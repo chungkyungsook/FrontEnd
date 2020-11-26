@@ -3,18 +3,21 @@ import { Link } from 'react-router-dom' ;
 
 import styled from 'styled-components' ;
 
-const Li = styled.li`
+const Container = styled.li`
+    width : 150px ;
     color : ${props => props.active ? 'red' : 'black'} ;
+
+    text-align : center ;
 `;
 
 const HeaderMenu = ({ path, pathname, children }) => {
     return (
         <Link to={path}>
-            <Li 
+            <Container 
                 active={path === pathname}    
             >
                 { children }
-            </Li>
+            </Container>
         </Link>
     );
 };

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react' ;
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom' ;
+import { BrowserRouter as Router, Route, Switch, Redirect, withRouter } from 'react-router-dom' ;
 
 // 공통
 import Header from './Header' ;
