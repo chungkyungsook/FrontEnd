@@ -5,8 +5,7 @@ import styled from 'styled-components' ;
 
 const Container = styled.li`
     width : 150px ;
-    color : ${props => props.active ? 'red' : 'black'} ;
-
+    color : ${props => props.active ? '#3d5712' : 'white'} ;
     text-align : center ;
 `;
 

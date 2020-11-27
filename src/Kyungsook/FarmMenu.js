@@ -5,15 +5,22 @@ import styled from 'styled-components' ;
 
 const Container = styled.div`
     border : 1px solid #333 ;
+    display: flex;
+    justify-content:center;
+    
 `;
 
 const Ul = styled.ul`
-
+    display: flex;
+    margin : 8px;
+    background : blue;
 `;
 
 const Li = styled.li`
-
+    padding : 0 8px;
+    background : white;
 `;
+
 
 const FarmMenu = () => {
     return (

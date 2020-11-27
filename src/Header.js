@@ -13,12 +13,12 @@ import {
 import HeaderMenu from './HeaderMenu' ;
 
 // 그림 리소스
-import logoHeight from './assets/logoHeight.jpg' ;
+import logoHeight from './assets/logoHeight.png' ;
 import title from './assets/HeaderTitle.png' ;
 
 const Container = styled.header`
     display : ${props => props.views ? 'flex' : 'none' } ;
-
+    background: rgb(160, 156, 128,0.9);
     /* background-color : ; */
 `;
 
@@ -34,7 +34,7 @@ const Img = styled.img`
 
 const LogoImg = styled.img`
     background-position : center ;
-
+    
     margin-right : 0.5rem ;
     margin-left : 1rem ;
 `;
