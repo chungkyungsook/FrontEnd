@@ -1,0 +1,45 @@
+/* 전체 틀 */
+.container {
+    background: rgb(224, 224, 218,00.3);
+    display: flex;
+    flex-direction: column;
+    
+}
+/* 가운데 틀 */
+.section{
+    display: flex;
+    margin: 5px;
+}
+
+/* 공통 속성 */
+.item{
+    /* 화면 크기 지정 */
+    height: calc(100vh - 172px);    
+    border: 1px solid black;
+    border-radius: 10px;
+    margin: 5px;
+}
+
+/* 기기관리 */
+.item1{
+    flex: 1;
+    background: white;
+    overflow-y:auto; /*세로 스크롤 내용 모두 보여주기*/
+}
+/* 배지 사진 + 온 습도 */
+.item2{
+    flex: 4;
+    background: white;
+}
+/* 그래프 + 간단한 버섯 상태 정보 */
+.item3{
+    flex: 4;
+    background: white;
+}
+
+/* 푸터 */
+.footer{
+    background: rgba(106, 106, 155, 0.133);
+    height: 80px;
+    text-align: center;
+}
