@@ -1,49 +1,67 @@
-import React from 'react' ;
+import React, {useState} from 'react' ;
 import { Link } from 'react-router-dom' ;
 
 import styled from 'styled-components' ;
 
 const Container = styled.aside`
-    border : 1px solid #333 ;
+    border : 1px solid #333;
+    box-sizing: border-box;
 `;
 
 const Ul = styled.ul`
-
+    margin: 1.2rem;
 `;
 
 const Li = styled.li`
+    font-size: 0.8em;
+    margin: 2rem;
+    height: 8.8rem;
+    text-align: center;
+    line-height: 8.8rem;
+    border: 1px solid gray;
+    width: 9rem;
+    border-radius: 9rem;
+    cursor: pointer;
+    &:hover {
+        background: beige;
+        border: 1px solid beige;
+    }
+    transition: 0.5s;
+`;
 
+const LinkStyled = styled(Link)`
+    cursor: default;
 `;
 
 const SideMenu = () => {
     return (
         <Container>
             <Ul>
-                <Link to="/setting">
+                <LinkStyled to="/setting">
                     <Li>
                         표고버섯
                     </Li>
-                </Link>
-                <Link to="/setting/baekhwago">
+                </LinkStyled>
+                <LinkStyled to="/setting/baekhwago">
                     <Li>
                         백화고
                     </Li>
-                </Link>
-                <Link to="/setting/custom">
+                </LinkStyled>
+                <LinkStyled to="/setting/custom">
                     <Li>
                         커스텀
                     </Li>
-                </Link>
-                <Link to="/setting/add">
+                </LinkStyled>
+                <LinkStyled to="/setting/add">
                     <Li>
                         환경 추가
                     </Li>
-                </Link>
-                <Link to="/setting/update">
+                </LinkStyled>
+                <LinkStyled to="/setting/update">
                     <Li>
-                        환경 업데이트(환경 끝난후)
+                        환경 업데이트
                     </Li>
-                </Link>
+                </LinkStyled>
             </Ul>
         </Container>
     );
