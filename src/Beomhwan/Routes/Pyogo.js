@@ -9,6 +9,9 @@ const PyogoStyled = styled.div`
 `;
 
 const CanvasBox = styled.div`
+    position: absolute;
+    top: 25%;
+    left: 25%;
     width: 50vw;
     height: 25vh;
 `;
@@ -91,9 +94,6 @@ const Chart = () => {
         <CanvasBox>
             <Line ref={chartReference} data={data}/>
         </CanvasBox>
-        <div>
-            <h1> 1일차 온도는 {Environment.Temperature}도, 습도는 {Environment.Humidity}% 입니다</h1>
-        </div>
         </>
     );
 }

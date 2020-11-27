@@ -15,7 +15,7 @@ const Ul = styled.ul`
 const Li = styled.li`
     font-size: 0.8em;
     margin: 2rem;
-    height: 8.8rem;
+    height: 8.65rem;
     text-align: center;
     line-height: 8.8rem;
     border: 1px solid gray;
