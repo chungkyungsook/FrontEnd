@@ -12,18 +12,25 @@ const Container = styled.div`
 
 const Ul = styled.ul`
     display: flex;
-    margin : 8px;
-    background : blue;
+    margin : 10px;
 `;
 
 const Li = styled.li`
     padding : 0 8px;
-    background : white;
+    cursor: pointer;
+    &:hover {
+        background: beige;
+        border-radius : 10px;
+    }
+    
 `;
 
+const FarmMenu = ({pathname}) => {
+    
 
-const FarmMenu = () => {
+
     return (
+        <>
         <Container>
             <Ul>
                 <Link to="/farm">
@@ -38,6 +45,7 @@ const FarmMenu = () => {
                 </Link>
             </Ul>
         </Container>
+        </>
     );
 };
 

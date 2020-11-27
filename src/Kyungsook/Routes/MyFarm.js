@@ -2,9 +2,6 @@ import React from 'react' ;
 import '../Css/MyFarm.css';
 
 const MyFarm = () => {
-
-
-    
     return (
         <>
             <div className="container">
@@ -18,7 +15,6 @@ const MyFarm = () => {
                     {/* end 배지 사진 + 온,습도 */}
                     <div className="item item3">item2</div>
                 </div>
-                <div className="footer">footer</div>
             </div>
         </>
     );
