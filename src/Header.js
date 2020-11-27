@@ -18,21 +18,70 @@ import title from './assets/HeaderTitle.png' ;
 
 const Container = styled.header`
     display : ${props => props.views ? 'flex' : 'none' } ;
+
+    /* background-color : ; */
 `;
 
 const TitleImgContainer = styled.div`
     display : flex ;
+
+    flex : 0.2 ;
 `;
 
 const Img = styled.img`
-    margin : auto 0 ;
+    margin-top : 1.5rem ;
 `;
 
-const Ul = styled.ul`
+const LogoImg = styled.img`
+    background-position : center ;
+
+    margin-right : 0.5rem ;
+    margin-left : 1rem ;
+`;
+
+const MenuContainer = styled.ul`
+    display : flex ;
+
+    flex : 0.6 ;
+
+    justify-content : center ;
+    align-items : center ;
+`;
+
+const InformationContainer = styled.div`
+    
+    flex : 0.2 ;
+    display : flex ;
+
+    justify-content : flex-end ;
+    align-items : center ;
+`;
+
+const MachineContainer = styled.div`
+    border-right : 1px solid #111 ;
+    
+    height : 100% ;
+
     display : flex ;
 
     justify-content : center ;
     align-items : center ;
+`;
+
+const UserContainer = styled.div`
+
+`;
+
+const MachineName = styled.div`
+    width : 50px ;
+`;
+
+const MachineStatus = styled.span`  
+    padding : 1rem ;
+`;
+
+const LoginStatus = styled.span`
+    padding : 1.2rem ;
 `;
 
 const Header = ({ location }) => {
@@ -66,10 +115,10 @@ const Header = ({ location }) => {
     return (
         <Container views={ menuData.some(data => pathCheck === data.route) } >
             <TitleImgContainer>
-                <Img src={logoHeight} width="120" height="70"/>
-                <Img src={title} width="185" height="40"/>
+                <LogoImg src={logoHeight} width="70" height="70" />
+                <Img src={title} width="175" height="30"/>
             </TitleImgContainer>
-            <Ul>
+            <MenuContainer>
                 { menuData.map((menu, index) => (
                         <HeaderMenu 
                             key={index}
@@ -79,7 +128,16 @@ const Header = ({ location }) => {
                             {menu.text}
                         </HeaderMenu>
                 )) }
-            </Ul>
+            </MenuContainer>
+            <InformationContainer>
+                <MachineContainer>
+                    <MachineName>키노코</MachineName>
+                    <MachineStatus>ON</MachineStatus>
+                </MachineContainer>
+                <UserContainer>
+                    <LoginStatus>Login</LoginStatus>
+                </UserContainer>
+            </InformationContainer>
         </Container>
     ) ;
 } ;
