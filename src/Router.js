@@ -24,16 +24,8 @@ import SettingRouter from './Beomhwan/SettingRouter' ;
 
 const RouterComponent = (props) => {
 
-    console.log(props) ;
-
-    const [ user, setUser ] = useState(null) ;
-    const authenticated = user !== null ;
-
-    useEffect(() => {
-        console.log('안녕') ;
-    }) ;
-
-    console.log(authenticated) ;
+    // const [ user, setUser ] = useState(null) ;
+    // const authenticated = user !== null ;
 
     return (
         <Router> 
