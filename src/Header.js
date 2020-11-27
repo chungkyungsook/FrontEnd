@@ -12,16 +12,76 @@ import {
 
 import HeaderMenu from './HeaderMenu' ;
 
+// 그림 리소스
+import logoHeight from './assets/logoHeight.jpg' ;
+import title from './assets/HeaderTitle.png' ;
+
 const Container = styled.header`
-    border : 1px solid #333 ;
+    display : ${props => props.views ? 'flex' : 'none' } ;
+
+    /* background-color : ; */
 `;
 
-const Ul = styled.ul`
+const TitleImgContainer = styled.div`
+    display : flex ;
+
+    flex : 0.2 ;
+`;
+
+const Img = styled.img`
+    margin-top : 1.5rem ;
+`;
+
+const LogoImg = styled.img`
+    background-position : center ;
+
+    margin-right : 0.5rem ;
+    margin-left : 1rem ;
+`;
+
+const MenuContainer = styled.ul`
+    display : flex ;
+
+    flex : 0.6 ;
+
+    justify-content : center ;
+    align-items : center ;
+`;
+
+const InformationContainer = styled.div`
+    
+    flex : 0.2 ;
+    display : flex ;
+
+    justify-content : flex-end ;
+    align-items : center ;
+`;
+
+const MachineContainer = styled.div`
+    border-right : 1px solid #111 ;
+    
+    height : 100% ;
+
+    display : flex ;
+
+    justify-content : center ;
+    align-items : center ;
+`;
+
+const UserContainer = styled.div`
 
 `;
 
-const Li = styled.li`
+const MachineName = styled.div`
+    width : 50px ;
+`;
 
+const MachineStatus = styled.span`  
+    padding : 1rem ;
+`;
+
+const LoginStatus = styled.span`
+    padding : 1.2rem ;
 `;
 
 const Header = ({ location }) => {
@@ -49,19 +109,35 @@ const Header = ({ location }) => {
     // route 이름
     const { pathname } = location ;
 
+    //path Check /login, /join 일시 가리는 값
+    const pathCheck = pathname.includes(SETTING) ? SETTING : pathname ;  
+
     return (
-        <Container>
-            <Ul>
+        <Container views={ menuData.some(data => pathCheck === data.route) } >
+            <TitleImgContainer>
+                <LogoImg src={logoHeight} width="70" height="70" />
+                <Img src={title} width="175" height="30"/>
+            </TitleImgContainer>
+            <MenuContainer>
                 { menuData.map((menu, index) => (
-                    <HeaderMenu 
-                        key={index}
-                        path={menu.route}
-                        pathname={`/${pathname.split('/')[1]}`}
-                    >
-                        {menu.text}
-                    </HeaderMenu>
+                        <HeaderMenu 
+                            key={index}
+                            path={menu.route}
+                            pathname={`/${pathname.split('/')[1]}`}
+                        >
+                            {menu.text}
+                        </HeaderMenu>
                 )) }
-            </Ul>
+            </MenuContainer>
+            <InformationContainer>
+                <MachineContainer>
+                    <MachineName>키노코</MachineName>
+                    <MachineStatus>ON</MachineStatus>
+                </MachineContainer>
+                <UserContainer>
+                    <LoginStatus>Login</LoginStatus>
+                </UserContainer>
+            </InformationContainer>
         </Container>
     ) ;
 } ;
