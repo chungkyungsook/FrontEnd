@@ -24,10 +24,12 @@ const TemplateContainer = styled.div`
 `;
 
 
-const FarmRouter = () => {
+const FarmRouter = ({ location }) => {
+    const { pathname } = location ;
+    
     return (
         <Container>
-            <FarmMenu />
+            <FarmMenu pathname = {pathname}/>
             <TemplateContainer>
                 <Route exact path={FARM} component={Farm} />
                 <Route path={`${FARM}${MOVIE}`} component={Movie} />

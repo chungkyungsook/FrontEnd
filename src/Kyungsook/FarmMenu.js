@@ -4,26 +4,32 @@ import { Link } from 'react-router-dom' ;
 import styled from 'styled-components' ;
 
 const Container = styled.div`
-    border : 1px solid #333 ;
     display: flex;
     justify-content:center;
-    
+    border-bottom: 1px solid rgb(0,0,0,0.5);
 `;
 
 const Ul = styled.ul`
     display: flex;
-    margin : 8px;
-    background : blue;
+    margin : 10px;
 `;
 
 const Li = styled.li`
     padding : 0 8px;
-    background : white;
+    cursor: pointer;
+    &:hover {
+        background: beige;
+        border-radius : 10px;
+    }
+    
 `;
 
+const FarmMenu = ({pathname}) => {
+    
 
-const FarmMenu = () => {
+
     return (
+        <>
         <Container>
             <Ul>
                 <Link to="/farm">
@@ -38,6 +44,7 @@ const FarmMenu = () => {
                 </Link>
             </Ul>
         </Container>
+        </>
     );
 };
 
