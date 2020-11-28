@@ -1,39 +1,75 @@
 /* 전체 틀 */
 .container {
     /* 화면 크기 지정 */
-    width: 1920px;
-    height: calc(1080px - 70px);    
+    width: 100%;
+    display: flex;
     background: rgb(224, 224, 218,00.3);
-    display: flex;
-    flex-direction: column;
-}
-/* 가운데 틀 */
-.section{
-    height: calc(1080px - 70px);    
-    display: flex;
-    margin: 5px;
+
 }
 
 /* 공통 속성 */
 .item{
-    border: 1px solid black;
+    height: 88.6vh;
+    /* border: 1px solid black; */
     border-radius: 10px;
-    margin: 10px;
+    margin : 19px 0 19px 19px;
+    
 }
 
 /* 기기관리 */
 .item1{
     flex: 1;
+    border: 1px solid black;
     background: white;
     overflow-y:auto; /*세로 스크롤 내용 모두 보여주기*/
 }
+
 /* 배지 사진 + 온 습도 */
 .item2{
+    display: flex;
     flex: 4;
+    flex-direction: column;
+}
+
+.box1{
+    border: 1px solid black;
+    border-radius: 10px;
     background: white;
 }
+/* 3D */
+.img {
+    flex: 3.5;
+    margin-bottom: 19px;
+}
+/* 온,습도 */
+.environment{
+    flex: 1.5;
+    
+}
+
+
 /* 그래프 + 간단한 버섯 상태 정보 */
 .item3{
-    flex: 4;
+    
+    display : flex;
+    flex    : 4;
+    flex-direction : column;
+    justify-content: center;
+
     background: white;
+    margin-right: 19px;
+    padding: 20px 30px;
+    border: 1px solid black;
+}
+
+/* 그래프 */
+.graph {
+    margin-bottom: 15px;
+    flex: 2;
+    background: rgb(145, 163, 119);
+}
+/* 알림 */
+.notification{
+    flex:4;
+    background: rgb(90, 109, 62);
 }

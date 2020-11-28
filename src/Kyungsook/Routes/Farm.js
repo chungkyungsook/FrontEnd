@@ -3,8 +3,8 @@ import styled from 'styled-components' ;
 
 const Container = styled.div`
     /* 화면 크기 지정 */
-    width: 1920px;
-    height: calc(1080px - 70px);      
+    width: 100%;
+    height: 88.6vh;
     background: rgb(224, 224, 218,00.3);
     display: flex;
     justify-content : space-around;
