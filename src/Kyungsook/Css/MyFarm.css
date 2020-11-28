@@ -1,22 +1,24 @@
 /* 전체 틀 */
 .container {
+    /* 화면 크기 지정 */
+    width: 1920px;
+    height: calc(1080px - 70px);    
     background: rgb(224, 224, 218,00.3);
     display: flex;
     flex-direction: column;
 }
 /* 가운데 틀 */
 .section{
+    height: calc(1080px - 70px);    
     display: flex;
     margin: 5px;
 }
 
 /* 공통 속성 */
 .item{
-    /* 화면 크기 지정 */
-    height: calc(100vh - 95px);    
     border: 1px solid black;
     border-radius: 10px;
-    margin: 5px;
+    margin: 10px;
 }
 
 /* 기기관리 */

@@ -4,10 +4,9 @@ import { Link } from 'react-router-dom' ;
 import styled from 'styled-components' ;
 
 const Container = styled.div`
-    border : 1px solid #333 ;
     display: flex;
     justify-content:center;
-    
+    border-bottom: 1px solid rgb(0,0,0,0.5);
 `;
 
 const Ul = styled.ul`
