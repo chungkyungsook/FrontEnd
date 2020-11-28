@@ -3,12 +3,18 @@ import { withRouter } from 'react-router-dom' ;
 
 import styled from 'styled-components' ;
 
+// Util
 import { 
     HOME,
     FARM,
     HELP,
     SETTING,
 } from './Util/routes' ;
+
+import {
+    flexAlign,
+    userSelect
+} from './Util/css' ;
 
 import HeaderMenu from './HeaderMenu' ;
 
@@ -29,59 +35,67 @@ const TitleImgContainer = styled.div`
 `;
 
 const Img = styled.img`
+    ${userSelect}
+
     margin-top : 1.5rem ;
+
+    cursor : default ;
 `;
 
 const LogoImg = styled.img`
+    ${userSelect}
+
     background-position : center ;
     
     margin-right : 0.5rem ;
     margin-left : 1rem ;
+
+    cursor : default ;
 `;
 
 const MenuContainer = styled.ul`
-    display : flex ;
+    ${flexAlign}
 
     flex : 0.6 ;
-
-    justify-content : center ;
-    align-items : center ;
 `;
 
 const InformationContainer = styled.div`
-    
-    flex : 0.2 ;
-    display : flex ;
+    ${flexAlign}
 
     justify-content : flex-end ;
-    align-items : center ;
+    flex : 0.2 ;
 `;
 
 const MachineContainer = styled.div`
+    ${flexAlign}
+    height : 75% ;
+
+    // 로그인 글자 사이 줄 색깔
     border-right : 1px solid #111 ;
-    
-    height : 100% ;
-
-    display : flex ;
-
-    justify-content : center ;
-    align-items : center ;
 `;
 
 const UserContainer = styled.div`
-
-`;
+    
+`;  
 
 const MachineName = styled.div`
+    ${userSelect}
+    
     width : 50px ;
+    cursor : default ;
 `;
 
 const MachineStatus = styled.span`  
-    padding : 1rem ;
+    ${userSelect}
+    
+    padding : 20px ;
+    cursor : default ;
 `;
 
 const LoginStatus = styled.span`
-    padding : 1.2rem ;
+    ${userSelect}
+    
+    padding : 30px ;
 `;
 
 const Header = ({ location }) => {
@@ -110,13 +124,15 @@ const Header = ({ location }) => {
     const { pathname } = location ;
 
     //path Check /login, /join 일시 가리는 값
-    const pathCheck = pathname.includes(SETTING) ? SETTING : pathname ;  
+    const pathCheck = pathname.includes(FARM) ? 
+            FARM 
+            : pathname.includes(SETTING) ? SETTING : pathname ;  
 
     return (
         <Container views={ menuData.some(data => pathCheck === data.route) } >
             <TitleImgContainer>
-                <LogoImg src={logoHeight} width="70" height="70" />
-                <Img src={title} width="175" height="30"/>
+                <LogoImg src={logoHeight} width="70" height="70" draggable="false" />
+                <Img src={title} width="175" height="30" draggable="false" />
             </TitleImgContainer>
             <MenuContainer>
                 { menuData.map((menu, index) => (
