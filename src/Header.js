@@ -62,12 +62,12 @@ const MenuContainer = styled.ul`
 const InformationContainer = styled.div`
     ${flexAlign}
 
+    justify-content : flex-end ;
     flex : 0.2 ;
 `;
 
 const MachineContainer = styled.div`
     ${flexAlign}
-
     height : 75% ;
 
     // 로그인 글자 사이 줄 색깔
@@ -88,14 +88,14 @@ const MachineName = styled.div`
 const MachineStatus = styled.span`  
     ${userSelect}
     
-    padding : 1rem ;
+    padding : 20px ;
     cursor : default ;
 `;
 
 const LoginStatus = styled.span`
     ${userSelect}
     
-    padding : 1.2rem ;
+    padding : 30px ;
 `;
 
 const Header = ({ location }) => {
