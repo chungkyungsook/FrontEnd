@@ -89,6 +89,7 @@ const GraphTitle = styled.div`
     font-size: 1.2em;
     text-align: center;
     line-height: 60px;
+    border-radius : 5px ;
     border: 1px solid gray;
 `;
 
