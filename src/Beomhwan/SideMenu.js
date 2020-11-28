@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom' ;
 import styled from 'styled-components' ;
 
 const Container = styled.aside`
+    position: sticky;
+    top: 70px;
     border : 1px solid #333;
     border-top: 0; border-bottom: 0;
     box-sizing: border-box;
