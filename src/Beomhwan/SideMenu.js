@@ -5,9 +5,7 @@ import styled from 'styled-components' ;
 
 const Container = styled.aside`
     position: sticky;
-    top: 70px;
-    border : 1px solid #333;
-    border-top: 0; border-bottom: 0;
+    top: 0px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;

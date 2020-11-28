@@ -1,16 +1,34 @@
 import React, {useRef, useEffect} from 'react';
 import styled from 'styled-components';
-import {Line} from 'react-chartjs-2';
+import {Bar} from 'react-chartjs-2';
+
+const randTemp = () => Math.floor(Math.random() * 15) + 20;
+const randHumi = () => Math.floor(Math.random() * 30) + 70;
 
 // chart내 data 세팅
 const data = {
-    labels: ['1','2','3','4','5'],
+    labels: ['1','2','3','4','5','6'],
     datasets: [
         {
+            type: 'bar',
             label: 'Temperature',
-            data: [10, 20, 24, 19, 23],
+            data: [randTemp(), randTemp(), randTemp(), randTemp(), randTemp(), randTemp()],
             fill: false,
-            borderColor: 'red'
+            backgroundColor: 'rgba(255,0,0,0.3)'
+        },
+        {   
+            type: 'bar',
+            label: 'Humidity',
+            data: [randHumi(), randHumi(), randHumi(), randHumi(), randHumi(), randHumi()],
+            fill: false,
+            backgroundColor: 'rgba(0,0,255,0.3)'
+        },
+        {
+            type: 'line',
+            label: 'GrowthRate',
+            data: [0, 0, 5, 10, 20, 25],
+            fill: false,
+            borderColor: 'gray'
         }
     ]
 };
@@ -22,7 +40,8 @@ const options = {
             {
                 ticks: {
                     beginAtZero: true,
-                    max: 30
+                    max: 100,
+                    stepSize: 20
                 }
             }
         ]
@@ -35,8 +54,8 @@ const LineChart = () => {
     console.dir(ChartRef);
 
     return (
-        <Line data={data} options={options} ref={ChartRef}/>
-    );
+        <Bar data={data} options={options} ref={ChartRef}/>
+    ) ;
 }
 
 const CustomBox = styled.div`
@@ -58,27 +77,37 @@ const CustomGraphStyle = styled.div`
     transition: 0.5s;
 `;
 
+const GraphTitle = styled.div`
+    position: absolute;
+    bottom: 0;
+    width: 30rem;
+    height: 60px;
+    font-size: 1.2em;
+    text-align: center;
+    line-height: 60px;
+    border: 1px solid gray;
+`;
+
 const Custom = () => {
     return (
         <>
             <div>
-                Setting / Custom
+                <CustomBox>
+                    <CustomGraphStyle><LineChart/><GraphTitle>랜덤 그래프</GraphTitle></CustomGraphStyle>
+                    <CustomGraphStyle><LineChart/></CustomGraphStyle>
+                    <CustomGraphStyle><LineChart/></CustomGraphStyle>
+                </CustomBox>
+                <CustomBox>
+                    <CustomGraphStyle><LineChart/></CustomGraphStyle>
+                    <CustomGraphStyle><LineChart/></CustomGraphStyle>
+                    <CustomGraphStyle><LineChart/></CustomGraphStyle>
+                </CustomBox>
+                <CustomBox>
+                    <CustomGraphStyle><LineChart/></CustomGraphStyle>
+                    <CustomGraphStyle><LineChart/></CustomGraphStyle>
+                    <CustomGraphStyle><LineChart/></CustomGraphStyle>
+                </CustomBox>
             </div>
-            <CustomBox>
-                <CustomGraphStyle><LineChart/></CustomGraphStyle>
-                <CustomGraphStyle></CustomGraphStyle>
-                <CustomGraphStyle></CustomGraphStyle>
-            </CustomBox>
-            <CustomBox>
-                <CustomGraphStyle></CustomGraphStyle>
-                <CustomGraphStyle></CustomGraphStyle>
-                <CustomGraphStyle></CustomGraphStyle>
-            </CustomBox>
-            <CustomBox>
-                <CustomGraphStyle></CustomGraphStyle>
-                <CustomGraphStyle></CustomGraphStyle>
-                <CustomGraphStyle></CustomGraphStyle>
-            </CustomBox>
         </>
     );
 };
