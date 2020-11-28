@@ -24,7 +24,7 @@ import Update from './Routes/Update' ;
 const Conatiner = styled.div`
     margin: 0;
     display: flex;
-    width: 100vw;
+    width: 100vw - 185px;
     height: 100vh - 70px;
 `;
 

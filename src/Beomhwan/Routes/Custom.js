@@ -64,15 +64,15 @@ const LineChart = () => {
 
 const CustomBox = styled.div`
     display: flex;
-    width: auto;
+    width: 100%;
     height: auto;
-    border-bottom: 1px solid gray;
+    border-bottom: 1px solid rgba(0,0,0,0.3);
 `;
 
 const CustomGraphStyle = styled.div`
     margin: 2vw 0 2vw 2vw;
     width: 30%;
-    height: 25rem;
+    height: auto;
     border: 1px solid rgba(0,0,0,0.3);
     flex-wrap: wrap;
     &:hover {
@@ -82,15 +82,19 @@ const CustomGraphStyle = styled.div`
 `;
 
 const GraphTitle = styled.div`
-    position: absolute;
-    bottom: 0;
-    width: 30rem;
+    width: 100%;
     height: 60px;
     font-size: 1.2em;
     text-align: center;
     line-height: 60px;
     border-radius : 5px ;
-    border: 1px solid gray;
+    color: rgba(0,0,0,0.7);
+    border: 1px solid rgba(0,0,0,0.3);
+    &:hover {
+        color: black;
+        border: 1px solid black;
+    }
+    transition: 0.5s;
 `;
 
 const Custom = () => {
@@ -98,19 +102,19 @@ const Custom = () => {
         <>
             <div>
                 <CustomBox>
-                    <CustomGraphStyle><LineChart/><GraphTitle>랜덤 그래프</GraphTitle></CustomGraphStyle>
-                    <CustomGraphStyle><LineChart/></CustomGraphStyle>
-                    <CustomGraphStyle><LineChart/></CustomGraphStyle>
+                    <CustomGraphStyle><LineChart/><GraphTitle>커스텀 환경 1</GraphTitle></CustomGraphStyle>
+                    <CustomGraphStyle><LineChart/><GraphTitle>커스텀 환경 2</GraphTitle></CustomGraphStyle>
+                    <CustomGraphStyle><LineChart/><GraphTitle>커스텀 환경 3</GraphTitle></CustomGraphStyle>
                 </CustomBox>
                 <CustomBox>
-                    <CustomGraphStyle><LineChart/></CustomGraphStyle>
-                    <CustomGraphStyle><LineChart/></CustomGraphStyle>
-                    <CustomGraphStyle><LineChart/></CustomGraphStyle>
+                    <CustomGraphStyle><LineChart/><GraphTitle>커스텀 환경 4</GraphTitle></CustomGraphStyle>
+                    <CustomGraphStyle><LineChart/><GraphTitle>커스텀 환경 5</GraphTitle></CustomGraphStyle>
+                    <CustomGraphStyle><LineChart/><GraphTitle>커스텀 환경 6</GraphTitle></CustomGraphStyle>
                 </CustomBox>
                 <CustomBox>
-                    <CustomGraphStyle><LineChart/></CustomGraphStyle>
-                    <CustomGraphStyle><LineChart/></CustomGraphStyle>
-                    <CustomGraphStyle><LineChart/></CustomGraphStyle>
+                    <CustomGraphStyle><LineChart/><GraphTitle>커스텀 환경 7</GraphTitle></CustomGraphStyle>
+                    <CustomGraphStyle><LineChart/><GraphTitle>커스텀 환경 8</GraphTitle></CustomGraphStyle>
+                    <CustomGraphStyle><LineChart/><GraphTitle>커스텀 환경 9</GraphTitle></CustomGraphStyle>
                 </CustomBox>
             </div>
         </>
