@@ -5,23 +5,28 @@ import styled from 'styled-components' ;
 
 const Container = styled.aside`
     border : 1px solid #333;
+    border-top: 0; border-bottom: 0;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 `;
 
 const Ul = styled.ul`
     margin: 1.2rem;
+    height: 100vh - 70px;
 `;
 
 const Li = styled.li`
-    font-size: 0.8em;
-    margin: 2rem;
-    height: 8.65rem;
+    font-size: 2vh;
     text-align: center;
-    line-height: 8.8rem;
     border: 1px solid gray;
-    width: 9rem;
-    border-radius: 9rem;
-    cursor: pointer;
+    width: 15vh;
+    height: 15vh;
+    margin: 1rem;
+    line-height: 15vh;
+    border-radius: 15vh;
+    cursor: pointer;    
     &:hover {
         background: beige;
         border: 1px solid beige;
