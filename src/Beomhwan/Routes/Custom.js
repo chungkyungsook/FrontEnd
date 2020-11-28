@@ -36,11 +36,15 @@ const data = {
 // chart의 options 설정
 const options = {
     scales: {
+        // y축 세팅
         yAxes: [
             {
                 ticks: {
+                    // 0부터 시작
                     beginAtZero: true,
+                    // ~ 100까지
                     max: 100,
+                    // 20 단위로 
                     stepSize: 20
                 }
             }
@@ -67,7 +71,7 @@ const CustomBox = styled.div`
 
 const CustomGraphStyle = styled.div`
     margin: 2vw 0 2vw 2vw;
-    width: 30rem;
+    width: 30%;
     height: 25rem;
     border: 1px solid rgba(0,0,0,0.3);
     flex-wrap: wrap;

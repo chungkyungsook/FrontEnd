@@ -81,7 +81,7 @@ const Pyogo = () => {
             <CanvasBox>
             <Chart/>
             </CanvasBox>
-            <FooterBox />
+            <FooterBox/>
         </PyogoStyled>
     );
 };
