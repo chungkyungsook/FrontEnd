@@ -109,7 +109,7 @@ const LoginItem      = styled.div`
 //회원가입 글자 속성
 const LoginPont      = styled.div`
     /* box 속성*/
-    padding         : 5.5rem 3rem  4rem;
+    padding         : 5.5rem 3rem  4rem 6rem;
     
     /* 폰트 속성 */
     font-size       : 3.5rem;
@@ -148,7 +148,8 @@ const TextBox       = styled.div`
 `;
 
 const Text          = styled.span`
-    padding-left : 0.4rem;
+    padding-left  : 0.4rem;
+    margin-bottom : 5px;
 `;
 
 // 아이디, 비밀번호 찾기
@@ -220,7 +221,7 @@ const Join = () => {
                         
                         <LoginBox>
                             <TextBox>
-                                <Text>Email</Text>
+                                <Text>EMAIL</Text>
                             </TextBox>      
                             <InputBox />
                         </LoginBox>
@@ -234,7 +235,7 @@ const Join = () => {
                         </LoginBox>
 
                         <ButtonBox>
-                            <Button>signUp</Button>
+                            <Button>SignUp</Button>
                         </ButtonBox>
 
                     </LoginItem>
