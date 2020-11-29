@@ -1,43 +1,35 @@
 import React, {useRef, useEffect, memo, useState} from 'react';
 import styled from 'styled-components';
-import { Bar } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 
 
 const data = {
     labels: ['1일차','2일차','3일차','4일차','5일차'],
     datasets: [
     {
-        type: 'bar',
         label: 'Temperature',
         data: [20, 20, 20, 20, 20],
         fill: false,
-        backgroundColor: 'rgba(255,0,0,0.3)',
+        borderColor: 'red',
     },
     {
-        type: 'bar',
         label: 'Humidity',
         data: [80, 80, 80, 80, 80],
         fill: false,
-        backgroundColor: 'rgba(0,0,255,0.3)',
-    },
-    {
-        type: 'line',
-        label: 'GrowthRate',
-        data: [0, 5, 12, 25, 33],
-        fill: false,
-        borderColor: 'black'
+        borderColor: 'blue',
     }
     ]
 };
 
 const options = {
+    maintainAspectRatio: false,
     scales: {
         yAxes: [
             {
                 ticks: {    
                     beginAtZero: true,
                     max: 100,
-                    stepSize: 20,
+                    stepSize: 10,
                 }
             }
         ]
@@ -50,38 +42,68 @@ const Chart = () => {
     console.dir(ChartRef);
 
     return(
-        <Bar data={data} options={options} ref={ChartRef} />
+        <Line data={data} options={options} ref={ChartRef} />
     )
 };
 
 const PyogoStyled = styled.div`
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
 `;
 
-const CanvasBox = styled.div`
-    box-sizing: border-box;
-    margin : 50px auto ;
-    width: 80%;
-    margin-bottom: 2rem;
+const PyogoGraphBox = styled.div`
+    padding: 30px;
+    flex: 5;
+    border-bottom: 1px solid gray;
 `;
 
 const FooterBox = styled.div`
-    margin: 50px auto;
-    width: 80%;
-    height: 2rem;
-    /* position: absolute; */
-    bottom: 1rem;
-    border: 1px solid gray;
+    padding: 30px;
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+`;
+
+const Description = styled.div`
+    flex: 9;
+    text-align: center;
+`;
+
+const GrowStartBox = styled.div`
+    padding: 30px;
+    flex: 1;
+    display: flex;
+`; 
+
+const GrowStartButton = styled.button`
+    flex: 1;
+    outline: none;
+    border-radius: 10px;
+    border: 3px solid rgba(0,0,0,0.4);
+    background: none;
+    &:hover{
+        background: beige;
+    }
+    transition: 0.3s;
+    cursor: pointer;
 `;
 
 const Pyogo = () => {
     return (
         <PyogoStyled>
-            <CanvasBox>
-            <Chart/>
-            </CanvasBox>
-            <FooterBox />
+            <PyogoGraphBox>
+                <Chart />
+            </PyogoGraphBox>
+            <FooterBox>
+                <Description>
+                    표고버섯은 일정한 생장 환경을 제공합니다.
+                </Description>
+                <GrowStartBox>
+                    <GrowStartButton>적용</GrowStartButton>
+                </GrowStartBox>
+            </FooterBox>
         </PyogoStyled>
     );
 };
