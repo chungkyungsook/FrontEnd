@@ -18,7 +18,7 @@ import SideMenu from './SideMenu' ;
 import Pyogo from './Routes/Pyogo' ;
 import Baekhwago from './Routes/Baekhwago' ;
 import Custom from './Routes/Custom' ;
-import Add from './Routes/Add' ;
+import {Add} from './Routes/Add' ;
 import Update from './Routes/Update' ;
 
 const Conatiner = styled.div`

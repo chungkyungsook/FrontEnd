@@ -1,4 +1,4 @@
-import React, {useRef, useEffect} from 'react';
+import React, {useRef, useEffect, memo} from 'react';
 import styled from 'styled-components';
 import {Bar} from 'react-chartjs-2';
 
@@ -52,9 +52,12 @@ const options = {
     }
 };
 
+// 환경 그래프 객체 DOM 반환
 const LineChart = () => {
+    // 특정 DOM을 참조
     const ChartRef = useRef();
 
+    // Chart.js instance 객체 확인
     console.dir(ChartRef);
 
     return (
@@ -62,13 +65,16 @@ const LineChart = () => {
     ) ;
 }
 
+// 환경 프로그램 div - 이 안에 3개의 커스텀 환경이 있음
 const CustomBox = styled.div`
     display: flex;
     width: 100%;
+    justify-content: space-around;
     height: auto;
     border-bottom: 1px solid rgba(0,0,0,0.3);
 `;
 
+// 커스텀 환경 프로그램 그래프
 const CustomGraphStyle = styled.div`
     margin: 2vw 0 2vw 2vw;
     width: 30%;
@@ -81,13 +87,13 @@ const CustomGraphStyle = styled.div`
     transition: 0.5s;
 `;
 
+// 커스텀 환경 프로그램 이름
 const GraphTitle = styled.div`
-    width: 100%;
     height: 60px;
     font-size: 1.2em;
     text-align: center;
     line-height: 60px;
-    border-radius : 5px ;
+    border-radius : 5px;
     color: rgba(0,0,0,0.7);
     border: 1px solid rgba(0,0,0,0.3);
     &:hover {

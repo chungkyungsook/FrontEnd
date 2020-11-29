@@ -19,13 +19,6 @@ const data = {
         data: [80, 80, 80, 80, 80],
         fill: false,
         backgroundColor: 'rgba(0,0,255,0.3)',
-    },
-    {
-        type: 'line',
-        label: 'GrowthRate',
-        data: [0, 5, 12, 25, 33],
-        fill: false,
-        borderColor: 'black'
     }
     ]
 };
@@ -57,31 +50,55 @@ const Chart = () => {
 const PyogoStyled = styled.div`
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
 `;
 
 const CanvasBox = styled.div`
+    padding: 50px;
     box-sizing: border-box;
-    margin : 50px auto ;
+    margin: 0 auto;
     width: 80%;
     margin-bottom: 2rem;
 `;
 
 const FooterBox = styled.div`
-    margin: 50px auto;
+    margin: 0 auto;
     width: 80%;
-    height: 2rem;
-    /* position: absolute; */
-    bottom: 1rem;
-    border: 1px solid gray;
+    height: auto;
+    display: flex;
+    flex-direction: row-reverse;
 `;
+
+const ButtonStyled = styled.button`
+    background: none;
+    box-shadow: none;
+    border: 1px solid gray;
+    width: 10%;
+    font-size: 1.2em;
+    height: 50px;
+    &:hover{
+        background: beige;
+    }
+    &:active, &:visited{
+        border: 1px solid gray;
+    }
+    transition: 0.3s;
+`;
+
+const Button = () => {
+    return <ButtonStyled>적용</ButtonStyled>
+}
 
 const Pyogo = () => {
     return (
         <PyogoStyled>
             <CanvasBox>
-            <Chart/>
+                <Chart/>
             </CanvasBox>
-            <FooterBox/>
+            <FooterBox>
+                <Button/>
+            </FooterBox>
         </PyogoStyled>
     );
 };
