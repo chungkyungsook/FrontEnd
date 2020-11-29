@@ -67,6 +67,7 @@ const LineChart = () => {
 
 // 환경 프로그램 div - 이 안에 3개의 커스텀 환경이 있음
 const CustomBox = styled.div`
+    padding: 10px;
     display: flex;
     width: 100%;
     justify-content: space-around;

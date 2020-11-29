@@ -1,36 +1,35 @@
 import React, {useRef, useEffect, memo, useState} from 'react';
 import styled from 'styled-components';
-import { Bar } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 
 
 const data = {
     labels: ['1일차','2일차','3일차','4일차','5일차'],
     datasets: [
     {
-        type: 'bar',
         label: 'Temperature',
         data: [20, 20, 20, 20, 20],
         fill: false,
-        backgroundColor: 'rgba(255,0,0,0.3)',
+        borderColor: 'red',
     },
     {
-        type: 'bar',
         label: 'Humidity',
         data: [80, 80, 80, 80, 80],
         fill: false,
-        backgroundColor: 'rgba(0,0,255,0.3)',
+        borderColor: 'blue',
     }
     ]
 };
 
 const options = {
+    maintainAspectRatio: false,
     scales: {
         yAxes: [
             {
                 ticks: {    
                     beginAtZero: true,
                     max: 100,
-                    stepSize: 20,
+                    stepSize: 10,
                 }
             }
         ]
@@ -43,7 +42,7 @@ const Chart = () => {
     console.dir(ChartRef);
 
     return(
-        <Bar data={data} options={options} ref={ChartRef} />
+        <Line data={data} options={options} ref={ChartRef} />
     )
 };
 
@@ -54,50 +53,56 @@ const PyogoStyled = styled.div`
     flex-direction: column;
 `;
 
-const CanvasBox = styled.div`
-    padding: 50px;
-    box-sizing: border-box;
-    margin: 0 auto;
-    width: 80%;
-    margin-bottom: 2rem;
+const PyogoGraphBox = styled.div`
+    padding: 30px;
+    flex: 5;
+    border-bottom: 1px solid gray;
 `;
 
 const FooterBox = styled.div`
-    margin: 0 auto;
-    width: 80%;
-    height: auto;
+    padding: 30px;
+    flex: 1;
     display: flex;
-    flex-direction: row-reverse;
+    flex-direction: row;
 `;
 
-const ButtonStyled = styled.button`
+const Description = styled.div`
+    flex: 9;
+    text-align: center;
+`;
+
+const GrowStartBox = styled.div`
+    padding: 30px;
+    flex: 1;
+    display: flex;
+`; 
+
+const GrowStartButton = styled.button`
+    flex: 1;
+    outline: none;
+    border-radius: 10px;
+    border: 3px solid rgba(0,0,0,0.4);
     background: none;
-    box-shadow: none;
-    border: 1px solid gray;
-    width: 10%;
-    font-size: 1.2em;
-    height: 50px;
     &:hover{
         background: beige;
     }
-    &:active, &:visited{
-        border: 1px solid gray;
-    }
     transition: 0.3s;
+    cursor: pointer;
 `;
-
-const Button = () => {
-    return <ButtonStyled>적용</ButtonStyled>
-}
 
 const Pyogo = () => {
     return (
         <PyogoStyled>
-            <CanvasBox>
-                <Chart/>
-            </CanvasBox>
+            <PyogoGraphBox>
+                <Chart />
+            </PyogoGraphBox>
             <FooterBox>
-                <Button/>
+                <Description>
+                    표고버섯은 일정한 생장 환경을 제공합니다.
+                </Description>
+                <GrowStartBox>
+                    <GrowStartButton>적용</GrowStartButton>
+                </GrowStartBox>
             </FooterBox>
         </PyogoStyled>
     );
