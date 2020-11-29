@@ -18,13 +18,13 @@ import SideMenu from './SideMenu' ;
 import Pyogo from './Routes/Pyogo' ;
 import Baekhwago from './Routes/Baekhwago' ;
 import Custom from './Routes/Custom' ;
-import Add from './Routes/Add' ;
+import {Add} from './Routes/Add' ;
 import Update from './Routes/Update' ;
 
 const Conatiner = styled.div`
     margin: 0;
     display: flex;
-    width: 100vw;
+    width: 100vw - 185px;
     height: 100vh - 70px;
 `;
 
