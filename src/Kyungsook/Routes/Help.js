@@ -1,5 +1,10 @@
 import React from 'react' ;
 import styled from 'styled-components';
+import title      from '../../assets/logoHeight.png' ;
+import {userSelect} from '../../Util/css' ;
+
+
+
 const Container   = styled.div`
 
     width : 100%;
@@ -38,15 +43,6 @@ const Item1Img = styled.div`
     justify-content : center;
     align-items : center;
 `;
-const Item1Info = styled.div`
-    margin : 10px;
-    flex : 4;
-    display: flex;
-    justify-content: center;
-    align-items : center;
-    background : blue;
-`;
-
 
 //선택한 키노코 이미지
 const KinokoImg = styled.div`
@@ -60,11 +56,35 @@ const Text = styled.div`
     padding : 5px;
 `;
 
+const Item1Info = styled.div`
+    margin : 10px;
+    flex : 4;
+    display: flex;
+    flex-direction : column;
+    justify-content: center;
+    align-items : center;
+`;
+
+
 //선택한 버섯 정보
 const KinokoInfo = styled.div`
-    
-    background : blue;
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.12), 0 0 8px 0 rgba(0, 0, 0, 0.06);
+    width: 448px;
+    height: 370px;
+    text-align :center;
+    line-height : 370px;
 `;
+
+//이미지
+const Img = styled.img`
+    
+    ${userSelect}
+
+    cursor : default ;
+
+
+`;
+
 
 //버섯 아이콘 구역
 const Item2 = styled.div`
@@ -95,6 +115,8 @@ const KinokoIcons = styled.div`
 
 //기기 사용법 구역
 const Section2    = styled.div`
+    text-align : center;
+    line-height : 83vh;
     height  : 83vh;
     flex : 1;
     margin : 0 20px;
@@ -110,13 +132,17 @@ const Help = () => {
         <Container>
             <Section1> 
                 <Item1>
+                    
                     <Item1Img> {/* 선택한 버섯 이미지 */}
                         <KinokoImg></KinokoImg>
                         <Text>표고버섯</Text>
                     </Item1Img>
+
                     <Item1Info> {/* 선택한 버섯 정보 */}
-                        <KinokoInfo></KinokoInfo>
+                        <Img     src={title}      width="50" height="50"  draggable="false" />
+                        <KinokoInfo>버섯 정보 입니다.</KinokoInfo>
                     </Item1Info>
+
                 </Item1>
 
                 <Item2> {/* 버섯 종류 아이콘 */}

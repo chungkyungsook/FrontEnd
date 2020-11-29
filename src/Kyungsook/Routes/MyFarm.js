@@ -4,7 +4,12 @@ import '../Css/MyFarm.css';
 const MyFarm = () => {
     return (
         <div className="container">
-            <div className="item item1">bar</div>
+            <div className="item item1">
+                <div className = "item1Text"> 기기 관리</div>
+                <div className = "item1ButtonBox">
+                    <div className = "item1Button"></div>
+                </div>
+            </div>
             {/* 배지 사진 + 온,습도 */}
             <div className="item item2">
                 <div className = "box1 img">

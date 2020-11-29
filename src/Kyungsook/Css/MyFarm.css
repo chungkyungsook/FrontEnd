@@ -3,7 +3,7 @@
     /* 화면 크기 지정 */
     width: 100%;
     display: flex;
-    background: rgb(224, 224, 218,00.3);
+    background: rgb(224, 224, 218);
 
 }
 
@@ -19,10 +19,33 @@
 /* 기기관리 */
 .item1{
     flex: 1;
+    display: flex;
+    flex-direction: column;
     border: 1px solid black;
     background: white;
     overflow-y:auto; /*세로 스크롤 내용 모두 보여주기*/
 }
+
+.item1Text {
+    flex-basis: 2rem;
+    background:rgb(145, 163, 119,0.8);
+    border-bottom: 1px solid black;
+    text-align: center;
+    line-height: 2rem;
+}
+/* 기기관리 버튼 영역 */
+.item1ButtonBox {
+    flex: 1;
+    background: rgb(90, 109, 62);
+}
+
+/* 기기관리 버튼 */
+.item1Button {
+    flex: 1;
+    background: rgb(90, 109, 62);
+}
+/*end 기기관리 */
+
 
 /* 배지 사진 + 온 습도 */
 .item2{
