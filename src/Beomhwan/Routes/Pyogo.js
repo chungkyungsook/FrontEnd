@@ -8,9 +8,10 @@ const data = {
     datasets: [
     {
         label: 'Temperature',
-        data: [20, 20, 20, 20, 20],
-        fill: false,
+        data: [25, 25, 25, 25, 25],
+        fill: true,
         borderColor: 'red',
+        backgroundColor: 'rgba(255,0,0,0.2)'
     },
     {
         label: 'Humidity',
@@ -43,7 +44,7 @@ const Chart = () => {
 
     return(
         <Line data={data} options={options} ref={ChartRef} />
-    )
+    );
 };
 
 const PyogoStyled = styled.div`
