@@ -3,9 +3,8 @@ import React, { useEffect, useRef, useState } from 'react' ;
 import Slide from "../Slide";
 import styled from 'styled-components';
 import img1 from "../../assets/HeaderTitle.png"; 
-import img2 from "../../assets/logo.png"; 
-import img3 from "../../assets/logo2.png"; 
-//노력해
+import {Redirect}   from 'react-router-dom' ;
+import { withCookies} from 'react-cookie';
 
 //전체 영역
 const Container = styled.div`
@@ -37,7 +36,7 @@ const SliderContainer = styled.div`
 
 const TOTAL_SLIDES = 2 * 5;
 
-const Movie = () => {
+const Movie = (props) => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const slideRef = useRef(null);
     
@@ -62,22 +61,30 @@ const Movie = () => {
         slideRef.current.style.transform = `translateX(-${currentSlide}0%)`; // 백틱을 사용하여 슬라이드로 이동하는 애니메이션을 만듭니다.
     }, [currentSlide]);
 
+    //isLogin cookie 값 확인
+    const isLoginCheck = props.cookies.get('isLogin')
+    
     return (
-      <Container>
-        <MovieContainer>
-        {currentSlide}
-        <SliderContainer ref={slideRef}>
-            <Slide img = {img1}/>
-            <Slide img = {img1}/>
-            <Slide img = {img1}/>
-        </SliderContainer>
-        <Button onClick={prevSlide}>Previous Slide</Button>
-        <Button onClick={nextSlide}>Next Slide</Button>
-        </MovieContainer>
-    </Container>
+      <>
+        {
+            !isLoginCheck ? (<Redirect to="/login" />) : (
+              <Container>
+                <MovieContainer>
+                {currentSlide}
+                <SliderContainer ref={slideRef}>
+                    <Slide img = {img1}/>
+                    <Slide img = {img1}/>
+                    <Slide img = {img1}/>
+                </SliderContainer>
+                <Button onClick={prevSlide}>Previous Slide</Button>
+                <Button onClick={nextSlide}>Next Slide</Button>
+                </MovieContainer>
+            </Container>)
+        }
+        </>
     );
 };
 
 
 
-export default Movie ;
+export default withCookies(Movie) ;

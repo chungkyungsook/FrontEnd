@@ -1,6 +1,6 @@
-import React from 'react' ;
-import { withRouter } from 'react-router-dom' ;
-
+import React, { useEffect, useState } from 'react' ;
+import { withRouter,Redirect } from 'react-router-dom' ;
+import axios from "axios";
 import styled from 'styled-components' ;
 
 // Util
@@ -21,6 +21,7 @@ import HeaderMenu from './HeaderMenu' ;
 // 그림 리소스
 import logoHeight from './assets/logoHeight.png' ;
 import title from './assets/HeaderTitle.png' ;
+import { withCookies } from 'react-cookie';
 
 const Container = styled.header`
     display : ${props => props.views ? 'flex' : 'none' } ;
@@ -98,7 +99,11 @@ const LoginStatus = styled.span`
     padding : 30px ;
 `;
 
-const Header = ({ location }) => {
+const Header = ({ location, cookies}) => {
+    //로그 아웃 버튼 클릭 했는지 판단
+    const [isLogout,setIsLogout] = useState({
+        isLogout : false,
+    })
 
     // 메뉴 데이터
     const menuData = [ 
@@ -128,34 +133,48 @@ const Header = ({ location }) => {
             FARM 
             : pathname.includes(SETTING) ? SETTING : pathname ;  
 
+    //logout 
+    const logoutOnClick = () =>{
+        console.log("로그아웃 누름");
+        //login 쿠키 삭제
+        console.log("MyFarm page 로그인 상태 확인",cookies.get('isLogin'));
+        
+        console.log("로그아웃")
+        axios.put('http://172.26.3.62/api/logout',{token:cookies.get('token')})      
+        cookies.remove('isLogin')
+        
+    }       
+
     return (
-        <Container views={ menuData.some(data => pathCheck === data.route) } >
-            <TitleImgContainer>
-                <LogoImg src={logoHeight} width="70" height="70" draggable="false" />
-                <Img src={title} width="175" height="30" draggable="false" />
-            </TitleImgContainer>
-            <MenuContainer>
-                { menuData.map((menu, index) => (
-                        <HeaderMenu 
-                            key={index}
-                            path={menu.route}
-                            pathname={`/${pathname.split('/')[1]}`}
-                        >
-                            {menu.text}
-                        </HeaderMenu>
-                )) }
-            </MenuContainer>
-            <InformationContainer>
-                <MachineContainer>
-                    <MachineName>키노코</MachineName>
-                    <MachineStatus>ON</MachineStatus>
-                </MachineContainer>
-                <UserContainer>
-                    <LoginStatus>Login</LoginStatus>
-                </UserContainer>
-            </InformationContainer>
-        </Container>
+        <>
+            <Container views={ menuData.some(data => pathCheck === data.route) } >
+                <TitleImgContainer>
+                    <LogoImg src={logoHeight} width="70" height="70" draggable="false" />
+                    <Img src={title} width="175" height="30" draggable="false" />
+                </TitleImgContainer>
+                <MenuContainer>
+                    { menuData.map((menu, index) => (
+                            <HeaderMenu 
+                                key={index}
+                                path={menu.route}
+                                pathname={`/${pathname.split('/')[1]}`}
+                            >
+                                {menu.text}
+                            </HeaderMenu>
+                    )) }
+                </MenuContainer>
+                <InformationContainer>
+                    <MachineContainer>
+                        <MachineName>키노코</MachineName>
+                        <MachineStatus>ON</MachineStatus>
+                    </MachineContainer>
+                    <UserContainer>
+                        <LoginStatus onClick={logoutOnClick}>Logout</LoginStatus>
+                    </UserContainer>
+                </InformationContainer>
+            </Container> 
+        </>
     ) ;
 } ;
 
-export default withRouter(Header) ;
+export default withRouter(withCookies(Header)) ;
