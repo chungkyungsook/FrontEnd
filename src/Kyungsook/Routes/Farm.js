@@ -1,6 +1,7 @@
 import React from 'react' ;
 import styled from 'styled-components' ;
-
+import {Redirect}   from 'react-router-dom' ;
+import { withCookies} from 'react-cookie';
 const Container = styled.div`
     /* 화면 크기 지정 */
     width: 100%;
@@ -150,8 +151,15 @@ const InfoBox  = styled.div`
     margin: 7px;
 `;
 
-const Farm = () => {
+
+const Farm = (props) => {
+    //isLogin cookie 값 확인
+    const isLoginCheck = props.cookies.get('isLogin')
+
     return (
+        <>
+        {
+            !isLoginCheck ? (<Redirect to="/login" />) : (
         <Container>
             <Section1>
                 
@@ -187,8 +195,10 @@ const Farm = () => {
                 </Item3>
             </Section2>
 
-        </Container>
+        </Container>)
+         }
+         </>
     ) ;
 } ;
 
-export default Farm ;
+export default withCookies(Farm) ;

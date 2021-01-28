@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import title      from '../../assets/logoHeight.png' ;
 import {userSelect} from '../../Util/css' ;
 
+import {Redirect}   from 'react-router-dom' ;
+import { withCookies} from 'react-cookie';
 
 
 const Container   = styled.div`
@@ -127,8 +129,15 @@ const Section2    = styled.div`
     border-radius : 20px;
 `;
 
-const Help = () => {
+const Help = (props) => {
+
+    //isLogin cookie 값 확인
+    const isLoginCheck = props.cookies.get('isLogin')
+
     return (
+        <>
+        {
+            !isLoginCheck ? (<Redirect to="/login" />) : (
         <Container>
             <Section1> 
                 <Item1>
@@ -154,8 +163,10 @@ const Help = () => {
             </Section1>
 
             <Section2> 기기 사용 방법은 추후 추가할 예정</Section2>
-        </Container>
+        </Container>)
+        }
+        </>
     );
 };
 
-export default Help ;
+export default withCookies(Help) ;
