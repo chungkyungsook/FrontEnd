@@ -45,8 +45,6 @@ const BaekhwagoOptions = {
 const BaekhwagoChart = () => {
     const ChartRef = useRef();
 
-    console.dir(ChartRef);
-
     return <Line ref={ChartRef} data={BaekhwagoData} options={BaekhwagoOptions} />;
 };
 

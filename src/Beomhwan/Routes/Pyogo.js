@@ -40,8 +40,6 @@ const options = {
 const Chart = () => {
     const ChartRef = useRef();
 
-    console.dir(ChartRef);
-
     return(
         <Line data={data} options={options} ref={ChartRef} />
     );
@@ -92,6 +90,12 @@ const GrowStartButton = styled.button`
 `;
 
 const Pyogo = () => {
+    const [opacity, setOpacity] = useState(false);
+
+    const onModal = (open) => {
+        setOpacity(open);
+    }
+
     return (
         <PyogoStyled>
             <PyogoGraphBox>
@@ -103,7 +107,7 @@ const Pyogo = () => {
                 </Description>
                 <GrowStartBox>
                     <GrowStartButton>적용</GrowStartButton>
-                </GrowStartBox>
+               </GrowStartBox>
             </FooterBox>
         </PyogoStyled>
     );
