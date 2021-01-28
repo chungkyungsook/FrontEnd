@@ -1,7 +1,7 @@
 import React from 'react' ;
 import { Route } from 'react-router-dom' ;
-
 import styled from 'styled-components' ;
+import ChartContext from './ChartContext';
 
 import { 
     SETTING,
@@ -32,10 +32,14 @@ const TemplateContainer = styled.div`
     width: 100%;
 `;
 
-const SettingRouter = () => {
+const SettingRouter = ({location}) => {
+
+    const {pathname} = location;
+
     return (
+        <ChartContext>
         <Conatiner>
-            <SideMenu />
+            <SideMenu pathname={pathname} />
             <TemplateContainer>
                 <Route exact path={SETTING} component={Pyogo}/>
                 <Route path={`${SETTING}${BAEKHWAGO}`} component={Baekhwago} />
@@ -44,6 +48,7 @@ const SettingRouter = () => {
                 <Route path={`${SETTING}${SETTING_UPDATE}`} component={Update} />
             </TemplateContainer>
         </Conatiner>
+        </ChartContext>
     );
 };
 

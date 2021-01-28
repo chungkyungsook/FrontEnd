@@ -1,5 +1,12 @@
 import React, {useState} from 'react' ;
 import { Link } from 'react-router-dom' ;
+import { 
+    SETTING,
+    BAEKHWAGO,
+    CUSTOM,
+    SETTING_ADD,
+    SETTING_UPDATE 
+} from '../Util/routes' ;
 
 import styled from 'styled-components' ;
 
@@ -32,38 +39,41 @@ const Li = styled.li`
         border: 1px solid beige;
     }
     transition: 0.5s;
+    user-select: none;
 `;
 
 const LinkStyled = styled(Link)`
     cursor: default;
+    
 `;
 
-const SideMenu = () => {
+const SideMenu = ({pathname}) => {
+
     return (
         <Container>
             <Ul>
-                <LinkStyled to="/setting">
-                    <Li>
+                <LinkStyled to={SETTING}>
+                    <Li style={pathname === '/setting' ? {background: 'beige', border: '1px solid beige'} : {}}>
                         표고버섯
                     </Li>
                 </LinkStyled>
-                <LinkStyled to="/setting/baekhwago">
-                    <Li>
+                <LinkStyled to={SETTING + BAEKHWAGO}>
+                    <Li style={pathname === '/setting/baekhwago' ? {background: 'beige', border: '1px solid beige'} : {}}>
                         백화고
                     </Li>
                 </LinkStyled>
-                <LinkStyled to="/setting/custom">
-                    <Li>
+                <LinkStyled to={SETTING + CUSTOM}>
+                    <Li style={pathname === '/setting/custom' ? {background: 'beige', border: '1px solid beige'} : {}}>
                         커스텀
                     </Li>
                 </LinkStyled>
-                <LinkStyled to="/setting/add">
-                    <Li>
+                <LinkStyled to={SETTING + SETTING_ADD}>
+                    <Li style={pathname === '/setting/add' ? {background: 'beige', border: '1px solid beige'} : {}}>
                         환경 추가
                     </Li>
                 </LinkStyled>
-                <LinkStyled to="/setting/update">
-                    <Li>
+                <LinkStyled to={SETTING + SETTING_UPDATE}>
+                    <Li style={pathname === '/setting/update' ? {background: 'beige', border: '1px solid beige'} : {}}>
                         환경 업데이트
                     </Li>
                 </LinkStyled>
@@ -72,4 +82,4 @@ const SideMenu = () => {
     );
 };
 
-export default SideMenu ;
+export default SideMenu;

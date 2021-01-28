@@ -8,9 +8,10 @@ const data = {
     datasets: [
     {
         label: 'Temperature',
-        data: [20, 20, 20, 20, 20],
-        fill: false,
+        data: [25, 25, 25, 25, 25],
+        fill: true,
         borderColor: 'red',
+        backgroundColor: 'rgba(255,0,0,0.2)'
     },
     {
         label: 'Humidity',
@@ -39,11 +40,9 @@ const options = {
 const Chart = () => {
     const ChartRef = useRef();
 
-    console.dir(ChartRef);
-
     return(
         <Line data={data} options={options} ref={ChartRef} />
-    )
+    );
 };
 
 const PyogoStyled = styled.div`
@@ -91,6 +90,12 @@ const GrowStartButton = styled.button`
 `;
 
 const Pyogo = () => {
+    const [opacity, setOpacity] = useState(false);
+
+    const onModal = (open) => {
+        setOpacity(open);
+    }
+
     return (
         <PyogoStyled>
             <PyogoGraphBox>
@@ -102,7 +107,7 @@ const Pyogo = () => {
                 </Description>
                 <GrowStartBox>
                     <GrowStartButton>적용</GrowStartButton>
-                </GrowStartBox>
+               </GrowStartBox>
             </FooterBox>
         </PyogoStyled>
     );

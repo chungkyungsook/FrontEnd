@@ -26,3 +26,5 @@ yarn-error.log*
 # ignore 추가
 package-lock.json
 .eslintcache
+
+debug.log

@@ -1,7 +1,8 @@
 import React, {useRef} from 'react';
 import styled from 'styled-components';
-import {SettingBoxStyled} from './Add';
 import {Line} from 'react-chartjs-2';
+import {SettingBox, CheckBox, CheckMenu, Menu2, SetDate, SetWaterSun, SettingName} from './Add';
+
 
 // ------------------------지금까지의 환경 그래프------------------------
 const RanCustomData = {
@@ -139,6 +140,8 @@ const DrawGraph = styled.div`
     height: 45vh;
 `;
 
+
+
 const Update = () => {
     return (
         <>
@@ -156,7 +159,16 @@ const Update = () => {
                 <DrawGraph>
                     <UpdateCustomChart/>
                 </DrawGraph>
-                <SettingBoxStyled/>
+                <SettingBox>
+                <CheckBox>
+                    <CheckMenu>온, 습도 체크박스 표시</CheckMenu>
+                    <Menu2>
+                        <SetDate></SetDate>
+                        <SetWaterSun>물주기, 햇빛 횟수 지정</SetWaterSun>
+                    </Menu2>
+                </CheckBox>
+                <SettingName>적용 버튼 표시</SettingName>
+                </SettingBox>
             </CustomUpdateDivRow>
         </>
     );
