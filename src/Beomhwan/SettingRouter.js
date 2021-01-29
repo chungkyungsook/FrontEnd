@@ -1,7 +1,8 @@
 import React from 'react' ;
-import { Route } from 'react-router-dom' ;
+import { Route, Redirect } from 'react-router-dom' ;
 import styled from 'styled-components' ;
 import ChartContext from './ChartContext';
+import {withCookies} from 'react-cookie';
 
 import { 
     SETTING,
@@ -32,11 +33,14 @@ const TemplateContainer = styled.div`
     width: 100%;
 `;
 
-const SettingRouter = ({location}) => {
+const SettingRouter = ({location, cookies}) => {
+    const isLoginCheck = cookies.get('isLogin');
 
     const {pathname} = location;
 
     return (
+        <>
+        {!isLoginCheck ? (<Redirect to="/login" />) : (
         <ChartContext>
         <Conatiner>
             <SideMenu pathname={pathname} />
@@ -49,7 +53,9 @@ const SettingRouter = ({location}) => {
             </TemplateContainer>
         </Conatiner>
         </ChartContext>
+        )}
+        </>
     );
 };
 
-export default SettingRouter ;
+export default withCookies(SettingRouter) ;

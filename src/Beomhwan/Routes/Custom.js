@@ -2,7 +2,11 @@ import React, {useRef, useEffect, useState} from 'react';
 import styled from 'styled-components';
 import {Line} from 'react-chartjs-2';
 import axios from 'axios';
-import {useCustomChartInfo, useCustomChartList} from '../ChartContext';
+import {
+    useCustomChartInfo, 
+    useCustomChartList, 
+    useMachineInfo
+} from '../ChartContext';
 import Modal from '../Components/Modal';
 
 // chart의 options 설정
@@ -27,11 +31,8 @@ const options = {
 
 // 환경 그래프 반환
 const BarChart = ({chartData}) => {
-
     // 특정 DOM을 참조
     const ChartRef = useRef(null);
-
-    console.dir(ChartRef);
 
     return (
         <Line data={chartData} options={options} ref={ChartRef}/>
@@ -82,21 +83,24 @@ const GraphTitle = styled.div`
 `;
 
 // 커스텀 환경 적용 버튼
-const CustomStartButton = styled.button`
+const CustomButton = styled.button`
     width: 100px;
     height: 40px;
     border: 1px solid gray;
     background-color: white;
     position: relative;
     top: 10px;
-    left: 399px;
+    left: 299px;
     user-select: none;
 `;
 
-const CustomStart = ({id, onStart}) => {
+const CustomStart = ({onStart, onRemove, macid, prgid}) => {
 
     return (
-        <CustomStartButton onClick={() => onStart(id)}>적용</CustomStartButton>
+        <>
+        <CustomButton onClick={() => onStart(macid, prgid)}>적용</CustomButton>
+        <CustomButton onClick={() => onRemove(prgid)}>삭제</CustomButton>
+        </>
     );
 }
 
@@ -104,21 +108,42 @@ const CustomStart = ({id, onStart}) => {
 const Custom = () => {
     const chart = useCustomChartList();
     const chartInfo = useCustomChartInfo();
+    const machineId = useMachineInfo();
     const [loading, setLoading] = useState(true);
-    const [opacity, setOpacity] = useState(false);
+    const [opacity, setOpacity] = useState(0);
 
     useEffect(() => {
         setTimeout(setLoading(false), 4000);
     },[]);
 
     // 커스텀 환경 적용 클릭 시 적용 테스트
-    const onStart = (id) => {
-        console.log(id);
-        setOpacity(true);
+    const onStart = (macid, prgid) => {
+        console.log(macid, prgid);
+        //커스텀 프로그램 적용 put 코드
+        axios.put('http://172.26.3.62/api/myfarm/program', {
+            id: macid,
+            prgId: prgid
+        }).then(response => {
+            console.log(response);
+        }).catch(err => {
+            console.error(err);
+        });
+        setOpacity(1);
     };
 
+    const onRemove = (prgid) => {
+        console.log(prgid);
+        axios.delete('http://172.26.3.62/api/farm', {
+            id: prgid
+        }).then(response => {
+            console.log(response);
+        }).catch(err => {
+            console.error(err);
+        })
+    }
+
     const onOverlayClick = () => {
-        setOpacity(false);
+        setOpacity(0);
     }
 
     return (
@@ -128,15 +153,19 @@ const Custom = () => {
             :
             <CustomBox>
                 {chart.map((ch,index) =>
-                <> 
-                <CustomGraphStyle key={index}>
+                <div key={index}> 
+                <CustomGraphStyle>
                     <p style={{userSelect: 'none'}}>사용 횟수 : {chartInfo[index].prg_count}</p>
                     <GraphTitle>- {chartInfo[index].prg_name} -</GraphTitle>
                     <BarChart chartData={ch}/>
-                    <CustomStart onStart={onStart} id={chartInfo[index].id}>적용</CustomStart>
+                    <CustomStart 
+                        onStart={onStart}
+                        onRemove={onRemove} 
+                        prgid={chartInfo[index].id}
+                        macid={machineId} />
                 </CustomGraphStyle>
-                {/* <Modal opacity={opacity} onOverlayClick={onOverlayClick} /> */}
-                </>
+                <Modal opacity={opacity} onOverlayClick={onOverlayClick} />
+                </div>
                 )}
             </CustomBox> 
         }
@@ -150,16 +179,3 @@ export default Custom;
 // 리스트 잘 출력하는거
 // 3개씩 끊어서 출력해야함
 // array.map을 다시한번 짚고 넘어가는게 좋을까?
-
-
-
-
-// 커스텀 프로그램 적용 put 코드
-// axios.put('http://172.26.3.62/api/myfarm/program', {
-//     id: 1,
-//     prgId: id
-// }).then(response => {
-//     console.log(response);
-// }).catch(err => {
-//     console.error(err);
-// })
