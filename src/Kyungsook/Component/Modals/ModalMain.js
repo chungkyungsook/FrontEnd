@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useState,useEffect } from 'react';
 import Modal from './Modal';
 
+
 const ModalMain = ()=> {
     //useState를 사용하여 open상태를 변경한다. (open일때 true로 만들어 열리는 방식)
     const [modalOpen, setModalOnpen] = useState(false)
@@ -12,9 +13,9 @@ const ModalMain = ()=> {
     const [isOkPwd, setIsOkPwd] = useState(0)
     
     const [input,setInput] = useState({
-        keyOnchange : "",
-        pwdOnchange : "",
-        clickBtnKey : false,
+        keyOnchange : "", //key 번호
+        pwdOnchange : "", // key 비밀 번호
+        nickName : "", // 기기 등록 이름
         makeBtn : false,
     })
 
@@ -32,7 +33,7 @@ const ModalMain = ()=> {
         setInput({
             keyOnchange : "",
             pwdOnchange : "",
-            clickBtnKey : false,
+            nickName : "",
             makeBtn : false,
         })
         setIsOk(0)
@@ -43,20 +44,6 @@ const ModalMain = ()=> {
         
     })
 
-    //key값 저장
-    const onChangeKey = (e) =>{
-        setInput({
-            ...input,
-            keyOnchange : e.target.value
-        })
-    }
-
-    const onChangePwd = (e) =>{
-        setInput({
-            ...input,
-            pwdOnchange : e.target.value
-        })
-    }
     //key번호 확인
     const onClickKey = () =>{
         axios.get(`http://${url}/api/pin/check`,{
@@ -93,18 +80,32 @@ const ModalMain = ()=> {
         })       
     }
 
-
-
+    //input 값 바꾸기
+    const onChange = (e) =>{
+        const {name,value} = e.target
+        setInput({
+            ...input,
+            [name] : value
+        })
+    }
+    //기기 이름 관리
     useEffect(()=>{
-        const value = isOk === 1 ? (isOkPwd === 1 ? setInput({...input,makeBtn:true}) : 'no') : 'no'
+        //값 변경 되었는지 확인
         console.log("key",input.keyOnchange)
         console.log("pwd",input.pwdOnchange)
         console.log("setIsOk",isOk)
         console.log("setIsOkPwd",isOkPwd)
         console.log("makeBtn",input.makeBtn)
-    }, [isOk, isOkPwd, setInput])
+        console.log("nickName",input.nickName)
 
+        //공백이면 등록 버튼 false로 값 변경
+        input.nickName === "" && setInput({...input,makeBtn: false})
 
+        //key, key 비밀번호 일치 및 기기 이름 설정 하면 
+        //등록 가능 하게 버튼 true로 값 변경
+        isOk === 1 && isOkPwd === 1 && input.nickName !== "" && setInput({...input,makeBtn:true})
+    },[isOk, isOkPwd, setInput,input.nickName])
+    
     const {makeBtn} = input
     return(
         <div>
@@ -114,17 +115,16 @@ const ModalMain = ()=> {
 
                 {/* Modal.js <main> {props.childern}</main> 에 내용이 입력된다.*/}
                 <div>
-
-                    <input  className='modalbtn' size='30' placeholder='기기의 핀 번호를 입력해주세요' onChange={onChangeKey}/>
+                    <input  name='keyOnchange' className='modalbtn' size='30' placeholder='기기의 핀 번호를 입력해주세요' onChange={onChange}/>
                     <button type="button" onClick={onClickKey} >확인</button>
                     {<div  className='text' >{ isOk===1 ? '*성공했습니다.' : isOk===2 && '*해당번호는 없습니다.'}</div>}
 
-                    <input className='modalbtn' size='30' placeholder='기기의 초기 비밀번호를 입력해주세요'onChange={onChangePwd} />
+                    <input name='pwdOnchange' className='modalbtn' size='30' placeholder='기기의 초기 비밀번호를 입력해주세요'onChange={onChange} />
                     <button type="button" onClick={onClickPwd}>확인</button>
                     {<div  className='text' >{ isOkPwd===1 ? '*성공했습니다.' : isOkPwd===2 && '*인증에 실패 했습니다.'}</div>}
 
-                    <input className='modalbtn' size='30' placeholder='기기의 이름을 입력해주세요'/>
-
+                    <input  name='nickName' className='modalbtn' size='30' placeholder='기기의 이름을 입력해주세요' onChange={onChange} />
+                    
                 </div>
             </Modal>
         </div>
