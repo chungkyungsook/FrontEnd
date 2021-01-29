@@ -100,9 +100,17 @@ const LoginBoxSamples =(props)=> {
 
     //처음 시작시 token지우기
     useEffect( ()=>{
+        axios.put('http://172.26.3.62/api/logout',{token:props.cookies.get('token')})      
         props.cookies.remove('email');
         props.cookies.remove('token');
         props.cookies.remove('isLogin') ;
+        props.cookies.remove('userId') ;
+
+         //cookie상태 확인
+         console.log("login page 로그인 상태 확인",isLogin);
+         console.log("login page 토큰확인",token);
+         console.log("login page email 확인",email);
+         console.log("login page userid 확인",userId);
     },[]);
     
 
@@ -111,14 +119,16 @@ const LoginBoxSamples =(props)=> {
         isLogin: false,
         token : '',
         email :'',
+        userId : '',
     })
 
-    const {isLogin,token,email} = data;
+    const {isLogin,token,email,userId} = data;
 
     const cookieSet = ()=>{
         props.cookies.set('isLogin', isLogin) ;
         props.cookies.set('email', email) ;
         props.cookies.set('token', token) ;
+        props.cookies.set('userId', userId) ;
     }
 
     //로그인 버튼 클릭시 실행
@@ -126,19 +136,15 @@ const LoginBoxSamples =(props)=> {
 
         console.log(JSON.stringify(res))
     
-    
+        //kakao 정보가져오기
         const semi_id    = JSON.stringify(res.profile.id)
         const semi_email = JSON.stringify(res.profile.kakao_account.email)
         const semi_token = JSON.stringify(res.response.refresh_token)
     
-        // axios.defaults.headers.common['Kakao'] = `Beare ${semi_token}`
-    
-        console.log(semi_id,semi_email,semi_token)
-    
         //db값 넣어주기
         try {
             //회원가입
-            const signup_response = await axios({
+            const signup_response =  axios({
                 method: "post",
                 // headers : {
                 //     "Access-Control-Allow-Origin" : "*"
@@ -159,7 +165,7 @@ const LoginBoxSamples =(props)=> {
         try {
 
             //로그인
-            const login_response = await axios({
+            const login_response =  axios({
                 method: "post",
                 url:"http://172.26.3.62/api/login",
                 data: {
@@ -169,8 +175,8 @@ const LoginBoxSamples =(props)=> {
                 responseType: "json"
             });
 
-            //회원가입
-            const signup_response = await axios({
+            //로그인 여부
+            const signup_response =  axios({
                 method: "post",
                 url:"http://172.26.3.62/api/auth",
                 data: {
@@ -181,16 +187,14 @@ const LoginBoxSamples =(props)=> {
 
         }catch (err) { //이미 가입된 계정
             console.log(err);
-        }finally {
-            
         }
 
         //값 바꿔주기
         setData({
-            ...data,
             isLogin:true,
             token: semi_token,
             email: semi_email,
+            userId : semi_id,
         }) ;
 
     }// responseKakao    
@@ -198,11 +202,7 @@ const LoginBoxSamples =(props)=> {
     //로그인 하면 cookie 저장
     isLogin && cookieSet();
 
-    //cookie상태 확인
-    console.log("login page 로그인 상태 확인",isLogin);
-    console.log("login page 토큰확인",token);
-    console.log("login page email 확인",email);
-
+    console.log("test")
     return (
         <>
         {
