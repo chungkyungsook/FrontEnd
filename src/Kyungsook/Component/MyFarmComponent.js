@@ -1,6 +1,7 @@
 import React from 'react' ;
 import '../Css/MyFarm.css';
 import {Link} from 'react-router-dom';
+import ModalMain from '../Component/Modals/ModalMain';
 
 const MyFarmComponent = ({pathname}) => {
     return (
@@ -11,7 +12,8 @@ const MyFarmComponent = ({pathname}) => {
 
                 <div className = "item1Text"> 기기 관리</div>
                 <div className = "item1ButtonBox">
-                    <div className = "item1Button">+</div>
+                    {/* 모달 창 */}
+                    <ModalMain/>
                 </div>
 
             </div>{/* 기기관리 끝*/}
