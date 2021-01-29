@@ -1,6 +1,7 @@
 import React, {useRef, useEffect, memo, useState} from 'react';
 import styled from 'styled-components';
 import { Line } from 'react-chartjs-2';
+import Modal from '../Components/Modal';
 
 
 const data = {
@@ -74,7 +75,7 @@ const GrowStartBox = styled.div`
     padding: 30px;
     flex: 1;
     display: flex;
-`; 
+`;
 
 const GrowStartButton = styled.button`
     flex: 1;
@@ -89,15 +90,28 @@ const GrowStartButton = styled.button`
     cursor: pointer;
 `;
 
-const Pyogo = () => {
-    const [opacity, setOpacity] = useState(false);
+const ModalOnButton = ({onModal}) => {
+    return (
+        <GrowStartButton onClick={onModal}>
+            적용
+        </GrowStartButton>
+    )
+}
 
-    const onModal = (open) => {
-        setOpacity(open);
+const Pyogo = () => {
+    const [opacity, setOpacity] = useState(0);
+
+    const onModal = () => {
+        setOpacity(1);
+    }
+
+    const onOverlayClick = () => {
+        setOpacity(0);
     }
 
     return (
         <PyogoStyled>
+            <Modal opacity={opacity} onOverlayClick={onOverlayClick}/>
             <PyogoGraphBox>
                 <Chart />
             </PyogoGraphBox>
@@ -106,7 +120,7 @@ const Pyogo = () => {
                     표고버섯은 일정한 생장 환경을 제공합니다.
                 </Description>
                 <GrowStartBox>
-                    <GrowStartButton>적용</GrowStartButton>
+                    <ModalOnButton onModal={onModal}>적용</ModalOnButton>
                </GrowStartBox>
             </FooterBox>
         </PyogoStyled>

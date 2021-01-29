@@ -1,8 +1,11 @@
 import styled from 'styled-components';
+import {useEffect} from 'react';
 
 const Overlay = styled.div`
     display: ${props => props.opacity ? 'flex' : 'none'};
     position: fixed;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     height: 100%;
     top: 0;
@@ -10,6 +13,7 @@ const Overlay = styled.div`
     right: 0;
     bottom: 0;
     background: rgba(0,0,0,0.3);
+    z-index: 0;
 `;
 
 const ModalBox = styled.div`
@@ -17,15 +21,23 @@ const ModalBox = styled.div`
     position: fixed;
     border: 1px solid gray;
     background-color: white;
-    flex: 1;
-    transform: (-50%, -50%);
+    width: 500px;
+    height: 200px;
+    z-index: 10;
 `;
 
 const Modal = ({opacity, onOverlayClick}) => {
-    return (
-        <Overlay opacity={opacity} onClick={onOverlayClick}>
-            <ModalBox opacity={opacity}>
 
+    useEffect(() => {
+        opacity ? 
+            document.body.style.overflow = "hidden" : 
+            document.body.style.overflow = "auto"
+    },[opacity]);
+
+    return (
+        <Overlay opacity={opacity} onClick={onOverlayClick} >
+            <ModalBox opacity={opacity}>
+                <button onClick={() => alert('clicked')}>click</button>
             </ModalBox>
         </Overlay>
     );

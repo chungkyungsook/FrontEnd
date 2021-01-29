@@ -6,6 +6,8 @@ import axios from 'axios';
 const CustomChartListContext = createContext();
 // 커스텀 차트 id 및 정보
 const CustomChartListInfoContext = createContext();
+// 커스텀 차트 기기 아이디 정보
+const UserMachineIdContext = createContext();
 
 // chartjs dataset
 const setChartjsDataset = (date, temp, humi, growth) => {
@@ -39,10 +41,16 @@ const setChartjsDataset = (date, temp, humi, growth) => {
 const ChartContext = ({children}) => {
     const [customChartDataSet, setCustomChartDataSet] = useState([]);
     const [customChartInfo, setCustomChartInfo] = useState([]);
+    const [machineId, setMachineId] = useState();
 
     useEffect(() => {
-        // get axios data
-        let data = getData()
+        // get user token
+        getMachineId().then(async (pro) => {
+            let id = pro;
+            await setMachineId(id);
+        });
+        // get chart data
+        getData()
         .then(value => {
             // api 데이터 가져왔고
             let da = value.data.filter(da => da.id < 11);
@@ -50,7 +58,7 @@ const ChartContext = ({children}) => {
         })
         .then(async ch => {
             // 커스텀 차트 정보에 데이터 삽입
-            setCustomChartInfo(ch);
+                        setCustomChartInfo(ch);
             await ch.forEach(data => {
                 // chartjs 양식에 맞추기 위한 배열들 선언
                 let dateArr = [];   // 날짜
@@ -80,6 +88,7 @@ const ChartContext = ({children}) => {
         });
     },[]);
 
+    // 프로그램 리스트 데이터 get
     const getData = async () => {
         let data = await axios.get('http://172.26.3.62/api/farm/custom/list');
         console.log(data);
@@ -87,10 +96,25 @@ const ChartContext = ({children}) => {
         return data;
     }
 
+    // UserToken을 통한 기기 id get
+    const getMachineId = async (token) => {
+        let machineIdPromise = axios.get('http://172.26.3.62/api/myfarm/id', {
+            token: token
+        }).then(response => {
+            console.log(response);
+            return response.data;
+        }).catch(err => {
+            console.error(err);
+        });
+        return machineIdPromise;
+    }
+
     return (
         <CustomChartListInfoContext.Provider value={customChartInfo}>
             <CustomChartListContext.Provider value={customChartDataSet}>
+                <UserMachineIdContext.Provider value={machineId}>
                     {children}
+                </UserMachineIdContext.Provider>
             </CustomChartListContext.Provider>
         </CustomChartListInfoContext.Provider>
     );
@@ -107,7 +131,15 @@ export function useCustomChartList() {
 
 export function useCustomChartInfo() {
     const customInfoContext = useContext(CustomChartListInfoContext);
-    if(!customInfoContext) 
+    if(customInfoContext.length === 0) 
         console.error('차트 정보 없음');
     return customInfoContext;
+};
+
+export function useMachineInfo() {
+    const machineinfo = useContext(UserMachineIdContext);
+    console.log(machineinfo);
+    if(!machineinfo)
+        console.error('기기 정보 없음!');
+    return machineinfo;
 };
