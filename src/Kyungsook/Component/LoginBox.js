@@ -202,6 +202,7 @@ const LoginBoxSamples =(props)=> {
     //로그인 하면 cookie 저장
     isLogin && cookieSet();
 
+    console.log("test")
     return (
         <>
         {
