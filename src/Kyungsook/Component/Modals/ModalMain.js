@@ -1,16 +1,17 @@
 import axios from 'axios';
 import React, { useState,useEffect } from 'react';
 import Modal from './Modal';
+import { withCookies} from 'react-cookie';
 
-
-const ModalMain = ()=> {
+const ModalMain = (props)=> {
     //useState를 사용하여 open상태를 변경한다. (open일때 true로 만들어 열리는 방식)
     const [modalOpen, setModalOnpen] = useState(false)
-    const [test, setTest] = useState(0)
-
-    //key번호 확인
-    const [isOk, setIsOk] = useState(0)
-    const [isOkPwd, setIsOkPwd] = useState(0)
+    const [openStr, setOpenStr] = useState({
+        isKey : 0,
+        isPwd : 0,
+        isNickName : 0
+    })
+    
     
     const [input,setInput] = useState({
         keyOnchange : "", //key 번호
@@ -21,6 +22,7 @@ const ModalMain = ()=> {
 
     //url
     const url = '172.26.3.62'
+    const {isKey,isPwd,isNickName} = openStr
 
     //Modal확인
     const openModal = () =>{
@@ -36,48 +38,67 @@ const ModalMain = ()=> {
             nickName : "",
             makeBtn : false,
         })
-        setIsOk(0)
-        setIsOkPwd(0)
+
+        setOpenStr({
+            isKey : 0,
+            isPwd : 0,
+            isNickName : 0
+        })
     }
 
-    useEffect(()=>{
-        
-    })
 
     //key번호 확인
-    const onClickKey = () =>{
-        axios.get(`http://${url}/api/pin/check`,{
-            params:{
-                pin : input.keyOnchange
-            }
-        })
-        .then(data =>{
-            data.status === 200 && setIsOk(1)
-            console.log("status",data.status)
-        })
-        .catch(
-            e=>{console.log(e)
-            setIsOk(2)
-        })
-    }
-
-    //key와 비밀번호 확인 && 등록 버튼 판단
-    const onClickPwd = () =>{
-
-        axios.get(`http://${url}/api/pin/auth`,{
-            params:{
-                pin : input.keyOnchange,
-                pw : input.pwdOnchange
-            }
-        })
-        .then(data =>{
-            data.status === 200 && setIsOkPwd(1)
-            console.log("status",data.status)
-        })
-        .catch(
-            e=>{console.log(e)
-                setIsOkPwd(2)
-        })       
+    const onClickBtn= (e) =>{
+        const {name} = e.target
+        
+        if(name === 'key'){ // 기기 key 번호 확인
+            axios.get(`http://${url}/api/pin/check`,{
+                params:{
+                    pin : input.keyOnchange
+                }
+            })
+            .then(data =>{
+                data.status === 200 && setOpenStr({...openStr,isKey:1})
+                console.log("status",data.status)
+            })
+            .catch(
+                e=>{console.log(e)
+                    setOpenStr({...openStr,isKey:2})
+            })
+        }else if(name === 'pwd'){ //기기 비밀번호 확인
+            axios.get(`http://${url}/api/pin/auth`,{
+                params:{
+                    pin : input.keyOnchange,
+                    pw : input.pwdOnchange
+                }
+            })
+            .then(data =>{
+                data.status === 200 && setOpenStr({...openStr,isPwd:1})
+                console.log("status",data.status)
+            })
+            .catch(
+                e=>{console.log(e)
+                    setOpenStr({...openStr,isPwd:2})
+            })       
+        }else if(name === 'makeDevice'){ //기기 등록
+            axios.put(`http://${url}/api/myfarm/register`,{
+                params:{
+                    pin : input.keyOnchange,
+                    pw : input.pwdOnchange,
+                    userId : props.cookies.get('userId'),
+                    machineName : input.nickName,
+                }
+            })
+            .then(data =>{
+                data.status === 200 && setOpenStr({...openStr,isNickName:1})
+                console.log("status",data.status)
+            })
+            .catch(
+                e=>{console.log(e)
+                setOpenStr({...openStr,isNickName:2})
+            })       
+        }
+        
     }
 
     //input 값 바꾸기
@@ -88,47 +109,45 @@ const ModalMain = ()=> {
             [name] : value
         })
     }
+    
     //기기 이름 관리
     useEffect(()=>{
-        //값 변경 되었는지 확인
         console.log("key",input.keyOnchange)
         console.log("pwd",input.pwdOnchange)
-        console.log("setIsOk",isOk)
-        console.log("setIsOkPwd",isOkPwd)
+        console.log("setIsOk",isKey)
+        console.log("setIsOkPwd",isPwd)
         console.log("makeBtn",input.makeBtn)
-        console.log("nickName",input.nickName)
-
-        //공백이면 등록 버튼 false로 값 변경
-        input.nickName === "" && setInput({...input,makeBtn: false})
-
-        //key, key 비밀번호 일치 및 기기 이름 설정 하면 
-        //등록 가능 하게 버튼 true로 값 변경
-        isOk === 1 && isOkPwd === 1 && input.nickName !== "" && setInput({...input,makeBtn:true})
-    },[isOk, isOkPwd, setInput,input.nickName])
+        //기기 이름 공백이면 버튼 숨기기
+        input.nickName === "" && setInput({...input,makeBtn: false}) 
+        isKey === 1 && isPwd === 1 && input.nickName !== "" && setInput({...input,makeBtn:true})
+    },[isKey, isPwd, setInput,input.nickName])
     
     const {makeBtn} = input
+
     return(
         <div>
             <div className='item1Button' onClick={openModal}>+</div>
             {/* header부분에 텍스트를 입력한다. */}
-            <Modal open={modalOpen} close={closeModal} header="기기 등록을 시작합니다." setTest={setTest} makeBtn={makeBtn}>
+            <Modal open={modalOpen} close={closeModal} header="기기 등록을 시작합니다." makeBtn={makeBtn} onClickBtn={onClickBtn}>
+
 
                 {/* Modal.js <main> {props.childern}</main> 에 내용이 입력된다.*/}
                 <div>
                     <input  name='keyOnchange' className='modalbtn' size='30' placeholder='기기의 핀 번호를 입력해주세요' onChange={onChange}/>
-                    <button type="button" onClick={onClickKey} >확인</button>
-                    {<div  className='text' >{ isOk===1 ? '*성공했습니다.' : isOk===2 && '*해당번호는 없습니다.'}</div>}
-
-                    <input name='pwdOnchange' className='modalbtn' size='30' placeholder='기기의 초기 비밀번호를 입력해주세요'onChange={onChange} />
-                    <button type="button" onClick={onClickPwd}>확인</button>
-                    {<div  className='text' >{ isOkPwd===1 ? '*성공했습니다.' : isOkPwd===2 && '*인증에 실패 했습니다.'}</div>}
-
-                    <input  name='nickName' className='modalbtn' size='30' placeholder='기기의 이름을 입력해주세요' onChange={onChange} />
+                    <button name='key' type="button" onClick={onClickBtn} >확인</button>
+                    {<div  className='text' >{ isKey===1 ? '*성공했습니다.' : isKey===2 && '*해당번호는 없습니다.'}</div>}
                     
+                    <input name='pwdOnchange' className='modalbtn' size='30' placeholder='기기의 초기 비밀번호를 입력해주세요'onChange={onChange} />
+                    <button name='pwd' type="button" onClick={onClickBtn}>확인</button>
+                    {<div  className='text' >{ isPwd===1 ? '*성공했습니다.' : isPwd===2 && '*인증에 실패 했습니다.'}</div>}
+                    
+                    <input  name='nickName' className='modalbtn' size='30' placeholder='기기의 이름을 입력해주세요' onChange={onChange} />
+                    {<div  className='text' >{ isNickName===1 ? closeModal() : isNickName===2 && '*등록에 실패했습니다. 관리자에게 문의 바랍니다.'}</div>}
                 </div>
+
             </Modal>
         </div>
     )
 
 }
-export default ModalMain
+export default withCookies(ModalMain)

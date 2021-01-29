@@ -3,7 +3,7 @@ import '../../Css/modal.css';
 
 const Modal = (props) =>{
     //열기, 닫기, 모달 헤더 텍스트를 부모로부터 받아옴
-    const {open, close,header,setTest, makeBtn} = props;
+    const {open, close,header, makeBtn,onClickBtn} = props;
 
     return(
         <div className={open ? 'openModal modal' : 'modal'}>
@@ -16,10 +16,9 @@ const Modal = (props) =>{
                     </header>
                     <main>
                         {props.children}
-                        {setTest(5)}
                     </main>
                     <footer>
-                        {makeBtn && <button  className="getKey">등록</button>}
+                        {makeBtn && <button name='makeDevice' className="getKey"type="button" onClick={onClickBtn}>등록</button>}
                     </footer>
                 </section>) 
                 : 
