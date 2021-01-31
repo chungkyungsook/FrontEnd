@@ -138,7 +138,20 @@
   padding: 20px 30px;
   border: 1px solid black;
 }
+/* 아무런 값 들이 없을 시 */
+.item4 {
+  display: flex;
+  flex: 8;
+  flex-direction: column;
+  justify-content: center;
 
+  background: white;
+  margin-right: 19px;
+  padding: 20px 30px;
+  border: 1px solid black;
+
+  text-align: center;
+}
 /* 그래프 */
 .graph {
   text-align: center;
@@ -190,4 +203,11 @@
 }
 .pageInfo:hover {
   background: #23291c;
+}
+
+.LodingText {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
 }

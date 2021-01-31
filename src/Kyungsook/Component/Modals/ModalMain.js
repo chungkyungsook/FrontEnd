@@ -61,9 +61,9 @@ const ModalMain = (props)=> {
                 data.status === 200 && setOpenStr({...openStr,isKey:1})
                 console.log("status",data.status)
             })
-            .catch(
-                e=>{console.log(e)
-                    setOpenStr({...openStr,isKey:2})
+            .catch(e=>{
+                    e.response.status === 401 && setOpenStr({...openStr,isKey:2})
+                    e.response.status === 404 && setOpenStr({...openStr,isKey:3})
             })
         }else if(name === 'pwd'){ //기기 비밀번호 확인
             axios.get(`http://${url}/api/pin/auth`,{
@@ -77,17 +77,18 @@ const ModalMain = (props)=> {
                 console.log("status",data.status)
             })
             .catch(
-                e=>{console.log(e)
+                e=>{
+                    console.log(e)
                     setOpenStr({...openStr,isPwd:2})
             })       
         }else if(name === 'makeDevice'){ //기기 등록
             axios.put(`http://${url}/api/myfarm/register`,{
-                params:{
+                
                     pin : input.keyOnchange,
                     pw : input.pwdOnchange,
                     userId : props.cookies.get('userId'),
                     machineName : input.nickName,
-                }
+                
             })
             .then(data =>{
                 data.status === 200 && setOpenStr({...openStr,isNickName:1})
@@ -123,7 +124,7 @@ const ModalMain = (props)=> {
     },[isKey, isPwd, setInput,input.nickName])
     
     const {makeBtn} = input
-
+    
     return(
         <div>
             <div className='item1Button' onClick={openModal}>+</div>
@@ -135,7 +136,7 @@ const ModalMain = (props)=> {
                 <div>
                     <input  name='keyOnchange' className='modalbtn' size='30' placeholder='기기의 핀 번호를 입력해주세요' onChange={onChange}/>
                     <button name='key' type="button" onClick={onClickBtn} >확인</button>
-                    {<div  className='text' >{ isKey===1 ? '*성공했습니다.' : isKey===2 && '*해당번호는 없습니다.'}</div>}
+                    {<div  className='text' >{ isKey===1 ? '*성공했습니다.' : isKey===2 ? '*이미 등록된 번호입니다.' : isKey===3 && "*등록된 번호가 없습니다."}</div>}
                     
                     <input name='pwdOnchange' className='modalbtn' size='30' placeholder='기기의 초기 비밀번호를 입력해주세요'onChange={onChange} />
                     <button name='pwd' type="button" onClick={onClickBtn}>확인</button>
