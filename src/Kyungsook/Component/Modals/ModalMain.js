@@ -6,6 +6,7 @@ import { withCookies} from 'react-cookie';
 const ModalMain = (props)=> {
     //useState를 사용하여 open상태를 변경한다. (open일때 true로 만들어 열리는 방식)
     const [modalOpen, setModalOnpen] = useState(false)
+
     const [openStr, setOpenStr] = useState({
         isKey : 0,
         isPwd : 0,
@@ -44,6 +45,7 @@ const ModalMain = (props)=> {
             isPwd : 0,
             isNickName : 0
         })
+
     }
 
 
@@ -87,12 +89,15 @@ const ModalMain = (props)=> {
                     pin : input.keyOnchange,
                     pw : input.pwdOnchange,
                     userId : props.cookies.get('userId'),
+                    // userId : 'SZ4S71',
                     machineName : input.nickName,
                 
             })
             .then(data =>{
                 data.status === 200 && setOpenStr({...openStr,isNickName:1})
-                console.log("status",data.status)
+                // console.log("status",data.status)
+                //page새롭게 로딩
+                window.location.replace("/")
             })
             .catch(
                 e=>{console.log(e)
@@ -120,6 +125,7 @@ const ModalMain = (props)=> {
         console.log("makeBtn",input.makeBtn)
         //기기 이름 공백이면 버튼 숨기기
         input.nickName === "" && setInput({...input,makeBtn: false}) 
+        //등록 버튼 만들기
         isKey === 1 && isPwd === 1 && input.nickName !== "" && setInput({...input,makeBtn:true})
     },[isKey, isPwd, setInput,input.nickName])
     
