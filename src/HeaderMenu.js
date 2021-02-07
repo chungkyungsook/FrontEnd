@@ -14,7 +14,8 @@ const Container = styled.li`
     text-align : center ;
 `;
 
-const HeaderMenu = ({ path, pathname, children }) => {
+const HeaderMenu = ({ path, pathname, children}) => {
+    
     return (
         <Link to={path} draggable="false">
             <Container 
@@ -22,6 +23,7 @@ const HeaderMenu = ({ path, pathname, children }) => {
             >
                 { children }
             </Container>
+            
         </Link>
     );
 };

@@ -88,8 +88,8 @@ const ModalMain = (props)=> {
                 
                     pin : input.keyOnchange,
                     pw : input.pwdOnchange,
-                    userId : props.cookies.get('userId'),
-                    // userId : 'SZ4S71',
+                    // userId : props.cookies.get('userId'),
+                    userId : 'SZ4S71',
                     machineName : input.nickName,
                 
             })

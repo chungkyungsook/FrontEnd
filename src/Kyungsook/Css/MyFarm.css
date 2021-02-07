@@ -120,11 +120,17 @@
 }
 
 /* 온도 */
-.temperature {
+.progress {
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
 }
 
 /* 습도 */
-.humidity {
+.span {
+  margin-right: 25px;
 }
 
 /* 그래프 + 간단한 버섯 상태 정보 */
@@ -183,6 +189,16 @@
   margin-top: 23px;
   flex: 3;
   background: rgb(238, 238, 232);
+}
+
+.smailInfo > h1 {
+  display: flex;
+  text-align: center;
+  line-height: 73px;
+  /* height: auto; */
+  /* margin: 50px; */
+  /* justify-content: center; */
+  flex-direction: column;
 }
 
 .pageInfo {

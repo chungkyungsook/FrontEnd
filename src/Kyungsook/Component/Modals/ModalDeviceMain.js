@@ -24,9 +24,10 @@ const ModalDeviceMain = (props)=> {
 
     }
         
-    //선택 삭제 버튼
+    //선택 and 삭제 버튼
     const choiceOnClick = (e) =>{
         const {name} = e.target
+
         if(name === 'ChoiceDevice'){ //기기 선택
             console.log("기기 작동 on/off")
             
@@ -35,6 +36,11 @@ const ModalDeviceMain = (props)=> {
             console.log("cook",props.cookies.get('deviceNumber'))
             closeModal()
             
+            //딜레이 주기
+            setTimeout(()=>{
+                //새로고침
+                window.location.replace("/")
+            },1000)
 
         }else if(name === 'DeleteDevice'){ //삭제
             console.log("삭제 버튼 클릭")
@@ -45,7 +51,7 @@ const ModalDeviceMain = (props)=> {
                 }
             }).then(d=>{
                 closeModal()
-                
+                props.cookies.remove('deviceNumber')
                 //페이지 새롭게 로딩
                 window.location.replace("/")
             }).catch(e=>{
@@ -59,9 +65,9 @@ const ModalDeviceMain = (props)=> {
         <div>
             {/* 등록된 기기 출력 */}
             {
-                userDeviceInfo.map(data=>(
+                userDeviceInfo.map((data,index)=>(
                     
-                    <div className = "item1Button" onClick={() => {openModal() ; (()=>{deviceNum(data)})() }}>
+                    <div key={index} className = "item1Button" onClick={() => {openModal() ; (()=>{deviceNum(data)})() }}>
                         {data.machine_name} 
                     </div>
                     ))

@@ -24,8 +24,8 @@ const MyFarm = (props) => {
         //user에 등록 된 기기 정보 가져오기
          axios.post(`http://${url}/api/myfarm/list`,{
              
-                userId : props.cookies.get('userId')
-                // userId : 'SZ4S71'
+                // userId : props.cookies.get('userId')
+                userId : 'SZ4S71'
              
             
         }).then(data =>{
@@ -43,12 +43,13 @@ const MyFarm = (props) => {
     }
     //한번만 실행하기
     useEffect(()=>{
+        console.log("props",props);
         //cookie상태값 확인하기
         // console.log("MyFarm page 로그인 상태 확인",props.cookies.get('isLogin'));
         // console.log("MyFarm page 토큰확인",props.cookies.get('token'));
         // console.log("MyFarm page email 확인",props.cookies.get('email'));
         // console.log("MyFarm page userId 확인",props.cookies.get('userId'));
-    },)
+    },[])
 
     useEffect(()=>{
        console.log( "값 바뀜")
