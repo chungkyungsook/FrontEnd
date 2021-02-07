@@ -104,13 +104,6 @@ const LoginStatus = styled.span`
 
 const Header = ({ location, cookies}) => {
 
-    //로그 아웃 버튼 클릭 했는지 판단
-    const [isLogout,setIsLogout] = useState({
-        isLogout : false,
-    })
-
-
-
     // 메뉴 데이터
     const menuData = [ 
         {
@@ -139,14 +132,35 @@ const Header = ({ location, cookies}) => {
             FARM 
             : pathname.includes(SETTING) ? SETTING : pathname ;  
 
-    //logout 
+    const [token, setToken] = useState('')
+
+    //url
+    const url = '172.26.3.62'
+
+    //처음 시작시
+    useEffect(()=>{
+        //token저장
+        setToken(cookies.get('token') && cookies.get('token'))
+        // console.log('token');
+
+        //선택한 device 저장
+        setValue(cookies.get('deviceNumber') && cookies.get('deviceNumber'))
+        console.log("---------------",value)
+    },[])
+    //logout 버튼 클릭
     const logoutOnClick = () =>{
-        // console.log("로그아웃 누름");
-        // //login 쿠키 삭제
-        // console.log("MyFarm page 로그인 상태 확인",cookies.get('isLogin'));
-        
-        axios.put('http://172.26.3.62/api/logout',{token:cookies.get('token')})      
-        cookies.remove('isLogin')
+    
+        //로그아웃 알려주기
+        axios.put(`http://${url}/api/logout`,{
+            token: JSON.stringify(token)
+        }).then((result) => {
+            cookies.remove('isLogin')
+        }).catch((err) => {
+            console.log(err,"api/logout 오류발생") 
+        }).finally(
+            cookies.remove('isLogin')
+        )    
+
         
     } 
 
@@ -155,22 +169,20 @@ const Header = ({ location, cookies}) => {
     //선택한 기기 정보 담기
     const [value, setValue] = useState('')
 
-    //기기 on/off
+    //기기 가동 상태on/off 
     const isOnBtn = ()=>{
         
         isOn ? setIsOn(false) : setIsOn(true)
+        console.log("header token ",token)
+        axios.get(`http://${url}/api/myfarm/status`,{
+            token : JSON.stringify(token)
+        }).then(result => {
+            console.log(result);
+        }).catch(err => {
+            console.log(err,"header, isOnBtn 함수 오류 발생!!!")
+        })
+    };
 
-        axios.get(''
-            
-        )
-    }
-
-    //이름 바꾸기,
-    useEffect(()=>{
-        setValue(cookies.get('deviceNumber') && cookies.get('deviceNumber'))
-        console.log("---------------",value)
-
-    },[])
 
     useEffect(()=>{
         value && console.log("22222222222222",value)
@@ -199,7 +211,7 @@ const Header = ({ location, cookies}) => {
                     {/* 기기 관리 */}
                     <MachineContainer>
                         <MachineName isOn={isOn}>-선택 기기- {value && value.machine_name}</MachineName>
-                        <MachineStatus onClick={value && isOnBtn}>{isOn ? 'On' : 'Off'}</MachineStatus>
+                        <MachineStatus onClick={isOnBtn}>{isOn ? 'On' : 'Off'}</MachineStatus>
                     </MachineContainer>
 
                     <UserContainer>

@@ -2,9 +2,14 @@
 import React, { useEffect, useState } from 'react' ;
 import '../Css/MyFarm.css';
 import {Link} from 'react-router-dom';
+import styled from 'styled-components' ;
 import ModalMain from '../Component/Modals/ModalMain';
 import ModalDeviceMain from '../Component/Modals/ModalDeviceMain';
 import Progress from '../Component/Progress'
+
+//그림 리소스
+import Kinoko1 from '../../assets/KinokoImg/kinoko1.png' ;
+import Kinoko2 from '../../assets/KinokoImg/kinoko2.png' ;
 
 const MyFarmComponent = (props) => {
     //user 기기 관리 정보, 서버 통신 완료 시 isOk : true
@@ -14,6 +19,19 @@ const MyFarmComponent = (props) => {
     const [userInfo, setUserInfo] = useState({
         user : ''
     })
+
+//이미지 그림 css
+const LogoImg = styled.img`
+
+    background-position : center ;
+        
+    margin-right : 0.5rem ;
+    margin-left : 1rem ;
+
+    padding-top: 70px;
+
+    cursor : default ;
+`;
 
     //기기 정보 및 서버 통신 됐는지 확인
     // useEffect(()=>{
@@ -29,6 +47,13 @@ const MyFarmComponent = (props) => {
         setUserInfo({
             user : data
         })
+    }
+
+    //false : 앞, true : 뒤
+    const [img, setImg] = useState(false)
+
+    const imgChang = () =>{
+        img ? setImg(false) : setImg(true)
     }
 
     //선택한 기기 가져오기
@@ -58,8 +83,13 @@ const MyFarmComponent = (props) => {
                 <div className="item item2">
                 <div className = "box1 kinokoImgBox">
                     <input className = "kinokoName" />
-                    <div className = "kinokoImg"> 버섯 사진 영역</div>
-                    <div className = "kinokoBtn"> 앞 </div>
+                    {/* 버섯 이미지 */}
+                    <div className = "kinokoImg">
+                        <LogoImg src={img ? Kinoko2 : Kinoko1} draggable="false" width="200"/>
+                    </div>
+                    <div className = "kinokoBtn" onClick={imgChang}>{
+                       img ? "뒤" : "앞" 
+                    } </div>
                 </div>
                 {/* 온도,습도 */}
                 {/* value: 온도,습도 별 값  */}

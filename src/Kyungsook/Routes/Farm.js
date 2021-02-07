@@ -118,6 +118,14 @@ const NumBox  = styled.div`
         background : rgb(145, 163, 119);
     }
 `;
+
+const KinokoInfoNumber = styled.div`
+    text-align: center;
+    display : flex;
+    font-size : 20px;
+    /* flex : 1; */
+    flex-direction:column;
+`
 const Item5 = styled.div`
     flex: 1;
     border: 1px solid black;
@@ -178,7 +186,10 @@ const Farm = (props) => {
                 <Item3>
 
                     <Item4>
-                        <NumBox>누적 버섯 갯수</NumBox>
+                        <NumBox>
+                            <div>누적 버섯 갯수</div>
+                            <KinokoInfoNumber>40</KinokoInfoNumber>
+                        </NumBox>
                         <NumBox>현재 버섯 갯수</NumBox>
                         <NumBox>채취해야할 버섯 갯수</NumBox>
                         <NumBox>수확한 버섯 갯수</NumBox>
