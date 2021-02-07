@@ -1,5 +1,6 @@
 // Custom chart list context
 import React, {createContext, useState, useEffect, useContext} from 'react';
+import {withCookies} from 'react-cookie';
 import axios from 'axios';
 
 // 커스텀 차트 데이터셋 context
@@ -38,13 +39,15 @@ const setChartjsDataset = (date, temp, humi, growth) => {
     return chartdata;
 }
 
-const ChartContext = ({children}) => {
+const ChartContext = ({children, cookies}) => {
     const [customChartDataSet, setCustomChartDataSet] = useState([]);
     const [customChartInfo, setCustomChartInfo] = useState([]);
     const [machineId, setMachineId] = useState();
 
+    const userIdvalue = cookies.get('userId');
+
     useEffect(() => {
-        // get user token
+        // get machine ID
         getMachineId().then(async (pro) => {
             let id = pro;
             await setMachineId(id);
@@ -53,12 +56,12 @@ const ChartContext = ({children}) => {
         getData()
         .then(value => {
             // api 데이터 가져왔고
-            let da = value.data.filter(da => da.id < 11);
+            let da = value.data;
             return da;
         })
         .then(async ch => {
             // 커스텀 차트 정보에 데이터 삽입
-                        setCustomChartInfo(ch);
+            setCustomChartInfo(ch);
             await ch.forEach(data => {
                 // chartjs 양식에 맞추기 위한 배열들 선언
                 let dateArr = [];   // 날짜
@@ -96,10 +99,11 @@ const ChartContext = ({children}) => {
         return data;
     }
 
-    // UserToken을 통한 기기 id get
-    const getMachineId = async (token) => {
-        let machineIdPromise = axios.get('http://172.26.3.62/api/myfarm/id', {
-            token: token
+    // UserId를 통한 기기 id get
+    const getMachineId = async () => {
+        console.log(userIdvalue);
+        let machineIdPromise = await axios.get('http://172.26.3.62/api/myfarm/id', {
+            params: {userId: 'SZ4S71'} // <--userIdvalue로 고쳐야 함!!!!!!!!!!!!!!!!!!!!!!!!!!
         }).then(response => {
             console.log(response);
             return response.data;
@@ -120,7 +124,7 @@ const ChartContext = ({children}) => {
     );
 };
 
-export default ChartContext;
+export default withCookies(ChartContext);
 
 export function useCustomChartList() {
     const chartjsListContext = useContext(CustomChartListContext);

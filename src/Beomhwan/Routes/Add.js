@@ -1,8 +1,14 @@
-import React, {createContext, useContext, useLayoutEffect, useState, useEffect, useRef} from 'react';
+import React, {useLayoutEffect, useState, useEffect, useRef} from 'react';
 import styled from 'styled-components';
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
-import am4themes_animated from '@amcharts/amcharts4/themes/animated';;
+import am4themes_animated from '@amcharts/amcharts4/themes/animated';
+import ChartSlider from '../Components/ChartSlider';
+import Select from '../Components/Select';
+import InputPrgName from '../Components/InputprgName';
+import {flexAlign} from '../../Util/css';
+import axios from 'axios';
+
 
 // 커스텀 차트
 const CustomChart = ({Data}) => {
@@ -52,7 +58,7 @@ const CustomChart = ({Data}) => {
             TempSeries.tooltip.dy = -8;
             TempSeries.sequencedInterpolation = 1500;
             TempSeries.defaultState.interpolationDuration = 1500;
-            TempSeries.columns.template.fill = am4core.color('red');
+            TempSeries.columns.template.fill = am4core.color('rgb(255,50,0)');
 
             // 습도 시리즈 생성
             const HumiSeries = chart.current.series.push(new am4charts.ColumnSeries());
@@ -62,31 +68,47 @@ const CustomChart = ({Data}) => {
             HumiSeries.tooltip.dy = -8;
             HumiSeries.sequencedInterpolation = 1500;
             HumiSeries.defaultState.interpolationDuration = 1500;
+            HumiSeries.columns.template.fill = am4core.color('rgb(0,100,255)');
 
             // 온도 불릿 생성
             const TempLabelBullet = TempSeries.bullets.push(new am4charts.LabelBullet());
             TempLabelBullet.strokeOpacity = 0;
             TempLabelBullet.stroke = am4core.color("#dadada");
-            TempLabelBullet.label.text = "{valueY.value.formatNumber('#. 도')}";
+            TempLabelBullet.label.text = "{valueY.value.formatNumber('#.')}도";
             TempLabelBullet.dy = -20;
 
             const TempBullet = TempSeries.bullets.create();
+            TempBullet.stroke = am4core.color("#ffffff");
             TempBullet.strokeWidth = 3;
+            TempBullet.opacity = 1;
+            TempBullet.defaultState.properties.opacity = 1;
             TempBullet.cursorOverStyle = am4core.MouseCursorStyle.verticalResize;
             TempBullet.draggable = true;
+            TempBullet.minY = 0;
+
+            const TempCircle = TempBullet.createChild(am4core.Circle);
+            TempCircle.radius = 8;
+            TempCircle.fill = am4core.color('rgb(255,50,0)');
 
             // 습도 불릿 생성
             const HumiLabelBullet = HumiSeries.bullets.push(new am4charts.LabelBullet());
             HumiLabelBullet.strokeOpacity = 0;
-            HumiLabelBullet.label.text = "{valueY.value.formatNumber('#.')}";
+            HumiLabelBullet.label.text = "{valueY.value.formatNumber('#.')}%";
             HumiLabelBullet.stroke = am4core.color("#dadada");
             HumiLabelBullet.dy = -20;
 
             const HumiBullet = HumiSeries.bullets.create();
             HumiBullet.stroke = am4core.color("#ffffff");
             HumiBullet.strokeWidth = 3;
+            HumiBullet.opacity = 1;
+            HumiBullet.defaultState.properties.opacity = 1;
             HumiBullet.cursorOverStyle = am4core.MouseCursorStyle.verticalResize;
             HumiBullet.draggable = true;
+            HumiBullet.minY = 0;
+
+            const HumiCircle = HumiBullet.createChild(am4core.Circle);
+            HumiCircle.radius = 8;
+            HumiCircle.fill = am4core.color('rgb(0,100,255)');
 
             // 온, 습도 드래그 이벤트
             TempBullet.events.on("drag", event => {
@@ -161,26 +183,14 @@ const CustomChart = ({Data}) => {
             });
 
             TempColumnTemplate.events.on("positionchanged", event => {
-                var dataItem = event.target.dataItem;
-                var itemBullet = dataItem.bullets.getKey(TempBullet.uid);
-                var column = dataItem.column;
-                itemBullet.minX = column.pixelWidth / 2;
-                itemBullet.maxX = itemBullet.minX;
-                itemBullet.minY = 0;
-                itemBullet.maxY = chart.current.seriesContainer.pixelHeight;
+                TempBullet.maxY = chart.current.seriesContainer.pixelHeight;
             });
 
-            HumiColumnTemplate.events.on("positionchanged", event => {
-                var dataItem = event.target.dataItem;
-                var itemBullet = dataItem.bullets.getKey(HumiBullet.uid);
-                var column = dataItem.column;
-                itemBullet.minX = column.pixelWidth / 2;
-                itemBullet.maxX = itemBullet.minX;
-                itemBullet.minY = 0;
-                itemBullet.maxY = chart.current.seriesContainer.pixelHeight;
-            });  
+            HumiColumnTemplate.events.on("positionchanged", async event => {
+                HumiBullet.maxY = chart.current.seriesContainer.pixelHeight;
+            }); 
 
-        return () => {chart.current.dispose()}
+        return () => chart.current.dispose();
     },[]);
 
     useEffect(() => {
@@ -195,9 +205,9 @@ const CustomChart = ({Data}) => {
         const dataItem = eventArg.target.dataItem;
         const value = valueAxisArg.yToValue(eventArg.target.pixelY);
         if(dataArg === "Temperature")
-            chartArg.data[dataItem.index].Temperature = Math.floor(value);
+            chartArg.data[dataItem.index].Temperature = Math.round(value);
         if(dataArg === "Humidity")
-            chartArg.data[dataItem.index].Humidity = Math.floor(value);
+            chartArg.data[dataItem.index].Humidity = Math.round(value);
 
         dataItem.valueY = value;
         dataItem.column.isHover = true;
@@ -228,13 +238,6 @@ const CustomChart = ({Data}) => {
     return (
         <>
         <DrawGraphBox id="CustomChartObj" ref={chart}></DrawGraphBox>
-        {Data.map((current,index) => 
-        <ul key={index}>
-            <li>{current.Date}</li>
-            <li>{current.Humidity}%</li>
-            <li>{current.Temperature}도</li>
-        </ul>
-        )}
         </>
     );
 };
@@ -263,7 +266,10 @@ const SelectedCustom = styled.div`
     flex: 1;
     height: 45vh;
     border-bottom: 1px solid rgba(0,0,0,0.3);
+    overflow: hidden;
     display: flex;
+    align-items: center;
+    justify-content: center;
 `;
 
 // 선택된 환경이 없을 경우 렌더링될 div
@@ -324,6 +330,7 @@ const SetDate = styled.div`
     flex: 1;
     border: 1px solid gray;
     padding: 10px;
+    ${flexAlign};
 `;
 
 // 물주기, 햇빛 세팅 div
@@ -331,6 +338,7 @@ const SetWaterSun = styled.div`
     flex: 2;
     border: 1px solid gray;
     padding: 10px;
+    ${flexAlign};
 `;
 
 // 커스텀 환경 이름 세팅 div
@@ -338,13 +346,15 @@ const SettingName = styled.div`
     flex: 1;
     border: 1px solid gray;
     padding: 10px;
+    ${flexAlign};
 `;
 
 // ---------------------------------------------------------
 
+
 // ---------------------------------------------------------
 const Add = () => {
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const date = useRef(2);
     const [chartData, setChartData] = useState([
         {
@@ -353,6 +363,12 @@ const Add = () => {
             Date: 1 + "일차"
         }
     ]);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setLoading(false);
+        }, 2000); // 로딩 1.5초 세팅
+    },[]);
 
     // 1일 추가
     const Add = () => {
@@ -376,11 +392,81 @@ const Add = () => {
         console.dir(chartData);
     };
 
-    // JSON 형태로 저장
+    // axios 전송
     const Save = () => {
-        const jsonChartData = JSON.stringify(chartData);
-        
-        console.log(jsonChartData);
+        let temp = [];
+        let humi = [];
+        chartData.map(ch => {
+            temp.push(ch.Temperature);
+            humi.push(ch.Humidity);
+        });
+        console.log(temp, humi);
+        console.log('date : ' + chartData.length);
+        console.log(count, prgInput);
+
+        axios.post('http://172.26.3.62/api/farm/custom', 
+            {
+                params: {
+                    machineId: 0,
+                    water: count.waterCount,
+                    sunshine: count.sunCount,
+                    period: chartData.length,
+                    name: prgInput.prg_name,
+                    temp: temp,
+                    humi: humi
+                }
+            }
+        ).then(response => {
+            console.log(response);
+            window.location.href = ('http://localhost:3000/setting/custom');
+        }).catch(e => {console.error(e);});
+    };
+
+    const [count, setCount] = useState({
+        sunCount: 0,
+        waterCount: 0
+    });
+
+    const sunChange = (e) => {
+        switch(e) {
+            case '+' :
+                count.sunCount < 5 
+                    ? setCount({...count, sunCount: count.sunCount + 1})
+                    : setCount({...count, sunCount: 5});
+                break;
+            case '-' :
+                count.sunCount > 0
+                    ? setCount({...count, sunCount: count.sunCount - 1})
+                    : setCount({...count, sunCount: 0});
+                break;
+            default :
+                break;
+        };
+    };
+
+    const waterChange = (e) => {
+        switch(e) {
+            case '+' :
+                count.waterCount < 5 
+                    ? setCount({...count, waterCount: count.waterCount + 1})
+                    : setCount({...count, waterCount: 5});
+                break;
+            case '-' :
+                count.waterCount > 0
+                    ? setCount({...count, waterCount: count.waterCount - 1})
+                    : setCount({...count, waterCount: 0});
+                break;
+            default :
+                break;
+        };    
+    };
+
+    const [prgInput, setPrgInput] = useState({
+        prg_name: ''
+    });
+
+    const onChange = (e) => {
+        setPrgInput({prg_name: e.target.value});
     };
 
     return (
@@ -390,13 +476,11 @@ const Add = () => {
         : <>           
             <CustomAddDiv>
                 <SelectedCustom>
-                    {/* <NoGraphSelected>
-                        현재 커스텀에서 선택된 환경이 없습니다.
-                    </NoGraphSelected> */}
+                    <ChartSlider />
                 </SelectedCustom>
             </CustomAddDiv>
             <CustomAddDiv>
-                <CustomChart Data={chartData}/>
+                <CustomChart Data={chartData} />
                 <SettingBox>
                 <CheckBox>
                     <CheckMenu>온, 습도 체크박스 표시</CheckMenu>
@@ -404,18 +488,24 @@ const Add = () => {
                         <SetDate>
                             <ButtonBox Add={Add} Remove={Remove} />
                         </SetDate>
-                        <SetWaterSun>물주기, 햇빛 횟수 지정</SetWaterSun>
+                        <SetWaterSun>
+                            <Select 
+                                count={count} 
+                                sunChange={sunChange} 
+                                waterChange={waterChange} 
+                            />
+                        </SetWaterSun>
                     </Menu2>
                 </CheckBox>
                 <SettingName>
-                    커스텀 환경 이름 지정 및 추가 버튼 표시
+                    <InputPrgName onChange={onChange} />
                     <button onClick={Save}>저장</button>
                 </SettingName>
                 </SettingBox>
             </CustomAddDiv>
             </>}
         </>
-    );
+    );  
 };
 
 export {Add, SettingBox, CheckBox, CheckMenu, Menu2, SetDate, SetWaterSun, SettingName};

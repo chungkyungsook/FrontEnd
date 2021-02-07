@@ -1,7 +1,6 @@
 import React, {useRef, useEffect, useState} from 'react';
 import styled from 'styled-components';
 import {Line} from 'react-chartjs-2';
-import axios from 'axios';
 import {
     useCustomChartInfo, 
     useCustomChartList, 
@@ -10,7 +9,7 @@ import {
 import Modal from '../Components/Modal';
 
 // chart의 options 설정
-const options = {
+export const options = {
     maintainAspectRatio: true,
     scales: {
         // y축 세팅
@@ -30,7 +29,7 @@ const options = {
 };
 
 // 환경 그래프 반환
-const BarChart = ({chartData}) => {
+const LineChart = ({chartData}) => {
     // 특정 DOM을 참조
     const ChartRef = useRef(null);
 
@@ -54,7 +53,7 @@ const CustomBox = styled.div`
 // 커스텀 환경 프로그램 그래프
 const CustomGraphStyle = styled.div`
     margin: 2vw 0 2vw 2vw;
-    width: 500px;
+    width: 480px;
     height: auto;
     border: 1px solid rgba(0,0,0,0.3);
     flex-wrap: wrap;
@@ -113,61 +112,45 @@ const Custom = () => {
     const [opacity, setOpacity] = useState(0);
 
     useEffect(() => {
-        setTimeout(setLoading(false), 4000);
+        setTimeout(() => {setLoading(false)}, 1500);
     },[]);
 
     // 커스텀 환경 적용 클릭 시 적용 테스트
     const onStart = (macid, prgid) => {
         console.log(macid, prgid);
-        //커스텀 프로그램 적용 put 코드
-        axios.put('http://172.26.3.62/api/myfarm/program', {
-            id: macid,
-            prgId: prgid
-        }).then(response => {
-            console.log(response);
-        }).catch(err => {
-            console.error(err);
-        });
         setOpacity(1);
     };
 
     const onRemove = (prgid) => {
-        console.log(prgid);
-        axios.delete('http://172.26.3.62/api/farm', {
-            id: prgid
-        }).then(response => {
-            console.log(response);
-        }).catch(err => {
-            console.error(err);
-        })
-    }
+        setOpacity(1);
+    };
 
-    const onOverlayClick = () => {
+    const onClose = () => {
         setOpacity(0);
-    }
+    };
 
     return (
         <>
         { loading ?
             <>Now loading...</>
             :
-            <CustomBox>
+                <CustomBox>
                 {chart.map((ch,index) =>
                 <div key={index}> 
                 <CustomGraphStyle>
                     <p style={{userSelect: 'none'}}>사용 횟수 : {chartInfo[index].prg_count}</p>
-                    <GraphTitle>- {chartInfo[index].prg_name} -</GraphTitle>
-                    <BarChart chartData={ch}/>
+                        <GraphTitle>- {chartInfo[index].prg_name} -</GraphTitle>
+                    <LineChart chartData={ch}/>
                     <CustomStart 
                         onStart={onStart}
                         onRemove={onRemove} 
                         prgid={chartInfo[index].id}
                         macid={machineId} />
                 </CustomGraphStyle>
-                <Modal opacity={opacity} onOverlayClick={onOverlayClick} />
                 </div>
                 )}
-            </CustomBox> 
+                <Modal opacity={opacity} onClose={onClose} />
+            </CustomBox>
         }
         </>
     );
@@ -179,3 +162,25 @@ export default Custom;
 // 리스트 잘 출력하는거
 // 3개씩 끊어서 출력해야함
 // array.map을 다시한번 짚고 넘어가는게 좋을까?
+
+// 삭제 코드
+// console.log(prgid);
+// axios.delete('http://172.26.3.62/api/farm', {params: {
+//     id: prgid
+// }}).then(response => {
+//     console.log(response);
+// }).catch(err => {
+//     console.error(err);
+// })
+
+// 적용 코드
+// console.log(macid, prgid);
+//         //커스텀 프로그램 적용 put 코드
+//         axios.put('http://172.26.3.62/api/myfarm/program', {
+//             id: macid,
+//             prgId: prgid
+//         }).then(response => {
+//             console.log(response);
+//         }).catch(err => {
+//             console.error(err);
+//         });

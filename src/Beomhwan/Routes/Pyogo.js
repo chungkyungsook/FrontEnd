@@ -2,7 +2,9 @@ import React, {useRef, useEffect, memo, useState} from 'react';
 import styled from 'styled-components';
 import { Line } from 'react-chartjs-2';
 import Modal from '../Components/Modal';
-
+import {flexAlign} from '../../Util/css';
+import {NotoSansLight, NotoSansRegular} from '../css/cssModule';
+import ModalContent from '../Components/ModalContent';
 
 const data = {
     labels: ['1일차','2일차','3일차','4일차','5일차'],
@@ -38,7 +40,7 @@ const options = {
     }
 };
 
-const Chart = () => {
+export const Chart = () => {
     const ChartRef = useRef();
 
     return(
@@ -96,22 +98,31 @@ const ModalOnButton = ({onModal}) => {
             적용
         </GrowStartButton>
     )
-}
+} 
 
 const Pyogo = () => {
     const [opacity, setOpacity] = useState(0);
+    const PyogoModalText = {
+        title: '주의',
+        caution1: '설정하시면 도중에 환경 변경이 불가능합니다.',
+        caution2: '재배를 시작하시겠습니까?',
+        waterText: '물 주기 횟수 : ',
+        sunText: '채광 횟수 : '
+    }
 
     const onModal = () => {
         setOpacity(1);
-    }
+    };
 
-    const onOverlayClick = () => {
+    const onClose = () => {
         setOpacity(0);
-    }
+    };
 
     return (
         <PyogoStyled>
-            <Modal opacity={opacity} onOverlayClick={onOverlayClick}/>
+            <Modal opacity={opacity} onClose={onClose}>
+                <ModalContent chartname='pyogo' text={PyogoModalText} onClose={onClose}/>
+            </Modal>
             <PyogoGraphBox>
                 <Chart />
             </PyogoGraphBox>

@@ -1,6 +1,8 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import styled from 'styled-components';
 import {Line} from 'react-chartjs-2';
+import Modal from '../Components/Modal';
+import ModalContent from '../Components/ModalContent';
 
 // 백화고차트 데이터
 const BaekhwagoData = {
@@ -42,7 +44,7 @@ const BaekhwagoOptions = {
 };
 
 // 백화고 chart
-const BaekhwagoChart = () => {
+export const BaekhwagoChart = () => {
     const ChartRef = useRef();
 
     return <Line ref={ChartRef} data={BaekhwagoData} options={BaekhwagoOptions} />;
@@ -94,8 +96,28 @@ const GrowStartButton = styled.button`
 `;
 
 const Baekhwago = () => {
+    const [opacity, setOpacity] = useState(0);
+    const BaekhwaText = {
+        title: '주의',
+        caution1: '설정하시면 도중에 환경 변경이 불가능합니다.',
+        caution2: '재배를 시작하시겠습니까?',
+        waterText: '물 주기 횟수 : ',
+        sunText: '채광 횟수 : '
+    }
+
+    const onModal = () => {
+        setOpacity(1);
+    }
+
+    const onClose = () => {
+        setOpacity(0);
+    }
+    
     return (
         <FullBox>
+            <Modal opacity={opacity} onClose={onClose}>
+                <ModalContent chartName='baekhwa' text={BaekhwaText} onClose={onClose}/>
+            </Modal>
             <BaekhwagoGraphBox>
                 <BaekhwagoChart/>
             </BaekhwagoGraphBox>
@@ -104,7 +126,7 @@ const Baekhwago = () => {
                     백화고는 자란 버섯들의 갓 길이의 평균을 기준으로 단계별로 환경을 제공합니다.
                 </Description>
                 <GrowStartButtonBox>
-                    <GrowStartButton>적용</GrowStartButton>
+                    <GrowStartButton onClick={onModal}>적용</GrowStartButton>
                 </GrowStartButtonBox>
             </FooterBox>
         </FullBox>
