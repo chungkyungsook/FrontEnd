@@ -58,7 +58,7 @@ const CustomChart = ({Data}) => {
             TempSeries.tooltip.dy = -8;
             TempSeries.sequencedInterpolation = 1500;
             TempSeries.defaultState.interpolationDuration = 1500;
-            TempSeries.columns.template.fill = am4core.color('red');
+            TempSeries.columns.template.fill = am4core.color('rgb(255,50,0)');
 
             // 습도 시리즈 생성
             const HumiSeries = chart.current.series.push(new am4charts.ColumnSeries());
@@ -68,6 +68,7 @@ const CustomChart = ({Data}) => {
             HumiSeries.tooltip.dy = -8;
             HumiSeries.sequencedInterpolation = 1500;
             HumiSeries.defaultState.interpolationDuration = 1500;
+            HumiSeries.columns.template.fill = am4core.color('rgb(0,100,255)');
 
             // 온도 불릿 생성
             const TempLabelBullet = TempSeries.bullets.push(new am4charts.LabelBullet());
@@ -77,9 +78,17 @@ const CustomChart = ({Data}) => {
             TempLabelBullet.dy = -20;
 
             const TempBullet = TempSeries.bullets.create();
+            TempBullet.stroke = am4core.color("#ffffff");
             TempBullet.strokeWidth = 3;
+            TempBullet.opacity = 1;
+            TempBullet.defaultState.properties.opacity = 1;
             TempBullet.cursorOverStyle = am4core.MouseCursorStyle.verticalResize;
             TempBullet.draggable = true;
+            TempBullet.minY = 0;
+
+            const TempCircle = TempBullet.createChild(am4core.Circle);
+            TempCircle.radius = 8;
+            TempCircle.fill = am4core.color('rgb(255,50,0)');
 
             // 습도 불릿 생성
             const HumiLabelBullet = HumiSeries.bullets.push(new am4charts.LabelBullet());
@@ -91,8 +100,15 @@ const CustomChart = ({Data}) => {
             const HumiBullet = HumiSeries.bullets.create();
             HumiBullet.stroke = am4core.color("#ffffff");
             HumiBullet.strokeWidth = 3;
+            HumiBullet.opacity = 1;
+            HumiBullet.defaultState.properties.opacity = 1;
             HumiBullet.cursorOverStyle = am4core.MouseCursorStyle.verticalResize;
             HumiBullet.draggable = true;
+            HumiBullet.minY = 0;
+
+            const HumiCircle = HumiBullet.createChild(am4core.Circle);
+            HumiCircle.radius = 8;
+            HumiCircle.fill = am4core.color('rgb(0,100,255)');
 
             // 온, 습도 드래그 이벤트
             TempBullet.events.on("drag", event => {
@@ -167,26 +183,14 @@ const CustomChart = ({Data}) => {
             });
 
             TempColumnTemplate.events.on("positionchanged", event => {
-                var dataItem = event.target.dataItem;
-                var itemBullet = dataItem.bullets.getKey(TempBullet.uid);
-                var column = dataItem.column;
-                itemBullet.minX = column.pixelWidth / 2;
-                itemBullet.maxX = itemBullet.minX;
-                itemBullet.minY = 0;
-                itemBullet.maxY = chart.current.seriesContainer.pixelHeight;
+                TempBullet.maxY = chart.current.seriesContainer.pixelHeight;
             });
 
-            HumiColumnTemplate.events.on("positionchanged", event => {
-                var dataItem = event.target.dataItem;
-                var itemBullet = dataItem.bullets.getKey(HumiBullet.uid);
-                var column = dataItem.column;
-                itemBullet.minX = column.pixelWidth / 2;
-                itemBullet.maxX = itemBullet.minX;
-                itemBullet.minY = 0;
-                itemBullet.maxY = chart.current.seriesContainer.pixelHeight;
+            HumiColumnTemplate.events.on("positionchanged", async event => {
+                HumiBullet.maxY = chart.current.seriesContainer.pixelHeight;
             }); 
 
-        return () => {chart.current.dispose()}
+        return () => chart.current.dispose();
     },[]);
 
     useEffect(() => {
@@ -363,7 +367,7 @@ const Add = () => {
     useEffect(() => {
         setTimeout(() => {
             setLoading(false);
-        }, 1500); // 로딩 1.5초 세팅
+        }, 2000); // 로딩 1.5초 세팅
     },[]);
 
     // 1일 추가

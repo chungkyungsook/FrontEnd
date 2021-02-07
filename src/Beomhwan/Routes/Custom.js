@@ -10,8 +10,7 @@ import Modal from '../Components/Modal';
 
 // chart의 options 설정
 export const options = {
-    responsive: true,
-    maintainAspectRatio: false,
+    maintainAspectRatio: true,
     scales: {
         // y축 세팅
         yAxes: [
@@ -118,6 +117,7 @@ const Custom = () => {
 
     // 커스텀 환경 적용 클릭 시 적용 테스트
     const onStart = (macid, prgid) => {
+        console.log(macid, prgid);
         setOpacity(1);
     };
 
