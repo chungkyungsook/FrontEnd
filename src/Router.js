@@ -23,7 +23,6 @@ import MyFarm from './Kyungsook/Routes/MyFarm' ;
 import SettingRouter from './Beomhwan/SettingRouter' ;
 
 const RouterComponent = (props) => {
-
     // const [ user, setUser ] = useState(null) ;
     // const authenticated = user !== null ;
 

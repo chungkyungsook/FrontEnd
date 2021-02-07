@@ -79,6 +79,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
   margin-bottom: 19px;
 }
 /* 버섯 이름 */
@@ -120,11 +121,17 @@
 }
 
 /* 온도 */
-.temperature {
+.progress {
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
 }
 
 /* 습도 */
-.humidity {
+.span {
+  margin-right: 25px;
 }
 
 /* 그래프 + 간단한 버섯 상태 정보 */
@@ -138,7 +145,20 @@
   padding: 20px 30px;
   border: 1px solid black;
 }
+/* 아무런 값 들이 없을 시 */
+.item4 {
+  display: flex;
+  flex: 8;
+  flex-direction: column;
+  justify-content: center;
 
+  background: white;
+  margin-right: 19px;
+  padding: 20px 30px;
+  border: 1px solid black;
+
+  text-align: center;
+}
 /* 그래프 */
 .graph {
   text-align: center;
@@ -172,6 +192,16 @@
   background: rgb(238, 238, 232);
 }
 
+.smailInfo > h1 {
+  display: flex;
+  text-align: center;
+  line-height: 73px;
+  /* height: auto; */
+  /* margin: 50px; */
+  /* justify-content: center; */
+  flex-direction: column;
+}
+
 .pageInfo {
   all: unset;
   flex: 0.2;
@@ -190,4 +220,11 @@
 }
 .pageInfo:hover {
   background: #23291c;
+}
+
+.LodingText {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
 }

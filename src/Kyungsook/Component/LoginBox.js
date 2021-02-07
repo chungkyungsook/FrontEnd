@@ -100,7 +100,7 @@ const LoginBoxSamples =(props)=> {
 
     //처음 시작시 token지우기
     useEffect( ()=>{
-        axios.put('http://172.26.3.62/api/logout',{token:props.cookies.get('token')})      
+        // axios.put('http://172.26.3.62/api/logout',{token:props.cookies.get('token')})      
         props.cookies.remove('email');
         props.cookies.remove('token');
         props.cookies.remove('isLogin') ;
