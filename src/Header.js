@@ -84,7 +84,7 @@ const MachineName = styled.div`
     flex : 1;
     text-align: center;
     cursor : default ;
-    color : ${props => props.isOn ? 'white' : 'gray' };
+    color : ${props => props.isOn === 'true' ? 'white' : 'gray' };
 `;
 
 
@@ -137,22 +137,12 @@ const Header = ({ location, cookies}) => {
     //url
     const url = '172.26.3.62'
 
-    //처음 시작시
-    useEffect(()=>{
-        //token저장
-        setToken(cookies.get('token') && cookies.get('token'))
-        // console.log('token');
-
-        //선택한 device 저장
-        setValue(cookies.get('deviceNumber') && cookies.get('deviceNumber'))
-        console.log("---------------",value)
-    },[])
     //logout 버튼 클릭
     const logoutOnClick = () =>{
-    
+        console.log("header logout token ",token)
         //로그아웃 알려주기
         axios.put(`http://${url}/api/logout`,{
-            token: JSON.stringify(token)
+            token: cookies.get('token')
         }).then((result) => {
             cookies.remove('isLogin')
         }).catch((err) => {
@@ -165,28 +155,58 @@ const Header = ({ location, cookies}) => {
     } 
 
     //기기 on / off
-    const [isOn, setIsOn] = useState(false)
+    const [isOn, setIsOn] = useState('')
     //선택한 기기 정보 담기
     const [value, setValue] = useState('')
-
+    //기기 on / off 서버값 바꿔줄때 사용
+    const [isOnData, setIsOnData] = useState('')
+    
     //기기 가동 상태on/off 
     const isOnBtn = ()=>{
+
+        // axios.put(`http://${url}/api/myfarm/status`,{
+            
+        //     id : cookies.get('deviceNumber').id,
+        //     status : isOn === 'true' ? 'false' : 'true'
         
-        isOn ? setIsOn(false) : setIsOn(true)
-        console.log("header token ",token)
+        // }).then(d=>{
+        //     console.log("header isOnBtn", d.data);          
+        //     setIsOn(isOn === 'true' ? 'false' : 'true')
+        //     //   setIsOnData(d.data)
+        // }).catch(err=>{
+        //     console.log(err,"header, isOnBtn 함수 오류 발생!!!")
+        // })    
+        setIsOn(isOn === 'true' ? 'false' : 'true')
+    }
+
+    
+
+    
+    //처음 시작시
+    useEffect(()=>{
+        //token저장
+        setToken(cookies.get('token') && cookies.get('token'))
+        console.log('token',token);
+
+        //선택한 device 저장
+        setValue(cookies.get('deviceNumber') && cookies.get('deviceNumber'))
+        console.log("---------------",value)
+
+        //처음 기기 돌아가는지 확인하기
         axios.get(`http://${url}/api/myfarm/status`,{
-            token : JSON.stringify(token)
-        }).then(result => {
-            console.log(result);
-        }).catch(err => {
+            params: {
+            token : cookies.get('token')
+            }
+        }).then(d=>{
+              console.log("header 처음 기기 작동하는지 확인하기", d.data); 
+              setIsOn(JSON.stringify(d.data))
+        }).catch(err=>{
             console.log(err,"header, isOnBtn 함수 오류 발생!!!")
         })
-    };
+    },[])
 
 
-    useEffect(()=>{
-        value && console.log("22222222222222",value)
-    },[value])
+    console.log('token',token);
    
     return (
         <>
@@ -211,7 +231,7 @@ const Header = ({ location, cookies}) => {
                     {/* 기기 관리 */}
                     <MachineContainer>
                         <MachineName isOn={isOn}>-선택 기기- {value && value.machine_name}</MachineName>
-                        <MachineStatus onClick={isOnBtn}>{isOn ? 'On' : 'Off'}</MachineStatus>
+                        <MachineStatus onClick={isOnBtn}>{isOn === 'true' ? 'On' : 'Off'}</MachineStatus>
                     </MachineContainer>
 
                     <UserContainer>
