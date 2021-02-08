@@ -8,6 +8,7 @@ import Select from '../Components/Select';
 import InputPrgName from '../Components/InputprgName';
 import {flexAlign} from '../../Util/css';
 import axios from 'axios';
+import { useMachineInfo } from '../ChartContext';
 
 
 // 커스텀 차트
@@ -363,6 +364,7 @@ const Add = () => {
             Date: 1 + "일차"
         }
     ]);
+    const machineId = useMachineInfo();
 
     useEffect(() => {
         setTimeout(() => {
@@ -406,15 +408,13 @@ const Add = () => {
 
         axios.post('http://172.26.3.62/api/farm/custom', 
             {
-                params: {
-                    machineId: 0,
-                    water: count.waterCount,
-                    sunshine: count.sunCount,
-                    period: chartData.length,
-                    name: prgInput.prg_name,
-                    temp: temp,
-                    humi: humi
-                }
+                machineId: machineId,
+                water: count.waterCount,
+                sunshine: count.sunCount,
+                period: chartData.length,
+                name: prgInput.prg_name,
+                temp: temp,
+                humi: humi
             }
         ).then(response => {
             console.log(response);

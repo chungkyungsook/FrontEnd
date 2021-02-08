@@ -7,6 +7,8 @@ import {
     useMachineInfo
 } from '../ChartContext';
 import Modal from '../Components/Modal';
+import axios from 'axios';
+import {Button, ModalTitleBox, ModalTextBox, ModalFooter} from '../Components/ModalContent';
 
 // chart의 options 설정
 export const options = {
@@ -110,6 +112,7 @@ const Custom = () => {
     const machineId = useMachineInfo();
     const [loading, setLoading] = useState(true);
     const [opacity, setOpacity] = useState(0);
+    const [a, setA] = useState(false);
 
     useEffect(() => {
         setTimeout(() => {setLoading(false)}, 1500);
@@ -118,8 +121,23 @@ const Custom = () => {
     // 커스텀 환경 적용 클릭 시 적용 테스트
     const onStart = (macid, prgid) => {
         console.log(macid, prgid);
+        
         setOpacity(1);
+        
     };
+
+    const setCustom = (macid, prgid) => {
+        //커스텀 프로그램 적용 put 코드
+        axios.put('http://172.26.3.62/api/myfarm/program', {
+            id: macid,
+            prgId: prgid
+        }).then(response => {
+            console.log(response);
+        }).catch(err => {
+            console.error(err);
+        });
+        setA(false);
+    }
 
     const onRemove = (prgid) => {
         setOpacity(1);
@@ -149,7 +167,14 @@ const Custom = () => {
                 </CustomGraphStyle>
                 </div>
                 )}
-                <Modal opacity={opacity} onClose={onClose} />
+                <Modal opacity={opacity} onClose={onClose} width='500' height='200'>
+                    <ModalTitleBox>주의!</ModalTitleBox>
+                    <ModalTextBox>한번 적용하면 도중에 취소가 불가능합니다.</ModalTextBox>
+                    <ModalTextBox>적용하시겠습니까? {machineId}</ModalTextBox>
+                    <ModalFooter>
+                    <Button>확인</Button><Button onClick={onClose}>취소</Button>
+                    </ModalFooter>
+                </Modal>
             </CustomBox>
         }
         </>

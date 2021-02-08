@@ -89,7 +89,7 @@ const options = {
 const LineChart = ({data}) => {
     const ChartRef = useRef(null);
 
-    return <Line data={data} opitons={options} ref={ChartRef}/>
+    return <Line data={data} options={options} ref={ChartRef}/>
 }
 
 const Compare = ({goSlide, chart}) => {
