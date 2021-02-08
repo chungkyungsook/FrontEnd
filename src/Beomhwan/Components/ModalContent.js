@@ -5,7 +5,7 @@ import {Chart as PyogoChart} from '../Routes/Pyogo';
 import {BaekhwagoChart as BaekhwaChart} from '../Routes/Baekhwago';
 
 // ---------모달 스타일--------------
-const ModalTitleBox = styled.div`
+export const ModalTitleBox = styled.div`
     ${flexAlign}
     ${NotoSansRegular}
     width: 100%;
@@ -14,7 +14,7 @@ const ModalTitleBox = styled.div`
     font-size: 1.2em;
 `;
 
-const ModalTextBox = styled.p`
+export const ModalTextBox = styled.p`
     ${flexAlign}
     ${NotoSansLight}
     width: 100%;
@@ -46,14 +46,14 @@ const ModalEnvInfoBox = styled.div`
     flex-direction: column-reverse;
 `;
 
-const ModalFooter = styled.div`
+export const ModalFooter = styled.div`
     width: 100%;
     height: 60px;
     margin-top: 20px;
     ${flexAlign}
 `;
 
-const Button = styled.button`
+export const Button = styled.button`
     ${NotoSansRegular}
     width: 80px;
     height: 50px;

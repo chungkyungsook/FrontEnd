@@ -42,16 +42,11 @@ const setChartjsDataset = (date, temp, humi, growth) => {
 const ChartContext = ({children, cookies}) => {
     const [customChartDataSet, setCustomChartDataSet] = useState([]);
     const [customChartInfo, setCustomChartInfo] = useState([]);
-    const [machineId, setMachineId] = useState();
-
     const userIdvalue = cookies.get('userId');
+    const machineIdValue = cookies.get('deviceNumber');
+    
 
     useEffect(() => {
-        // get machine ID
-        getMachineId().then(async (pro) => {
-            let id = pro;
-            await setMachineId(id);
-        });
         // get chart data
         getData()
         .then(value => {
@@ -99,24 +94,10 @@ const ChartContext = ({children, cookies}) => {
         return data;
     }
 
-    // UserId를 통한 기기 id get
-    const getMachineId = async () => {
-        console.log(userIdvalue);
-        let machineIdPromise = await axios.get('http://172.26.3.62/api/myfarm/id', {
-            params: {userId: 'SZ4S71'} // <--userIdvalue로 고쳐야 함!!!!!!!!!!!!!!!!!!!!!!!!!!
-        }).then(response => {
-            console.log(response);
-            return response.data;
-        }).catch(err => {
-            console.error(err);
-        });
-        return machineIdPromise;
-    }
-
     return (
         <CustomChartListInfoContext.Provider value={customChartInfo}>
             <CustomChartListContext.Provider value={customChartDataSet}>
-                <UserMachineIdContext.Provider value={machineId}>
+                <UserMachineIdContext.Provider value={machineIdValue.id}>
                     {children}
                 </UserMachineIdContext.Provider>
             </CustomChartListContext.Provider>
@@ -147,3 +128,19 @@ export function useMachineInfo() {
         console.error('기기 정보 없음!');
     return machineinfo;
 };
+
+
+
+    // // UserId를 통한 기기 id get
+    // const getMachineId = async () => {
+    //     console.log(userIdvalue);
+    //     let machineIdPromise = await axios.get('http://172.26.3.62/api/myfarm/id', {
+    //         params: {userId: 'SZ4S71'} // <--userIdvalue로 고쳐야 함!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //     }).then(response => {
+    //         console.log(response);
+    //         return response.data;
+    //     }).catch(err => {
+    //         console.error(err);
+    //     });
+    //     return machineIdPromise;
+    // }

@@ -20,8 +20,8 @@ const ModalBox = styled.div`
     display: flex;
     position: fixed;
     background-color: white;
-    width: 80%;
-    height: 80%;
+    width: ${props=>props.width ? props.width+'px' : '80%'};
+    height: ${props=>props.height ? props.height+'px' : '80%'};
     z-index: 10;
     flex-direction: column;
     border-radius: 12px;
@@ -52,12 +52,12 @@ const CloseButton = styled.p`
     height: 0;
 `;
 
-const Modal = ({opacity, onClose, children}) => {
+const Modal = ({opacity, onClose, children, width, height}) => {
 
     return (
         <Overlay opacity={opacity}  >
             <Overlay opacity={opacity} onClick={onClose}></Overlay>
-            <ModalBox>
+            <ModalBox width={width} height={height}>
                 <ModalHeader>
                     <CloseButton onClick={onClose}>
                         x

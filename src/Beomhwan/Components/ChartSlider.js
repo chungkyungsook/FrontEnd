@@ -243,7 +243,7 @@ const ChartSilder = () => {
 
     // toggle checked 확인
     const onToggle = (id) => {
-        setChart(chart.map(ch => ch.prg_id === id ? {...ch, toggle: !ch.toggle} : ch));
+        setChart(chart.map((ch,index) => ch.prg_id === id ? {...ch, toggle: !ch.toggle} : ch));
     }
 
     // 상세로 넘어가기
