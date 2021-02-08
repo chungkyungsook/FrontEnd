@@ -24,8 +24,8 @@ const MyFarm = (props) => {
         //user에 등록 된 기기 정보 가져오기
          axios.post(`http://${url}/api/myfarm/list`,{
              
-                // userId : props.cookies.get('userId')
-                userId : 'SZ4S71'
+                userId : props.cookies.get('userId')
+                // userId : 'SZ4S71'
              
             
         }).then(data =>{
