@@ -101,8 +101,8 @@ const LoginStatus = styled.span`
     
     padding : 30px ;
 `;
-
-const Header = ({ location, cookies}) => {
+// setIsOn -> 선택한 기기 정보 넣기 
+const Header = ({ location, cookies, setIsOn,isOn}) => {
 
     // 메뉴 데이터
     const menuData = [ 
@@ -153,60 +153,85 @@ const Header = ({ location, cookies}) => {
 
         
     } 
+    const [grdId, setGrdId] = useState(0)
+    //선택한 기기 가동상태 확인
+    const [value, setValue] = useState('') 
 
-    //기기 on / off
-    const [isOn, setIsOn] = useState('')
-    //선택한 기기 정보 담기
-    const [value, setValue] = useState('')
-    //기기 on / off 서버값 바꿔줄때 사용
-    const [isOnData, setIsOnData] = useState('')
-    
-    //기기 가동 상태on/off 
-    const isOnBtn = ()=>{
-
-        // axios.put(`http://${url}/api/myfarm/status`,{
-            
-        //     id : cookies.get('deviceNumber').id,
-        //     status : isOn === 'true' ? 'false' : 'true'
-        
-        // }).then(d=>{
-        //     console.log("header isOnBtn", d.data);          
-        //     setIsOn(isOn === 'true' ? 'false' : 'true')
-        //     //   setIsOnData(d.data)
-        // }).catch(err=>{
-        //     console.log(err,"header, isOnBtn 함수 오류 발생!!!")
-        // })    
-        setIsOn(isOn === 'true' ? 'false' : 'true')
-    }
-
-    
-
-    
-    //처음 시작시
-    useEffect(()=>{
-        //token저장
-        setToken(cookies.get('token') && cookies.get('token'))
-        console.log('token',token);
-
-        //선택한 device 저장
-        setValue(cookies.get('deviceNumber') && cookies.get('deviceNumber'))
-        console.log("---------------",value)
-
-        //처음 기기 돌아가는지 확인하기
-        axios.get(`http://${url}/api/myfarm/status`,{
-            params: {
-            token : cookies.get('token')
+    //처음 시작 시 
+      useEffect(()=>{
+        console.log("================== Header 처음 실행 화면 ==================");
+        // setIsOn('header에서 값 바꿈')
+        //선택 된 기기 있는지 확인하기
+        axios.get(
+            `http://${url}/api/myfarm/id`,{
+                params : {
+                    token : cookies.get('token')
+                }
             }
-        }).then(d=>{
-              console.log("header 처음 기기 작동하는지 확인하기", d.data); 
-              setIsOn(JSON.stringify(d.data))
-        }).catch(err=>{
-            console.log(err,"header, isOnBtn 함수 오류 발생!!!")
+        ).then(data =>{
+            // setGrdId(JSON.stringify(data.data))
+            setIsOn({...isOn, id : parseInt(JSON.stringify(data.data))})
+            //선택 된 기기 값 있으면 가동 상태 확인하기
+            JSON.stringify(data.data) !== '0' &&             
+            axios.get(`http://${url}/api/myfarm/status`,{
+                params : {
+                    id : JSON.stringify(data.data)
+                    // id : 12
+                }
+            }).then(data =>{
+                console.log('header 기기 상태값 확인',data);
+                setValue(JSON.stringify(data.data))
+            }).catch(e =>{
+                console.log("Header 실행중인 기기 상태 error",e.err);
+            })
+
+        }).catch(e => {
+            console.log("Header 실행중인 기기 값 error",e.err)
         })
-    },[])
+        
+      },[])
+
+    const [userData, setUserData] = useState([])
+    //해당 기기 상태 확인 후 있으면 실행
+    useEffect(()=>{
+        value && ( 
+            axios.post(`http://${url}/api/myfarm/list`,{
+                
+                userId : cookies.get('userId')
+                
+            }).then((data) =>{ // 해당 user 정보 다 저장하기
+
+                setUserData(data.data)
+
+            }).catch(e =>{
+                console.log('header 선택한 기기 정보 가져오기 실패',e.err);
+            })
+        )
+        
+    },[value])
+
+    //선택한 기기 있으면 해당 기기 이름 가져오기
+    useEffect(()=>{
+        
+        console.log("header 선택한 기기", userData);
+        console.log("header 선택한 기기",isOn.id);
+        console.log("header 선택한 기기",isOn.grgName);
+
+        userData.map(data =>(
+            // console.log(data,"grgId",isOn.id !==0 ? isOn.id : grdId),
+            JSON.stringify(data.id) ==  isOn.id  && (
+                // console.log(data.machine_name),
+                setIsOn({
+                    id : JSON.stringify(data.id),
+                    grgName : data.machine_name
+                })
+            )
+        ))
+
+    },[isOn.id,userData,isOn.grgName])
 
 
-    console.log('token',token);
+
    
     return (
         <>
@@ -230,8 +255,8 @@ const Header = ({ location, cookies}) => {
                     
                     {/* 기기 관리 */}
                     <MachineContainer>
-                        <MachineName isOn={isOn}>-선택 기기- {value && value.machine_name}</MachineName>
-                        <MachineStatus onClick={isOnBtn}>{isOn === 'true' ? 'On' : 'Off'}</MachineStatus>
+                        <MachineName isOn={value}>-선택 기기- {isOn.grgName} </MachineName>
+                        <MachineStatus>{value ? 'On' : 'Off'}</MachineStatus>
                     </MachineContainer>
 
                     <UserContainer>

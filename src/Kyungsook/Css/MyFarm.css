@@ -97,7 +97,9 @@
   flex: 2;
   margin: 13px 13px;
   width: 539px;
-  background: rgb(109, 58, 58);
+  background: rgb(94 76 69);
+  border-radius: 12px;
+  box-shadow: 0 0 8px 0 rgb(0 0 0 / 72%), 0 0 8px 0 rgb(0 0 0 / 0%);
 }
 
 /* 앞뒤 */

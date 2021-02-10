@@ -100,7 +100,8 @@ const LoginBoxSamples =(props)=> {
 
     //처음 시작시 token지우기
     useEffect( ()=>{
-        // axios.put('http://172.26.3.62/api/logout',{token:props.cookies.get('token')})      
+        props.cookies.get('token') && (axios.put('http://172.26.3.62/api/logout',{token:props.cookies.get('token')}))
+        
         props.cookies.remove('email');
         props.cookies.remove('token');
         props.cookies.remove('isLogin') ;
@@ -111,6 +112,7 @@ const LoginBoxSamples =(props)=> {
          console.log("login page 토큰확인",token);
          console.log("login page email 확인",email);
          console.log("login page userid 확인",userId);
+
     },[]);
     
 
@@ -213,9 +215,8 @@ const LoginBoxSamples =(props)=> {
                     <br></br>
                     <KaKaoLogin
                         jsKey={'91224fabd87ed64c0173372e3b0e3581'}
-                        buttonText="KaKao"
+                        buttonText="카카오 계정으로 로그인"
                         onSuccess={responseKaKao} //로그인 성공한 경우 실행할 함수
-                        // onFailure={this.responseFail}  // 로그인 실패한 경우 실행할 함수
                         getProfile={true}
                     />
                 </LoginBox>

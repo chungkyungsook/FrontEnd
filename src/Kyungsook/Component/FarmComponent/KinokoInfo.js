@@ -4,7 +4,8 @@ import { withCookies } from 'react-cookie';
 import FarmBox from './FarmBox';
 
 /**
- * This component is for Information.
+ * This component is for Information. 
+ * Farm 컴포넌트
  * @param {{
  *      cookies: {{
  *                 get(): DODOSADFOIADJFOEIWFEOWFIJJIO
@@ -23,9 +24,10 @@ const KinokoInfo = (props)=>{
     const test =  props.cookies.get('deviceNumber') && props.cookies.get('deviceNumber') 
 
     useEffect(()=>{
+      console.log(" ============================ 여기서 부터 Farm KinokoInfo ============================");
         test === "" ? console.log("공백") : console.log("공백아님",test)
         console.log("KinokoInfo farm 화면전환");
-        console.log("KinokoInfo farm 쿠키 확인", test && test.machine_prgid);
+        console.log("KinokoInfo farm 쿠키(선택한 기기,deviceNumber) 확인 ", test && test.machine_prgid);
 
         axios.get(`http://${url}/api/mushroom`,{
             
