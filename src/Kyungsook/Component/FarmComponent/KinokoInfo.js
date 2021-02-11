@@ -20,7 +20,8 @@ const KinokoInfo = (props)=>{
     const [prgId, setPrgId] = useState('')
     const id = 7
     //url
-    const url = '172.26.3.62'
+    // const url = '172.26.3.62'
+    const url = '54.210.105.132'
     const test =  props.cookies.get('deviceNumber') && props.cookies.get('deviceNumber') 
 
     useEffect(()=>{

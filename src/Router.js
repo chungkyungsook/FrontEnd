@@ -53,7 +53,8 @@ const RouterComponent = (props) => {
                 render = { ()=> <MyFarm value={value}/> } />
                 <Route path={LOGIN} component={Login} />
                 <Route path={JOIN} component={Join} />    
-                <Route path={FARM} component={FarmRouter} />
+                <Route path={FARM} component={FarmRouter} 
+                render = { ()=> <MyFarm value={value}/> }/>
                 <Route path={HELP} component={Help} />
                 <Route path={SETTING} component={SettingRouter} />
                 <Redirect from="*" to={HOME} />

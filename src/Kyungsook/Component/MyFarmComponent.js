@@ -23,7 +23,8 @@ const MyFarmComponent = (props) => {
         user : '',
         changUser : false
     })
-    const url = '172.26.3.62'
+    // const url = '172.26.3.62'
+    const url = '54.210.105.132'
 
     // const [isOn, setIsOn] = useState('')
 
@@ -56,19 +57,30 @@ const MyFarmComponent = (props) => {
         img ? setImg(false) : setImg(true)
     }
 
-    // //진행중인 프로그램 이름 및 프로그램 id 
-    // const [prgId, setPrgId] = useState({})
+    //진행중인 프로그램 이름 및 프로그램 id 
+    const [kinokos, setKinokos] = useState({
+        prgName : '',
+        day : '',
+        kinokoStatus : ''
+    })
 
     const kinokoInfo = ()=>{
         console.log("MyFarm in MyfarmComponent kinokoInfo 실행");
-
-        
+        console.log("==============================",new Date());
+        //진행 중인 프로그램 이름
+        //해당 일차
+        //수확할 버섯        
     }
 
     useEffect(()=>{
         console.log("================== MyFarm in MyFarmComponent 처음 실행 화면 ==================");
         // /api/myfarm/data
-        value.isOn.id != 0 && kinokoInfo()
+        setKinokos({
+            ...kinokos, day : new Date().getFullYear()
+        })
+
+        console.log('================time',kinokos);
+
     },[])
 
     // useEffect(()=>{
@@ -84,6 +96,8 @@ const MyFarmComponent = (props) => {
             ...userInfo,
             changUser : false
         })
+
+        kinokoInfo()
     },[userInfo.user])
 
     useEffect(()=>{

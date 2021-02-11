@@ -6,12 +6,14 @@ import { withCookies} from 'react-cookie';
 import axios from 'axios';
 
 const MyFarm = (props) => {
+    
     //isOn : 선택한 기기 정보 0이면 선택된 값이 없음
     const {value} = props
 
     //isLogin cookie 값 확인
     const isLoginCheck = props.cookies.get('isLogin')
-    const url = '172.26.3.62'
+    // const url = '172.26.3.62'
+    const url = '54.210.105.132'
     
     const [isOk, setIsOk] = useState({
         isDevice : false
@@ -28,8 +30,8 @@ const MyFarm = (props) => {
         //user에 등록 된 기기 정보 가져오기
          axios.post(`http://${url}/api/myfarm/list`,{
              
-                userId : props.cookies.get('userId')
-                // userId : 'SZ4S71'
+                // userId : props.cookies.get('userId')
+                userId : 'SZ4S71'
              
             
         }).then(data =>{

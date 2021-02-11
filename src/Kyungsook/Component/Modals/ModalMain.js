@@ -23,7 +23,8 @@ const ModalMain = (props)=> {
     })
 
     //url
-    const url = '172.26.3.62'
+    // const url = '172.26.3.62'
+    const url = '54.210.105.132'
     const {isKey,isPwd,isNickName} = openStr
 
     //Modal확인

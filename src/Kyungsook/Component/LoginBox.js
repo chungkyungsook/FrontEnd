@@ -114,7 +114,7 @@ const LoginBoxSamples =(props)=> {
          console.log("login page userid 확인",userId);
 
     },[]);
-    
+    const url = '54.210.105.132'
 
     const [data, setData] = useState({
         datas : '',
@@ -151,13 +151,15 @@ const LoginBoxSamples =(props)=> {
                 // headers : {
                 //     "Access-Control-Allow-Origin" : "*"
                 // },
-                url:"http://172.26.3.62/api/register",
+                url:`http://${url}/api/register`,
                 data: {
                     id : semi_id,
                     email: semi_email.replaceAll('"',''),
                 },
                 responseType: "json"
             });
+
+            // axios.post(`http://${url}/api/register`)
 
         }catch (err) { //이미 가입된 계정
             console.log(err)
@@ -169,7 +171,7 @@ const LoginBoxSamples =(props)=> {
             //로그인
             const login_response =  axios({
                 method: "post",
-                url:"http://172.26.3.62/api/login",
+                url:`http://${url}/api/login`,
                 data: {
                     id : semi_id,
                     token : semi_token.replaceAll('"',''),
@@ -180,7 +182,7 @@ const LoginBoxSamples =(props)=> {
             //로그인 여부
             const signup_response =  axios({
                 method: "post",
-                url:"http://172.26.3.62/api/auth",
+                url:`http://${url}/api/auth`,
                 data: {
                     token : semi_token.replaceAll('"',''),
                 },

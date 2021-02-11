@@ -9,7 +9,8 @@ const ModalDeviceMain = (props)=> {
     const [modalOpen, setModalOnpen] = useState(false)
     const {userDeviceInfo,deviceNum,userInfo,setUserInfo} = props
     //url
-    const url = '172.26.3.62'
+    // const url = '172.26.3.62'
+    const url = '54.210.105.132'
 
     const [deviceOn, setDeviceOn] = useState(false)
 
