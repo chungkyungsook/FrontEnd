@@ -7,12 +7,17 @@ import {Redirect}   from 'react-router-dom' ;
 import { withCookies} from 'react-cookie';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
+import SwiperCore ,{Navigation, Pagination,Thumbs}from 'swiper';
 import 'swiper/swiper-bundle.css';
+import '../Css/Movie.css';
+import { number } from '@amcharts/amcharts4/core';
 
+SwiperCore.use([Navigation, Pagination,Thumbs]);
 //전체 영역
 const Container = styled.div`
     width: 60%;
     display : flex;
+    text-align: center;
 `;
 
 const MovieContainer = styled.div`
@@ -43,41 +48,60 @@ const Movie = (props) => {
 
   const url = "http://localhost:3000/dummy/Movie.json";
   const [viewList, setViewList] = useState([])
-  const [number, setNumber] = useState(0)
-
   //슬리아더 저장 변수
   const [slides, setSlides] = useState([]);
 
-  useEffect(()=>{
-    axios.get(url).then(data =>{
-      setViewList(data.data.MovieList)
-    })
-    setNumber(1)
-  },[])
+  const [number, setNumber] = useState(0)
 
-  
   useEffect(()=>{
-    setSlides(
+
+    number === 0 && ( axios.get(url).then(data =>{
+      console.log("1번",number);
+      setNumber(1)
+      setViewList(data.data.MovieList)
+    }))
+
+    number === 1 && setSlides(
       viewList.map((data,index) =>(
-        <SwiperSlide key={`slide-${index}`}>
-          <img src={data.thumbnail} 
-            alt={`Slide ${data}`}
+        console.log("2번",data),
+        <SwiperSlide key={`slide-${index}`} tag="li">
+          <img 
+            width= '500px'
+            // style={{listStyle : 'none'}}
+            src={data.thumbnail} 
+            alt={`Thumbnail ${data}`}
           />
         </SwiperSlide>
       ))
     )
-
   },[viewList])
-    
+
+  useEffect(()=>{
+
+    setNumber(2)
+  },[slides])
+  
     return (
       <>
         {
-            !isLoginCheck ? (<Redirect to="/login" />) : (
-              <Container>
-              <Swiper id="main">
-                {slides}
-              </Swiper>
-              </Container>)
+            !isLoginCheck ? (<Redirect to="/login" />) : number === 2 && (
+               <div className='test'>              
+                <Swiper 
+                id="main" 
+                tag="section" 
+                wrapperTag="ul" 
+                navigation 
+                pagination 
+                spaceBetween={0} 
+                slidesPerView={1}
+                onInit ={(swiper) => console.log('Swiper initalized!')}
+                onSlideChange={(swiper) => {console.log("Slide index changed to:", swiper.activeIndex);}}
+                onReachEnd={()=>console.log('Swiper end reached')}
+                >
+                  {slides}
+                </Swiper>
+              </div>
+            )
         }
         </>
     );
