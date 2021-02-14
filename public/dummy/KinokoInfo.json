@@ -1,5 +1,5 @@
 {
-    "webtoons" : [
+    "kinokos" : [
       {
         "id" : 1,
         "title" : "표고버섯",
@@ -19,7 +19,7 @@
       {
         "id" : 3,
         "title" : "느타리버섯",
-        "artist" : "느타리버섯 입니다.",
+        "list" : "느타리버섯 입니다.",
         "genre" : ["볶음요리","맛있어요"],
         "score" : 4.3,
         "thumbnail" : "http://t1.daumcdn.net/webtoon/op/c61ba72e44b0acc8c871ae99c54fca6174410594"
@@ -27,7 +27,7 @@
       {
         "id" : 4,
         "title" : "팽이버섯",
-        "artist" : "팽이버섯 입니다.",
+        "list" : "팽이버섯 입니다.",
         "genre" : ["가성비","무난무난"],
         "score" : 6.7,
         "thumbnail" : "http://t1.daumcdn.net/cartoon/58A6AC20042CC40002"

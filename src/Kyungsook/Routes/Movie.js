@@ -87,7 +87,7 @@ const Movie = (props) => {
             !isLoginCheck ? (<Redirect to="/login" />) : number === 2 && (
                <div className='test'>              
                 <Swiper 
-                id="main" 
+                id="main"
                 tag="section" 
                 wrapperTag="ul" 
                 navigation 

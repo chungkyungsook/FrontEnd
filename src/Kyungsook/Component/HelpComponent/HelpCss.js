@@ -1,8 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { withCookies} from 'react-cookie';
 import styled from 'styled-components';
 import title      from '../../../assets/logoHeight.png' ;
 import {userSelect} from '../../../Util/css' ;
+
+//슬라이더
+import SwiperCore from 'swiper';
+import {Swiper, SwiperSlide} from 'swiper/react'
+import 'swiper/swiper-bundle.css'
 
 const Container   = styled.div`
 
@@ -50,9 +55,14 @@ const KinokoImg = styled.div`
     height : 170px;
     border-radius : 23px;
     margin : 5px;
+    text-align : center;
+    padding-top : 20px;
+    user-select : none ;
 `;
 const Text = styled.div`
+    /* flex: 1; */
     padding : 5px;
+    padding-top: 5px;
 `;
 
 const Item1Info = styled.div`
@@ -70,9 +80,17 @@ const KinokoInfo = styled.div`
     box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.12), 0 0 8px 0 rgba(0, 0, 0, 0.06);
     width: 448px;
     height: 370px;
-    text-align :center;
-    line-height : 370px;
+    display: flex;
+    align-items: center;
+    /* text-align :center; */
+    /* line-height : 370px; */
 `;
+
+const KinoText = styled.span`
+    width : 100%;
+    text-align : center;
+    padding : 5px;
+`
 
 //이미지
 const Img = styled.img`
@@ -105,7 +123,6 @@ const KinokoIcons = styled.div`
     width : 150px;
     height : 150px;
     margin : 5px;
-    cursor: pointer;
     
     &:hover{
         background : #ddd;
@@ -125,33 +142,49 @@ const Section2    = styled.div`
     border: 1px solid black;
     border-radius : 20px;
 `;
-const HelpCss = (props) =>{
-    const {list, onClick} = props
+const HelpCss = ({list,kinokoInfo, onClick}) =>{
 
+    useEffect(()=>{
+        console.log('help css');
+    },[])
 
     return (
     <Container>
             <Section1> 
-                (
-                    <Item1>
-                        
-                        <Item1Img> {/* 선택한 버섯 이미지 */}
-                            <KinokoImg></KinokoImg>
-                            <Text>표고버섯</Text>
-                        </Item1Img>
+                
+                <Item1>
+                    
+                    <Item1Img> {/* 선택한 버섯 이미지 */}
+                        <KinokoImg>
+                            <img
+                                src={kinokoInfo.thumbnail}
+                                alt={kinokoInfo.title}
+                            />
+                        </KinokoImg>
+                        <Text>{kinokoInfo.title}</Text>
+                    </Item1Img>
 
-                        <Item1Info> {/* 선택한 버섯 정보 */}
-                            <Img     src={title}      width="50" height="50"  draggable="false" />
-                            <KinokoInfo>버섯 정보 입니다.</KinokoInfo>
-                        </Item1Info>
+                    <Item1Info> {/* 선택한 버섯 정보 */}
+                        <Img     src={title}      width="50" height="50"  draggable="false" />
+                        <KinokoInfo>
+                            <KinoText>{kinokoInfo.list}</KinoText>
+                            <KinoText>{kinokoInfo.genre}</KinoText>
+                        </KinokoInfo>
+                    </Item1Info>
 
-                    </Item1>
-                )
+                </Item1>
+                
                 <Item2> {/* 버섯 종류 아이콘 */}
-                    <KinokoIcons onClick={onClick}>1</KinokoIcons>
+                    {list.map((data,index) =>(
+                        <KinokoIcons onClick={()=> onClick(data)} key={index}>
+                             <img style= "padding-top : 5px " src={data.thumbnail} alt={data.title}/>
+                             <Text>{data.title}</Text>
+                        </KinokoIcons>
+                    ))}
+                    {/* <KinokoIcons onClick={onClick}>1</KinokoIcons>
                     <KinokoIcons onClick={onClick}>2</KinokoIcons>
                     <KinokoIcons onClick={onClick}>3</KinokoIcons>
-                    <KinokoIcons onClick={onClick}>4</KinokoIcons>
+                    <KinokoIcons onClick={onClick}>4</KinokoIcons> */}
                 </Item2>
             </Section1>
     <Section2> 기기 사용 방법은 추후 추가할 예정</Section2>
