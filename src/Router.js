@@ -22,18 +22,39 @@ import MyFarm from './Kyungsook/Routes/MyFarm' ;
 // 범환
 import SettingRouter from './Beomhwan/SettingRouter' ;
 
+//쿠키
+import { withCookies } from 'react-cookie';
+
 const RouterComponent = (props) => {
-    // const [ user, setUser ] = useState(null) ;
-    // const authenticated = user !== null ;
+    
+    useEffect(()=>{
+        
+    },[])
+
+    const [isOn, setIsOn] = useState({
+        id : 0,
+        grgName : ''
+    })
+
+    const value = {
+        isOn,setIsOn
+    }
+
+    useEffect(()=>{
+        console.log('Router in isOn',isOn);
+        // setIsOn({...isOn,id : isOn.id})
+    },[isOn.id,isOn.grgName])
 
     return (
         <Router> 
-            <Header />
+            <Header setIsOn={setIsOn} isOn={isOn} />
             <Switch>
-                <Route path={HOME} exact component={MyFarm} />
+                <Route path={HOME} exact 
+                render = { ()=> <MyFarm value={value}/> } />
                 <Route path={LOGIN} component={Login} />
                 <Route path={JOIN} component={Join} />    
-                <Route path={FARM} component={FarmRouter} />
+                <Route path={FARM} component={FarmRouter} 
+                render = { ()=> <MyFarm value={value}/> }/>
                 <Route path={HELP} component={Help} />
                 <Route path={SETTING} component={SettingRouter} />
                 <Redirect from="*" to={HOME} />
@@ -42,4 +63,4 @@ const RouterComponent = (props) => {
     )
 } ;
 
-export default RouterComponent ;
+export default withCookies(RouterComponent) ;

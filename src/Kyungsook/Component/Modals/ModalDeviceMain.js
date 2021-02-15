@@ -9,7 +9,8 @@ const ModalDeviceMain = (props)=> {
     const [modalOpen, setModalOnpen] = useState(false)
     const {userDeviceInfo,deviceNum,userInfo,setUserInfo} = props
     //url
-    const url = '172.26.3.62'
+    // const url = '172.26.3.62'
+    const url = '54.210.105.132'
 
     const [deviceOn, setDeviceOn] = useState(false)
 
@@ -20,7 +21,7 @@ const ModalDeviceMain = (props)=> {
 
     const closeModal = () =>{
         setModalOnpen(false)
-        setUserInfo({user : ""})
+        setUserInfo({user : '', changUser : false})
 
     }
         
@@ -29,29 +30,32 @@ const ModalDeviceMain = (props)=> {
         const {name} = e.target
 
         if(name === 'ChoiceDevice'){ //기기 선택
-            console.log("기기 작동 on/off")
             
-            // userId cookie 저장
-            props.cookies.set('deviceNumber',userInfo.user)
-            console.log("cook",props.cookies.get('deviceNumber'))
-            closeModal()
-            
+            axios.put(`http://${url}/api/myfarm/select`,{
+                    id : parseInt(JSON.stringify(userInfo.user)),
+                    token : props.cookies.get('token')
+            }).then(data => {
+                console.log("ModalDevieMain 선택한 기기 통신 성공",data);
+                setUserInfo({user : userInfo.user, changUser : true})
+            }).catch(e =>{
+                console.log("ModalDeviceMain 선택한 기기 error",e.error);
+            }).finally(closeModal())            
+
             //딜레이 주기
-            setTimeout(()=>{
-                //새로고침
-                window.location.replace("/")
-            },1000)
+            // setTimeout(()=>{
+            //     //새로고침
+            //     window.location.replace("/")
+            // },1000)
 
         }else if(name === 'DeleteDevice'){ //삭제
             console.log("삭제 버튼 클릭")
             console.log("user",userInfo.user.id)
             axios.delete(`http://${url}/api/myfarm`,{
                 params: {
-                    id : userInfo.user.id
+                    id : parseInt(JSON.stringify(userInfo.user))
                 }
             }).then(d=>{
                 closeModal()
-                props.cookies.remove('deviceNumber')
                 //페이지 새롭게 로딩
                 window.location.replace("/")
             }).catch(e=>{

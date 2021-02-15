@@ -1,15 +1,23 @@
 
 import React, { useEffect, useRef, useState } from 'react' ;
-import Slide from "../Slide";
+import axios from 'axios';
 import styled from 'styled-components';
-import img1 from "../../assets/HeaderTitle.png"; 
+
 import {Redirect}   from 'react-router-dom' ;
 import { withCookies} from 'react-cookie';
 
+import { Swiper, SwiperSlide } from 'swiper/react';
+import SwiperCore ,{Navigation, Pagination,Thumbs}from 'swiper';
+import 'swiper/swiper-bundle.css';
+import '../Css/Movie.css';
+import { number } from '@amcharts/amcharts4/core';
+
+SwiperCore.use([Navigation, Pagination,Thumbs]);
 //전체 영역
 const Container = styled.div`
     width: 60%;
     display : flex;
+    text-align: center;
 `;
 
 const MovieContainer = styled.div`
@@ -34,52 +42,66 @@ const SliderContainer = styled.div`
   display: flex; //이미지들을 가로로 나열합니다.
 `;
 
-const TOTAL_SLIDES = 2 * 5;
-
 const Movie = (props) => {
-    const [currentSlide, setCurrentSlide] = useState(0);
-    const slideRef = useRef(null);
-    
-    const nextSlide = () => {
-        if (currentSlide >= TOTAL_SLIDES) { // 더 이상 넘어갈 슬라이드가 없으면 슬라이드를 초기화합니다.
-        setCurrentSlide(0);
-        } else {
-        setCurrentSlide(currentSlide + 5);
-        }
-    };
+  //isLogin cookie 값 확인
+  const isLoginCheck = props.cookies.get('isLogin')
 
-    const prevSlide = () => {
-        if (currentSlide === 0) {
-        setCurrentSlide(TOTAL_SLIDES);
-        } else {
-        setCurrentSlide(currentSlide -5);
-        }
-    };
+  const url = "http://localhost:3000/dummy/Movie.json";
+  const [viewList, setViewList] = useState([])
+  //슬리아더 저장 변수
+  const [slides, setSlides] = useState([]);
 
-    useEffect(() => {
-        slideRef.current.style.transition = "all 0.5s ease-in-out";
-        slideRef.current.style.transform = `translateX(-${currentSlide}0%)`; // 백틱을 사용하여 슬라이드로 이동하는 애니메이션을 만듭니다.
-    }, [currentSlide]);
+  const [number, setNumber] = useState(0)
 
-    //isLogin cookie 값 확인
-    const isLoginCheck = props.cookies.get('isLogin')
-    
+  useEffect(()=>{
+
+    number === 0 && ( axios.get(url).then(data =>{
+      console.log("1번",number);
+      setNumber(1)
+      setViewList(data.data.MovieList)
+    }))
+
+    number === 1 && setSlides(
+      viewList.map((data,index) =>(
+        console.log("2번",data),
+        <SwiperSlide key={`slide-${index}`} tag="li">
+          <img 
+            width= '500px'
+            // style={{listStyle : 'none'}}
+            src={data.thumbnail} 
+            alt={`Thumbnail ${data}`}
+          />
+        </SwiperSlide>
+      ))
+    )
+  },[viewList])
+
+  useEffect(()=>{
+
+    setNumber(2)
+  },[slides])
+  
     return (
       <>
         {
-            !isLoginCheck ? (<Redirect to="/login" />) : (
-              <Container>
-                <MovieContainer>
-                {currentSlide}
-                <SliderContainer ref={slideRef}>
-                    <Slide img = {img1}/>
-                    <Slide img = {img1}/>
-                    <Slide img = {img1}/>
-                </SliderContainer>
-                <Button onClick={prevSlide}>Previous Slide</Button>
-                <Button onClick={nextSlide}>Next Slide</Button>
-                </MovieContainer>
-            </Container>)
+            !isLoginCheck ? (<Redirect to="/login" />) : number === 2 && (
+               <div className='test'>              
+                <Swiper 
+                id="main"
+                tag="section" 
+                wrapperTag="ul" 
+                navigation 
+                pagination 
+                spaceBetween={0} 
+                slidesPerView={1}
+                onInit ={(swiper) => console.log('Swiper initalized!')}
+                onSlideChange={(swiper) => {console.log("Slide index changed to:", swiper.activeIndex);}}
+                onReachEnd={()=>console.log('Swiper end reached')}
+                >
+                  {slides}
+                </Swiper>
+              </div>
+            )
         }
         </>
     );

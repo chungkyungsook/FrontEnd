@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useState,useEffect } from 'react';
 import Modal from './Modal';
 import { withCookies} from 'react-cookie';
+import { Redirect } from 'react-router-dom';
 
 const ModalMain = (props)=> {
     //useState를 사용하여 open상태를 변경한다. (open일때 true로 만들어 열리는 방식)
@@ -22,7 +23,8 @@ const ModalMain = (props)=> {
     })
 
     //url
-    const url = '172.26.3.62'
+    // const url = '172.26.3.62'
+    const url = '54.210.105.132'
     const {isKey,isPwd,isNickName} = openStr
 
     //Modal확인
@@ -95,7 +97,10 @@ const ModalMain = (props)=> {
             })
             .then(data =>{
                 data.status === 200 && setOpenStr({...openStr,isNickName:1})
-                // console.log("status",data.status)
+                console.log("MyFram data 출력 ModalMain ",data)
+                // return(
+                //     <Redirect />
+                // )
                 //page새롭게 로딩
                 window.location.replace("/")
             })
@@ -116,8 +121,14 @@ const ModalMain = (props)=> {
         })
     }
     
+    useEffect(()=>{
+        console.log("====================MyFarm in ModalMain 처음 실행 화면 ===================");
+    },[])
+
+
     //기기 이름 관리
     useEffect(()=>{
+        
         console.log("key",input.keyOnchange)
         console.log("pwd",input.pwdOnchange)
         console.log("setIsOk",isKey)

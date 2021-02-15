@@ -2,6 +2,7 @@ import React from 'react' ;
 import styled from 'styled-components' ;
 import {Redirect}   from 'react-router-dom' ;
 import { withCookies} from 'react-cookie';
+import SwiperImg from './SwiperImg';
 const Container = styled.div`
     /* 화면 크기 지정 */
     width: 100%;
@@ -160,11 +161,10 @@ const InfoBox  = styled.div`
 `;
 
 
-const FarmBox = (props) => {
+const FarmMock = (props) => {
     //isLogin cookie 값 확인
     const isLoginCheck = props.cookies.get('isLogin')
-    const {mushrooms, onClick,value} = props
-
+    const {onClick,imgList} = props
     return (
         <>
         {
@@ -175,18 +175,10 @@ const FarmBox = (props) => {
                 <ItemName><Text>키노코짱</Text></ItemName>
                 {/* 3D배지 구역 */}
                 <ItemImg>
-                     {/*서버와 통신이 성공하면  */}
-                    {/* {mushrooms.map((data,index) =>(
-                            <button key={index} onClick={()=>onClick(data)}>{index}</button>
-                    ))}
-                    {value && 
-                            <>
-                                <div>id:{value.id}</div>
-                                <div>사진:{value.mr_imgid}</div>
-                                <div>size:{value.mr_size}</div>
-                                <div>상태:{value.mr_status}</div>
-                            </>
-                    } */}
+                    {/*서버와 통신이 성공하면  */}
+                    <button onClick={() => onClick('mon')} >mon</button>
+                    <button onClick={() => onClick('tue')} >tue</button>
+                    <button onClick={() => onClick('wed')} >wed</button>
                     {/* mock 데이터 */}
                     
                 </ItemImg>
@@ -214,7 +206,8 @@ const FarmBox = (props) => {
 
                     <Item5> 
                         <Photo> 버섯 갤러리
-                            <KinokoInfoNumber>{value && value.mr_imgid}</KinokoInfoNumber>
+                        
+                        {imgList.chooesKinoko != null && (<SwiperImg kinoko = {imgList.chooesKinoko}/>)}
                         </Photo>
                         <InfoBoxs>
                             <InfoBox>
@@ -222,7 +215,9 @@ const FarmBox = (props) => {
                                 <KinokoInfoNumber>#</KinokoInfoNumber>
                             </InfoBox>
                             <InfoBox>버섯 길이
-                                <KinokoInfoNumber>{value && value.mr_size}</KinokoInfoNumber>
+                                <KinokoInfoNumber>
+                                    {imgList.chooesKinoko != null && JSON.stringify(imgList.chooesKinoko[0])}
+                                </KinokoInfoNumber>
                             </InfoBox>
                         </InfoBoxs>
                     </Item5>
@@ -236,4 +231,4 @@ const FarmBox = (props) => {
     ) ;
 } ;
 
-export default withCookies(FarmBox) ;
+export default withCookies(FarmMock) ;

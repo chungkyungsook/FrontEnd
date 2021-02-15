@@ -98,9 +98,11 @@ const Button       = styled.div`
 
 const LoginBoxSamples =(props)=> {
 
+    const url = '54.210.105.132'
     //처음 시작시 token지우기
     useEffect( ()=>{
-        // axios.put('http://172.26.3.62/api/logout',{token:props.cookies.get('token')})      
+        props.cookies.get('token') && (axios.put(`http://${url}/api/logout`,{token:props.cookies.get('token')}))
+        
         props.cookies.remove('email');
         props.cookies.remove('token');
         props.cookies.remove('isLogin') ;
@@ -111,8 +113,8 @@ const LoginBoxSamples =(props)=> {
          console.log("login page 토큰확인",token);
          console.log("login page email 확인",email);
          console.log("login page userid 확인",userId);
+
     },[]);
-    
 
     const [data, setData] = useState({
         datas : '',
@@ -144,18 +146,30 @@ const LoginBoxSamples =(props)=> {
         //db값 넣어주기
         try {
             //회원가입
-            const signup_response =  axios({
-                method: "post",
-                // headers : {
-                //     "Access-Control-Allow-Origin" : "*"
-                // },
-                url:"http://172.26.3.62/api/register",
-                data: {
+            const signup_response = axios.post(`http://${url}/api/register`,{
+                // data : {
                     id : semi_id,
                     email: semi_email.replaceAll('"',''),
-                },
-                responseType: "json"
-            });
+                // }
+            }).then(data => {
+                console.log("loginBox",data);
+            }).catch(e=>{
+                console.log(e);
+            })
+            // const signup_response =  axios({
+            //     method: "post",
+            //     // headers : {
+            //     //     "Access-Control-Allow-Origin" : "*"
+            //     // },
+            //     url:`http://${url}/api/register`,
+            //     data: {
+            //         id : semi_id,
+            //         email: semi_email.replaceAll('"',''),
+            //     },
+            //     responseType: "json"
+            // });
+
+            // axios.post(`http://${url}/api/register`)
 
         }catch (err) { //이미 가입된 계정
             console.log(err)
@@ -167,7 +181,7 @@ const LoginBoxSamples =(props)=> {
             //로그인
             const login_response =  axios({
                 method: "post",
-                url:"http://172.26.3.62/api/login",
+                url:`http://${url}/api/login`,
                 data: {
                     id : semi_id,
                     token : semi_token.replaceAll('"',''),
@@ -178,7 +192,7 @@ const LoginBoxSamples =(props)=> {
             //로그인 여부
             const signup_response =  axios({
                 method: "post",
-                url:"http://172.26.3.62/api/auth",
+                url:`http://${url}/api/auth`,
                 data: {
                     token : semi_token.replaceAll('"',''),
                 },
@@ -213,9 +227,8 @@ const LoginBoxSamples =(props)=> {
                     <br></br>
                     <KaKaoLogin
                         jsKey={'91224fabd87ed64c0173372e3b0e3581'}
-                        buttonText="KaKao"
+                        buttonText="카카오 계정으로 로그인"
                         onSuccess={responseKaKao} //로그인 성공한 경우 실행할 함수
-                        // onFailure={this.responseFail}  // 로그인 실패한 경우 실행할 함수
                         getProfile={true}
                     />
                 </LoginBox>
