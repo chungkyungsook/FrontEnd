@@ -145,8 +145,8 @@ const Section2    = styled.div`
 const HelpCss = ({list,kinokoInfo, onClick}) =>{
 
     useEffect(()=>{
-        console.log('help css');
-    },[])
+        console.log('help css', kinokoInfo);
+    },[kinokoInfo])
 
     return (
     <Container>
@@ -177,7 +177,7 @@ const HelpCss = ({list,kinokoInfo, onClick}) =>{
                 <Item2> {/* 버섯 종류 아이콘 */}
                     {list.map((data,index) =>(
                         <KinokoIcons onClick={()=> onClick(data)} key={index}>
-                             <img style= "padding-top : 5px " src={data.thumbnail} alt={data.title}/>
+                             <img src={data.thumbnail} alt={data.title}/>
                              <Text>{data.title}</Text>
                         </KinokoIcons>
                     ))}

@@ -18,16 +18,22 @@ const Help = (props) => {
         setKinokoInfo(data)
     }
 
+    // useEffect(()=>{
+    //     console.log('help main',list);
+        
+    // },[])
+
     useEffect(()=>{
-        console.log('help main');
-    },[])
+        console.log('help main',list);
+        list.map(data => ( data.id === 1 && setKinokoInfo(data)))
+    },[list])
 
     return (
         <>
         {
             !isLoginCheck ? (<Redirect to="/login" />) : (
                 <>
-                    <HelpList setList={setList}/>
+                    <HelpList setList={setList} setKinokoInfo={setKinokoInfo}/>
                     <HelpCss list ={list} kinokoInfo={kinokoInfo} onClick={onClick}/>
                 </>
         )

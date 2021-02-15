@@ -98,9 +98,10 @@ const Button       = styled.div`
 
 const LoginBoxSamples =(props)=> {
 
+    const url = '54.210.105.132'
     //처음 시작시 token지우기
     useEffect( ()=>{
-        props.cookies.get('token') && (axios.put('http://172.26.3.62/api/logout',{token:props.cookies.get('token')}))
+        props.cookies.get('token') && (axios.put(`http://${url}/api/logout`,{token:props.cookies.get('token')}))
         
         props.cookies.remove('email');
         props.cookies.remove('token');
@@ -114,7 +115,6 @@ const LoginBoxSamples =(props)=> {
          console.log("login page userid 확인",userId);
 
     },[]);
-    const url = '54.210.105.132'
 
     const [data, setData] = useState({
         datas : '',
@@ -146,18 +146,28 @@ const LoginBoxSamples =(props)=> {
         //db값 넣어주기
         try {
             //회원가입
-            const signup_response =  axios({
-                method: "post",
-                // headers : {
-                //     "Access-Control-Allow-Origin" : "*"
-                // },
-                url:`http://${url}/api/register`,
-                data: {
+            const signup_response = axios.post(`http://${url}/api/register`,{
+                // data : {
                     id : semi_id,
                     email: semi_email.replaceAll('"',''),
-                },
-                responseType: "json"
-            });
+                // }
+            }).then(data => {
+                console.log("loginBox",data);
+            }).catch(e=>{
+                console.log(e);
+            })
+            // const signup_response =  axios({
+            //     method: "post",
+            //     // headers : {
+            //     //     "Access-Control-Allow-Origin" : "*"
+            //     // },
+            //     url:`http://${url}/api/register`,
+            //     data: {
+            //         id : semi_id,
+            //         email: semi_email.replaceAll('"',''),
+            //     },
+            //     responseType: "json"
+            // });
 
             // axios.post(`http://${url}/api/register`)
 
