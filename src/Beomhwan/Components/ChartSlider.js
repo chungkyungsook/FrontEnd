@@ -10,6 +10,7 @@ const CompareBox = styled.div`
     width: 100%;
     height: 100%;
     background-color: mintcream;
+    overflow: hidden;
 `;
 
 // 차트의 전체 div
@@ -49,6 +50,11 @@ const ChartDescription = styled.div`
 const options = {
     responsive: true,
     maintainAspectRatio: false,
+    tooltips: {
+        mode: 'index',
+        intersect: false,
+        position: 'nearest'
+    },
     scales: {
         // y축 세팅
         yAxes: [
@@ -64,7 +70,7 @@ const options = {
             }
         ]
     }
-}
+};
 
 const LeftButton = styled.button`
     position: absolute;
@@ -147,13 +153,18 @@ const ChartSilder = () => {
     const [detailChart, setDetailChart] = useState([]); // 상세 비교로 넘길 차트 배열
     const [slideOpacity, setSlideOpacity] = useState(true);
 
+    console.log(chartInfo);
+
     useEffect(() => {
         // 종합적인 커스텀 차트 리스트 정보들
         chartInfo.map((ch, index) => {
+            ch.prg_count !== 0 &&
             setChart(chart => chart.concat({
                 prg_id: ch.id,
                 prg_name: ch.prg_name,
                 prg_count: ch.prg_count,
+                prg_water: ch.prg_water,
+                prg_sunshine: ch.prg_sunshine,
                 toggle: false,
                 data: chartList[index]
             }));    
@@ -254,6 +265,7 @@ const ChartSilder = () => {
 
         setSlideOpacity(!slideOpacity);
     }
+
 
     return (
         <CompareBox>

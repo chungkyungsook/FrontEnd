@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import {NotoSansRegular} from '../css/cssModule';
 
 const Overlay = styled.div`
-    display: ${props => props.opacity ? 'flex' : 'none'};
+    display: ${props => props.opacity && props.customId ? 'flex' : 'none'};
     position: fixed;
     align-items: center;
     justify-content: center;
@@ -52,11 +52,11 @@ const CloseButton = styled.p`
     height: 0;
 `;
 
-const Modal = ({opacity, onClose, children, width, height}) => {
+const Modal = ({opacity, onClose, children, width, height, customId}) => {
 
     return (
-        <Overlay opacity={opacity}  >
-            <Overlay opacity={opacity} onClick={onClose}></Overlay>
+        <Overlay opacity={opacity} customId={customId} >
+            <Overlay opacity={opacity} customId={customId} onClick={onClose}></Overlay>
             <ModalBox width={width} height={height}>
                 <ModalHeader>
                     <CloseButton onClick={onClose}>
