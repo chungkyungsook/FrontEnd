@@ -2,6 +2,7 @@
 import React, {createContext, useState, useEffect, useContext} from 'react';
 import {withCookies} from 'react-cookie';
 import axios from 'axios';
+import {URL, Local} from './Util';
 
 // 커스텀 차트 데이터셋 context
 const CustomChartListContext = createContext();
@@ -42,10 +43,27 @@ const setChartjsDataset = (date, temp, humi, growth) => {
 const ChartContext = ({children, cookies}) => {
     const [customChartDataSet, setCustomChartDataSet] = useState([]);
     const [customChartInfo, setCustomChartInfo] = useState([]);
-    const userIdvalue = cookies.get('userId');
-    const machineIdValue = cookies.get('deviceNumber');
-    
+    // if(!cookies.get('deviceNumber')) {
+    //     alert('기기 선택 후 이용하실 수 있습니다!');
+    //     window.location.href = Local;
+    // }
 
+    
+    // UserId를 통한 기기 id get
+    const getMachineId = async () => {
+        let machineIdPromise = await axios.get(`${URL}/api/myfarm/id`, {
+            params: {userId: 'SZ4S71'} // <--userIdvalue로 고쳐야 함!!!!!!!!!!!!!!!!!!!!!!!!!!
+        }).then(response => {
+            console.log(response);
+            return response.data;
+        }).catch(err => {
+            console.error(err);
+        });
+        return machineIdPromise;
+    }
+
+    const machineIdValue = getMachineId();
+    
     useEffect(() => {
         // get chart data
         getData()
@@ -88,7 +106,7 @@ const ChartContext = ({children, cookies}) => {
 
     // 프로그램 리스트 데이터 get
     const getData = async () => {
-        let data = await axios.get('http://172.26.3.62/api/farm/custom/list');
+        let data = await axios.get(`${URL}/api/farm/custom/list`);
         console.log(data);
 
         return data;

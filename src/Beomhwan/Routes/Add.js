@@ -9,7 +9,7 @@ import InputPrgName from '../Components/InputprgName';
 import {flexAlign} from '../../Util/css';
 import axios from 'axios';
 import { useMachineInfo } from '../ChartContext';
-
+import {Local, URL} from '../Util';
 
 // 커스텀 차트
 const CustomChart = ({Data}) => {
@@ -350,8 +350,24 @@ const SettingName = styled.div`
     ${flexAlign};
 `;
 
+const LogBox = styled.div`
+    margin: 5px 0 5px 0;
+    height: 20px;
+    width: 100%;
+    border: 1px solid gray;
+    color: red;
+    ${flexAlign};
+    border-radius: 5px;
+`;
+
 // ---------------------------------------------------------
 
+class MyError extends Error {
+    constructor(errorName, ...params) {
+        super(...params);
+        this.name = errorName;
+    }
+}
 
 // ---------------------------------------------------------
 const Add = () => {
@@ -369,7 +385,7 @@ const Add = () => {
     useEffect(() => {
         setTimeout(() => {
             setLoading(false);
-        }, 2000); // 로딩 1.5초 세팅
+        }, 2000); // 로딩 2초 세팅
     },[]);
 
     // 1일 추가
@@ -396,30 +412,44 @@ const Add = () => {
 
     // axios 전송
     const Save = () => {
-        let temp = [];
-        let humi = [];
-        chartData.map(ch => {
-            temp.push(ch.Temperature);
-            humi.push(ch.Humidity);
-        });
-        console.log(temp, humi);
-        console.log('date : ' + chartData.length);
-        console.log(count, prgInput);
+        try{
+            let temp = [];
+            let humi = [];
+            chartData.map(ch => {
+                if(ch.Temperature > 35) {
+                    throw new MyError('TempError');
+                }
+                temp.push(ch.Temperature);
+                humi.push(ch.Humidity);
+            });
+            console.log(temp, humi);
+            console.log('date : ' + chartData.length);
+            console.log(count, prgInput);
 
-        axios.post('http://172.26.3.62/api/farm/custom', 
-            {
-                machineId: machineId,
-                water: count.waterCount,
-                sunshine: count.sunCount,
-                period: chartData.length,
-                name: prgInput.prg_name,
-                temp: temp,
-                humi: humi
+            if(prgInput.prg_name === '')
+                throw new MyError('NameError');
+
+            axios.post(`${URL}/api/farm/custom`, 
+                {
+                    machineId: machineId,
+                    water: count.waterCount,
+                    sunshine: count.sunCount,
+                    period: chartData.length,
+                    name: prgInput.prg_name,
+                    temp: temp,
+                    humi: humi
+                }
+            ).then(response => {
+                console.log(response);
+                window.location.href = (`${Local}setting/custom`);
+            }).catch(e => {console.error(e);});
+        } catch(e) {
+            if(e.name === 'TempError') {
+                alert('온도 제한 35도를 넘었습니다!');
+            } else if(e.name === 'NameError') {
+                alert('프로그램 이름을 입력해주세요!');
             }
-        ).then(response => {
-            console.log(response);
-            window.location.href = ('http://localhost:3000/setting/custom');
-        }).catch(e => {console.error(e);});
+        }
     };
 
     const [count, setCount] = useState({
@@ -483,7 +513,13 @@ const Add = () => {
                 <CustomChart Data={chartData} />
                 <SettingBox>
                 <CheckBox>
-                    <CheckMenu>온, 습도 체크박스 표시</CheckMenu>
+                    <CheckMenu>
+                        <p>온도는 35도 이하로 제한됩니다.</p>
+                        {chartData.map((ch,index) => {
+                            if(ch.Temperature > 35)
+                            return <LogBox>{ch.Date} 온도가 35도 이상입니다!</LogBox>
+                        })}
+                    </CheckMenu>
                     <Menu2>
                         <SetDate>
                             <ButtonBox Add={Add} Remove={Remove} />

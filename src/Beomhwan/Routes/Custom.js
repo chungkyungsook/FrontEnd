@@ -1,4 +1,4 @@
-import React, {useRef, useEffect, useState} from 'react';
+import React, {useRef, useEffect, useState, createContext} from 'react';
 import styled from 'styled-components';
 import {Line} from 'react-chartjs-2';
 import {
@@ -13,6 +13,11 @@ import {Button, ModalTitleBox, ModalTextBox, ModalFooter} from '../Components/Mo
 // chart의 options 설정
 export const options = {
     maintainAspectRatio: true,
+    tooltips: {
+        mode: 'index',
+        intersect: false,
+        position: 'nearest'
+    },
     scales: {
         // y축 세팅
         yAxes: [
@@ -38,7 +43,7 @@ const LineChart = ({chartData}) => {
     return (
         <Line data={chartData} options={options} ref={ChartRef}/>
     ) ;
-}
+};
 
 // 환경 프로그램 div - 이 안에 3개의 커스텀 환경이 있음
 
@@ -95,15 +100,15 @@ const CustomButton = styled.button`
     user-select: none;
 `;
 
-const CustomStart = ({onStart, onRemove, macid, prgid}) => {
+const CustomStart = ({onStart, onRemove, prgid}) => {
 
     return (
         <>
-        <CustomButton onClick={() => onStart(macid, prgid)}>적용</CustomButton>
+        <CustomButton onClick={() => onStart(prgid)}>적용</CustomButton>
         <CustomButton onClick={() => onRemove(prgid)}>삭제</CustomButton>
         </>
     );
-}
+};
 
 // 커스텀 컴포넌트
 const Custom = () => {
@@ -111,40 +116,86 @@ const Custom = () => {
     const chartInfo = useCustomChartInfo();
     const machineId = useMachineInfo();
     const [loading, setLoading] = useState(true);
-    const [opacity, setOpacity] = useState(0);
-    const [a, setA] = useState(false);
+    const [modalInfo, setModalInfo] = useState({
+        opacity: false,
+        customId: null,
+        modalTextfirst: '',
+        modalTextsecond: '',
+        confirm: ''
+    });
 
     useEffect(() => {
         setTimeout(() => {setLoading(false)}, 1500);
     },[]);
 
-    // 커스텀 환경 적용 클릭 시 적용 테스트
-    const onStart = (macid, prgid) => {
-        console.log(macid, prgid);
-        
-        setOpacity(1);
-        
+    // 커스텀 환경 적용 클릭 시 모달 on 및 텍스트 변경
+    const onStart = (prgid) => {
+        setModalInfo({
+            opacity: true,
+            customId: prgid,
+            modalTextfirst: '한번 적용하면 도중에 취소가 불가능합니다.',
+            modalTextsecond: '적용하시겠습니까?',
+            confirm: 'start'
+        });
     };
 
-    const setCustom = (macid, prgid) => {
-        //커스텀 프로그램 적용 put 코드
-        axios.put('http://172.26.3.62/api/myfarm/program', {
-            id: macid,
-            prgId: prgid
-        }).then(response => {
-            console.log(response);
-        }).catch(err => {
-            console.error(err);
-        });
-        setA(false);
-    }
-
+    // 커스텀 환경 삭제 클릭 시 모달 on 및 텍스트 변경
     const onRemove = (prgid) => {
-        setOpacity(1);
+        setModalInfo({
+            opacity: true,
+            customId: prgid,
+            modalTextfirst: '정말 삭제하시겠습니까?',
+            modalTextsecond: '',
+            confirm: 'remove'
+        });
+    };
+
+    const CustomModalFunction = (macid, prgid) => {
+        switch(modalInfo.confirm) {
+            case 'start':
+                //커스텀 프로그램 적용 put 코드
+                axios.put(`${URL}/api/myfarm/program`, {
+                    id: macid,
+                    prgId: prgid
+                }).then(response => {
+                    console.log(response);
+                    setModalInfo({
+                        opacity: false,
+                        customId: null
+                    });
+                }).catch(err => {
+                    console.error(err);
+                });
+                break;
+            case 'remove':
+                axios.delete(`${URL}/api/farm`, {params: {
+                    id: prgid
+                }}).then(response => {
+                    console.log(response);
+                    window.location.href = 'http://localhost:3000/setting/custom';
+                }).catch(err => {
+                    console.error(err);
+                });
+                break;
+            default:
+                setModalInfo({
+                    opacity: false,
+                    customId: null,
+                    modalTextfirst: '',
+                    modalTextsecond: '',
+                    confirm: ''
+                });
+        }
     };
 
     const onClose = () => {
-        setOpacity(0);
+        setModalInfo({
+            opacity: false,
+            customId: null,
+            modalTextfirst: '',
+            modalTextsecond: '',
+            confirm: ''
+        });
     };
 
     return (
@@ -167,12 +218,13 @@ const Custom = () => {
                 </CustomGraphStyle>
                 </div>
                 )}
-                <Modal opacity={opacity} onClose={onClose} width='500' height='200'>
+                <Modal opacity={modalInfo.opacity} customId={modalInfo.customId} onClose={onClose} width='500' height='200'>
                     <ModalTitleBox>주의!</ModalTitleBox>
-                    <ModalTextBox>한번 적용하면 도중에 취소가 불가능합니다.</ModalTextBox>
-                    <ModalTextBox>적용하시겠습니까? {machineId}</ModalTextBox>
+                    <ModalTextBox>{modalInfo.modalTextfirst}</ModalTextBox>
+                    <ModalTextBox>{modalInfo.modalTextsecond}</ModalTextBox>
                     <ModalFooter>
-                    <Button>확인</Button><Button onClick={onClose}>취소</Button>
+                    <Button onClick={() => CustomModalFunction(machineId, modalInfo.customId)}>확인</Button>
+                    <Button onClick={onClose}>취소</Button>
                     </ModalFooter>
                 </Modal>
             </CustomBox>
@@ -182,30 +234,3 @@ const Custom = () => {
 };
 
 export default Custom;
-
-// 지금 당장 해야할거 
-// 리스트 잘 출력하는거
-// 3개씩 끊어서 출력해야함
-// array.map을 다시한번 짚고 넘어가는게 좋을까?
-
-// 삭제 코드
-// console.log(prgid);
-// axios.delete('http://172.26.3.62/api/farm', {params: {
-//     id: prgid
-// }}).then(response => {
-//     console.log(response);
-// }).catch(err => {
-//     console.error(err);
-// })
-
-// 적용 코드
-// console.log(macid, prgid);
-//         //커스텀 프로그램 적용 put 코드
-//         axios.put('http://172.26.3.62/api/myfarm/program', {
-//             id: macid,
-//             prgId: prgid
-//         }).then(response => {
-//             console.log(response);
-//         }).catch(err => {
-//             console.error(err);
-//         });

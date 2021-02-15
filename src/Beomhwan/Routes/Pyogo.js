@@ -120,7 +120,7 @@ const Pyogo = () => {
 
     return (
         <PyogoStyled>
-            <Modal opacity={opacity} onClose={onClose}>
+            <Modal opacity={opacity} customId='0' onClose={onClose}>
                 <ModalContent chartname='pyogo' text={PyogoModalText} onClose={onClose}/>
             </Modal>
             <PyogoGraphBox>
