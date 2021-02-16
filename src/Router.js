@@ -50,13 +50,18 @@ const RouterComponent = (props) => {
             <Header setIsOn={setIsOn} isOn={isOn} />
             <Switch>
                 <Route path={HOME} exact 
-                render = { ()=> <MyFarm value={value}/> } />
+                render = { (props)=> <MyFarm {...props} value={value}/> } />
+
                 <Route path={LOGIN} component={Login} />
-                <Route path={JOIN} component={Join} />    
-                <Route path={FARM} component={FarmRouter} 
-                render = { ()=> <MyFarm value={value}/> }/>
+                <Route path={JOIN} component={Join} />   
+
+                <Route path={FARM} exact 
+                render = { (props)=> <FarmRouter {...props} value={value}/> } />
+                
+                
                 <Route path={HELP} component={Help} />
-                <Route path={SETTING} component={SettingRouter} />
+                <Route path={SETTING}exact 
+                render = { (props)=> <SettingRouter {...props} value={value}/> } />
                 <Redirect from="*" to={HOME} />
             </Switch>
         </Router>

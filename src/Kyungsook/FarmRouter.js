@@ -24,9 +24,9 @@ const TemplateContainer = styled.div`
 `;
 
 
-const FarmRouter = ({ location }) => {
-    const { pathname } = location ;
-    
+const FarmRouter = ({ location,value }) => {
+    const { pathname} = location ;
+    console.log("FarmRouterdfsijfoijwoifjowej",value);
     return (
         <Container>
             <FarmMenu pathname = {pathname}/>
