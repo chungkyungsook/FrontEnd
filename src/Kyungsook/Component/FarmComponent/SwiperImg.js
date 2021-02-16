@@ -11,26 +11,6 @@ const SwiperImg  = (prors) => {
   const data = new Date()
   const {kinoko} = prors
 
-  // const listVeiw = () =>{
-
-  //   const slideData = [] ;
-
-  //   for( let i = 0; i<kinoko.length ; i++){
-  //     slideData.push(
-  //       <SwiperSlide 
-  //         key={`slide-${i}`}>
-  //         <img
-  //           src={kinoko[i].thumbnail}
-  //           style={{listStyle :'none'}}
-  //           alt={`Slide ${i}`}
-  //          />
-  //          <h2>{`날짜 ${JSON.stringify(data)}`}</h2>
-  //       </SwiperSlide>
-  //     )
-  //   }
-
-  //     setSlides(slideData) ;
-  // }
 
   useEffect(() =>{
     console.log("kinoko" + kinoko) ;

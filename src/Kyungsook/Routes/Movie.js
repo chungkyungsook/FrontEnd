@@ -63,7 +63,7 @@ const Movie = (props) => {
 
     number === 1 && setSlides(
       viewList.map((data,index) =>(
-        console.log("2번",data),
+        // console.log("2번",data),
         <SwiperSlide key={`slide-${index}`} tag="li">
           <img 
             width= '500px'

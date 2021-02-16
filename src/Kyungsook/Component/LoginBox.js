@@ -28,71 +28,22 @@ const LoginBox       = styled.div`
     
 `;
 
-
-const InputBox      = styled.input`
-    /* box 속성(input) */
-    all             : unset ;
-    border-radius   : 10px;
-    height          : 30px;
-    /* margin          : 0.7rem 0 0 0; */
-    background      : #E0E0DA;
-    padding         : 5px;
-
-`;
-
-
-const TextBox       = styled.div`
-    display         : flex ;
-    justify-content : flex-start ;
-`;
-
-const Text          = styled.span`
-    
-`;
-
-// 아이디, 비밀번호 찾기
-const TextInput     = styled.span`
-    /* box 속성 */
-    display         : flex ;
-    justify-content : flex-end ;
-    padding-top      : 0.5rem;
-
-    /* 폰트 속성  */
-    font-size       : 15px;
-    color           : rgb(224, 224, 218);
-
-    cursor: pointer;
-
-    &:hover{
-        color : #232d;    
-    }
-
-`;
-
-const ButtonBox     = styled.div`
-    
-    all             : unset;
-    /* box 속성  */
-    display         : flex;
-    justify-content : center;
-    align-items     : center;
-    
-    padding-top     : 1rem;
-`;
-
-const Button       = styled.div`
-
-    background     : #ABB48B;
-    border-radius  : 17px;
-    color          : white;
-    margin         : 0.8rem 0.4rem 8rem;;
-    padding        : 0.6rem;
-
-    cursor: pointer;
-    &:hover{
-        background : #232d;    
-    }
-
+const KaKaoBtn = styled(KaKaoLogin)`
+  padding: 0;
+  width: 300px;
+  height: 45px;
+  line-height: 44px;
+  color: #783c00;
+  background-color: #ffeb00;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  &:hover {
+    box-shadow: 0 0px 15px 0 rgba(0, 0, 0, 0.2);
+  }
 `;
 
 
@@ -101,18 +52,30 @@ const LoginBoxSamples =(props)=> {
     const url = '54.210.105.132'
     //처음 시작시 token지우기
     useEffect( ()=>{
-        props.cookies.get('token') && (axios.put(`http://${url}/api/logout`,{token:props.cookies.get('token')}))
         
+        
+        props.cookies.get('token') && (
+            axios.put(`http://${url}/api/logout`,
+                {token:props.cookies.get('token')}
+                ).then(data =>{
+                    console.log("loginBox 처음 시작 시",data);
+                }).catch(e =>{
+                    console.log("loginBox 처음 시작 시 error 로그아웃 실패",e);
+                })
+            )
+
+        console.log("LoginBox 버튼 클릭 쿠키 남아 있으면 삭제");
         props.cookies.remove('email');
         props.cookies.remove('token');
         props.cookies.remove('isLogin') ;
         props.cookies.remove('userId') ;
 
+        
          //cookie상태 확인
-         console.log("login page 로그인 상태 확인",isLogin);
-         console.log("login page 토큰확인",token);
-         console.log("login page email 확인",email);
-         console.log("login page userid 확인",userId);
+        console.log("login page 로그인 상태 확인",isLogin);
+        console.log("login page 토큰확인",token);
+        console.log("login page email 확인",email);
+        console.log("login page userid 확인",userId);
 
     },[]);
 
@@ -136,7 +99,7 @@ const LoginBoxSamples =(props)=> {
     //로그인 버튼 클릭시 실행
     const responseKaKao = async (res) => {
 
-        console.log(JSON.stringify(res))
+        console.log("로그인 버튼 클릭 ",JSON.stringify(res))
     
         //kakao 정보가져오기
         const semi_id    = JSON.stringify(res.profile.id)
@@ -146,7 +109,7 @@ const LoginBoxSamples =(props)=> {
         //db값 넣어주기
         try {
             //회원가입
-            const signup_response = axios.post(`http://${url}/api/register`,{
+            axios.post(`http://${url}/api/register`,{
                 // data : {
                     id : semi_id,
                     email: semi_email.replaceAll('"',''),
@@ -156,20 +119,7 @@ const LoginBoxSamples =(props)=> {
             }).catch(e=>{
                 console.log(e);
             })
-            // const signup_response =  axios({
-            //     method: "post",
-            //     // headers : {
-            //     //     "Access-Control-Allow-Origin" : "*"
-            //     // },
-            //     url:`http://${url}/api/register`,
-            //     data: {
-            //         id : semi_id,
-            //         email: semi_email.replaceAll('"',''),
-            //     },
-            //     responseType: "json"
-            // });
-
-            // axios.post(`http://${url}/api/register`)
+            
 
         }catch (err) { //이미 가입된 계정
             console.log(err)
@@ -179,7 +129,7 @@ const LoginBoxSamples =(props)=> {
         try {
 
             //로그인
-            const login_response =  axios({
+            axios({
                 method: "post",
                 url:`http://${url}/api/login`,
                 data: {
@@ -190,7 +140,7 @@ const LoginBoxSamples =(props)=> {
             });
 
             //로그인 여부
-            const signup_response =  axios({
+            axios({
                 method: "post",
                 url:`http://${url}/api/auth`,
                 data: {
@@ -216,7 +166,6 @@ const LoginBoxSamples =(props)=> {
     //로그인 하면 cookie 저장
     isLogin && cookieSet();
 
-    console.log("test")
     return (
         <>
         {
@@ -224,13 +173,21 @@ const LoginBoxSamples =(props)=> {
             <>
                 <LoginPont>Login</LoginPont>
                 <LoginBox>
-                    <br></br>
-                    <KaKaoLogin
+                    
+                    <KaKaoBtn
+                        jsKey={'91224fabd87ed64c0173372e3b0e3581'}
+                        buttonText="카카오 계정으로 회원가입"
+                        onSuccess={responseKaKao} //로그인 성공한 경우 실행할 함수
+                        getProfile={true}
+                    />
+{/* 
+                    <KaKaoBtn
                         jsKey={'91224fabd87ed64c0173372e3b0e3581'}
                         buttonText="카카오 계정으로 로그인"
                         onSuccess={responseKaKao} //로그인 성공한 경우 실행할 함수
                         getProfile={true}
-                    />
+                    /> */}
+
                 </LoginBox>
                 {/* {isLogin && move()} */}
             </>
