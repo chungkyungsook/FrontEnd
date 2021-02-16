@@ -3,65 +3,84 @@
       {
         "id" : 1,
         "cm" : "4",
-        "artist" : "윤태호",
-        "day" : "mon",
-        "thumbnail" : "http://t1.daumcdn.net/webtoon/op/f6df13cba138bce8e5526e71fd46ecb1d8433520"
+        "status" : "grow",
+        "percent" : 50,
+        "thumbnail" : ["http://t1.daumcdn.net/webtoon/op/f6df13cba138bce8e5526e71fd46ecb1d8433520",
+                      "http://t1.daumcdn.net/webtoon/op/f6df13cba138bce8e5526e71fd46ecb1d8433520",
+                      "http://t1.daumcdn.net/webtoon/op/f6df13cba138bce8e5526e71fd46ecb1d8433520",
+                      "http://t1.daumcdn.net/webtoon/op/f6df13cba138bce8e5526e71fd46ecb1d8433520",
+                      "http://t1.daumcdn.net/webtoon/op/f6df13cba138bce8e5526e71fd46ecb1d8433520"]
       },
       {
         "id" : 2,
         "cm" : "3",
-        "artist" : "김태호",
-        "day" : "mon",
-        "thumbnail" : "http://t1.daumcdn.net/webtoon/op/b6a0a829b579340585887cb44e762d664e055e7d"
+        "status" : "grow",
+        "percent" : 60,
+        "thumbnail" : ["http://t1.daumcdn.net/webtoon/op/b6a0a829b579340585887cb44e762d664e055e7d",
+                       "http://t1.daumcdn.net/webtoon/op/f6df13cba138bce8e5526e71fd46ecb1d8433520",
+                       "http://t1.daumcdn.net/webtoon/op/f6df13cba138bce8e5526e71fd46ecb1d8433520",
+                       "http://t1.daumcdn.net/webtoon/op/b6a0a829b579340585887cb44e762d664e055e7d",
+                       "http://t1.daumcdn.net/webtoon/op/b6a0a829b579340585887cb44e762d664e055e7d"]
       },
       {
         "id" : 3,
         "cm" : "1",
-        "artist" : "유재석",
-        "day" : "mon",
+        "status" : "get",
+        "percent" : 100,
         "thumbnail" : "http://t1.daumcdn.net/webtoon/op/c61ba72e44b0acc8c871ae99c54fca6174410594"
       },
       {
         "id" : 4,
         "cm" : "2",
-        "artist" : "tue",
-        "day" : "tue",
+        "status" : "end",
+        "percent" : 100,
         "thumbnail" : "http://t1.daumcdn.net/cartoon/58A6AC20042CC40002"
       },
       {
         "id" : 5,
         "cm" : "3",
-        "artist" : "트와이스",
-        "day" : "tue",
+        "status" : "grow",
+        "percent" : 11,
         "thumbnail" : "http://t1.daumcdn.net/cartoon/589C32130248A30001"
       },
       {
         "id" : 6,
         "cm" : "4",
-        "artist" : "박명수",
-        "day" : "tue",
-        "thumbnail" : "http://t1.daumcdn.net/cartoon/58F5CCB9012FF90001"
+        "status" : "get",
+        "percent" : 100,
+        "thumbnail" : ["http://t1.daumcdn.net/cartoon/58F5CCB9012FF90001",
+                        "http://t1.daumcdn.net/cartoon/58F5CCB9012FF90001",
+                        "http://t1.daumcdn.net/cartoon/58F5CCB9012FF90001"]
       },
       {
         "id" : 7,
         "cm" : "6",
-        "artist" : "여자친구",
-        "day" : "wed",
+        "status" : "end",
+        "percent" : 100,
         "thumbnail" : "http://t1.daumcdn.net/webtoon/op/8cc3b938d6d1c665f7e19b5949c3161e85d8b41d"
       },
       {
         "id" : 8,
         "cm" : "4",
-        "artist" : "위너",
-        "day" : "wed",
-        "thumbnail" : "http://i1.cartoon.daumcdn.net/svc/image/U03/cartoon/566A81290233790001"
+        "status" : "get",
+        "percent" : 100,
+        "thumbnail" : ["http://i1.cartoon.daumcdn.net/svc/image/U03/cartoon/566A81290233790001",
+                        "http://i1.cartoon.daumcdn.net/svc/image/U03/cartoon/566A81290233790001",
+                        "http://i1.cartoon.daumcdn.net/svc/image/U03/cartoon/566A81290233790001",
+                        "http://i1.cartoon.daumcdn.net/svc/image/U03/cartoon/566A81290233790001"]
       },
       {
         "id" : 9,
         "cm" : "0",
-        "artist" : "윤종신",
-        "day" : "wed",
-        "thumbnail" : "http://i1.cartoon.daumcdn.net/svc/image/U03/cartoon/55E5573D0213590002"
+        "status" : "grow",
+        "percent" : 55,
+        "thumbnail" : ["http://i1.cartoon.daumcdn.net/svc/image/U03/cartoon/55E5573D0213590002",
+                        "http://i1.cartoon.daumcdn.net/svc/image/U03/cartoon/55E5573D0213590002",
+                        "http://i1.cartoon.daumcdn.net/svc/image/U03/cartoon/55E5573D0213590002",
+                        "http://i1.cartoon.daumcdn.net/svc/image/U03/cartoon/55E5573D0213590002",
+                        "http://i1.cartoon.daumcdn.net/svc/image/U03/cartoon/55E5573D0213590002",
+                        "http://i1.cartoon.daumcdn.net/svc/image/U03/cartoon/55E5573D0213590002",
+                        "http://i1.cartoon.daumcdn.net/svc/image/U03/cartoon/55E5573D0213590002"]
       }
     ]
   }

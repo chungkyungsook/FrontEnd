@@ -10,8 +10,8 @@ import LoginBox from './LoginBox';
 
 const Container = styled.div`
     /* 화면 크기 지정 */
-    width           : 100%;
-    
+    width  : 100%;
+    height : 100vh;
     /* box 설정 */
     display         : flex;
     justify-content : center;

@@ -181,10 +181,6 @@ const HelpCss = ({list,kinokoInfo, onClick}) =>{
                              <Text>{data.title}</Text>
                         </KinokoIcons>
                     ))}
-                    {/* <KinokoIcons onClick={onClick}>1</KinokoIcons>
-                    <KinokoIcons onClick={onClick}>2</KinokoIcons>
-                    <KinokoIcons onClick={onClick}>3</KinokoIcons>
-                    <KinokoIcons onClick={onClick}>4</KinokoIcons> */}
                 </Item2>
             </Section1>
     <Section2> 기기 사용 방법은 추후 추가할 예정</Section2>

@@ -1,4 +1,4 @@
-import React from 'react' ;
+import React, { useEffect } from 'react' ;
 import styled from 'styled-components' ;
 import {Redirect}   from 'react-router-dom' ;
 import { withCookies} from 'react-cookie';
@@ -143,7 +143,9 @@ const Photo   =  styled.div`
     margin-top: 10px;
     box-shadow      : 0 0 8px 0 rgba(0, 0, 0, 0.22), 0 0 8px 0 rgba(0, 0, 0, 0.26);
     border-radius: 13px;
-    flex: 1;
+    /* flex: 1; */
+    height : 150px;
+     
 `;
 
 //성장률, 버섯 길이 전체 영역
@@ -161,10 +163,21 @@ const InfoBox  = styled.div`
 `;
 
 
-const FarmMock = (props) => {
+const FarmMock = ({cookies, imgList,onClick}) => {
     //isLogin cookie 값 확인
-    const isLoginCheck = props.cookies.get('isLogin')
-    const {onClick,imgList} = props
+    const isLoginCheck = cookies.get('isLogin')
+    
+    useEffect(()=>{
+        console.log('===========Farm FarmMock 처음 실행 상태===========');
+    },[])
+    
+    //값이 잘 들어 오는 지 확인
+    useEffect(()=>{
+        imgList.kinokosList && console.log("FarmMock kinokoLists",imgList.kinokosList);
+        
+    },[imgList])
+
+
     return (
         <>
         {
@@ -176,11 +189,14 @@ const FarmMock = (props) => {
                 {/* 3D배지 구역 */}
                 <ItemImg>
                     {/*서버와 통신이 성공하면  */}
-                    <button onClick={() => onClick('mon')} >mon</button>
-                    <button onClick={() => onClick('tue')} >tue</button>
-                    <button onClick={() => onClick('wed')} >wed</button>
-                    {/* mock 데이터 */}
-                    
+                    {
+                        imgList.kinokosList && (
+                            imgList.kinokosList.map((data,index)=>(
+                                // console.log(data),
+                                <button key={index} onClick={() => onClick(data)}>{data.id}</button>
+                            ))
+                        )
+                    }
                 </ItemImg>
                 
             </Section1>
@@ -206,8 +222,6 @@ const FarmMock = (props) => {
 
                     <Item5> 
                         <Photo> 버섯 갤러리
-                        
-                        {imgList.chooesKinoko != null && (<SwiperImg kinoko = {imgList.chooesKinoko}/>)}
                         </Photo>
                         <InfoBoxs>
                             <InfoBox>
@@ -216,7 +230,6 @@ const FarmMock = (props) => {
                             </InfoBox>
                             <InfoBox>버섯 길이
                                 <KinokoInfoNumber>
-                                    {imgList.chooesKinoko != null && JSON.stringify(imgList.chooesKinoko[0])}
                                 </KinokoInfoNumber>
                             </InfoBox>
                         </InfoBoxs>
