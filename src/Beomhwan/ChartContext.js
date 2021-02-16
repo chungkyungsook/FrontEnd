@@ -43,26 +43,27 @@ const setChartjsDataset = (date, temp, humi, growth) => {
 const ChartContext = ({children, cookies}) => {
     const [customChartDataSet, setCustomChartDataSet] = useState([]);
     const [customChartInfo, setCustomChartInfo] = useState([]);
+    console.log(cookies);
     // if(!cookies.get('deviceNumber')) {
     //     alert('기기 선택 후 이용하실 수 있습니다!');
     //     window.location.href = Local;
     // }
-
+    // const machineIdValue = cookies.get('deviceNumber');
     
-    // UserId를 통한 기기 id get
-    const getMachineId = async () => {
-        let machineIdPromise = await axios.get(`${URL}/api/myfarm/id`, {
-            params: {userId: 'SZ4S71'} // <--userIdvalue로 고쳐야 함!!!!!!!!!!!!!!!!!!!!!!!!!!
-        }).then(response => {
-            console.log(response);
-            return response.data;
-        }).catch(err => {
-            console.error(err);
-        });
-        return machineIdPromise;
-    }
+    // // UserId를 통한 기기 id get
+    // const getMachineId = async () => {
+    //     let machineIdPromise = await axios.get(`${URL}/api/myfarm/id`, {
+    //         params: {userId: 'SZ4S71'} // <--userIdvalue로 고쳐야 함!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //     }).then(response => {
+    //         console.log(response);
+    //         return response.data;
+    //     }).catch(err => {
+    //         console.error(err);
+    //     });
+    //     return machineIdPromise;
+    // }
 
-    const machineIdValue = getMachineId();
+    // const machineIdValue = getMachineId();
     
     useEffect(() => {
         // get chart data
@@ -115,7 +116,7 @@ const ChartContext = ({children, cookies}) => {
     return (
         <CustomChartListInfoContext.Provider value={customChartInfo}>
             <CustomChartListContext.Provider value={customChartDataSet}>
-                <UserMachineIdContext.Provider value={machineIdValue.id}>
+                <UserMachineIdContext.Provider >
                     {children}
                 </UserMachineIdContext.Provider>
             </CustomChartListContext.Provider>
