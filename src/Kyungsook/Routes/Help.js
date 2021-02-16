@@ -18,10 +18,10 @@ const Help = (props) => {
         setKinokoInfo(data)
     }
 
-    // useEffect(()=>{
-    //     console.log('help main',list);
+    useEffect(()=>{
+        console.log('help main',list);
         
-    // },[])
+    },[])
 
     useEffect(()=>{
         console.log('help main',list);
