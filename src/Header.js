@@ -135,7 +135,7 @@ const Header = ({ location, cookies, setIsOn,isOn}) => {
     const [token, setToken] = useState('')
 
     //url
-    const url = '172.26.3.62'
+    const url = '54.210.105.132'
 
     //logout 버튼 클릭
     const logoutOnClick = () =>{
