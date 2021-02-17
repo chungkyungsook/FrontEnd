@@ -40,38 +40,15 @@ const setChartjsDataset = (date, temp, humi, growth) => {
     return chartdata;
 }
 
-const ChartContext = ({children, cookies}) => {
+const ChartContext = ({children, machineId}) => {
     const [customChartDataSet, setCustomChartDataSet] = useState([]);
     const [customChartInfo, setCustomChartInfo] = useState([]);
-    const userId = cookies.get('userId');
-    console.log(userId);
-    const [machineId, setMachineId] = useState('');
-    
-    // if(!cookies.get('deviceNumber')) {
-    //     alert('기기 선택 후 이용하실 수 있습니다!');
-    //     window.location.href = Local;
-    // }
+    console.log(machineId);
     // const machineIdValue = cookies.get('deviceNumber');
-    
-
 
     // const machineIdValue = getMachineId();
     
     useEffect(() => {
-        //     // UserId를 통한 기기 id get
-        // const getMachineId = async () => {
-        //     let machineIdPromise = await axios.get(`${URL}/api/myfarm/id`, {
-        //         params: {userId: userId} // <--userIdvalue로 고쳐야 함!!!!!!!!!!!!!!!!!!!!!!!!!!
-        //     }).then(response => {
-        //         console.log(response);
-        //         return response.data;
-        //     }).catch(err => {
-        //         console.error(err);
-        //     });
-        //     return machineIdPromise;
-        // }
-
-        // setMachineId(getMachineId());
 
 
         // get chart data
@@ -124,7 +101,7 @@ const ChartContext = ({children, cookies}) => {
     return (
         <CustomChartListInfoContext.Provider value={customChartInfo}>
             <CustomChartListContext.Provider value={customChartDataSet}>
-                <UserMachineIdContext.Provider >
+                <UserMachineIdContext.Provider value={machineId}>
                     {children}
                 </UserMachineIdContext.Provider>
             </CustomChartListContext.Provider>

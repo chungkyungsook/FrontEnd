@@ -148,7 +148,7 @@ const Compare = ({goSlide, chart}) => {
             <>
             <CompareListBox width={slideInfo.width} x={slideInfo.x}>
                 {chart.map((ch,i) => 
-                    <CompareBox>
+                    <CompareBox key={i}>
                         <ChartBox>
                             <LineChart data={ch.data} />
                         </ChartBox>
