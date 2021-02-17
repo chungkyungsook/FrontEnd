@@ -102,7 +102,7 @@ const LoginStatus = styled.span`
     padding : 30px ;
 `;
 // setIsOn -> 선택한 기기 정보 넣기 
-const Header = ({ location, cookies, setIsOn,isOn}) => {
+const Header = ({ location, cookies, setIsOn,isOn,isValue, setIsValue}) => {
 
     // 메뉴 데이터
     const menuData = [ 
@@ -155,7 +155,7 @@ const Header = ({ location, cookies, setIsOn,isOn}) => {
     } 
     const [grdId, setGrdId] = useState(0)
     //선택한 기기 가동상태 확인
-    const [value, setValue] = useState('') 
+    // const [value, setValue] = useState('') 
 
     //처음 시작 시 
       useEffect(()=>{
@@ -170,6 +170,7 @@ const Header = ({ location, cookies, setIsOn,isOn}) => {
             }
         ).then(data =>{
             // setGrdId(JSON.stringify(data.data))
+            console.log("Headeer is ", data);
             setIsOn({...isOn, id : parseInt(JSON.stringify(data.data))})
             //선택 된 기기 값 있으면 가동 상태 확인하기
             JSON.stringify(data.data) !== '0' &&             
@@ -180,7 +181,7 @@ const Header = ({ location, cookies, setIsOn,isOn}) => {
                 }
             }).then(data =>{
                 console.log('header 기기 상태값 확인',data);
-                setValue(JSON.stringify(data.data))
+                setIsValue(JSON.stringify(data.data))
             }).catch(e =>{
                 console.log("Header 실행중인 기기 상태 error",e.err);
             })
@@ -194,13 +195,15 @@ const Header = ({ location, cookies, setIsOn,isOn}) => {
     const [userData, setUserData] = useState([])
     //해당 기기 상태 확인 후 있으면 실행
     useEffect(()=>{
-        value && ( 
+
+        console.log("Header value", isValue);
+        isValue && ( 
             axios.post(`http://${url}/api/myfarm/list`,{
                 
                 userId : cookies.get('userId')
                 
             }).then((data) =>{ // 해당 user 정보 다 저장하기
-
+                // console.log("header isValue data",data)
                 setUserData(data.data)
 
             }).catch(e =>{
@@ -208,27 +211,28 @@ const Header = ({ location, cookies, setIsOn,isOn}) => {
             })
         )
         
-    },[value])
+    },[isValue])
 
     //선택한 기기 있으면 해당 기기 이름 가져오기
     useEffect(()=>{
         
-        console.log("header 선택한 기기", userData);
-        console.log("header 선택한 기기",isOn.id);
-        console.log("header 선택한 기기",isOn.grgName);
+        // console.log("header 선택한 기기 user data", userData);
+        // console.log("header 선택한 기기 id",isOn.id);
+        // console.log("header 선택한 기기 name",isOn.grgName);
 
         userData.map(data =>(
-            // console.log(data,"grgId",isOn.id !==0 ? isOn.id : grdId),
+            // console.log( "header user data 현재 data.id === isOn.id",data),
             JSON.stringify(data.id) ==  isOn.id  && (
                 // console.log(data.machine_name),
                 setIsOn({
                     id : JSON.stringify(data.id),
                     grgName : data.machine_name
-                })
+                }),
+                setIsValue(data.machine_ison)
             )
         ))
 
-    },[isOn.id,userData,isOn.grgName])
+    },[userData,isOn.id])
 
 
 
@@ -255,8 +259,8 @@ const Header = ({ location, cookies, setIsOn,isOn}) => {
                     
                     {/* 기기 관리 */}
                     <MachineContainer>
-                        <MachineName isOn={value}>-선택 기기- {isOn.grgName} </MachineName>
-                        <MachineStatus>{value ? 'On' : 'Off'}</MachineStatus>
+                        <MachineName isOn={isValue}>-선택 기기- {isOn.grgName} </MachineName>
+                        <MachineStatus>{isValue ? 'On' : 'Off'}</MachineStatus>
                     </MachineContainer>
 
                     <UserContainer>
