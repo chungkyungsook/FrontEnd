@@ -275,7 +275,7 @@ const ChartSilder = () => {
         <ChartListBox width={slideInfo.chartSize}>
             <ChartContainer width={slideInfo.width} x={slideInfo.x}>
                 {chart.map((ch, index) => 
-                <ChartContentBox>
+                <ChartContentBox key={index}>
                     <ChartStyle>
                         <ChartInstance chartData={ch.data}/>
                     </ChartStyle>

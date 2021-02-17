@@ -33,7 +33,7 @@ const TemplateContainer = styled.div`
     width: 100%;
 `;
 
-const SettingRouter = ({location, cookies}) => {
+const SettingRouter = ({location, cookies, value}) => {
     const isLoginCheck = cookies.get('isLogin');
 
     const {pathname} = location;
@@ -41,7 +41,7 @@ const SettingRouter = ({location, cookies}) => {
     return (
         <>
         {!isLoginCheck ? (<Redirect to="/login" />) : (
-        <ChartContext>
+        <ChartContext machineId={value.isOn.id}>
         <Conatiner>
             <SideMenu pathname={pathname} />
             <TemplateContainer>

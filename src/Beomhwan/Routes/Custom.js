@@ -9,6 +9,7 @@ import {
 import Modal from '../Components/Modal';
 import axios from 'axios';
 import {Button, ModalTitleBox, ModalTextBox, ModalFooter} from '../Components/ModalContent';
+import {URL} from '../Util';
 
 // chart의 options 설정
 export const options = {
