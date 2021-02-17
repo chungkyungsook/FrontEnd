@@ -36,6 +36,8 @@ const RouterComponent = (props) => {
         grgName : ''
     })
 
+    const [isValue, setIsValue] = useState('')
+
     const value = {
         isOn,setIsOn
     }
@@ -47,7 +49,7 @@ const RouterComponent = (props) => {
 
     return (
         <Router> 
-            <Header setIsOn={setIsOn} isOn={isOn} />
+            <Header setIsOn={setIsOn} isOn={isOn} isValue={isValue} setIsValue={setIsValue} />
             <Switch>
                 <Route path={HOME} exact 
                 render = { (props)=> <MyFarm {...props} value={value}/> } />
@@ -55,12 +57,12 @@ const RouterComponent = (props) => {
                 <Route path={LOGIN} component={Login} />
                 <Route path={JOIN} component={Join} />   
 
-                <Route path={FARM} exact 
+                <Route path={FARM} 
                 render = { (props)=> <FarmRouter {...props} value={value}/> } />
                 
                 
                 <Route path={HELP} component={Help} />
-                <Route path={SETTING}exact 
+                <Route path={SETTING}  
                 render = { (props)=> <SettingRouter {...props} value={value}/> } />
                 <Redirect from="*" to={HOME} />
             </Switch>
