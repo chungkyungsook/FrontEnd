@@ -3,6 +3,105 @@ import styled from 'styled-components' ;
 import {Redirect}   from 'react-router-dom' ;
 import { withCookies} from 'react-cookie';
 import SwiperImg from './SwiperImg';
+
+
+const FarmMock = ({cookies, imgList,onClick,kinoko}) => {
+    //isLogin cookie 값 확인
+    const isLoginCheck = cookies.get('isLogin')
+    
+    useEffect(()=>{
+        console.log('===========Farm FarmMock 처음 실행 상태===========');
+    },[])
+    
+    //값이 잘 들어 오는 지 확인
+    useEffect(()=>{
+        //전체 버섯의 정보
+        imgList.kinokosList && console.log("FarmMock kinokoLists",imgList.kinokosList,imgList.kinokoNumber);
+        console.log(imgList.kinokoNumber);
+        //값 이 들어오고, 해당 버섯의 상태 저장
+        //진행중인 프로젝트 이름 가져오기
+
+        
+    },[imgList])
+
+
+    return (
+        <>
+        {
+            !isLoginCheck ? (<Redirect to="/login" />) : (
+        <Container>
+            <Section1>
+                
+                <ItemName><Text>키노코짱</Text></ItemName>
+                {/* 3D배지 구역 */}
+                <ItemImg>
+                    {/*서버와 통신이 성공하면  */}
+                    {
+                        imgList.kinokosList && (
+                            imgList.kinokosList.map((data,index)=>(
+                                // console.log(data),
+                                data.status !== "end" && <button key={index} onClick={() => onClick(data)}>{data.id}</button>
+                            ))
+                        )
+                    }
+                </ItemImg>
+                
+            </Section1>
+            
+            <Section2>
+                
+                <Item2>
+                    <ProjectName><Text>진행 중인 프로젝트</Text></ProjectName>
+                    <GrpBox> 그래프 영역</GrpBox>
+                </Item2>
+                
+                <Item3>
+
+                    <Item4>
+
+                        <NumBox>
+                            <div>누적 버섯 갯수</div>
+                            <KinokoInfoNumber>{imgList.kinokoNumber.allKinoko}</KinokoInfoNumber>
+                        </NumBox>
+                        <NumBox>
+                            현재 버섯 갯수
+                            <KinokoInfoNumber>{imgList.kinokoNumber.thisKinoko}</KinokoInfoNumber>
+                        </NumBox>
+                        <NumBox>
+                            채취해야할 버섯 갯수
+                            <KinokoInfoNumber>{imgList.kinokoNumber.getKinoko}</KinokoInfoNumber>
+                        </NumBox>
+                        <NumBox>
+                            수확한 버섯 갯수
+                            <KinokoInfoNumber>{imgList.kinokoNumber.endKinoko}</KinokoInfoNumber>
+                        </NumBox>
+                    </Item4>
+
+                    <Item5> 
+                        <Photo> 버섯 갤러리
+                            <SwiperImg kinoko={kinoko}/>
+                        </Photo>
+                        <InfoBoxs>
+                            <InfoBox>
+                                성장률
+                                <KinokoInfoNumber>{kinoko && kinoko.percent}</KinokoInfoNumber>
+                            </InfoBox>
+                            <InfoBox>
+                                버섯 길이
+                                <KinokoInfoNumber>{kinoko && kinoko.cm}</KinokoInfoNumber>
+                            </InfoBox>
+                        </InfoBoxs>
+                    </Item5>
+
+                </Item3>
+            </Section2>
+
+        </Container>)
+         }
+         </>
+    ) ;
+} ;
+
 const Container = styled.div`
     /* 화면 크기 지정 */
     width: 100%;
@@ -162,86 +261,5 @@ const InfoBox  = styled.div`
     margin: 7px;
 `;
 
-
-const FarmMock = ({cookies, imgList,onClick}) => {
-    //isLogin cookie 값 확인
-    const isLoginCheck = cookies.get('isLogin')
-    
-    useEffect(()=>{
-        console.log('===========Farm FarmMock 처음 실행 상태===========');
-    },[])
-    
-    //값이 잘 들어 오는 지 확인
-    useEffect(()=>{
-        imgList.kinokosList && console.log("FarmMock kinokoLists",imgList.kinokosList);
-        
-    },[imgList])
-
-
-    return (
-        <>
-        {
-            !isLoginCheck ? (<Redirect to="/login" />) : (
-        <Container>
-            <Section1>
-                
-                <ItemName><Text>키노코짱</Text></ItemName>
-                {/* 3D배지 구역 */}
-                <ItemImg>
-                    {/*서버와 통신이 성공하면  */}
-                    {
-                        imgList.kinokosList && (
-                            imgList.kinokosList.map((data,index)=>(
-                                // console.log(data),
-                                <button key={index} onClick={() => onClick(data)}>{data.id}</button>
-                            ))
-                        )
-                    }
-                </ItemImg>
-                
-            </Section1>
-            
-            <Section2>
-                
-                <Item2>
-                    <ProjectName><Text>진행 중인 프로젝트</Text></ProjectName>
-                    <GrpBox> 그래프 영역</GrpBox>
-                </Item2>
-                
-                <Item3>
-
-                    <Item4>
-                        <NumBox>
-                            <div>누적 버섯 갯수</div>
-                            <KinokoInfoNumber>40</KinokoInfoNumber>
-                        </NumBox>
-                        <NumBox>현재 버섯 갯수</NumBox>
-                        <NumBox>채취해야할 버섯 갯수</NumBox>
-                        <NumBox>수확한 버섯 갯수</NumBox>
-                    </Item4>
-
-                    <Item5> 
-                        <Photo> 버섯 갤러리
-                        </Photo>
-                        <InfoBoxs>
-                            <InfoBox>
-                                성장률
-                                <KinokoInfoNumber>#</KinokoInfoNumber>
-                            </InfoBox>
-                            <InfoBox>버섯 길이
-                                <KinokoInfoNumber>
-                                </KinokoInfoNumber>
-                            </InfoBox>
-                        </InfoBoxs>
-                    </Item5>
-
-                </Item3>
-            </Section2>
-
-        </Container>)
-         }
-         </>
-    ) ;
-} ;
 
 export default withCookies(FarmMock) ;

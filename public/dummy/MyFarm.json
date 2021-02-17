@@ -27,21 +27,21 @@
         "cm" : "1",
         "status" : "get",
         "percent" : 100,
-        "thumbnail" : "http://t1.daumcdn.net/webtoon/op/c61ba72e44b0acc8c871ae99c54fca6174410594"
+        "thumbnail" : ["http://t1.daumcdn.net/webtoon/op/c61ba72e44b0acc8c871ae99c54fca6174410594"]
       },
       {
         "id" : 4,
         "cm" : "2",
         "status" : "end",
         "percent" : 100,
-        "thumbnail" : "http://t1.daumcdn.net/cartoon/58A6AC20042CC40002"
+        "thumbnail" : ["http://t1.daumcdn.net/cartoon/58A6AC20042CC40002"]
       },
       {
         "id" : 5,
         "cm" : "3",
         "status" : "grow",
         "percent" : 11,
-        "thumbnail" : "http://t1.daumcdn.net/cartoon/589C32130248A30001"
+        "thumbnail" :["http://t1.daumcdn.net/cartoon/589C32130248A30001"]
       },
       {
         "id" : 6,
@@ -57,7 +57,7 @@
         "cm" : "6",
         "status" : "end",
         "percent" : 100,
-        "thumbnail" : "http://t1.daumcdn.net/webtoon/op/8cc3b938d6d1c665f7e19b5949c3161e85d8b41d"
+        "thumbnail" : ["http://t1.daumcdn.net/webtoon/op/8cc3b938d6d1c665f7e19b5949c3161e85d8b41d"]
       },
       {
         "id" : 8,

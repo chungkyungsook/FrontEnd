@@ -24,10 +24,8 @@ const Li = styled.li`
     
 `;
 
-const FarmMenu = ({pathname,url}) => {
-    console.log("form menu url",url,pathname);
-
-
+const FarmMenu = ({pathname}) => {
+    
     return (
         <>
         <Container>
