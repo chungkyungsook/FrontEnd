@@ -16,6 +16,8 @@ import {
     DEBUG
 } from '../../Util/debugging.js'
 
+import MyfarmInfo from '../Component/MyfarmInfo';
+
 const MyFarm = (props) => {
 ///////////////////////////////////////////////////////////////////////   변수
     //isOn : 선택한 기기 정보, 재배기 이름 / isValue : 기기 작동상태    
@@ -37,6 +39,8 @@ const MyFarm = (props) => {
 
     const [isLoding, setIsLoding] = useState(false)
 ///////////////////////////////////////////////////////////////////////    
+
+    //해당 함수에서 버섯의 모든 정보를 가져온다.
     const deviceGet = () =>{
 
         //user에 등록 된 기기 정보 가져오기
@@ -57,6 +61,13 @@ const MyFarm = (props) => {
         setIsOk({
             isDevice : true
         })
+
+        // 버섯 프로그램 실행 일차 
+        
+        //당일날 자란 버섯의 갯수
+        
+        //수확할 버섯 수
+
         //등록된 버섯 재배기 온도,습도 값 결정해 주기
         setSetting(
             {temperature : 20, humidity : 80}
@@ -75,6 +86,13 @@ const MyFarm = (props) => {
         
     },[])
 
+    useEffect(()=>{
+        console.log("=================Myfarm===================="); //선택하면 값이 바뀜
+        // cookie상태값 확인하기
+        DEBUG && console.log("MyFarm ", value.isOn)
+        
+        
+    },[value.isOn.prgName])
 
    
     
@@ -85,14 +103,16 @@ const MyFarm = (props) => {
         {
             props.cookies.get('token')? 
             (isOk.isDevice ? //재배기 있나요? yes
-                (
-                    <MyFarmComponent 
-                    userDeviceInfo={userDeviceInfo.userInfo} 
-                    isOk={isOk.isDevice} 
-                    value={value} 
-                    setting={setting}
-                    isLoding={isLoding}
-                    />
+                (   <>
+                        <MyfarmInfo value={value}/>
+                        <MyFarmComponent 
+                        userDeviceInfo={userDeviceInfo.userInfo} 
+                        isOk={isOk.isDevice} 
+                        value={value} 
+                        setting={setting}
+                        isLoding={isLoding}
+                        />
+                    </>
                 ) : //no -> 처음 한번 실행 
                 (
                     <div className="LodingText">Loding.... {deviceGet()} </div>

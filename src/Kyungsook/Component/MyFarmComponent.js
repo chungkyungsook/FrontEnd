@@ -32,19 +32,6 @@ const MyFarmComponent = (props) => {
 
     // const [isOn, setIsOn] = useState('')
 
-    //이미지 그림 css
-    const LogoImg = styled.img`
-
-        background-position : center ;
-            
-        margin-right : 0.5rem ;
-        margin-left : 1rem ;
-
-        padding-top: 70px;
-
-        cursor : default ;
-    `;
-
     //선택한 기기 정보 저장하기
     const deviceNum = (data)=>{
         DEBUG && console.log("userInfo. changUser", userInfo.changUser)
@@ -114,9 +101,10 @@ const MyFarmComponent = (props) => {
 
             </div>{/* 기기관리 끝*/}
             {/* 해당 user에 등록된 기긱가 없을 때 */}
-            { isLoding ? 
+            { 
+            isLoding ? 
             ( userDeviceInfo.length === 0 ? (<div className="item item4"> 재배기를 등록 해 주세요</div> )
-            : (value.isOn === 0 ? (<div className="item item4"> 선택 된 재배기가 없습니다. 재배기를 선택해 주세요</div> )
+            : (value.isOn.id === 0 ? (<div className="item item4"> 선택 된 재배기가 없습니다. 재배기를 선택해 주세요</div> )
             : 
             (
                 <>
@@ -175,5 +163,18 @@ const MyFarmComponent = (props) => {
         </div>
     );
 };
+
+//이미지 그림 css
+const LogoImg = styled.img`
+
+    background-position : center ;
+        
+    margin-right : 0.5rem ;
+    margin-left : 1rem ;
+
+    padding-top: 70px;
+
+    cursor : default ;
+    `;
 
 export default withCookies(MyFarmComponent) ;
