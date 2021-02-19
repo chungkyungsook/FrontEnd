@@ -23,38 +23,58 @@ import MyFarm from './Kyungsook/Routes/MyFarm' ;
 import SettingRouter from './Beomhwan/SettingRouter' ;
 
 //쿠키
-import { withCookies } from 'react-cookie';
+import { Cookies, withCookies } from 'react-cookie';
 
 const RouterComponent = (props) => {
-    
-    useEffect(()=>{
-        
-    },[])
-
+/////////////////////////////////////////////////////////////////////////////////// *변수
+    //선택된 재배기 번호와 재배기 이름 저장 -> id : 0이면 선택된 재배기 없음
     const [isOn, setIsOn] = useState({
         id : 0,
-        grgName : ''
+        prgName : ''
     })
 
+    //선택된 재배기 on/off 상태 확인 
     const [isValue, setIsValue] = useState('')
 
+    const [isCheck,setIsCheck] = useState(0)
+
+    //사용자가 등록한 모든 재배기 저옵 가져오기
+    const [userMachines, setUserMachines] = useState({
+
+        machins : null
+    })
+    
+    //변수 한번에 보내기
     const value = {
-        isOn,setIsOn
+        isOn,setIsOn,isValue,setIsCheck,isCheck
     }
 
+    //로그인 확인 하기
+    const [isLogin, setIsLogin] = useState(props.cookies.get('token' && true))
+/////////////////////////////////////////////////////////////////////////////////// *이후 
+    
     useEffect(()=>{
-        console.log('Router in isOn',isOn);
-        // setIsOn({...isOn,id : isOn.id})
-    },[isOn.id,isOn.grgName])
+        console.log("===========Router 처음 실행============")
+    },[])
 
+    useEffect(()=>{
+        console.log('Router in isOn',isOn.id);
+        console.log('Router in isOn prgName',isOn.prgName);
+        console.log('Router in isOn isValue',isValue);
+        // setIsOn({...isOn,id : isOn.id})
+    },[isOn.id,isOn.prgName,isValue])
+
+////////////////////////////////////////////////////////////////////////////////////
     return (
         <Router> 
-            <Header setIsOn={setIsOn} isOn={isOn} isValue={isValue} setIsValue={setIsValue} />
+            <Header setIsOn={setIsOn} isOn={isOn} isValue={isValue} setIsValue={setIsValue} isLogin={isLogin}setIsLogin={setIsLogin} isCheck={isCheck} setIsCheck={setIsCheck}/>
             <Switch>
                 <Route path={HOME} exact 
                 render = { (props)=> <MyFarm {...props} value={value}/> } />
 
-                <Route path={LOGIN} component={Login} />
+                <Route path={LOGIN} 
+                render ={ (props) => <Login {...props} setIsLogin={setIsLogin} />}
+                />
                 <Route path={JOIN} component={Join} />   
 
                 <Route path={FARM} 

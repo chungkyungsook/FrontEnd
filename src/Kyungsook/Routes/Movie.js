@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef, useState } from 'react' ;
+import React, { useEffect, useState } from 'react' ;
 import axios from 'axios';
 import styled from 'styled-components';
 
@@ -10,7 +10,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore ,{Navigation, Pagination,Thumbs}from 'swiper';
 import 'swiper/swiper-bundle.css';
 import '../Css/Movie.css';
-import { number } from '@amcharts/amcharts4/core';
+// import { number } from '@amcharts/amcharts4/core';
 
 SwiperCore.use([Navigation, Pagination,Thumbs]);
 //전체 영역
@@ -84,7 +84,9 @@ const Movie = (props) => {
     return (
       <>
         {
-            !isLoginCheck ? (<Redirect to="/login" />) : number === 2 && (
+            props.cookies.get('token') ? 
+            
+            number === 2 && (
                <div className='test'>              
                 <Swiper 
                 id="main"
@@ -101,7 +103,9 @@ const Movie = (props) => {
                   {slides}
                 </Swiper>
               </div>
-            )
+            ) 
+            : 
+            (<Redirect to="/login" />)
         }
         </>
     );

@@ -1,4 +1,4 @@
-import React from 'react' ;
+import React, { useEffect } from 'react' ;
 import styled from 'styled-components' ;
 import {Redirect}   from 'react-router-dom' ;
 import { withCookies} from 'react-cookie';
@@ -163,8 +163,10 @@ const InfoBox  = styled.div`
 const FarmBox = (props) => {
     //isLogin cookie 값 확인
     const isLoginCheck = props.cookies.get('isLogin')
-    const {mushrooms, onClick,value} = props
-
+    useEffect(()=>{
+        console.log("=============FarmBox================");
+        console.log("===============end==================");
+    },[])
     return (
         <>
         {
@@ -176,18 +178,6 @@ const FarmBox = (props) => {
                 {/* 3D배지 구역 */}
                 <ItemImg>
                      {/*서버와 통신이 성공하면  */}
-                    {/* {mushrooms.map((data,index) =>(
-                            <button key={index} onClick={()=>onClick(data)}>{index}</button>
-                    ))}
-                    {value && 
-                            <>
-                                <div>id:{value.id}</div>
-                                <div>사진:{value.mr_imgid}</div>
-                                <div>size:{value.mr_size}</div>
-                                <div>상태:{value.mr_status}</div>
-                            </>
-                    } */}
-                    {/* mock 데이터 */}
                     
                 </ItemImg>
                 
@@ -205,7 +195,7 @@ const FarmBox = (props) => {
                     <Item4>
                         <NumBox>
                             <div>누적 버섯 갯수</div>
-                            <KinokoInfoNumber>40</KinokoInfoNumber>
+                            <KinokoInfoNumber></KinokoInfoNumber>
                         </NumBox>
                         <NumBox>현재 버섯 갯수</NumBox>
                         <NumBox>채취해야할 버섯 갯수</NumBox>
@@ -214,7 +204,7 @@ const FarmBox = (props) => {
 
                     <Item5> 
                         <Photo> 버섯 갤러리
-                            <KinokoInfoNumber>{value && value.mr_imgid}</KinokoInfoNumber>
+                            <KinokoInfoNumber></KinokoInfoNumber>
                         </Photo>
                         <InfoBoxs>
                             <InfoBox>
@@ -222,7 +212,7 @@ const FarmBox = (props) => {
                                 <KinokoInfoNumber>#</KinokoInfoNumber>
                             </InfoBox>
                             <InfoBox>버섯 길이
-                                <KinokoInfoNumber>{value && value.mr_size}</KinokoInfoNumber>
+                                <KinokoInfoNumber></KinokoInfoNumber>
                             </InfoBox>
                         </InfoBoxs>
                     </Item5>

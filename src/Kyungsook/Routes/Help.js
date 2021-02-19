@@ -31,12 +31,15 @@ const Help = (props) => {
     return (
         <>
         {
-            !isLoginCheck ? (<Redirect to="/login" />) : (
+            props.cookies.get('token') ? 
+            (
                 <>
                     <HelpList setList={setList} setKinokoInfo={setKinokoInfo}/>
                     <HelpCss list ={list} kinokoInfo={kinokoInfo} onClick={onClick}/>
                 </>
-        )
+            )
+            :
+            (<Redirect to="/login" />)
         }
         </>
     );

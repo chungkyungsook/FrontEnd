@@ -7,7 +7,7 @@ import { Redirect } from 'react-router-dom';
 const ModalDeviceMain = (props)=> {
     //useState를 사용하여 open상태를 변경한다. (open일때 true로 만들어 열리는 방식)
     const [modalOpen, setModalOnpen] = useState(false)
-    const {userDeviceInfo,deviceNum,userInfo,setUserInfo} = props
+    const {userDeviceInfo,deviceNum,userInfo,setUserInfo,value} = props
     //url
     // const url = '172.26.3.62'
     const url = '54.210.105.132'
@@ -36,17 +36,13 @@ const ModalDeviceMain = (props)=> {
                     token : props.cookies.get('token')
             }).then(data => {
                 console.log("ModalDevieMain 선택한 기기 통신 성공",data);
-                setUserInfo({user : userInfo.user, changUser : true})
+                //선택한 기기 정보 바꾸기 위해서 사용됨
+                value.setIsCheck(1)
             }).catch(e =>{
                 console.log("ModalDeviceMain 선택한 기기 error",e.error);
             }).finally(closeModal())            
 
-            //딜레이 주기
-            // setTimeout(()=>{
-            //     //새로고침
-            //     window.location.replace("/")
-            // },1000)
-
+            
         }else if(name === 'DeleteDevice'){ //삭제
             console.log("삭제 버튼 클릭")
             console.log("user",userInfo.user.id)
@@ -79,7 +75,7 @@ const ModalDeviceMain = (props)=> {
 
             {/* header부분에 텍스트를 입력한다. */}
             <DeviceModal open={modalOpen} close={closeModal} 
-                         header="기기 관리" choiceOnClick={choiceOnClick}
+                         header="재배기 관리" choiceOnClick={choiceOnClick}
                          deviceOn={deviceOn}
                          >
 
@@ -90,8 +86,8 @@ const ModalDeviceMain = (props)=> {
                     <br/>
                     <br/>
                     <div className="textStyle"><span className="text">*주의사항</span></div>
-                    <div className="textStyle">해당 기기를 삭제하면 그전에 기록한 정보들은</div>
-                    <div className="textStyle">"전부" 사라집니다</div>
+                    <div className="textStyle">해당 재배기를 삭제하면 그전에 기록한 정보들은</div>
+                    <div className="textStyle">"전부" 삭제됩니다</div>
                 </div>
 
             </DeviceModal >

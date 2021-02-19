@@ -4,7 +4,17 @@ import Modal from './Modal';
 import { withCookies} from 'react-cookie';
 import { Redirect } from 'react-router-dom';
 
+import {
+    AWS_URL,
+ 
+}from '../../../Util/api'
+
+import{
+    MODAL_DEBUG
+}from '../../../Util/debugging'
+
 const ModalMain = (props)=> {
+/////////////////////////////////////////////////////////////////////변수
     //useState를 사용하여 open상태를 변경한다. (open일때 true로 만들어 열리는 방식)
     const [modalOpen, setModalOnpen] = useState(false)
 
@@ -21,11 +31,13 @@ const ModalMain = (props)=> {
         nickName : "", // 기기 등록 이름
         makeBtn : false,
     })
+    const {makeBtn} = input
 
     //url
     // const url = '172.26.3.62'
     const url = '54.210.105.132'
     const {isKey,isPwd,isNickName} = openStr
+///////////////////////////////////////////////////////////////////// 함수
 
     //Modal확인
     const openModal = () =>{
@@ -98,9 +110,6 @@ const ModalMain = (props)=> {
             .then(data =>{
                 data.status === 200 && setOpenStr({...openStr,isNickName:1})
                 console.log("MyFram data 출력 ModalMain ",data)
-                // return(
-                //     <Redirect />
-                // )
                 //page새롭게 로딩
                 window.location.replace("/")
             })
@@ -120,7 +129,7 @@ const ModalMain = (props)=> {
             [name] : value
         })
     }
-    
+///////////////////////////////////////////////////////////////////// 이벤트 발생하면 동작
     useEffect(()=>{
         console.log("====================MyFarm in ModalMain 처음 실행 화면 ===================");
     },[])
@@ -128,19 +137,20 @@ const ModalMain = (props)=> {
 
     //기기 이름 관리
     useEffect(()=>{
-        
-        console.log("key",input.keyOnchange)
-        console.log("pwd",input.pwdOnchange)
-        console.log("setIsOk",isKey)
-        console.log("setIsOkPwd",isPwd)
-        console.log("makeBtn",input.makeBtn)
+        console.log("==============ModalMain 디버그==============");
+        MODAL_DEBUG && console.log("key",input.keyOnchange)
+        MODAL_DEBUG && console.log("pwd",input.pwdOnchange)
+        MODAL_DEBUG && console.log("setIsOk",isKey)
+        MODAL_DEBUG && console.log("setIsOkPwd",isPwd)
+        MODAL_DEBUG && console.log("makeBtn",input.makeBtn)
         //기기 이름 공백이면 버튼 숨기기
         input.nickName === "" && setInput({...input,makeBtn: false}) 
         //등록 버튼 만들기
         isKey === 1 && isPwd === 1 && input.nickName !== "" && setInput({...input,makeBtn:true})
+        console.log("==============ModalMain end ==============");
     },[isKey, isPwd, setInput,input.nickName])
     
-    const {makeBtn} = input
+    
     
     return(
         <div>
@@ -148,19 +158,18 @@ const ModalMain = (props)=> {
             {/* header부분에 텍스트를 입력한다. */}
             <Modal open={modalOpen} close={closeModal} header="기기 등록을 시작합니다." makeBtn={makeBtn} onClickBtn={onClickBtn}>
 
-
                 {/* Modal.js <main> {props.childern}</main> 에 내용이 입력된다.*/}
                 <div>
-                    <input  name='keyOnchange' className='modalbtn' size='30' placeholder='기기의 핀 번호를 입력해주세요' onChange={onChange}/>
+                    <input  name='keyOnchange' className='modalbtn' size='30' placeholder='재배기 핀 번호를 입력해주세요' onChange={onChange}/>
                     <button name='key' type="button" onClick={onClickBtn} >확인</button>
                     {<div  className='text' >{ isKey===1 ? '*성공했습니다.' : isKey===2 ? '*이미 등록된 번호입니다.' : isKey===3 && "*등록된 번호가 없습니다."}</div>}
                     
-                    <input name='pwdOnchange' className='modalbtn' size='30' placeholder='기기의 초기 비밀번호를 입력해주세요'onChange={onChange} />
+                    <input name='pwdOnchange' className='modalbtn' size='30' placeholder='재배기 비밀번호를 입력해주세요'onChange={onChange} />
                     <button name='pwd' type="button" onClick={onClickBtn}>확인</button>
                     {<div  className='text' >{ isPwd===1 ? '*성공했습니다.' : isPwd===2 && '*인증에 실패 했습니다.'}</div>}
                     
                     <input  name='nickName' className='modalbtn' size='30' placeholder='기기의 이름을 입력해주세요' onChange={onChange} />
-                    {<div  className='text' >{ isNickName===1 ? closeModal() : isNickName===2 && '*등록에 실패했습니다. 관리자에게 문의 바랍니다.'}</div>}
+                    {<div  className='text' >{ isNickName===1 ? closeModal() : isNickName===2 && '*등록에 실패했습니다.이미 등록 된 재배기입니다.'}</div>}
                 </div>
 
             </Modal>
