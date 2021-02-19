@@ -136,7 +136,9 @@ const Header = ({ location, cookies, setIsOn,isOn,isValue, setIsValue,isLogin,se
                 })  
 
             }).catch(e =>{
+                e.response.status === '404' && (console.log('값 바뀜'))
                 HEADER_DEBUG && console.log("Header 사용자가 선택한 재배기 ID 실패",e.response.status);
+                               
             })
         )
     },[isLogin,isCheck])

@@ -5,6 +5,9 @@ import { withCookies} from 'react-cookie';
 import SwiperImg from './SwiperImg';
 import KinokoImg from '../../../assets/KinokoImg/kinoko1.png' ;
 
+//그래프
+import ProgressChart from '../../../Beomhwan/Components/ProgressChart'
+
 const FarmMock = ({cookies, imgList,onClick,kinoko}) => {
     //isLogin cookie 값 확인
     const isLoginCheck = cookies.get('isLogin')
@@ -55,7 +58,9 @@ const FarmMock = ({cookies, imgList,onClick,kinoko}) => {
                 
                 <Item2>
                     <ProjectName><Text>진행 중인 프로젝트</Text></ProjectName>
-                    <GrpBox> 그래프 영역</GrpBox>
+                    <GrpBox>
+                        <ProgressChart />
+                    </GrpBox>
                 </Item2>
                 
                 <Item3>

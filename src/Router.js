@@ -38,7 +38,7 @@ const RouterComponent = (props) => {
 
     const [isCheck,setIsCheck] = useState(0)
 
-    //사용자가 등록한 모든 재배기 저옵 가져오기
+    //사용자가 등록한 모든 재배기 정보 가져오기
     const [userMachines, setUserMachines] = useState({
 
         machins : null

@@ -34,6 +34,8 @@ const MyFarm = (props) => {
     const [isOk, setIsOk] = useState({
         isDevice :false
     })
+
+    const [isLoding, setIsLoding] = useState(false)
 ///////////////////////////////////////////////////////////////////////    
     const deviceGet = () =>{
 
@@ -45,6 +47,7 @@ const MyFarm = (props) => {
             setUserDeviceInfo({
                 userInfo : data.data
             })
+            setIsLoding(true)
         }).catch(e=>{
             e.response.status === 404 && console.log( e.response.status,"등록된 버섯 재배기 정보 읎음");
             console.log( e.response.status,"등록된 버섯 재배기 정보 가져오기 실패");
@@ -88,6 +91,7 @@ const MyFarm = (props) => {
                     isOk={isOk.isDevice} 
                     value={value} 
                     setting={setting}
+                    isLoding={isLoding}
                     />
                 ) : //no -> 처음 한번 실행 
                 (
