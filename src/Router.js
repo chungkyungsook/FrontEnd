@@ -36,6 +36,7 @@ const RouterComponent = (props) => {
     //선택된 재배기 on/off 상태 확인 
     const [isValue, setIsValue] = useState('')
 
+    //로딩화면 추가
     const [isCheck,setIsCheck] = useState(0)
 
     //사용자가 등록한 모든 재배기 정보 가져오기

@@ -130,7 +130,7 @@ const Header = ({ location, cookies, setIsOn,isOn,isValue, setIsValue,isLogin,se
                 }).then(data =>{
                     HEADER_DEBUG && console.log("Header 사용자가 선택한 재배기 작동 상태 성공",data.data)
                     setIsValue(data.data)
-                    setIsCheck(0)
+                    setIsCheck(0) // 선택한 재배기 작동 상태 끝 로딩 화면을 위한 설정
                 }).catch(e =>{
                     HEADER_DEBUG && console.log("Header 사용자가 선택한 재배기 작동 상태 실패",e.response.status);
                 })  
