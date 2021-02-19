@@ -6,6 +6,7 @@ import am4themes_animated from '@amcharts/amcharts4/themes/animated';
 import axios from 'axios';
 
 const ProgressChart = ({value}) => {
+    console.log(window.location.pathname);
     const [loading, setLoading] = useState(true);
     const chartRef = useRef();
     // 진행중인 프로그램 데이터 받아오기
@@ -61,6 +62,7 @@ const ProgressChart = ({value}) => {
     useLayoutEffect(() => {
         let chart = am4core.create('chartdiv', am4charts.XYChart);
         getData().then(data => {
+            
             am4core.useTheme(am4themes_animated);
             chart.scrollbarX = new am4core.Scrollbar();
             chart.cursor = new am4charts.XYCursor();
@@ -151,17 +153,17 @@ const ProgressChart = ({value}) => {
             console.log(chartRef);
     
             
-            return () => {chart.dispose();};
+            return () => chart.dispose();
         });
-        setLoading(false);
-    }, []);
+        setTimeout(() => setLoading(false), 2000);
+    }, [loading]);
 
     return (
         <div style={{width: '100%', height: '100%'}}>
         <>
         {loading 
         ? <>Now Loading...</>
-        : <div id="chartdiv" style={{width: '100%', height: '100%'}}> </div>
+        : <div ref={chartRef} id='chartdiv' style={{width: '100%', height: '100%'}}> </div>
         }
         </>
         </div>

@@ -237,7 +237,7 @@ const Compare = ({goSlide, chart}) => {
             </>
             : 
             <>
-                <CompareBox style={{flexDirection: 'column'}}>
+                <CompareBox style={{flexDirection: 'column'}} width={responsiveWidth}>
                     체크 된 리스트가 없습니다.
                     <button onClick={goSlide}>체크하러 가기</button>
                 </CompareBox>

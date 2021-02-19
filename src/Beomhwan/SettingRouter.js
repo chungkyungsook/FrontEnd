@@ -37,6 +37,8 @@ const SettingRouter = ({location, cookies, value}) => {
     const isLoginCheck = cookies.get('token');
     const {pathname} = location;
 
+    console.log(value);
+
     return (
         <>
         {!isLoginCheck ? (<Redirect to="/login" />) : (
