@@ -17,11 +17,10 @@ import {
     DEBUG
 } from '../../Util/debugging.js'
 
-
 const MyFarmComponent = (props) => {
 
     //user 기기 관리 정보, 서버 통신 완료 시 isOk : true
-    const {userDeviceInfo,value,setting} = props
+    const {userDeviceInfo,value,setting,isLoding} = props
     
     //선택하 기기 정보 저장
     const [userInfo, setUserInfo] = useState({
@@ -115,8 +114,10 @@ const MyFarmComponent = (props) => {
 
             </div>{/* 기기관리 끝*/}
             {/* 해당 user에 등록된 기긱가 없을 때 */}
-            { userDeviceInfo.length === 0 ? <div className="item item4"> 재배기를 등록 해 주세요</div> 
-            : value.isOn === 0 ? <div className="item item4"> 선택 된 재배기가 없습니다. 재배기를 선택해 주세요</div> :
+            { isLoding ? 
+            ( userDeviceInfo.length === 0 ? (<div className="item item4"> 재배기를 등록 해 주세요</div> )
+            : (value.isOn === 0 ? (<div className="item item4"> 선택 된 재배기가 없습니다. 재배기를 선택해 주세요</div> )
+            : 
             (
                 <>
                 <div className="item item2">
@@ -168,7 +169,8 @@ const MyFarmComponent = (props) => {
             </>
             )
             
-            
+            )) : 
+            (<div className="item item4"> Loding...</div> )
             }
         </div>
     );

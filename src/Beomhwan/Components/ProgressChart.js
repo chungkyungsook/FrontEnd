@@ -17,14 +17,14 @@ const ProgressChart = ({value}) => {
 
         await axios.get('http://54.210.105.132/api/myfarm/data', {
             params: {
-                id: value.id // 기기 id
+                id: 9 // 기기 id
             }
         }).then(response => {
             obj.prg_name = response.data[0].prg_name;
         });
         await axios.get('http://54.210.105.132/api/farm/data', {
             params: {
-                id: value.id, // 기기 id
+                id: 9, // 기기 id
                 type: 'custom'
             }
         }).then(response => {
@@ -157,7 +157,7 @@ const ProgressChart = ({value}) => {
     }, []);
 
     return (
-        <div style={{width: '100%', height: 500}}>
+        <div style={{width: '100%', height: '100%'}}>
         <>
         {loading 
         ? <>Now Loading...</>
