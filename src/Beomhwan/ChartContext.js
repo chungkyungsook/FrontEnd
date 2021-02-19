@@ -70,7 +70,7 @@ const ChartContext = ({children, machineId}) => {
                 
                 // 온도 데이터
                 data.temperature.forEach((temp,index) => {
-                    dateArr.push(index + 1);
+                    dateArr.push((index + 1) + "일차");
                     tempArr.push(temp.setting_value);
                 });
                 // 습도 데이터

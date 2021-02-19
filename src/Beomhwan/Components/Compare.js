@@ -2,7 +2,10 @@ import React,{useState, useRef, useLayoutEffect, useEffect} from 'react';
 import styled from 'styled-components';
 import { flexAlign } from '../../Util/css';
 import {NotoSansRegular} from '../css/cssModule';
+// import * as am4core from '@amcharts/amcharts4/core';
+// import * as am4charts from '@amcharts/amcharts4/charts';
 import {Line} from 'react-chartjs-2';
+import {getKinoko} from '../CRUD';
 
 const options = {
     response: true,
@@ -30,7 +33,7 @@ const options = {
 };
 
 const ContainerBox = styled.div`
-    width: 1500px;
+    width: ${p=>p.width}px;
     height: calc(45vh - 70px);
     overflow: hidden;
 `;
@@ -58,7 +61,7 @@ const DescriptionBox = styled.div`
 
 const CompareBox = styled.div`
     float: left;
-    width: 1500px;
+    width: ${p => p.width}px;
     height: 100%;
     ${flexAlign}
 `;
@@ -107,24 +110,77 @@ const LineChart = ({data}) => {
     return <Line data={data} options={options} />
 };
 
+// const CompareChart = () => {
+
+//     useLayoutEffect(() => {
+//         let chart = am4core.create('chartDiv', am4charts.XYChart);
+
+
+//         return () => {chart.dispose()};
+//     }, []);
+
+//     return (
+//         <div id='chartDiv' style={{width: '100%', height: '100%'}}></div>
+//     );
+// }
+
+function useGetClientWidth() {
+    function vh(v) {
+        let h = Math.max(window.document.documentElement.clientHeight, window.innerHeight || 0);
+        return (v * h) / 100;
+    }
+
+    console.log('clientSize: ', window.document.documentElement.clientWidth);
+    console.log('vhSize: ', vh(20));
+
+    let size = (window.document.documentElement.clientWidth - Math.round(vh(20))) - 40;
+    if(size <= 1080) {
+        size = (window.document.documentElement.clientWidth - Math.round(vh(20)));
+    } else if(size <= 1300) {
+        size = (window.document.documentElement.clientWidth - Math.round(vh(20))) - 90;
+    }
+    return size;
+}
+
 const Compare = ({goSlide, chart}) => {
+
     console.log(chart);
+    let [chartData, setChartData] = useState([]);
     const [slideInfo, setSlideInfo] = useState({
-        chartSize: 1500,
+        chartSize: 0,
         width: 0,
         x: 0,
         count: 0
     });
 
+    const responsiveWidth = useGetClientWidth();
+    console.log('반응형 : ', responsiveWidth);
+
     useEffect(() => {
-        setSlideInfo({...slideInfo, width: 1500 * chart.length});
+        setSlideInfo({...slideInfo, width: responsiveWidth * chart.length});
+    }, [responsiveWidth]);
+
+    useEffect(() => {
+        setSlideInfo({...slideInfo, width:  responsiveWidth * chart.length});
+
+        chart.map(async (ch,index) => {
+            await getKinoko(ch.prg_id)
+            .then(data => {
+                let chart = {
+                    ...ch,
+                    kinokoCount: data.length
+                }
+
+                setChartData(ch => [...ch, chart]);
+            });
+        });
     }, []);
 
     const onNext = () => {
         slideInfo.count < chart.length - 1
         ? setSlideInfo({
             ...slideInfo,
-            x: slideInfo.x + 1500,
+            x: slideInfo.x + responsiveWidth,
             count: ++slideInfo.count
         })
         : setSlideInfo({...slideInfo, count: chart.length-1});
@@ -136,21 +192,22 @@ const Compare = ({goSlide, chart}) => {
         ? setSlideInfo({
             ...slideInfo, 
             count: --slideInfo.count,
-            x: slideInfo.x - 1500
+            x: slideInfo.x - responsiveWidth
         })
         : setSlideInfo({...slideInfo, count: 0}) 
         
     };
 
     return (
-        <ContainerBox>
+        <ContainerBox width={responsiveWidth}>
             {chart.length !== 0 ? 
             <>
             <CompareListBox width={slideInfo.width} x={slideInfo.x}>
-                {chart.map((ch,i) => 
-                    <CompareBox key={i}>
+                {chartData.map((ch,i) => 
+                    <CompareBox key={i} width={responsiveWidth}>
                         <ChartBox>
                             <LineChart data={ch.data} />
+                            {/* <CompareChart /> */}
                         </ChartBox>
                         <DescriptionBox>
                             <TitleBox>
@@ -159,7 +216,7 @@ const Compare = ({goSlide, chart}) => {
                             <CardFlex>
                                 <CardBox>
                                     <CardTitle>수확한 버섯 수</CardTitle>
-                                    <CardContent>N개</CardContent>
+                                    <CardContent>{ch.kinokoCount}개</CardContent>
                                 </CardBox>
                                 <CardBox>
                                     <CardTitle>총 재배일</CardTitle>
@@ -180,8 +237,10 @@ const Compare = ({goSlide, chart}) => {
             </>
             : 
             <>
-                체크 된 리스트가 없습니다.
-                <button onClick={goSlide}>체크하러 가기</button>
+                <CompareBox style={{flexDirection: 'column'}}>
+                    체크 된 리스트가 없습니다.
+                    <button onClick={goSlide}>체크하러 가기</button>
+                </CompareBox>
             </>
             }
         </ContainerBox>

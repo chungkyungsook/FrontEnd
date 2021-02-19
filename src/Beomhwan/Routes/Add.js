@@ -372,13 +372,79 @@ class MyError extends Error {
 // ---------------------------------------------------------
 const Add = () => {
     const [loading, setLoading] = useState(true);
-    const date = useRef(2);
+    const date = useRef(15);
     const [chartData, setChartData] = useState([
         {
             Temperature: 20,
             Humidity: 80,
             Date: 1 + "일차"
-        }
+        },
+        {
+            Temperature: 20,
+            Humidity: 80,
+            Date: 2 + "일차"
+        },
+        {
+            Temperature: 20,
+            Humidity: 80,
+            Date: 3 + "일차"
+        },
+        {
+            Temperature: 20,
+            Humidity: 80,
+            Date: 4 + "일차"
+        },
+        {
+            Temperature: 20,
+            Humidity: 80,
+            Date: 5 + "일차"
+        },
+        {
+            Temperature: 20,
+            Humidity: 80,
+            Date: 6 + "일차"
+        },
+        {
+            Temperature: 20,
+            Humidity: 80,
+            Date: 7 + "일차"
+        },
+        {
+            Temperature: 20,
+            Humidity: 80,
+            Date: 8 + "일차"
+        },
+        {
+            Temperature: 20,
+            Humidity: 80,
+            Date: 9 + "일차"
+        },
+        {
+            Temperature: 20,
+            Humidity: 80,
+            Date: 10 + "일차"
+        },
+        {
+            Temperature: 20,
+            Humidity: 80,
+            Date: 11 + "일차"
+        },
+        {
+            Temperature: 20,
+            Humidity: 80,
+            Date: 12 + "일차"
+        },
+        {
+            Temperature: 20,
+            Humidity: 80,
+            Date: 13 + "일차"
+        },
+        {
+            Temperature: 20,
+            Humidity: 80,
+            Date: 14 + "일차"
+        },
+        
     ]);
     const machineId = useMachineInfo();
 
@@ -477,9 +543,9 @@ const Add = () => {
     const waterChange = (e) => {
         switch(e) {
             case '+' :
-                count.waterCount < 5 
+                count.waterCount < 10 
                     ? setCount({...count, waterCount: count.waterCount + 1})
-                    : setCount({...count, waterCount: 5});
+                    : setCount({...count, waterCount: 10});
                 break;
             case '-' :
                 count.waterCount > 0

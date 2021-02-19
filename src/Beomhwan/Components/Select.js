@@ -2,8 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 const SelectBox = styled.div`
-    width: 160px;
-    height: 60px;
+    width: 200px;
+    height: 80px;
     border: 1px solid gray;
     display: flex;
     flex-direction: row;
@@ -39,11 +39,13 @@ const Select = ({count, sunChange, waterChange}) => {
     return (
         <SelectBox>
             <SelectEnvi>
+                <div>일조 횟수</div>
                 <UpDown onClick={() => sunChange('+')}> + </UpDown>
                 <NumBox>{count.sunCount}번</NumBox>
                 <UpDown onClick={() => sunChange('-')}> - </UpDown>
             </SelectEnvi>
             <SelectEnvi>
+                <div>물 주기 횟수</div>
                 <UpDown onClick={() => waterChange('+')}> + </UpDown>
                 <NumBox>{count.waterCount}번</NumBox>
                 <UpDown onClick={() => waterChange('-')}> - </UpDown>
