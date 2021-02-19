@@ -13,10 +13,15 @@ import Kinoko2 from '../../assets/KinokoImg/kinoko2.png' ;
 import axios from 'axios';
 import { withCookies } from 'react-cookie';
 
+import {
+    DEBUG
+} from '../../Util/debugging.js'
+
+
 const MyFarmComponent = (props) => {
 
     //user 기기 관리 정보, 서버 통신 완료 시 isOk : true
-    const {userDeviceInfo,value} = props
+    const {userDeviceInfo,value,setting} = props
     
     //선택하 기기 정보 저장
     const [userInfo, setUserInfo] = useState({
@@ -43,7 +48,9 @@ const MyFarmComponent = (props) => {
 
     //선택한 기기 정보 저장하기
     const deviceNum = (data)=>{
-        console.log("userInfo. changUser", userInfo.changUser);
+        DEBUG && console.log("userInfo. changUser", userInfo.changUser)
+
+        //선택한 재배기 id저장
         setUserInfo({
             ...userInfo,
             user : data.id
@@ -58,40 +65,24 @@ const MyFarmComponent = (props) => {
     }
 
     //진행중인 프로그램 이름 및 프로그램 id 
-    const [kinokos, setKinokos] = useState({
-        prgName : '',
-        day : '',
-        kinokoStatus : ''
-    })
+    
 
     const kinokoInfo = ()=>{
         console.log("MyFarm in MyfarmComponent kinokoInfo 실행");
-        console.log("==============================",new Date());
-        //진행 중인 프로그램 이름
-        //해당 일차
-        //수확할 버섯        
+        
     }
 
     useEffect(()=>{
-        console.log("================== MyFarm in MyFarmComponent 처음 실행 화면 ==================");
-        // /api/myfarm/data
-        setKinokos({
-            ...kinokos, day : new Date().getFullYear()
-        })
-
-        console.log('================time',kinokos);
-
+        (console.log("==================MyFarmComponent 처음 실행 화면 =================="));
+        
     },[])
-
-    // useEffect(()=>{
-    //     console.log("MyFarmComdljsol 값 확인 ",prgId);
-    // },[prgId])
 
     //userInfo값이 변경 되면 실행
     useEffect(()=>{
         console.log('MyFarm userInfo 선택된 값들',userInfo.user)
+
         //값 새롭게 가져오기
-        userInfo.changUser && value.setIsOn({...value.isOn, id : userInfo.user})
+        // userInfo.changUser && value.setIsOn({...value.isOn, id : userInfo.user})
         setUserInfo({
             ...userInfo,
             changUser : false
@@ -102,8 +93,8 @@ const MyFarmComponent = (props) => {
 
     useEffect(()=>{
         
-        console.log("MyFarmCom... isOn 값 변경",value.isOn.id)
-        console.log("MyFarmCom... isOn 값 변경",value.isOn.grgName)
+        DEBUG && console.log("MyFarmCom... isOn 값 변경",value.isOn.id)
+        DEBUG && console.log("MyFarmCom... isOn 값 변경",value.isOn.prgName)
 
     },[value.isOn.id])
 
@@ -113,19 +104,19 @@ const MyFarmComponent = (props) => {
             {/* 기기관리 */}
             <div className="item item1">
 
-                <div className = "item1Text"> 기기 관리</div>
+                <div className = "item1Text"> 재배기 관리</div>
                 <div className = "item1ButtonBox">   
                     {/* 기기 모달창*/}
                     <ModalDeviceMain userDeviceInfo={userDeviceInfo} deviceNum={deviceNum} 
-                                     setUserInfo={setUserInfo} userInfo={userInfo}  />
+                                     setUserInfo={setUserInfo} userInfo={userInfo} value={value} />
                     {/* 모달 창 */}
                     <ModalMain/>
                 </div>
 
             </div>{/* 기기관리 끝*/}
             {/* 해당 user에 등록된 기긱가 없을 때 */}
-            { userDeviceInfo.length === 0 ? <div className="item item4"> 기기 등록을 해 주세요</div> 
-            : value.isOn === 0 ? <div className="item item4"> 선택 된 기기 가 없습니다. 기기를 선택해 주세요</div> :
+            { userDeviceInfo.length === 0 ? <div className="item item4"> 재배기를 등록 해 주세요</div> 
+            : value.isOn === 0 ? <div className="item item4"> 선택 된 재배기가 없습니다. 재배기를 선택해 주세요</div> :
             (
                 <>
                 <div className="item item2">
@@ -145,11 +136,11 @@ const MyFarmComponent = (props) => {
                 <div className = "box1 environment">
                     <div className = "box2 progress">
                         <span className="span">온도</span>
-                        <Progress color={'secondary'} value={20} name={'온도'}/>
+                        <Progress color={'secondary'} value={setting.temperature} name={'온도'}/>
                     </div>       
                     <div className = "box2 progress">
                         <span className="span">습도</span>
-                        <Progress value={70}/>
+                        <Progress value={setting.humidity}/>
                     </div>       
                 </div>
 
@@ -160,7 +151,7 @@ const MyFarmComponent = (props) => {
                 <div className = "notification">
                     <div className = "programName">
                         <div>진행중인 프로그램 이름</div>
-                        <div>{}</div>
+                        <div>{value.isOn.prgName && value.isOn.prgName}</div>
                         <br/>
                         <div>{'0일차'}</div>
                     </div>

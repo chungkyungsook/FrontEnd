@@ -3,7 +3,7 @@ import styled from 'styled-components' ;
 import {Redirect}   from 'react-router-dom' ;
 import { withCookies} from 'react-cookie';
 import SwiperImg from './SwiperImg';
-
+import KinokoImg from '../../../assets/KinokoImg/kinoko1.png' ;
 
 const FarmMock = ({cookies, imgList,onClick,kinoko}) => {
     //isLogin cookie 값 확인
@@ -28,7 +28,7 @@ const FarmMock = ({cookies, imgList,onClick,kinoko}) => {
     return (
         <>
         {
-            !isLoginCheck ? (<Redirect to="/login" />) : (
+             (
         <Container>
             <Section1>
                 
@@ -36,6 +36,8 @@ const FarmMock = ({cookies, imgList,onClick,kinoko}) => {
                 {/* 3D배지 구역 */}
                 <ItemImg>
                     {/*서버와 통신이 성공하면  */}
+                    <LogoImg src={KinokoImg} draggable="false" width="200" alt={'버섯 배지 사진'}/>
+                    <div>
                     {
                         imgList.kinokosList && (
                             imgList.kinokosList.map((data,index)=>(
@@ -44,6 +46,7 @@ const FarmMock = ({cookies, imgList,onClick,kinoko}) => {
                             ))
                         )
                     }
+                    </div>
                 </ItemImg>
                 
             </Section1>
@@ -101,6 +104,21 @@ const FarmMock = ({cookies, imgList,onClick,kinoko}) => {
          </>
     ) ;
 } ;
+
+//이미지 그림 css
+const LogoImg = styled.img`
+
+    background-position : center ;
+        
+    margin-right : 0.5rem ;
+    margin-left : 1rem ;
+    /* margin : 100px; */
+    padding-top: 170px;
+    text-align : center;
+    width: 192px;
+    cursor : default ;
+`;
+
 
 const Container = styled.div`
     /* 화면 크기 지정 */

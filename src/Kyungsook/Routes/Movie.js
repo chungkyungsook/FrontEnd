@@ -84,7 +84,9 @@ const Movie = (props) => {
     return (
       <>
         {
-            !isLoginCheck ? (<Redirect to="/login" />) : number === 2 && (
+            props.cookies.get('token') ? 
+            
+            number === 2 && (
                <div className='test'>              
                 <Swiper 
                 id="main"
@@ -101,7 +103,9 @@ const Movie = (props) => {
                   {slides}
                 </Swiper>
               </div>
-            )
+            ) 
+            : 
+            (<Redirect to="/login" />)
         }
         </>
     );

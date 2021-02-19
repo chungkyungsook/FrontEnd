@@ -5,88 +5,100 @@ import {Redirect}   from 'react-router-dom' ;
 import { withCookies} from 'react-cookie';
 import axios from 'axios';
 
+import {
+    AWS_URL,
+    MACHINE_LIST,
+    PRG_NAME,
+    MUSHROOM_ALL
+} from '../../Util/api.js'
+
+import {
+    DEBUG
+} from '../../Util/debugging.js'
+
 const MyFarm = (props) => {
-    
-    //isOn : 선택한 기기 정보 0이면 선택된 값이 없음
+///////////////////////////////////////////////////////////////////////   변수
+    //isOn : 선택한 기기 정보, 재배기 이름 / isValue : 기기 작동상태    
     const {value} = props
-
-    //isLogin cookie 값 확인
-    const isLoginCheck = props.cookies.get('isLogin')
-    // const url = '172.26.3.62'
-    const url = '54.210.105.132'
-    
-    const [isOk, setIsOk] = useState({
-        isDevice : false
-    })
-
     //user 기기 정보 저장
     const [userDeviceInfo, setUserDeviceInfo] = useState({
         userInfo : []
     })
 
+    // 재배기 온도, 습도 값 저장
+    const [setting, setSetting] = useState({
+        temperature : 0, //온도
+        humidity : 0,    //습도
+    })
 
+    const [isOk, setIsOk] = useState({
+        isDevice :false
+    })
+///////////////////////////////////////////////////////////////////////    
     const deviceGet = () =>{
 
         //user에 등록 된 기기 정보 가져오기
-         axios.post(`http://${url}/api/myfarm/list`,{
-             
-                userId : props.cookies.get('userId')
-                // userId : 'SZ4S71'
-             
-            
+        axios.post(`${AWS_URL}${MACHINE_LIST}`,{
+            userId : props.cookies.get('userId')
         }).then(data =>{
+            console.log('Myfarm 등록된 기기 정보 가져오기',data.data)
             setUserDeviceInfo({
                 userInfo : data.data
             })
-            
         }).catch(e=>{
-            
+            e.response.status === 404 && console.log( e.response.status,"등록된 버섯 재배기 정보 읎음");
+            console.log( e.response.status,"등록된 버섯 재배기 정보 가져오기 실패");
         })
 
+        //등록된 버섯 재배기 정보 가져오기 성공
         setIsOk({
             isDevice : true
         })
+        //등록된 버섯 재배기 온도,습도 값 결정해 주기
+        setSetting(
+            {temperature : 20, humidity : 80}
+        )
+        
+        //버섯 자란 수
+        //수확할 버섯 확인
     }
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////
     //한번만 실행하기
     useEffect(()=>{
         console.log("====================MyFarm 처음 실행 화면 ===================");
         // cookie상태값 확인하기
-        console.log("MyFarm page 로그인 상태 확인",props.cookies.get('isLogin'));
-        console.log("MyFarm page 토큰확인",props.cookies.get('token'));
-        console.log("MyFarm page email 확인",props.cookies.get('email'));
-        console.log("MyFarm page userId 확인",props.cookies.get('userId'));
-
-        console.log("MyFarm page isOn, setIsOn", value.isOn.id);
+        DEBUG && console.log("MyFarm page 토큰확인",props.cookies.get('token'));
+        DEBUG && console.log("MyFarm page email 확인",props.cookies.get('userId'));
+        
     },[])
 
-    useEffect(()=>{
-       console.log( "값 바뀜")
-       console.log("MyFarm userDeviceInfo", userDeviceInfo.userInfo.length !== 0)
-       
-       console.log("MyFarm user",userDeviceInfo.userInfo,"MyFarm server통신", isOk.isDevice);
-       
-    },[userDeviceInfo.userInfo,isOk.isDevice])
 
-    useEffect(()=>{
-        console.log("MyFarm Router에서 값이 넘어오는지 확인",value.isOn.id);
-        console.log("MyFarm Router에서 값이 넘어오는지 확인",value.isOn.grgName);
-    },[value.isOn.id])
-
+   
+    
+    
     //cookie 저장하기
     return (
         <>
         {
-            !isLoginCheck ? (<Redirect to="/login" />) : 
-            isOk.isDevice ? (<MyFarmComponent userDeviceInfo={userDeviceInfo.userInfo} 
-                                              isOk={isOk.isDevice} value={value}/>):
-            (<div className="LodingText">Loding.... {deviceGet()} </div>)
-            
-
+            props.cookies.get('token')? 
+            (isOk.isDevice ? //재배기 있나요? yes
+                (
+                    <MyFarmComponent 
+                    userDeviceInfo={userDeviceInfo.userInfo} 
+                    isOk={isOk.isDevice} 
+                    value={value} 
+                    setting={setting}
+                    />
+                ) : //no -> 처음 한번 실행 
+                (
+                    <div className="LodingText">Loding.... {deviceGet()} </div>
+                ))
+            :
+            (
+                <Redirect to ="/login"/>
+            )
         }
-        {/* {
-            !isLoginCheck ? (<Redirect to="/login" />) : (<MyFarmComponent userDeviceInfo={userDeviceInfo.userInfo} isOk={isOk.isDevice}/>)
-        } */}
+
         </>
         
     );
