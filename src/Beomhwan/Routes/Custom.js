@@ -206,7 +206,7 @@ const Custom = () => {
             :
                 <CustomBox>
                 {chart.map((ch,index) =>
-                <div key={index}> 
+                <div key={index}>
                 <CustomGraphStyle>
                     <p style={{userSelect: 'none'}}>사용 횟수 : {chartInfo[index].prg_count}</p>
                         <GraphTitle>- {chartInfo[index].prg_name} -</GraphTitle>

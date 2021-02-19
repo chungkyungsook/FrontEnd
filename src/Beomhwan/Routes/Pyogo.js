@@ -7,18 +7,18 @@ import {NotoSansLight, NotoSansRegular} from '../css/cssModule';
 import ModalContent from '../Components/ModalContent';
 
 const data = {
-    labels: ['1일차','2일차','3일차','4일차','5일차'],
+    labels: ['1일차','2일차','3일차','4일차','5일차','6일차','7일차','8일차','9일차','10일차','11일차','12일차','13일차','14일차'],
     datasets: [
     {
         label: 'Temperature',
-        data: [25, 25, 25, 25, 25],
+        data: [25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25,],
         fill: true,
         borderColor: 'red',
         backgroundColor: 'rgba(255,0,0,0.2)'
     },
     {
         label: 'Humidity',
-        data: [80, 80, 80, 80, 80],
+        data: [80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, ],
         fill: false,
         borderColor: 'blue',
     }

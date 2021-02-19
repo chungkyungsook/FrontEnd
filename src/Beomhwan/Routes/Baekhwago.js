@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import {Line} from 'react-chartjs-2';
 import Modal from '../Components/Modal';
 import ModalContent from '../Components/ModalContent';
+import {flexAlign} from '../../Util/css';
 
 // 백화고차트 데이터
 const BaekhwagoData = {
@@ -73,7 +74,19 @@ const FooterBox = styled.div`
 
 const Description = styled.div`
     flex: 9;
-    text-align: center;
+    ${flexAlign};
+`;
+
+const DescriptionTitle = styled.div`
+    flex: 1;
+    height: 100%;
+`;
+
+const DescriptionContent = styled.div`
+    flex: 3;
+    border: 1px solid gray;
+    height: 100%;
+    ${flexAlign};
 `;
 
 const GrowStartButtonBox = styled.div`
@@ -115,7 +128,7 @@ const Baekhwago = () => {
     
     return (
         <FullBox>
-            <Modal opacity={opacity} onClose={onClose}>
+            <Modal opacity={opacity} customId="0" onClose={onClose}>
                 <ModalContent chartName='baekhwa' text={BaekhwaText} onClose={onClose}/>
             </Modal>
             <BaekhwagoGraphBox>
@@ -123,7 +136,8 @@ const Baekhwago = () => {
             </BaekhwagoGraphBox>
             <FooterBox>
                 <Description>
-                    백화고는 자란 버섯들의 갓 길이의 평균을 기준으로 단계별로 환경을 제공합니다.
+                    <DescriptionTitle></DescriptionTitle>
+                    <DescriptionContent>백화고는 자란 버섯들의 갓 길이의 평균을 기준으로 단계별로 환경을 제공합니다.</DescriptionContent>
                 </Description>
                 <GrowStartButtonBox>
                     <GrowStartButton onClick={onModal}>적용</GrowStartButton>

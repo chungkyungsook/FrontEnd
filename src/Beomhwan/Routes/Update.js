@@ -140,8 +140,6 @@ const DrawGraph = styled.div`
     height: 45vh;
 `;
 
-
-
 const Update = () => {
     return (
         <>

@@ -34,8 +34,7 @@ const TemplateContainer = styled.div`
 `;
 
 const SettingRouter = ({location, cookies, value}) => {
-    const isLoginCheck = cookies.get('isLogin');
-
+    const isLoginCheck = cookies.get('token');
     const {pathname} = location;
 
     return (

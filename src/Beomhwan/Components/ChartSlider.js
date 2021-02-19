@@ -184,8 +184,8 @@ const ChartSilder = () => {
                 slideNum: 3
             });
         }
-        // 1000 ~ 1399 => 2개씩
-        else if(windowSize > 1000 && windowSize < 1399) {
+        // 1080 ~ 1399 => 2개씩
+        else if(windowSize > 1080 && windowSize < 1399) {
             console.log('middle');
             setSlideInfo({
                 ...slideInfo,
@@ -194,7 +194,7 @@ const ChartSilder = () => {
                 slideNum: 2
             });
         }
-        // ~ 999 => 1개씩
+        // ~ 1079 => 1개씩
         else{
             console.log('down');
             setSlideInfo({
