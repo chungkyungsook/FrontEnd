@@ -20,7 +20,7 @@ import {
 const MyFarmComponent = (props) => {
 
     //user 기기 관리 정보, 서버 통신 완료 시 isOk : true
-    const {userDeviceInfo,value,setting,isLoding} = props
+    const {userDeviceInfo,value,setting,isLoding,day} = props
     
     //선택하 기기 정보 저장
     const [userInfo, setUserInfo] = useState({
@@ -140,9 +140,9 @@ const MyFarmComponent = (props) => {
                 <div className = "notification">
                     <div className = "programName">
                         <div>진행중인 프로그램 이름</div>
-                        <div>{value.isOn.prgName && value.isOn.prgName}</div>
+                        <div>{value.prgInfo.name && value.prgInfo.name}</div>
                         <br/>
-                        <div>{'0일차'}</div>
+                        <div>{day && day.today}</div>
                     </div>
                     <div className = "smailInfo">
                         <h1>오늘은 버섯이 {0}개 자랐습니다.</h1>

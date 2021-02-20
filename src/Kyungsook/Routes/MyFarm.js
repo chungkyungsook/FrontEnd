@@ -9,7 +9,8 @@ import {
     AWS_URL,
     MACHINE_LIST,
     PRG_NAME,
-    MUSHROOM_ALL
+    MUSHROOM_ALL,
+    DATE
 } from '../../Util/api.js'
 
 import {
@@ -17,7 +18,7 @@ import {
 } from '../../Util/debugging.js'
 
 import MyfarmInfo from '../Component/MyfarmInfo';
-
+import {format} from 'date-fns';
 const MyFarm = (props) => {
 ///////////////////////////////////////////////////////////////////////   변수
     //isOn : 선택한 기기 정보, 재배기 이름 / isValue : 기기 작동상태    
@@ -27,17 +28,36 @@ const MyFarm = (props) => {
         userInfo : []
     })
 
+    //해당 날짜
+    
+    const [day, setDay] = useState({
+        today :  '',
+        kinokoDay : ''
+    })
+
     // 재배기 온도, 습도 값 저장
     const [setting, setSetting] = useState({
         temperature : 0, //온도
         humidity : 0,    //습도
     })
 
+    //
     const [isOk, setIsOk] = useState({
         isDevice :false
     })
 
     const [isLoding, setIsLoding] = useState(false)
+    
+    //모든 버섯 정보 저장
+    const [imgList, setImgList] = useState({
+        kinokosList : null,
+        kinokoNumber : {
+        allKinoko : 0,
+        thisKinoko: 0,
+        getKinoko : 0,
+        endKinoko : 0
+        }
+    })
 ///////////////////////////////////////////////////////////////////////    
 
     //해당 함수에서 버섯의 모든 정보를 가져온다.
@@ -90,7 +110,19 @@ const MyFarm = (props) => {
         console.log("=================Myfarm===================="); //선택하면 값이 바뀜
         // cookie상태값 확인하기
         DEBUG && console.log("MyFarm ", value.isOn)
-        
+        // cookie상태값 확인하기
+        console.log("MyFarmInfo ", value)
+        //프로그램 날짜 변경하기
+        value.isValue && (
+            axios.get(`${AWS_URL}${DATE}`,{
+                params: { id : value.isOn.id }
+            }).then(data =>{
+                DEBUG && console.log(data.status)
+            }).catch(e=>{
+                DEBUG && console.log(e.response.status)
+            })
+        )
+        console.log("===================end===================="); //선택하면 값이 바뀜
         
     },[value.isOn.prgName])
 
@@ -104,13 +136,14 @@ const MyFarm = (props) => {
             props.cookies.get('token')? 
             (isOk.isDevice ? //재배기 있나요? yes
                 (   <>
-                        <MyfarmInfo value={value}/>
+                        <MyfarmInfo setImgList={setImgList} value={value} day={day} setDay={setDay}/>
                         <MyFarmComponent 
                         userDeviceInfo={userDeviceInfo.userInfo} 
                         isOk={isOk.isDevice} 
                         value={value} 
                         setting={setting}
                         isLoding={isLoding}
+                        day={day}
                         />
                     </>
                 ) : //no -> 처음 한번 실행 
