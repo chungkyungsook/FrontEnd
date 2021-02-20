@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import {flexAlign} from '../../Util/css';
 
 const SelectBox = styled.div`
     width: 200px;
@@ -30,7 +31,7 @@ const NumBox = styled.div`
     width: 100%;
     flex: 1;
     border: 1px solid gray;
-    align-items: center;
+    ${flexAlign}
 `;
 
 
@@ -38,12 +39,12 @@ const Select = ({count, sunChange, waterChange}) => {
     console.log(count);
     return (
         <SelectBox>
-            <SelectEnvi>
+            {/* <SelectEnvi>
                 <div>일조 횟수</div>
                 <UpDown onClick={() => sunChange('+')}> + </UpDown>
                 <NumBox>{count.sunCount}번</NumBox>
                 <UpDown onClick={() => sunChange('-')}> - </UpDown>
-            </SelectEnvi>
+            </SelectEnvi> */}
             <SelectEnvi>
                 <div>물 주기 횟수</div>
                 <UpDown onClick={() => waterChange('+')}> + </UpDown>
