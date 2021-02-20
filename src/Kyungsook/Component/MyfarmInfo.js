@@ -15,12 +15,12 @@ import {
 import {
     DEBUG
 } from '../../Util/debugging'
-const MyfarmInfo = ({value,cookies,day,setDay})=>{
+const MyfarmInfo = ({value,cookies,day,setDay,})=>{
    
 //////////////////////////////////////////////////////////////// 변수
 var data = new Date();
 //자라는 중 , 수확완료, 백화고, 수확
-const type = ['growing','complete','whiteflower','harvest',]
+const type = ['growing','complete','whiteflower','harvest']
 // mr_date : 자란 날짜
 
 //////////////////////////////////////////////////////////////// 함수
@@ -35,24 +35,6 @@ const type = ['growing','complete','whiteflower','harvest',]
         console.log("=================MyfarmInfo===================="); //선택하면 값이 바뀜
         // cookie상태값 확인하기
         console.log("MyFarmInfo ", value)
-        //프로그램 날짜 변경하기
-        // !value.isValue && (
-        //     axios.get(`${AWS_URL}${MACHINE_DATA}`,{
-        //         params: { id : value.isOn.id }
-        //     }).then(data =>{
-        //         DEBUG && console.log("MyfarmInfo 프로그램 ID,NAME",data.data)
-        //         value.setPrgInfo({
-        //             prg_id: data.data[0].id,
-        //             name : data.data[0].prg_name
-        //         })
-        //     }).catch(e=>{
-        //         DEBUG && console.log("MyfarmInfo 프로그램 ID,NAME err",e.response.status)
-        //         value.setPrgInfo({
-        //             prg_id: "",
-        //             name : "실행중인 프로그램이 없습니다."
-        //         })
-        //     })
-        // )
 
         value.isOn.id !== 0 && (
            axios.get(`${AWS_URL}${DATE}`,{
@@ -90,6 +72,7 @@ const type = ['growing','complete','whiteflower','harvest',]
                     params: {prgId : data.data[0].id }
                 }).then(data =>{
                     DEBUG && console.log("MyfarmInfo 버섯 상태 가져오기",data.data.length)
+                    value.setKinokoInfo(data.data)
                 }).catch(e=>{
                     DEBUG && console.log("MyfarmInfo 버섯 상태 errroeeor",e.response.status)
                 })
@@ -121,6 +104,16 @@ const type = ['growing','complete','whiteflower','harvest',]
         // console.log((day.today.getTime() - day.kinokoDay.getTime() / (1000*60*60*24) ),'일');
         
     },[day.kinokoDay])
+
+    useEffect(()=>{
+        
+        value.kinokoInfo.kinokosList !== null && (
+            // console.log("버섯상태확인",value.kinokoInfo)
+            value.kinokoInfo.map((data,index)=>(
+                console.log("버섯상태확인",data.kinokosList)
+            ))
+        )
+    },[value.kinokoInfo])
 ////////////////////////////////////////////////////////////////
     return(
         <div></div>

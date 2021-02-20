@@ -49,12 +49,24 @@ const RouterComponent = (props) => {
         name : ''
     })
     
+    //모든 버섯 정보 저장
+    const [kinokoInfo, setKinokoInfo] = useState({
+        kinokosList : null,
+        kinokoNumber : {
+            thisKinoko: 0,
+            getKinoko : 0,
+            endKinoko : 0,
+            witeKinoko : 0 //백화고 상태
+        } 
+        })
+    
     //변수 한번에 보내기
     const value = {
         isOn,setIsOn, //재배기 id, name
         isValue, // 재배기 작동 상태
         setIsCheck,isCheck, //재배기 선택 여부 판단 1
-        prgInfo, setPrgInfo
+        prgInfo, setPrgInfo,
+        kinokoInfo, setKinokoInfo //버섯 정보 저장(상태 포함)
     }
 
     //로그인 확인 하기
@@ -79,7 +91,7 @@ const RouterComponent = (props) => {
             <Header setIsOn={setIsOn} isOn={isOn} isValue={isValue} setIsValue={setIsValue} isLogin={isLogin}setIsLogin={setIsLogin} isCheck={isCheck} setIsCheck={setIsCheck}/>
             <Switch>
                 <Route path={HOME} exact 
-                render = { (props)=> <MyFarm {...props} value={value}/> } />
+                render = { (props)=> <MyFarm {...props} value={value} /> } />
 
                 <Route path={LOGIN} 
                 render ={ (props) => <Login {...props} setIsLogin={setIsLogin} />}

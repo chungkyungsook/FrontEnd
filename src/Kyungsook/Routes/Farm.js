@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react' ;
-import styled from 'styled-components' ;
-import {Redirect}   from 'react-router-dom' ;
 import { withCookies} from 'react-cookie';
 import KinokoInfo from '../Component/FarmComponent/KinokoInfo';
 import FarmMock from '../Component/FarmComponent/FarmMock'
 import axios from 'axios';
 
+import {
+  AWS_URL,
+  MUSHROOM_ALL
+} from '../../Util/api'
 
 const Farm = (props) => {
-  
-  const id = 7
-  const url = '54.210.105.132'
 
   //모든 버섯 정보 저장
   const [imgList, setImgList] = useState({
@@ -30,7 +29,9 @@ const Farm = (props) => {
   const getList = ()=>{
     const url = "dummy/MyFarm.json";
 
-    axios.get(url).then(data =>{
+    axios.get(`${AWS_URL}${MUSHROOM_ALL}`,{
+      // params: {prgId : data.data[0].id }
+    }).then(data =>{
       console.log("Farm axios getList()");
       setImgList({...imgList, kinokosList : data.data.kinokoImg})
     }).catch( e =>{
