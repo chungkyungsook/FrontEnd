@@ -25,6 +25,10 @@ const CustomChart = ({Data}) => {
             chart.current.data = chartData; 
             console.dir(chart.current.data);
 
+            let title = chart.current.titles.create();
+            title.text = "그래프를 드래그해서 온도, 습도를 조절해보자!";
+            title.fontSize = 20;
+
             chart.current.padding(40, 40, 0, 0);
             chart.current.maskBullets = false;
 
@@ -358,6 +362,7 @@ const LogBox = styled.div`
     color: red;
     ${flexAlign};
     border-radius: 5px;
+    font-size: 12px;
 `;
 
 // ---------------------------------------------------------
@@ -399,52 +404,6 @@ const Add = () => {
             Humidity: 80,
             Date: 5 + "일차"
         },
-        {
-            Temperature: 20,
-            Humidity: 80,
-            Date: 6 + "일차"
-        },
-        {
-            Temperature: 20,
-            Humidity: 80,
-            Date: 7 + "일차"
-        },
-        {
-            Temperature: 20,
-            Humidity: 80,
-            Date: 8 + "일차"
-        },
-        {
-            Temperature: 20,
-            Humidity: 80,
-            Date: 9 + "일차"
-        },
-        {
-            Temperature: 20,
-            Humidity: 80,
-            Date: 10 + "일차"
-        },
-        {
-            Temperature: 20,
-            Humidity: 80,
-            Date: 11 + "일차"
-        },
-        {
-            Temperature: 20,
-            Humidity: 80,
-            Date: 12 + "일차"
-        },
-        {
-            Temperature: 20,
-            Humidity: 80,
-            Date: 13 + "일차"
-        },
-        {
-            Temperature: 20,
-            Humidity: 80,
-            Date: 14 + "일차"
-        },
-        
     ]);
     const machineId = useMachineInfo();
 
@@ -520,7 +479,7 @@ const Add = () => {
 
     const [count, setCount] = useState({
         sunCount: 0,
-        waterCount: 0
+        waterCount: 1
     });
 
     const sunChange = (e) => {
@@ -548,9 +507,9 @@ const Add = () => {
                     : setCount({...count, waterCount: 10});
                 break;
             case '-' :
-                count.waterCount > 0
+                count.waterCount > 1
                     ? setCount({...count, waterCount: count.waterCount - 1})
-                    : setCount({...count, waterCount: 0});
+                    : setCount({...count, waterCount: 1});
                 break;
             default :
                 break;
@@ -582,8 +541,10 @@ const Add = () => {
                     <CheckMenu>
                         <p>온도는 35도 이하로 제한됩니다.</p>
                         {chartData.map((ch,index) => {
-                            if(ch.Temperature > 35)
-                            return <LogBox>{ch.Date} 온도가 35도 이상입니다!</LogBox>
+                            if(ch.Temperature > 27)
+                                return <LogBox>{ch.Date} 온도가 27도 이상입니다!</LogBox>
+                            else if(ch.Temperature < 17)
+                                return <LogBox>{ch.Date} 온도가 17도 이하입니다!</LogBox>
                         })}
                     </CheckMenu>
                     <Menu2>

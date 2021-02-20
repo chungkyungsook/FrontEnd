@@ -49,8 +49,7 @@ const ChartContext = ({children, machineId}) => {
     // const machineIdValue = getMachineId();
     
     useEffect(() => {
-
-
+        
         // get chart data
         getData()
         .then(value => {
