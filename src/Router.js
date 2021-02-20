@@ -30,13 +30,13 @@ const RouterComponent = (props) => {
     //선택된 재배기 번호와 재배기 이름 저장 -> id : 0이면 선택된 재배기 없음
     const [isOn, setIsOn] = useState({
         id : 0,
-        prgName : ''
+        prgName : '',
     })
 
     //선택된 재배기 on/off 상태 확인 
     const [isValue, setIsValue] = useState('')
 
-    //로딩화면 추가
+    //선택한 기기 정보 바꾸기 위해서 사용됨
     const [isCheck,setIsCheck] = useState(0)
 
     //사용자가 등록한 모든 재배기 정보 가져오기
@@ -44,10 +44,17 @@ const RouterComponent = (props) => {
 
         machins : null
     })
+    const [prgInfo, setPrgInfo] = useState({
+        prg_id : 0,
+        name : ''
+    })
     
     //변수 한번에 보내기
     const value = {
-        isOn,setIsOn,isValue,setIsCheck,isCheck
+        isOn,setIsOn, //재배기 id, name
+        isValue, // 재배기 작동 상태
+        setIsCheck,isCheck, //재배기 선택 여부 판단 1
+        prgInfo, setPrgInfo
     }
 
     //로그인 확인 하기
@@ -62,8 +69,9 @@ const RouterComponent = (props) => {
         console.log('Router in isOn',isOn.id);
         console.log('Router in isOn prgName',isOn.prgName);
         console.log('Router in isOn isValue',isValue);
+        console.log('Router in isOn isValue',prgInfo);
         // setIsOn({...isOn,id : isOn.id})
-    },[isOn.id,isOn.prgName,isValue])
+    },[isOn.id,isOn.prgName,isValue,prgInfo])
 
 ////////////////////////////////////////////////////////////////////////////////////
     return (

@@ -15,15 +15,27 @@ export const MACHINE_LIST = '/api/myfarm/list'
 //200, 4040
 export const MACHINE_STATUS = '/api/myfarm/status'
 
+//프로그램 시작날짜
+//get param
+//200 404
+//get id : 프로그램 id
+export const DATE = '/api/farm/startdate'
+
 //사용자가 실행중인 재배기 id 
 //get ,param
 //userId 
 //200,404
 export const MACHINE_ID = '/api/myfarm/id'
+
+//해당 기기의 번호와 이름을 가져온다.
+//get param
+//200 404
+//id  (id, prg_name)
+export const MACHINE_DATA = '/api/myfarm/data'
 //////////////////////////////////////////////////버섯의 상태 정보 API
 //해당 프로그램의 모든 버섯 정보들을 가져옴
 //prgId
-export const MUSHROOM_ALL = '/api/mushroom/all'
+export const MUSHROOM_ALL = '/api/mushroom'
 
 //해당 프로그램의 모든 버섯 정보들을 가져옴
 //prgId
