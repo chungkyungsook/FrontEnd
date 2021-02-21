@@ -10,6 +10,7 @@ import Modal from '../Components/Modal';
 import axios from 'axios';
 import {Button, ModalTitleBox, ModalTextBox, ModalFooter} from '../Components/ModalContent';
 import {URL} from '../Util';
+import {flexAlign} from '../../Util/css';
 
 // chart의 options 설정
 export const options = {
@@ -111,6 +112,15 @@ const CustomStart = ({onStart, onRemove, prgid}) => {
     );
 };
 
+const AddMessageBox = styled.div`
+    ${flexAlign};
+    height: 200px;
+    border: 1px solid gray;
+    border-radius: 20px;
+    flex: 1;
+    font-size: 1.3em;
+`;
+
 // 커스텀 컴포넌트
 const Custom = () => {
     const chart = useCustomChartList();
@@ -118,7 +128,7 @@ const Custom = () => {
     const machineId = useMachineInfo();
     const [loading, setLoading] = useState(true);
     const [modalInfo, setModalInfo] = useState({
-        opacity: false,
+        opacity: 0,
         customId: null,
         modalTextfirst: '',
         modalTextsecond: '',
@@ -132,7 +142,7 @@ const Custom = () => {
     // 커스텀 환경 적용 클릭 시 모달 on 및 텍스트 변경
     const onStart = (prgid) => {
         setModalInfo({
-            opacity: true,
+            opacity: 1,
             customId: prgid,
             modalTextfirst: '한번 적용하면 도중에 취소가 불가능합니다.',
             modalTextsecond: '적용하시겠습니까?',
@@ -143,7 +153,7 @@ const Custom = () => {
     // 커스텀 환경 삭제 클릭 시 모달 on 및 텍스트 변경
     const onRemove = (prgid) => {
         setModalInfo({
-            opacity: true,
+            opacity: 1,
             customId: prgid,
             modalTextfirst: '정말 삭제하시겠습니까?',
             modalTextsecond: '',
@@ -151,6 +161,7 @@ const Custom = () => {
         });
     };
 
+    // 시작 삭제 클릭 시 모달 설정
     const CustomModalFunction = (macid, prgid) => {
         switch(modalInfo.confirm) {
             case 'start':
@@ -161,7 +172,7 @@ const Custom = () => {
                 }).then(response => {
                     console.log(response);
                     setModalInfo({
-                        opacity: false,
+                        opacity: 0,
                         customId: null
                     });
                 }).catch(err => {
@@ -180,7 +191,7 @@ const Custom = () => {
                 break;
             default:
                 setModalInfo({
-                    opacity: false,
+                    opacity: 0,
                     customId: null,
                     modalTextfirst: '',
                     modalTextsecond: '',
@@ -189,9 +200,10 @@ const Custom = () => {
         }
     };
 
+    // 모달 닫았을 때
     const onClose = () => {
         setModalInfo({
-            opacity: false,
+            opacity: 0,
             customId: null,
             modalTextfirst: '',
             modalTextsecond: '',
@@ -205,20 +217,25 @@ const Custom = () => {
             <>Now loading...</>
             :
                 <CustomBox>
-                {chart.map((ch,index) =>
-                <div key={index}>
-                <CustomGraphStyle>
-                    <p style={{userSelect: 'none'}}>사용 횟수 : {chartInfo[index].prg_count}</p>
-                        <GraphTitle>- {chartInfo[index].prg_name} -</GraphTitle>
-                    <LineChart chartData={ch}/>
-                    <CustomStart 
-                        onStart={onStart}
-                        onRemove={onRemove} 
-                        prgid={chartInfo[index].id}
-                        macid={machineId} />
-                </CustomGraphStyle>
-                </div>
-                )}
+                {chart.length === 0
+                ? 
+                    <AddMessageBox> 커스텀 환경이 없습니다. '환경 추가'에서 커스텀 환경을 추가해주세요! </AddMessageBox>
+                :   chart.map((ch,index) =>
+                        <div key={index}>
+                        <CustomGraphStyle>
+                            <p style={{userSelect: 'none'}}>사용 횟수 : {chartInfo[index].prg_count}</p>
+                                <GraphTitle>- {chartInfo[index].prg_name} -</GraphTitle>
+                            <LineChart chartData={ch}/>
+                            <CustomStart 
+                                onStart={onStart}
+                                onRemove={onRemove} 
+                                prgid={chartInfo[index].id}
+                                macid={machineId} />
+                        </CustomGraphStyle>
+                        </div>
+                    )
+                }
+                
                 <Modal opacity={modalInfo.opacity} customId={modalInfo.customId} onClose={onClose} width='500' height='200'>
                     <ModalTitleBox>주의!</ModalTitleBox>
                     <ModalTextBox>{modalInfo.modalTextfirst}</ModalTextBox>

@@ -1,7 +1,10 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState, useLayoutEffect, useEffect} from 'react';
 import styled from 'styled-components';
 import {Line} from 'react-chartjs-2';
-import {SettingBox, CheckBox, CheckMenu, Menu2, SetDate, SetWaterSun, SettingName} from './Add';
+import * as am4core from '@amcharts/amcharts4/core';
+import * as am4charts from '@amcharts/amcharts4/charts';
+import am4themes_animated from '@amcharts/amcharts4/themes/animated';
+import {CustomChart as UpdateCustomChart, SettingBox, CheckBox, CheckMenu, Menu2, SetDate, SetWaterSun, SettingName} from './Add';
 
 
 // ------------------------지금까지의 환경 그래프------------------------
@@ -51,51 +54,9 @@ const RanCustomChart = () => {
 
     return <Line ref={LineChart} data={RanCustomData} options={RanCustomOptions} />
 }
-
 // --------------------------------------------------------------------
 
 
-// ------------------------추가적으로 작업할 그래프------------------------
-const UpdateCustomData = {
-    labels: ['7일차','8일차','9일차','10일차','11일차'],
-    datasets: [
-        {
-            label: "Temperature",
-            data: [23, 24, 20, 22, 23],
-            fill: false,
-            borderColor: 'red'
-        },
-        {
-            label: "Humidity",
-            data: [80, 83, 80, 78, 82],
-            fill: false,
-            borderColor: 'blue'
-        }
-    ]
-};
-
-const UpdateCustomOptions = {
-    maintainAspectRatio: false,
-    scales: {
-        yAxes: [
-            {
-                ticks: {
-                    beginAtZero: true,
-                    max: 100,
-                    stepSize: 10
-                }
-            }
-        ]
-    }
-}
-
-const UpdateCustomChart = () => {
-    const LineChart = useRef();
-
-    console.dir(LineChart);
-
-    return <Line ref={LineChart} data={UpdateCustomData} options={UpdateCustomOptions} />
-}
 // -----------------------------------------------------------------------
 
 // --------------------Div 분할 세팅--------------------
@@ -114,7 +75,7 @@ const CustomUpdateDivRow = styled.div`
 `;
 // ---------------------------------------------------- 
 
-// -----------------지금까지 실행되었던 커스텀 환경 정보-----------------
+// -----------------지금까지 실행되었던 커스텀 환경 정보 스타일-----------------
 const UpdateGraphBox = styled.div`
     height: 45vh;
     display: flex;
@@ -132,7 +93,7 @@ const RanEnvironmentInfo = styled.div`
     padding: 20px;
     border-left: 1px solid gray;
 `;
-// -------------------------------------------------------------------
+// -------------------------------------------------------------------------
 
 const DrawGraph = styled.div`
     padding: 10px;
@@ -141,6 +102,16 @@ const DrawGraph = styled.div`
 `;
 
 const Update = () => {
+    const [data, setData] = useState([{
+        Date: '6일차',
+        Temperature: 20,
+        Humidity: 80
+    }]);
+
+    function update () {
+        
+    }
+
     return (
         <>
             <CustomUpdateDivColumn>
@@ -155,7 +126,7 @@ const Update = () => {
             </CustomUpdateDivColumn>
             <CustomUpdateDivRow>
                 <DrawGraph>
-                    <UpdateCustomChart/>
+                    <UpdateCustomChart Data={data} titleMsg={'그래프를 업데이트 해보자!'}/>
                 </DrawGraph>
                 <SettingBox>
                 <CheckBox>
@@ -165,7 +136,9 @@ const Update = () => {
                         <SetWaterSun>물주기, 햇빛 횟수 지정</SetWaterSun>
                     </Menu2>
                 </CheckBox>
-                <SettingName>적용 버튼 표시</SettingName>
+                    <SettingName>
+                        <button onClick={update}>적용하기</button>
+                    </SettingName>
                 </SettingBox>
             </CustomUpdateDivRow>
         </>

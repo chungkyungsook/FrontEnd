@@ -6,7 +6,7 @@ import am4themes_animated from '@amcharts/amcharts4/themes/animated';
 import axios from 'axios';
 import styled from 'styled-components';
 
-const ProgressChart = ({value}) => {
+const ProgressChart = () => {
     console.log(window.location.pathname);
     const [loading, setLoading] = useState(true);
     const [axiosData, setAxiosData] = useState({
@@ -59,7 +59,6 @@ const ProgressChart = ({value}) => {
             })
         
         console.dir(obj);
-
         return obj;
     }
 
