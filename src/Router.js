@@ -32,29 +32,15 @@ const RouterComponent = (props) => {
         id : 0,
         prgName : '',
     })
-
     //선택된 재배기 on/off 상태 확인 
     const [isValue, setIsValue] = useState('')
 
     //선택한 기기 정보 바꾸기 위해서 사용됨
     const [isCheck,setIsCheck] = useState(0)
 
-    //사용자가 등록한 모든 재배기 정보 가져오기
     const [prgInfo, setPrgInfo] = useState({
         prg_id : 0,
         name : ''
-    })
-    
-    //모든 버섯 정보 저장
-    const [kinokoInfo, setKinokoInfo] = useState({
-        kinokosList : null,
-        kinokoNumber : {
-            thisKinoko: [],
-            getKinoko : [],
-            endKinoko : [],
-            witeKinoko : [], //백화고 상태
-            growingKinoko :[]
-        } 
     })
     
     //변수 한번에 보내기
@@ -62,8 +48,7 @@ const RouterComponent = (props) => {
         isOn,setIsOn, //재배기 id, name
         isValue, // 재배기 작동 상태
         setIsCheck,isCheck, //재배기 선택 여부 판단 1
-        prgInfo, setPrgInfo,
-        kinokoInfo, setKinokoInfo //버섯 정보 저장(상태 포함)
+        prgInfo, setPrgInfo
     }
 
     //로그인 확인 하기
@@ -85,10 +70,10 @@ const RouterComponent = (props) => {
 ////////////////////////////////////////////////////////////////////////////////////
     return (
         <Router> 
-            <Header setIsOn={setIsOn} isOn={isOn} isValue={isValue} setIsValue={setIsValue} isLogin={isLogin}setIsLogin={setIsLogin} isCheck={isCheck} setIsCheck={setIsCheck} setKinokoInfo={setKinokoInfo}/>
+            <Header setIsOn={setIsOn} isOn={isOn} isValue={isValue} setIsValue={setIsValue} isLogin={isLogin}setIsLogin={setIsLogin} isCheck={isCheck} setIsCheck={setIsCheck}/>
             <Switch>
                 <Route path={HOME} exact 
-                render = { (props)=> <MyFarm {...props} value={value} /> } />
+                render = { (props)=> <MyFarm {...props} value={value}/> } />
 
                 <Route path={LOGIN} 
                 render ={ (props) => <Login {...props} setIsLogin={setIsLogin} />}

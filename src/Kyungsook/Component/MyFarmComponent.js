@@ -29,7 +29,6 @@ const MyFarmComponent = (props) => {
     })
     // const url = '172.26.3.62'
     const url = '54.210.105.132'
-    const {kinokosList, kinokoNumber} = value.kinokoInfo
 
     // const [isOn, setIsOn] = useState('')
 
@@ -82,7 +81,7 @@ const MyFarmComponent = (props) => {
         
         DEBUG && console.log("MyFarmCom... isOn 값 변경",value.isOn.id)
         DEBUG && console.log("MyFarmCom... isOn 값 변경",value.isOn.prgName)
-        DEBUG && console.log("MyFarmCom... isOn 값 변경",value.kinokoInfo.kinokoNumber.getKinoko)
+
     },[value.isOn.id])
 
     return (
@@ -105,7 +104,7 @@ const MyFarmComponent = (props) => {
             { 
             isLoding ? 
             ( userDeviceInfo.length === 0 ? (<div className="item item4"> 재배기를 등록 해 주세요</div> )
-            : (value.isOn.id === '' ? (<div className="item item4"> 선택 된 재배기가 없습니다. 재배기를 선택해 주세요</div> )
+            : (value.isOn.id === 0 ? (<div className="item item4"> 선택 된 재배기가 없습니다. 재배기를 선택해 주세요</div> )
             : 
             (
                 <>
@@ -146,8 +145,8 @@ const MyFarmComponent = (props) => {
                         <div>{day && day.today}</div>
                     </div>
                     <div className = "smailInfo">
-                    {kinokoNumber.thisKinoko.length !== 0 ? (<h1>오늘 자란 버섯이 {JSON.stringify(kinokoNumber.thisKinoko)}개 있습니다.</h1>) : <h1>오늘 자라난 버섯은 없네요</h1>}
-                        {kinokoNumber.getKinoko.length !== 0 ? (<h1>수확가능한 버섯이 {JSON.stringify((kinokoNumber.getKinoko + kinokoNumber.witeKinoko) + 1)}개 있습니다.</h1>) : <h1>아직 수확할 버섯은 없네요</h1>}
+                        <h1>오늘은 버섯이 {0}개 자랐습니다.</h1>
+                        <h1>아직 수확할 버섯은 없네요</h1>
                     </div>
                 </div>
                 
