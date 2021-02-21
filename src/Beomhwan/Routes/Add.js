@@ -12,7 +12,7 @@ import { useMachineInfo } from '../ChartContext';
 import {Local, URL} from '../Util';
 
 // 커스텀 차트
-const CustomChart = ({Data}) => {
+export const CustomChart = ({Data, titleMsg}) => {
     const chart = useRef(null);
     const [chartData, setChartData] = useState(Data);
 
@@ -26,7 +26,7 @@ const CustomChart = ({Data}) => {
             console.dir(chart.current.data);
 
             let title = chart.current.titles.create();
-            title.text = "그래프를 드래그해서 온도, 습도를 조절해보자!";
+            title.text = titleMsg;
             title.fontSize = 20;
 
             chart.current.padding(40, 40, 0, 0);
@@ -377,7 +377,7 @@ class MyError extends Error {
 // ---------------------------------------------------------
 const Add = () => {
     const [loading, setLoading] = useState(true);
-    const date = useRef(15);
+    const date = useRef(5);
     const [chartData, setChartData] = useState([
         {
             Temperature: 20,
@@ -442,7 +442,10 @@ const Add = () => {
             let humi = [];
             chartData.map(ch => {
                 if(ch.Temperature > 35) {
-                    throw new MyError('TempError');
+                    throw new MyError('TempErrorUp');
+                }
+                else if(ch.Temperature < 17) {
+                    throw new MyError('TempErrorDown');
                 }
                 temp.push(ch.Temperature);
                 humi.push(ch.Humidity);
@@ -469,9 +472,13 @@ const Add = () => {
                 window.location.href = (`${Local}setting/custom`);
             }).catch(e => {console.error(e);});
         } catch(e) {
-            if(e.name === 'TempError') {
+            if(e.name === 'TempErrorUp') {
                 alert('온도 제한 35도를 넘었습니다!');
-            } else if(e.name === 'NameError') {
+            } 
+            else if(e.name === 'TempErrorDown') {
+                alert('온도 제한 17도보다 낮습니다!');
+            }
+            else if(e.name === 'NameError') {
                 alert('프로그램 이름을 입력해주세요!');
             }
         }
@@ -535,7 +542,7 @@ const Add = () => {
                 </SelectedCustom>
             </CustomAddDiv>
             <CustomAddDiv>
-                <CustomChart Data={chartData} />
+                <CustomChart Data={chartData} titleMsg="그래프를 드래그해서 온도, 습도를 조절해보자!" />
                 <SettingBox>
                 <CheckBox>
                     <CheckMenu>
