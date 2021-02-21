@@ -36,7 +36,7 @@ import title from './assets/HeaderTitle.png' ;
 import { withCookies } from 'react-cookie';
 
 // setIsOn -> 선택한 기기 정보 넣기 
-const Header = ({ location, cookies, setIsOn,isOn,isValue, setIsValue,isLogin,setIsLogin,isCheck,setIsCheck}) => {
+const Header = ({ location, cookies, setIsOn,isOn,isValue, setIsValue,isLogin,setIsLogin,isCheck,setIsCheck,setKinokoInfo}) => {
 /////////////////////////////////////////////////////////////////////////////////////
     // 메뉴 데이터
     const menuData = [ 
@@ -111,6 +111,7 @@ const Header = ({ location, cookies, setIsOn,isOn,isValue, setIsValue,isLogin,se
         )
 
         isCheck === 1 && (
+            
             axios.get(`${AWS_URL}${MACHINE_ID}`,{
                 params : {
                     token : cookies.get('token')
@@ -123,7 +124,6 @@ const Header = ({ location, cookies, setIsOn,isOn,isValue, setIsValue,isLogin,se
                     id : parseInt(data.data.id),
                     prgName : data.data.name
                 })
-
                 //재배개 작동 상태 가져오기 isValue
                 axios.get(`${AWS_URL}${MACHINE_STATUS}`,{
                     params :  {id : JSON.stringify(data.data.id)}
@@ -131,6 +131,7 @@ const Header = ({ location, cookies, setIsOn,isOn,isValue, setIsValue,isLogin,se
                     HEADER_DEBUG && console.log("Header 사용자가 선택한 재배기 작동 상태 성공",data.data)
                     setIsValue(data.data)
                     setIsCheck(0) // 선택한 재배기 작동 상태 끝 로딩 화면을 위한 설정
+                    
                 }).catch(e =>{
                     HEADER_DEBUG && console.log("Header 사용자가 선택한 재배기 작동 상태 실패",e.response.status);
                 })  
@@ -144,9 +145,6 @@ const Header = ({ location, cookies, setIsOn,isOn,isValue, setIsValue,isLogin,se
     },[isLogin,isCheck])
 
 /////////////////////////////////////////////////////////////////////////////////////
-
-    // token값 있는지 확인하기 -> token값 없으면 로그인 페이지로 이동
-    // props.cookies.get('token') ? ( console.log("쿠키 있음")) : return (<Redirect to="login" />)
 
     //logout 버튼 클릭
     const logoutOnClick = () =>{

@@ -15,19 +15,33 @@ import {
 import {
     DEBUG
 } from '../../Util/debugging'
-const MyfarmInfo = ({value,cookies,day,setDay,})=>{
+const MyfarmInfo = ({value,cookies,day,setDay})=>{
    
 //////////////////////////////////////////////////////////////// 변수
 var data = new Date();
 //자라는 중 , 수확완료, 백화고, 수확
 const type = ['growing','complete','whiteflower','harvest']
+const {kinokoNumber, kinokosList } = value.kinokoInfo;
 // mr_date : 자란 날짜
 
 //////////////////////////////////////////////////////////////// 함수
 //////////////////////////////////////////////////////////////// 생명주기
+
     useEffect(()=>{
         console.log('=======================MyfarmInfo 처음 시작합니다====================');
         console.log('value', value);
+        
+        value.setKinokoInfo({
+            kinokosList : null,
+            kinokoNumber : {
+                thisKinoko: [],
+                getKinoko : [],
+                endKinoko : [],
+                witeKinoko : [], //백화고 상태
+                growingKinoko:[]
+            } 
+        })
+
     },[])
 
 
@@ -55,6 +69,7 @@ const type = ['growing','complete','whiteflower','harvest']
                     today : "재배기를 작동시켜주세요",
                     kinokoDay : "저장된 날짜가 없습니다."
                 })
+
             })
         )
 
@@ -72,18 +87,14 @@ const type = ['growing','complete','whiteflower','harvest']
                     params: {prgId : data.data[0].id }
                 }).then(data =>{
                     DEBUG && console.log("MyfarmInfo 버섯 상태 가져오기",data.data.length)
-                    value.setKinokoInfo(data.data)
+                    value.setKinokoInfo({
+                        ...value.kinokoInfo,
+                        kinokosList: data.data
+                    })
                 }).catch(e=>{
                     DEBUG && console.log("MyfarmInfo 버섯 상태 errroeeor",e.response.status)
                 })
-                    //재배기 안 모든 버섯 가져오기
-                    // axios.get(`${AWS_URL}${MUSHROOM_TYPE}${type}`,{
-                    //     params: {prgId : data.data[0].id }
-                    // }).then(data =>{
-                    //     DEBUG && console.log("MyfarmInfo 버섯 상태 가져오기",data.data.length)
-                    // }).catch(e=>{
-                    //     DEBUG && console.log("MyfarmInfo 버섯 상태 errroeeor",e.response.status)
-                    // })
+
             }).catch(e=>{
                 DEBUG && console.log("MyfarmInfo 프로그램 ID,NAME err",e.response.status)
                 value.setPrgInfo({
@@ -101,22 +112,88 @@ const type = ['growing','complete','whiteflower','harvest']
         console.log(day.today)
         console.log(day.kinokoDay)
 
-        // console.log((day.today.getTime() - day.kinokoDay.getTime() / (1000*60*60*24) ),'일');
+        console.log((day.today - day.kinokoDay / (1000*60*60*24) ),'일');
         
     },[day.kinokoDay])
 
     useEffect(()=>{
-        
-        value.kinokoInfo.kinokosList !== null && (
-            // console.log("버섯상태확인",value.kinokoInfo)
-            value.kinokoInfo.map((data,index)=>(
-                console.log("버섯상태확인",data.kinokosList)
-            ))
+        console.log("=============myfarminfo 버섯 상태=============");
+        console.log("버섯 값 있는지 확인",value.kinokoInfo)
+        //초기화
+        !value.isValue && (
+            value.setKinokoInfo({
+                kinokosList : null,
+                kinokoNumber : {
+                    thisKinoko: [],
+                    getKinoko : [],
+                    endKinoko : [],
+                    witeKinoko : [], //백화고 상태
+                    growingKinoko:[]
+                } 
+            })
         )
-    },[value.kinokoInfo])
+
+        kinokosList !== null && value.isValue && (
+            
+            //자라는 중 , 수확완료, 백화고, 수확
+            //  ['growing','complete','whiteflower','harvest']
+            kinokosList.map((data,index)=>(
+                console.log(data),
+                pushKinoko(data)
+            ))
+              
+              
+        
+        )
+        console.log("=============end=============");
+    },[value.kinokoInfo.kinokosList])
+
+    const pushKinoko = (data) =>{        
+        format(new Date, "yyyy-MM-dd") === format(new Date(data.mr_date), "yyyy-MM-dd") &&  (
+            value.setKinokoInfo({
+                ...value.kinokoInfo,
+                kinokoNumber :{
+                    ...kinokoNumber, 
+                    kinokoNumber: {...kinokoNumber, thisKinoko : kinokoNumber.thisKinoko++}
+                }
+            })
+        )
+        // ,
+        data.mr_status === type[0] ? (
+            value.setKinokoInfo({
+                ...value.kinokoInfo,
+                kinokoNumber :{
+                    ...kinokoNumber, 
+                    kinokoNumber: {...kinokoNumber, growingKinoko : kinokoNumber.growingKinoko++}
+                }
+            })
+        )
+        : data.mr_status === type[1] ? (
+            value.setKinokoInfo({
+                kinokosList : kinokosList,
+                kinokoNumber: {...kinokoNumber, endKinoko : kinokoNumber.endKinoko++}
+            })
+        )
+        :data.mr_status === type[2] ? (
+            value.setKinokoInfo({
+                kinokosList : kinokosList,
+                kinokoNumber: {...kinokoNumber, witeKinoko : kinokoNumber.witeKinoko++}
+            })
+        )
+        :data.mr_status === type[3] ? (
+            value.setKinokoInfo({
+                ...value.kinokoInfo,
+                kinokoNumber: {...kinokoNumber, getKinoko : kinokoNumber.getKinoko++}
+            })
+        )
+        :console.log("no")
+    }
+
 ////////////////////////////////////////////////////////////////
     return(
+        <>
         <div></div>
+        </>
     )
 }
 

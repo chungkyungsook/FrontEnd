@@ -40,10 +40,6 @@ const RouterComponent = (props) => {
     const [isCheck,setIsCheck] = useState(0)
 
     //사용자가 등록한 모든 재배기 정보 가져오기
-    const [userMachines, setUserMachines] = useState({
-
-        machins : null
-    })
     const [prgInfo, setPrgInfo] = useState({
         prg_id : 0,
         name : ''
@@ -53,12 +49,13 @@ const RouterComponent = (props) => {
     const [kinokoInfo, setKinokoInfo] = useState({
         kinokosList : null,
         kinokoNumber : {
-            thisKinoko: 0,
-            getKinoko : 0,
-            endKinoko : 0,
-            witeKinoko : 0 //백화고 상태
+            thisKinoko: [],
+            getKinoko : [],
+            endKinoko : [],
+            witeKinoko : [], //백화고 상태
+            growingKinoko :[]
         } 
-        })
+    })
     
     //변수 한번에 보내기
     const value = {
@@ -88,7 +85,7 @@ const RouterComponent = (props) => {
 ////////////////////////////////////////////////////////////////////////////////////
     return (
         <Router> 
-            <Header setIsOn={setIsOn} isOn={isOn} isValue={isValue} setIsValue={setIsValue} isLogin={isLogin}setIsLogin={setIsLogin} isCheck={isCheck} setIsCheck={setIsCheck}/>
+            <Header setIsOn={setIsOn} isOn={isOn} isValue={isValue} setIsValue={setIsValue} isLogin={isLogin}setIsLogin={setIsLogin} isCheck={isCheck} setIsCheck={setIsCheck} setKinokoInfo={setKinokoInfo}/>
             <Switch>
                 <Route path={HOME} exact 
                 render = { (props)=> <MyFarm {...props} value={value} /> } />

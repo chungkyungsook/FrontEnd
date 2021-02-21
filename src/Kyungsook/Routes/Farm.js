@@ -6,10 +6,16 @@ import axios from 'axios';
 
 import {
   AWS_URL,
-  MUSHROOM_ALL
+  MUSHROOM_ALL,
+  MACHINE_DATA
 } from '../../Util/api'
 
+import {
+  DEBUG
+} from '../../Util/debugging'
 const Farm = (props) => {
+  const {value} = props
+  const {prgInfo} = props.value
 
   //모든 버섯 정보 저장
   const [imgList, setImgList] = useState({
@@ -27,13 +33,12 @@ const Farm = (props) => {
  
   //전체 객체 가져오기
   const getList = ()=>{
-    const url = "dummy/MyFarm.json";
 
     axios.get(`${AWS_URL}${MUSHROOM_ALL}`,{
-      // params: {prgId : data.data[0].id }
+      params: {prgId :  prgInfo.prg_id}
     }).then(data =>{
       console.log("Farm axios getList()");
-      setImgList({...imgList, kinokosList : data.data.kinokoImg})
+      setImgList({...imgList, kinokosList : data.data})
     }).catch( e =>{
       
     })
@@ -41,11 +46,12 @@ const Farm = (props) => {
 
   const onClick = (data) =>{
     console.log("Farm 버섯 객체 누르면 해당 정보 보여주기",data);
-    setKinoko(data)
+    // setKinoko(data)
   }
 
   useEffect(()=>{
     console.log('===========Farm 처음 실행 상태===========');
+   
   },[])
 
   //버섯 상태별로 저장하기
@@ -57,10 +63,10 @@ const Farm = (props) => {
     
     imgList.kinokosList && (
         imgList.kinokosList.map((data,index)=>(
-        numUp(data.status)
+        numUp(data.mr_status)
       ))
     )
-    
+    //
     imgList.kinokosList &&( setImgList({...imgList, kinokoNumber: {...kinokoNumber, allKinoko : imgList.kinokosList.length}}))
     
 
@@ -70,14 +76,17 @@ const Farm = (props) => {
 
   const numUp = (data) =>{
     
-        data === 'grow' ? (
+        data === 'growing' ? (
           setImgList({...imgList, kinokoNumber: {...kinokoNumber, thisKinoko : kinokoNumber.thisKinoko++}})
         ) 
-        : data === 'get' ? (
+        : data === 'harvest' ? (
           setImgList({...imgList, kinokoNumber: {...kinokoNumber, getKinoko : kinokoNumber.getKinoko++}})
         )
-        : data === 'end' ?(
+        : data === 'complete' ?(
           setImgList({...imgList, kinokoNumber: {...kinokoNumber, endKinoko : kinokoNumber.endKinoko++}})
+        )
+        : data === 'whiteflower' ?(
+          setImgList({...imgList, kinokoNumber: {...kinokoNumber, getKinoko : kinokoNumber.getKinoko++}})
         )
         : (console.log('NO'))
     
@@ -85,7 +94,7 @@ const Farm = (props) => {
   return(
       <>
         {/* 선택한 기기 버섯 정보 가져오기 */}
-        <KinokoInfo getList={getList} imgList ={imgList}/>
+        <KinokoInfo value={value} getList={getList} imgList ={imgList}/>
         {/* 버섯 화면에 보이기 -> mock은 test파일 원본은 farmBox */}
         <FarmMock imgList={imgList} kinoko={kinoko} onClick={onClick}/>
       </>

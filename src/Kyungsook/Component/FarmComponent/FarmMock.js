@@ -21,8 +21,6 @@ const FarmMock = ({cookies, imgList,onClick,kinoko}) => {
         //전체 버섯의 정보
         imgList.kinokosList && console.log("FarmMock kinokoLists",imgList.kinokosList,imgList.kinokoNumber);
         console.log(imgList.kinokoNumber);
-        //값 이 들어오고, 해당 버섯의 상태 저장
-        //진행중인 프로젝트 이름 가져오기
 
         
     },[imgList])
@@ -45,7 +43,7 @@ const FarmMock = ({cookies, imgList,onClick,kinoko}) => {
                         imgList.kinokosList && (
                             imgList.kinokosList.map((data,index)=>(
                                 // console.log(data),
-                                data.status !== "end" && <button key={index} onClick={() => onClick(data)}>{data.id}</button>
+                                data.mr_status !== "complete" && <button key={index} onClick={() => onClick(data)}>{data.id}</button>
                             ))
                         )
                     }

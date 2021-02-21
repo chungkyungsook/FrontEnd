@@ -25,10 +25,10 @@ const SwiperImg  = ({kinoko}) => {
     console.log("===================farm SwiperImg===================");
     kinoko && (
       setSlides(
-        kinoko.thumbnail.map((data,index) =>(
+        kinoko.map((data,index) =>(
           setNuber(1),
           <SwiperSlide key={`slide-${index}`} tag="li">
-            <img src={data} alt={`Thumbanil ${data}`}/>
+            <img src={data.mr_imgid} alt={`Thumbanil ${data}`}/>
           </SwiperSlide>
         ))
       ) 
