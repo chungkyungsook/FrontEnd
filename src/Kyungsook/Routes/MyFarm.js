@@ -108,7 +108,7 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
             HEADER_DEBUG && console.log("Myfarm 사용자가 선택한 재배기 ID 실패",e.response.status);
             setIsLoding(true) //선택한 재배기 없으면 로딩 끝내주기
             value.setIsOn({
-                id : 17,
+                id : 0,
                 prgName : "실험중입니다."
             })
         })
@@ -213,21 +213,20 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
         //등록된 버섯 재배기 온도,습도 값 결정해 주기
         console.log("===================end===================="); //선택하면 값이 바뀜
         maching_setting(20,50)
-    },[value.isCheck])
-    useEffect(()=>{
-        machine_list() //전체 파일 가져오기
     },[])
+
     
 
     useEffect(()=>{
-        // machine_list()
-        machine_id()
-        prg_name()
-        mushroom_all() //모든 객체 정보 가져오기
-        start_date() //시작 날짜
-        machine_status()
+        
+            machine_list()
+            machine_id()
+            prg_name()
+            mushroom_all() //모든 객체 정보 가져오기
+            start_date() //시작 날짜
+            machine_status()
 
-    },[machine_list])
+    },[isOk.isDevice,value.isCheck])
     
     
 
@@ -236,21 +235,12 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
         <>
         {
             cookies.get('token') ? (
-                (
-                    isOk.isDevice ? ( //재배기가 있나요? Yse
-                        <MyfarmCss 
-                            value={value} // 사용자 재배기id,name
-                            isLoding={isLoding} //모든 사용 끝나면 보여주기
-                            result2={result2} // 화면 보여줄 값 들
-                            isOk={isOk.isDevice}
-                        />
-                    ):( //재배기 없어요
-                        <>
-                            <div className="LodingText">Loding....</div>
-                            {/* <MyfarmInfo value={value} result={result}/> */}
-                        </>
-                    )
-                )                
+                <MyfarmCss 
+                    value={value} // 사용자 재배기id,name
+                    isLoding={isLoding} //모든 사용 끝나면 보여주기
+                    result2={result2} // 화면 보여줄 값 들
+                    isOk={isOk.isDevice}
+                />
             ) : ( //로그인이 풀렸어요
                 <Redirect to = "Login" />
             )

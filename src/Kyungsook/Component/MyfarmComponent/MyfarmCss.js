@@ -90,7 +90,7 @@ const MyFarmCss = ({value,isLoding,result2,isOk}) => {
             </div>{/* 기기관리 끝*/}
             {/* 해당 user에 등록된 기긱가 없을 때 */}
             { 
-            isLoding ? (isOk === 1 ? <div className="item item4"> 서버에서 오류가 발생했어요</div>  : 
+            isLoding ? 
             ( result2.userDeviceInfo.length === 0 ? 
                     (<div className="item item4"> 재배기를 등록 해 주세요</div> )
                     : (value.isOn.id === 0 ? 
@@ -149,7 +149,7 @@ const MyFarmCss = ({value,isLoding,result2,isOk}) => {
             </>
             )
             
-            ))) : 
+            )) : 
             (<div className="item item4"> Loding...</div> )
             }
         </div>
