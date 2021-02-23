@@ -130,10 +130,10 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
             })
         }).catch(e =>{
             HEADER_DEBUG && console.log("Myfarm 사용자가 선택한 재배기 프로그램 이름 실패",e.response.status);
-            value.setPrgInfo({
-                prg_id : 5,
-                prg_name : "선택한 재배기 프로그램 이름 가져오기 실패...."
-            })
+            // value.setPrgInfo({
+            //     prg_id : 0,
+            //     prg_name : "진행중인 프로그램이 없습니다."
+            // })
         })  
 
         HEADER_DEBUG && console.log("===========Myfarm end사용자가 선택한 재배기 작동 상태 확인===============")
@@ -207,26 +207,31 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
         // cookie상태값 확인하기
         DEBUG && console.log("MyFarm 토큰확인",cookies.get('token'));
         DEBUG && console.log("MyFarm userId 확인",cookies.get('userId'));
-        DEBUG && console.log("MyFarm value 확인", value);
         DEBUG && console.log("MyFarm prgInfo 확인", value.prgInfo);
         DEBUG && console.log("MyFarm isCheck 확인", value.isCheck);
         //등록된 버섯 재배기 온도,습도 값 결정해 주기
         console.log("===================end===================="); //선택하면 값이 바뀜
         maching_setting(20,50)
-    },[])
+    },[cookies,value.prgInfo,value.isCheck])
 
     
+    useEffect(()=>{
+        console.log("리스트 실행 isCheck",value.isCheck);
+        machine_list()
+        machine_id()
+    },[value.isCheck])
 
     useEffect(()=>{
-        
-            machine_list()
-            machine_id()
+        console.log("리스트 다음 실행 ",value.isOn.id,);
+        console.log("myfarm list prgInfo, isdevice",value.prgInfo,isOk.isDevice);
+        if(isOk.isDevice){
             prg_name()
             mushroom_all() //모든 객체 정보 가져오기
             start_date() //시작 날짜
             machine_status()
-
-    },[isOk.isDevice,value.isCheck])
+        }
+        
+    },[isOk.isDevice,value.isOn.id])
     
     
 

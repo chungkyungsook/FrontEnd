@@ -83,10 +83,14 @@ const RouterComponent = (props) => {
 
     useEffect(()=>{
         console.log("===========Router============")
-        console.log(isOn,"값 바뀜");
+        // console.log(isOn,"값 바뀜");
         console.log(isCheck,"isCheck 값 바뀜");
         isCheck === 1 && setIsCheck(0)
-    },[isCheck,isOn])
+    },[isCheck])
+
+    useEffect(()=>{
+        console.log("Router isOn :",isOn);
+    },[isOn])
 
 
 ////////////////////////////////////////////////////////////////////////////////////
