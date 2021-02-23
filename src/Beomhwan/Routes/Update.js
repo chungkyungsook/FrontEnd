@@ -102,6 +102,7 @@ const DrawGraph = styled.div`
 `;
 
 const Update = () => {
+    
     const [data, setData] = useState([{
         Date: '6일차',
         Temperature: 20,
@@ -109,7 +110,7 @@ const Update = () => {
     }]);
 
     function update () {
-        
+            
     }
 
     return (

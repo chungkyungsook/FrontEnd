@@ -10,6 +10,8 @@ const CustomChartListContext = createContext();
 const CustomChartListInfoContext = createContext();
 // 커스텀 차트 기기 아이디 정보
 const UserMachineIdContext = createContext();
+// 커스텀 업데이트 프로그램 아이디 정보
+const CustomUpdatePrgIdContext = createContext();
 
 // chartjs dataset
 const setChartjsDataset = (date, temp, humi, growth) => {
@@ -43,6 +45,7 @@ const setChartjsDataset = (date, temp, humi, growth) => {
 const ChartContext = ({children, machineId}) => {
     const [customChartDataSet, setCustomChartDataSet] = useState([]);
     const [customChartInfo, setCustomChartInfo] = useState([]);
+    const [customUpdateChartInfo, setCustomUpdateChartInfo] = useState({});
     console.log(machineId);
     // const machineIdValue = cookies.get('deviceNumber');
 
@@ -87,6 +90,11 @@ const ChartContext = ({children, machineId}) => {
                 );
             });
         });
+
+        getUpdateChartId().then(res => {
+            setCustomUpdateChartInfo(res);
+        })
+
     },[]);
 
     // 프로그램 리스트 데이터 get
@@ -97,11 +105,25 @@ const ChartContext = ({children, machineId}) => {
         return data;
     }
 
+    async function getUpdateChartId () {
+        let data = await axios.get(`${URL}/api/myfarm/data`, {
+            params: {
+                id: 18
+            }
+        }).then(res => {
+            console.log(res);
+            return res.data;
+        })
+        return data;
+    }
+
     return (
         <CustomChartListInfoContext.Provider value={customChartInfo}>
             <CustomChartListContext.Provider value={customChartDataSet}>
                 <UserMachineIdContext.Provider value={machineId}>
-                    {children}
+                    <CustomUpdatePrgIdContext.Provider value={customUpdateChartInfo}>
+                        {children}
+                    </CustomUpdatePrgIdContext.Provider>
                 </UserMachineIdContext.Provider>
             </CustomChartListContext.Provider>
         </CustomChartListInfoContext.Provider>
@@ -131,6 +153,14 @@ export function useMachineInfo() {
         console.error('기기 정보 없음!');
     return machineinfo;
 };
+
+export function useCustomUpdateInfo() {
+    const CustomUpdateInfo = useContext(CustomUpdatePrgIdContext);
+    console.log(CustomUpdateInfo);
+    if(!CustomUpdateInfo)
+        console.error('업데이트 차트 정보 없음!');
+    return CustomUpdateInfo;
+}
 
 
 
