@@ -9,7 +9,6 @@ const CompareBox = styled.div`
     ${flexAlign};
     width: 100%;
     height: 100%;
-    background-color: mintcream;
     overflow: hidden;
 `;
 
@@ -112,6 +111,20 @@ const CheckedStyle = styled.div`
     height: 10px;
     background-color: aquamarine;
     border-radius: 5px;
+`;
+
+// 선택된 환경이 없을 경우 렌더링될 div
+const NoGraphSelected = styled.div`
+    margin: auto;
+    flex: 0.4;
+    height: 100px;
+    font-size: 1.4em;
+    text-align: center;
+    line-height: 100px;
+    border: 1px solid rgba(0,0,0,0.3);
+    border-radius: 10px;
+    box-shadow: 0 5px 5px rgba(0,0,0,0.4);
+    user-select: none;
 `;
 
 const ChartInstance = ({chartData}) => {
@@ -270,7 +283,9 @@ const ChartSilder = () => {
     return (
         <CompareBox>
         {slideOpacity
-        ? <>
+        ?
+        chart.length > 0 ?
+        <>
         <LeftButton onClick={onLeft}></LeftButton>
         <ChartListBox width={slideInfo.chartSize}>
             <ChartContainer width={slideInfo.width} x={slideInfo.x}>
@@ -293,6 +308,11 @@ const ChartSilder = () => {
         <RightButton onClick={onRight}></RightButton>
         <button onClick={changeComponent}>상세</button>
         </>
+        : 
+        <NoGraphSelected>
+            현재 생성된 커스텀 그래프가 없습니다!
+        </NoGraphSelected>
+
         : <>
         <Compare goSlide={changeComponent} chart={detailChart} />
         </>

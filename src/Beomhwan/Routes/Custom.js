@@ -71,6 +71,7 @@ const CustomGraphStyle = styled.div`
         border: 1px solid black;
     };
     transition: 0.5s;
+    box-shadow: 0 5px 5px rgba(0,0,0,0.4);
 `;
 
 // 커스텀 환경 프로그램 이름
@@ -98,8 +99,9 @@ const CustomButton = styled.button`
     background-color: white;
     position: relative;
     top: 10px;
-    left: 299px;
+    left: 279px;
     user-select: none;
+    box-shadow: 0 5px 5px rgba(0,0,0,0.4);
 `;
 
 const CustomStart = ({onStart, onRemove, prgid}) => {
@@ -121,29 +123,77 @@ const AddMessageBox = styled.div`
     font-size: 1.3em;
 `;
 
+const CardInner = styled.div`
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+`;
+
+const Card = styled.div`
+    width: 520px;
+    height: 440px;
+    ${CardInner}:hover {
+        transform: rotateY(180deg);
+    }
+`;
+
+const CardFront = styled.div`
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+`;
+
+const CardBack = styled.div`
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    &:hover {
+        transform: rotateY(180deg);
+    }
+`;
+
 // 커스텀 컴포넌트
 const Custom = () => {
     const chart = useCustomChartList();
     const chartInfo = useCustomChartInfo();
     const machineId = useMachineInfo();
     const [loading, setLoading] = useState(true);
+    const [customChart, setCustomChart] = useState([]);
     const [modalInfo, setModalInfo] = useState({
         opacity: 0,
         customId: null,
+        titleText: '',
         modalTextfirst: '',
         modalTextsecond: '',
         confirm: ''
     });
 
     useEffect(() => {
+        chart.map((ch, i) => {
+            setCustomChart(cus => cus.concat({
+                prg_id: chartInfo[i].id,
+                prg_name: chartInfo[i].prg_name,
+                data: ch,
+                prg_count: chartInfo[i].prg_count
+            }));
+        });
+
         setTimeout(() => {setLoading(false)}, 1500);
     },[]);
 
     // 커스텀 환경 적용 클릭 시 모달 on 및 텍스트 변경
     const onStart = (prgid) => {
+        console.log(customChart);
+        console.log(prgid);
         setModalInfo({
             opacity: 1,
             customId: prgid,
+            titleText: '주의!',
             modalTextfirst: '한번 적용하면 도중에 취소가 불가능합니다.',
             modalTextsecond: '적용하시겠습니까?',
             confirm: 'start'
@@ -155,6 +205,7 @@ const Custom = () => {
         setModalInfo({
             opacity: 1,
             customId: prgid,
+            titleText: '주의!',
             modalTextfirst: '정말 삭제하시겠습니까?',
             modalTextsecond: '',
             confirm: 'remove'
@@ -172,8 +223,12 @@ const Custom = () => {
                 }).then(response => {
                     console.log(response);
                     setModalInfo({
-                        opacity: 0,
-                        customId: null
+                        ...modalInfo,
+                        opacity: 1,
+                        customId: prgid,
+                        titleText: '',
+                        modalTextfirst: '적용 했습니다.',
+                        modalTextsecond: '프로그램이 종료 될 때까지 프로그램을 바꿀 수 없으니 주의해주세요.'
                     });
                 }).catch(err => {
                     console.error(err);
@@ -184,19 +239,21 @@ const Custom = () => {
                     id: prgid
                 }}).then(response => {
                     console.log(response);
-                    window.location.href = 'http://localhost:3000/setting/custom';
+                    setCustomChart(cu => cu.filter(id => id.prg_id !== prgid));
+                    setModalInfo({
+                        ...modalInfo,
+                        opacity: 1,
+                        customId: prgid,
+                        titleText: '',
+                        modalTextfirst: '삭제 했습니다.',
+                    });
                 }).catch(err => {
                     console.error(err);
                 });
+                
                 break;
             default:
-                setModalInfo({
-                    opacity: 0,
-                    customId: null,
-                    modalTextfirst: '',
-                    modalTextsecond: '',
-                    confirm: ''
-                });
+                return 0;
         }
     };
 
@@ -220,24 +277,24 @@ const Custom = () => {
                 {chart.length === 0
                 ? 
                     <AddMessageBox> 커스텀 환경이 없습니다. '환경 추가'에서 커스텀 환경을 추가해주세요! </AddMessageBox>
-                :   chart.map((ch,index) =>
+                :   customChart.map((ch,index) =>
                         <div key={index}>
-                        <CustomGraphStyle>
-                            <p style={{userSelect: 'none'}}>사용 횟수 : {chartInfo[index].prg_count}</p>
-                                <GraphTitle>- {chartInfo[index].prg_name} -</GraphTitle>
-                            <LineChart chartData={ch}/>
-                            <CustomStart 
-                                onStart={onStart}
-                                onRemove={onRemove} 
-                                prgid={chartInfo[index].id}
-                                macid={machineId} />
-                        </CustomGraphStyle>
+                                <CustomGraphStyle>
+                                <GraphTitle>- {ch.prg_name} -</GraphTitle>
+                                <LineChart chartData={ch.data}/>
+                                <p style={{userSelect: 'none'}}>사용 횟수 : {ch.prg_count}</p>
+                                <CustomStart 
+                                    onStart={onStart}
+                                    onRemove={onRemove} 
+                                    prgid={ch.prg_id}
+                                    macid={machineId} />
+                            </CustomGraphStyle>
                         </div>
                     )
                 }
                 
                 <Modal opacity={modalInfo.opacity} customId={modalInfo.customId} onClose={onClose} width='500' height='200'>
-                    <ModalTitleBox>주의!</ModalTitleBox>
+                    <ModalTitleBox>{modalInfo.titleText}</ModalTitleBox>
                     <ModalTextBox>{modalInfo.modalTextfirst}</ModalTextBox>
                     <ModalTextBox>{modalInfo.modalTextsecond}</ModalTextBox>
                     <ModalFooter>

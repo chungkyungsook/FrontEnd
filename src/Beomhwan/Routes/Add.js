@@ -250,8 +250,8 @@ export const CustomChart = ({Data, titleMsg}) => {
 const ButtonBox = ({Add, Remove}) => {
     return (
         <>
-            <button onClick={Add}>1일 추가</button>
-            <button onClick={Remove}>1일 빼기</button>
+            <Button onClick={Add}>1일 추가</Button>
+            <Button onClick={Remove}>1일 빼기</Button>
         </>
     );
 }
@@ -275,19 +275,6 @@ const SelectedCustom = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-`;
-
-// 선택된 환경이 없을 경우 렌더링될 div
-const NoGraphSelected = styled.div`
-    margin: auto;
-    flex: 0.4;
-    height: 100px;
-    font-size: 1.4em;
-    text-align: center;
-    line-height: 100px;
-    border: 1px solid rgba(0,0,0,0.3);
-    border-radius: 10px;
-    box-shadow: 0 5px 5px rgba(0,0,0,0.4);
 `;
 
 // 그래프 설정 박스
@@ -320,6 +307,7 @@ const CheckMenu = styled.div`
     flex: 1;
     border: 1px solid gray;
     padding: 10px;
+    font-size: 0.9em;
 `;
 
 // 날짜, 물주기, 햇빛 세팅 div
@@ -365,6 +353,17 @@ const LogBox = styled.div`
     font-size: 12px;
 `;
 
+const Button = styled.button`
+    margin-left: 10px;
+    width: 100px;
+    height: 40px;
+    background-color: white;
+    &:hover {
+        background-color: beige;
+    }
+    transition-duration: 0.4s;
+`;
+
 // ---------------------------------------------------------
 
 class MyError extends Error {
@@ -377,7 +376,7 @@ class MyError extends Error {
 // ---------------------------------------------------------
 const Add = () => {
     const [loading, setLoading] = useState(true);
-    const date = useRef(5);
+    const date = useRef(6);
     const [chartData, setChartData] = useState([
         {
             Temperature: 20,
@@ -459,7 +458,7 @@ const Add = () => {
 
             axios.post(`${URL}/api/farm/custom`, 
                 {
-                    machineId: machineId,
+                    machineId: machineId, // machineId = 1
                     water: count.waterCount,
                     sunshine: count.sunCount,
                     period: chartData.length,
@@ -569,7 +568,7 @@ const Add = () => {
                 </CheckBox>
                 <SettingName>
                     <InputPrgName onChange={onChange} />
-                    <button onClick={Save}>저장</button>
+                    <Button onClick={Save}>저장</Button>
                 </SettingName>
                 </SettingBox>
             </CustomAddDiv>
