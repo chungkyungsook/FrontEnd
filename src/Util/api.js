@@ -27,11 +27,6 @@ export const DATE = '/api/farm/startdate'
 //200,404
 export const MACHINE_ID = '/api/myfarm/id'
 
-//해당 기기의 번호와 이름을 가져온다.
-//get param
-//200 404
-//id  (id, prg_name)
-export const MACHINE_DATA = '/api/myfarm/data'
 //////////////////////////////////////////////////버섯의 상태 정보 API
 //해당 프로그램의 모든 버섯 정보들을 가져옴
 //prgId

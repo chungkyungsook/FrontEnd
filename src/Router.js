@@ -23,8 +23,17 @@ import MyFarm from './Kyungsook/Routes/MyFarm' ;
 import SettingRouter from './Beomhwan/SettingRouter' ;
 
 //쿠키
-import { Cookies, withCookies } from 'react-cookie';
+import { withCookies } from 'react-cookie';
 
+import axios from 'axios';
+import {
+    AWS_URL,
+    LOGOUT,
+}from './Util/api'
+
+import{
+    LOGOUT_DEBUG,
+}from './Util/debugging'
 const RouterComponent = (props) => {
 /////////////////////////////////////////////////////////////////////////////////// *변수
     //선택된 재배기 번호와 재배기 이름 저장 -> id : 0이면 선택된 재배기 없음
@@ -32,33 +41,16 @@ const RouterComponent = (props) => {
         id : 0,
         prgName : '',
     })
-
     //선택된 재배기 on/off 상태 확인 
     const [isValue, setIsValue] = useState('')
 
     //선택한 기기 정보 바꾸기 위해서 사용됨
     const [isCheck,setIsCheck] = useState(0)
 
-    //사용자가 등록한 모든 재배기 정보 가져오기
-    const [userMachines, setUserMachines] = useState({
-
-        machins : null
-    })
     const [prgInfo, setPrgInfo] = useState({
         prg_id : 0,
-        name : ''
+        prg_name : ''
     })
-    
-    //모든 버섯 정보 저장
-    const [kinokoInfo, setKinokoInfo] = useState({
-        kinokosList : null,
-        kinokoNumber : {
-            thisKinoko: 0,
-            getKinoko : 0,
-            endKinoko : 0,
-            witeKinoko : 0 //백화고 상태
-        } 
-        })
     
     //변수 한번에 보내기
     const value = {
@@ -66,32 +58,48 @@ const RouterComponent = (props) => {
         isValue, // 재배기 작동 상태
         setIsCheck,isCheck, //재배기 선택 여부 판단 1
         prgInfo, setPrgInfo,
-        kinokoInfo, setKinokoInfo //버섯 정보 저장(상태 포함)
+        setIsValue,
     }
 
     //로그인 확인 하기
-    const [isLogin, setIsLogin] = useState(props.cookies.get('token' && true))
+    const [isLogin, setIsLogin] = useState(props.cookies.get('token') && true)
 /////////////////////////////////////////////////////////////////////////////////// *이후 
-    
-    useEffect(()=>{
-        console.log("===========Router 처음 실행============")
-    },[])
+    //logout 버튼 클릭
+    const logoutOnClick = () =>{
+        
+        
+        axios.put(`${AWS_URL}${LOGOUT}`,{
+            token: props.cookies.get('token')
+        }).then((data) => {
+            LOGOUT_DEBUG && console.log(data,'로그아웃 성공')
+            props.cookies.remove('token')
+            props.cookies.remove('userId')
+        }).catch((e) => {
+            LOGOUT_DEBUG && console.log(e.response.status)
+            LOGOUT_DEBUG && console.log(e.response.data,"로그아웃 실패")
+        })
+        
+    } 
 
     useEffect(()=>{
-        console.log('Router in isOn',isOn.id);
-        console.log('Router in isOn prgName',isOn.prgName);
-        console.log('Router in isOn isValue',isValue);
-        console.log('Router in isOn isValue',prgInfo);
-        // setIsOn({...isOn,id : isOn.id})
-    },[isOn.id,isOn.prgName,isValue,prgInfo])
+        console.log("===========Router============")
+        // console.log(isOn,"값 바뀜");
+        console.log(isCheck,"isCheck 값 바뀜");
+        isCheck === 1 && setIsCheck(0)
+    },[isCheck])
+
+    useEffect(()=>{
+        console.log("Router isOn :",isOn);
+    },[isOn])
+
 
 ////////////////////////////////////////////////////////////////////////////////////
     return (
         <Router> 
-            <Header setIsOn={setIsOn} isOn={isOn} isValue={isValue} setIsValue={setIsValue} isLogin={isLogin}setIsLogin={setIsLogin} isCheck={isCheck} setIsCheck={setIsCheck}/>
+            <Header setIsOn={setIsOn} isOn={isOn} isValue={isValue} setIsValue={setIsValue} isLogin={isLogin}setIsLogin={setIsLogin} isCheck={isCheck} setIsCheck={setIsCheck} logoutOnClick={logoutOnClick}/>
             <Switch>
                 <Route path={HOME} exact 
-                render = { (props)=> <MyFarm {...props} value={value} /> } />
+                render = { (props)=> <MyFarm {...props} value={value} logoutOnClick={logoutOnClick}/> } />
 
                 <Route path={LOGIN} 
                 render ={ (props) => <Login {...props} setIsLogin={setIsLogin} />}

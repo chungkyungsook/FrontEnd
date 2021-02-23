@@ -34,7 +34,7 @@ const Login = ({cookies,setIsLogin}) => {
 
     //user정보 저장하기
     const onClickLogin = async(res)=>{
-        console.log("로그인 버튼 클릭",JSON.stringify(res))
+        LOGIN_DEBUG && console.log("로그인 버튼 클릭",JSON.stringify(res))
         //kakao정보 받아 오기 -> 필요한 정보, userId, toekn, email
         setUserKakaoInfo({
             userId : JSON.stringify(res.profile.id),
@@ -60,14 +60,14 @@ const Login = ({cookies,setIsLogin}) => {
     useEffect(()=>{
         //로그인 여부 확인해주기 -> token값 
         //token값이 없으면 모든 쿠키 값 지워주기
-        console.log("===================Login 페이지 처음 화면===================");
+        LOGIN_DEBUG && console.log("===================Login 페이지 처음 화면===================");
         LOGIN_DEBUG && console.log("Login cookies token",cookies.get('token'))
         LOGIN_DEBUG && console.log("Login userId",cookies.get('userId'))
     },[])
 
     //카카오 로그인후 회원가입 여부및 로그인 해주기
     useEffect(()=>{
-        console.log("=========== Login 카카오 로그인 =======");
+        LOGIN_DEBUG && console.log("=========== Login 카카오 로그인 =======");
         LOGIN_DEBUG && console.log("Login cookies token",cookies.get('token'))
         login !== 0 && 
         (login === 1 ? 

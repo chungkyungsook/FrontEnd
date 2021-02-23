@@ -36,7 +36,7 @@ import title from './assets/HeaderTitle.png' ;
 import { withCookies } from 'react-cookie';
 
 // setIsOn -> 선택한 기기 정보 넣기 
-const Header = ({ location, cookies, setIsOn,isOn,isValue, setIsValue,isLogin,setIsLogin,isCheck,setIsCheck}) => {
+const Header = ({ location, cookies,isOn,isValue,logoutOnClick}) => {
 /////////////////////////////////////////////////////////////////////////////////////
     // 메뉴 데이터
     const menuData = [ 
@@ -66,106 +66,13 @@ const Header = ({ location, cookies, setIsOn,isOn,isValue, setIsValue,isLogin,se
             FARM 
             : pathname.includes(SETTING) ? SETTING : pathname ;  
 //----------------------------------------------------------------------
-    const [token, setToken] = useState('')
+    // const [token, setToken] = useState('')
 
 /////////////////////////////////////////////////////////////////////////////////////
     useEffect(()=>{
-        console.log("================== Header 처음 실행 화면 ==================");
-
+        HEADER_DEBUG && console.log("================== Header 처음 실행 화면 ==================");
+        HEADER_DEBUG && console.log("================== end ==================");
     },[])
-
-    useEffect(()=>{
-        console.log("================== Header실행 화면 ==================");
-        HEADER_DEBUG && console.log("token",cookies.get('token'));
-        HEADER_DEBUG && console.log("Header isLogin 로그인 성공 여부:",isLogin);
-        !isLogin && cookies.get('token') && setIsLogin(true)
-        //token값이 있고 로그인 성공했으면 선택된 기기 있는 지 확인 해 주기 
-        //-> 필요한 정보 : token,
-        isLogin && (
-            axios.get(`${AWS_URL}${MACHINE_ID}`,{
-                params : {
-                    token : cookies.get('token')
-                }
-            }).then(data => {
-                //재배기 이름 추후 추가할 예정입니다.
-                HEADER_DEBUG && console.log("Header 사용자가 선택한 재배기 ID 성공",parseInt(data.data.id))
-
-                setIsOn({
-                    id : parseInt(data.data.id),
-                    prgName : data.data.name
-                })
-
-                //재배개 작동 상태 가져오기 isValue
-                axios.get(`${AWS_URL}${MACHINE_STATUS}`,{
-                    params :  {id : JSON.stringify(data.data.id)}
-                }).then(data =>{
-                    HEADER_DEBUG && console.log("Header 사용자가 선택한 재배기 작동 상태 성공",data.data)
-                    setIsValue(data.data)
-                }).catch(e =>{
-                    HEADER_DEBUG && console.log("Header 사용자가 선택한 재배기 작동 상태 실패",e.response.status);
-                })  
-
-            }).catch(e =>{
-                HEADER_DEBUG && console.log("Header 사용자가 선택한 재배기 ID 실패",e.response.status);
-            })
-        )
-
-        isCheck === 1 && (
-            axios.get(`${AWS_URL}${MACHINE_ID}`,{
-                params : {
-                    token : cookies.get('token')
-                }
-            }).then(data => {
-                //재배기 이름 추후 추가할 예정입니다.
-                HEADER_DEBUG && console.log("Header 사용자가 선택한 재배기 ID 성공",parseInt(data.data.id))
-
-                setIsOn({
-                    id : parseInt(data.data.id),
-                    prgName : data.data.name
-                })
-
-                //재배개 작동 상태 가져오기 isValue
-                axios.get(`${AWS_URL}${MACHINE_STATUS}`,{
-                    params :  {id : JSON.stringify(data.data.id)}
-                }).then(data =>{
-                    HEADER_DEBUG && console.log("Header 사용자가 선택한 재배기 작동 상태 성공",data.data)
-                    setIsValue(data.data)
-                    setIsCheck(0) // 선택한 재배기 작동 상태 끝 로딩 화면을 위한 설정
-                }).catch(e =>{
-                    HEADER_DEBUG && console.log("Header 사용자가 선택한 재배기 작동 상태 실패",e.response.status);
-                })  
-
-            }).catch(e =>{
-                e.response.status === '404' && (console.log('값 바뀜'))
-                HEADER_DEBUG && console.log("Header 사용자가 선택한 재배기 ID 실패",e.response.status);
-                               
-            })
-        )
-    },[isLogin,isCheck])
-
-/////////////////////////////////////////////////////////////////////////////////////
-
-    // token값 있는지 확인하기 -> token값 없으면 로그인 페이지로 이동
-    // props.cookies.get('token') ? ( console.log("쿠키 있음")) : return (<Redirect to="login" />)
-
-    //logout 버튼 클릭
-    const logoutOnClick = () =>{
-        console.log("header logout token ",token)
-        
-        axios.put(`${AWS_URL}${LOGOUT}`,{
-            token: cookies.get('token')
-        }).then((data) => {
-            LOGOUT_DEBUG && console.log(data,'로그아웃 성공')
-            cookies.remove('token')
-            cookies.remove('userId')
-        }).catch((e) => {
-            LOGOUT_DEBUG && console.log(e.response.status)
-            LOGOUT_DEBUG && console.log(e.response.data,"로그아웃 실패")
-        })
-        
-    } 
-    
-
    
     return (
         <>
