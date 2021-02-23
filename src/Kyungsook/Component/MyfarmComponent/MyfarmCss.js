@@ -112,10 +112,11 @@ const MyFarmCss = ({value,isLoding,result2,isOk}) => {
             (
                 <>
                 <div className="item item2">
+                
                 <div className = "box1 kinokoImgBox">
-                    <div>
-                        <input className = "kinokoName" />
-                        <button>이름 바꾸기</button>
+                <div>
+                    <div>                
+                        {result2.kinokoName !== '' ? (<div>{result2.kinokoName}</div>) : (<><input className = "kinokoName" /> <button>이름 바꾸기</button></>)}
                     </div>
                     {/* 버섯 이미지 */}
                     <div className = "kinokoImg">
@@ -123,7 +124,9 @@ const MyFarmCss = ({value,isLoding,result2,isOk}) => {
                     </div>
                     <div className = "kinokoBtn" onClick={imgChang}>{
                        img ? "뒤" : "앞" 
-                    } </div>
+                    }</div>
+                    </div>
+                    {result2.kinokoName !== '' ?  (<button className="change_name">이름 바꾸기</button>) : null}
                 </div>
                 {/* 온도,습도 */}
                 {/* value: 온도,습도 별 값  */}

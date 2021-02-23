@@ -12,6 +12,8 @@ import {
     DATE, //재배기 실행 날짜
     MACHINE_ID, //재배기 id가져오기 
     MACHINE_STATUS, //재배기 상태 가졍괴
+    MUSHROOM_NAME, //버섯 배지이름 가져오기
+    MUSHROOM_NAME_CHANGE //버섯 배지이름 변경
 } from '../../Util/api.js'
 
 import {
@@ -55,6 +57,11 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
 
     //버섯 배지 이름 저장
     const [kinokoName, setKinokoName] = useState('')
+
+    //MyfarmCss
+    const result2 = {
+        userDeviceInfo,setting,day,days,kinokoName
+    }
     
 ///////////////////////////////////////////////////////////////////////    실행 함수
     
@@ -154,10 +161,18 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
             {temperature : temperature, humidity : humidity}
         )
     }
-    //배지 이름 가져오기
+    //버섯 배지 이름 가져오기
     async function mushroom_name (){
         HEADER_DEBUG && console.log("==========6. Myfarm 배지 이름 가져오기==========")
-        // axios.get()
+        await axios.get(`${AWS_URL}${MUSHROOM_NAME}`,{
+            params : {id : parseInt(value.prgInfo.prg_id)}
+        }).then(data =>{
+            console.log("이름 가져오기 성공",data.data)
+            setKinokoName(data.data)
+        }).catch(e =>{
+            console.log(e);
+        })
+        
     }
 
     //배지 이름 바꾸기
@@ -198,15 +213,8 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
         HEADER_DEBUG && console.log("===========Myfarm end사용자가 선택한 재배기 작동 상태 확인===============")
     };
 //////////////////////////////////////////////////////////////////////////////////////////////////////변수
-    //myfarmInfo 
-    const result = {
-        // machine_list,machine_id,machine_status,setIsLoding
-        machine_list,machine_id,machine_status,prg_name,mushroom_all,start_date
-    }
-    //MyfarmCss
-    const result2 = {
-        userDeviceInfo,setting,day,days
-    }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////// useEffect
     useEffect(()=>{
         maching_setting(20,50) //재배기 온도 습도 작동 환경
     },[])
@@ -223,8 +231,10 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
         console.log("===================end===================="); //선택하면 값이 바뀜
         if(value.prgInfo.prg_id !== 0){ //진행중인 프로그램 이름이 있으면
             start_date() //시작 날짜
+            mushroom_name() // 버섯 배지 이름 가져오기
         }else{
             setDays(0)
+            setKinokoName('')
         }
         
     },[cookies,value.prgInfo,value.isCheck])
@@ -243,7 +253,6 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
         if(isOk.isDevice){
             prg_name()
             mushroom_all() //모든 객체 정보 가져오기
-            // start_date() //시작 날짜
             machine_status()
         }
         

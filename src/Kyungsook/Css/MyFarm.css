@@ -107,6 +107,9 @@
   flex: 0.1;
   margin: 4px;
 }
+/* 버섯 이름 바꾸기  */
+.change_name {
+}
 
 /* 온,습도 */
 .environment {

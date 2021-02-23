@@ -30,13 +30,20 @@ export const MACHINE_ID = '/api/myfarm/id'
 //////////////////////////////////////////////////버섯의 상태 정보 API
 //해당 프로그램의 모든 버섯 정보들을 가져옴
 //prgId
-export const MUSHROOM_ALL = '/api/mushroom'
-
 //해당 프로그램의 모든 버섯 정보들을 가져옴
 //prgId
 ///api/mushroom/{type}
-export const MUSHROOM_TYPE = '/api/mushroom/'
+export const MUSHROOM_ALL = '/api/mushroom'
 
+//배지 이름 가져오기
+//id : 프로그램id
+//param 200 4004
+export const MUSHROOM_NAME = '/api/farm/compostname'
+
+//배지 이름 변경하기
+//id : (int) 유저 id, name : (string)이름
+//json 200	403
+export const MUSHROOM_NAME_CHANGE = '/api/farm/compostname'
 /////////////////////////////////////////////////로그인 관련된 API
 //회원가입
 //post ,json
