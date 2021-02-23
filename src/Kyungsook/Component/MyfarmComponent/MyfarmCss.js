@@ -71,6 +71,19 @@ const MyFarmCss = ({value,isLoding,result2,isOk}) => {
 
     },[value.isOn.id])
 
+    useEffect(()=>{
+        console.log("오늘은 며칠?", result2.day.today, result2.day.kinokoDay);
+        if(result2.day.today !== '' ){
+        //     var test = (result2.result2.day.today.getTime() - result2.result2.day.kinokoDay.getTime()) / (1000*60*60*24)
+        //     console.log(test,"일");
+        let test = new Date(result2.day.today)
+        let test2 = new Date(result2.day.kinokoDay)
+
+        console.log((test.getTime() - test2.getTime()) / (1000*60*60*24));
+        } 
+        
+    },[result2.day])   
+
     return (
         <div className="container">
             
@@ -134,7 +147,7 @@ const MyFarmCss = ({value,isLoding,result2,isOk}) => {
                         <div>진행중인 프로그램 이름</div>
                         <div>{value.prgInfo.prg_name}</div>
                         <br/>
-                        <div>{result2.day && result2.day.today}</div>
+                        <div>{result2.day && result2.days}일차</div>
                     </div>
                     <div className = "smailInfo">
                         <h1>오늘은 버섯이 {0}개 자랐습니다.</h1>

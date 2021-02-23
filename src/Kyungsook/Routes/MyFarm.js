@@ -23,6 +23,7 @@ import MyfarmInfo from '../Component/MyfarmComponent/MyfarmInfo'; //정보 값 �
 import MyfarmCss from '../Component/MyfarmComponent/MyfarmCss';   // 해당 페이지 보여주기
 
 import {format} from 'date-fns';
+import { da } from 'date-fns/locale';
 const MyFarm = ({cookies,value,logoutOnClick}) => {
 ///////////////////////////////////////////////////////////////////////   변수
     //user 기기 정보 저장
@@ -35,6 +36,8 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
         today :  '',
         kinokoDay : ''
     })
+    //일차 
+    const [days, setDays] = useState('')
 
     // 재배기 온도, 습도 값 저장
     const [setting, setSetting] = useState({
@@ -100,7 +103,7 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
             
             //사용자가 작동시킨 재배기 id, 재배기 이름 입력
             value.setIsOn({
-                id : data.data.id,
+                id : JSON.stringify(data.data.id),
                 prgName : data.data.name
             })
             
@@ -125,15 +128,15 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
         }).then(data =>{
             HEADER_DEBUG && console.log("Myfarm 사용자가 선택한 재배기 프로그램 이름 성공",data.data)
             value.setPrgInfo({
-                prg_id : parseInt(data.data[0].id),
+                prg_id : data.data[0].id,
                 prg_name : data.data[0].prg_name
             })
         }).catch(e =>{
             HEADER_DEBUG && console.log("Myfarm 사용자가 선택한 재배기 프로그램 이름 실패",e.response.status);
-            // value.setPrgInfo({
-            //     prg_id : 0,
-            //     prg_name : "진행중인 프로그램이 없습니다."
-            // })
+            value.setPrgInfo({
+                prg_id : 0,
+                prg_name : "진행중인 프로그램이 없습니다."
+            })
         })  
 
         HEADER_DEBUG && console.log("===========Myfarm end사용자가 선택한 재배기 작동 상태 확인===============")
@@ -168,7 +171,11 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
         await axios.get(`${AWS_URL}${DATE}`,{
             params: {id : value.prgInfo.prg_id}
         }).then(data =>{
-            console.log("프로그램 시작 날짜",data.data);
+            console.log("프로그램 시작 날짜",data.data)
+            setDay({
+                today : format(new Date, "yyyy-MM-dd"),
+                kinokoDay : format(new Date(data.data), "yyyy-MM-dd")
+            })
         }).catch(e=>{
             console.log("프로그램 시작 날짜 가져오기 실패",e.response.status,value.prgInfo);
         })
@@ -198,8 +205,11 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
     }
     //MyfarmCss
     const result2 = {
-        userDeviceInfo,setting,day
+        userDeviceInfo,setting,day,days
     }
+    useEffect(()=>{
+        maching_setting(20,50) //재배기 온도 습도 작동 환경
+    },[])
 
     //한번만 실행하기
     useEffect(()=>{
@@ -211,11 +221,17 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
         DEBUG && console.log("MyFarm isCheck 확인", value.isCheck);
         //등록된 버섯 재배기 온도,습도 값 결정해 주기
         console.log("===================end===================="); //선택하면 값이 바뀜
-        maching_setting(20,50)
+        if(value.prgInfo.prg_id !== 0){ //진행중인 프로그램 이름이 있으면
+            start_date() //시작 날짜
+        }else{
+            setDays(0)
+        }
+        
     },[cookies,value.prgInfo,value.isCheck])
 
     
     useEffect(()=>{
+        setIsLoding(false)
         console.log("리스트 실행 isCheck",value.isCheck);
         machine_list()
         machine_id()
@@ -227,14 +243,24 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
         if(isOk.isDevice){
             prg_name()
             mushroom_all() //모든 객체 정보 가져오기
-            start_date() //시작 날짜
+            // start_date() //시작 날짜
             machine_status()
         }
         
     },[isOk.isDevice,value.isOn.id])
     
     
-
+    useEffect(()=>{
+        // console.log("오늘은 며칠?",day.today, day.kinokoDay);
+        if(result2.day.today !== '' ){
+        
+        let test = new Date(day.today)
+        let test2 = new Date(day.kinokoDay)
+        setDays((test.getTime() - test2.getTime()) / (1000*60*60*24))
+        
+        } 
+        
+    },[day])   
     
     return (
         <>
