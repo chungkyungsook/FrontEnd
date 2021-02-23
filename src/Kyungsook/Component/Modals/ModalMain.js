@@ -78,8 +78,8 @@ const ModalMain = (props)=> {
                 console.log("status",data.status)
             })
             .catch(e=>{
-                    e.response.status === 401 && setOpenStr({...openStr,isKey:2})
-                    e.response.status === 404 && setOpenStr({...openStr,isKey:3})
+                    
+                    e.response.status === 400 && setOpenStr({...openStr,isKey:2})
             })
         }else if(name === 'pwd'){ //기기 비밀번호 확인
             axios.get(`http://${url}/api/pin/auth`,{
@@ -162,7 +162,7 @@ const ModalMain = (props)=> {
                 <div>
                     <input  name='keyOnchange' className='modalbtn' size='30' placeholder='재배기 핀 번호를 입력해주세요' onChange={onChange}/>
                     <button name='key' type="button" onClick={onClickBtn} >확인</button>
-                    {<div  className='text' >{ isKey===1 ? '*성공했습니다.' : isKey===2 ? '*이미 등록된 번호입니다.' : isKey===3 && "*등록된 번호가 없습니다."}</div>}
+                    {<div  className='text' >{ isKey===1 ? '*성공했습니다.' : isKey===2 && '*샐패 했습니다..' }</div>}
                     
                     <input name='pwdOnchange' className='modalbtn' size='30' placeholder='재배기 비밀번호를 입력해주세요'onChange={onChange} />
                     <button name='pwd' type="button" onClick={onClickBtn}>확인</button>

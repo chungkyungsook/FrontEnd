@@ -8,6 +8,7 @@ export const LOGIN_DEBUG = false;
 
 //Header
     export const  HEADER_DEBUG = true;
+    // export const  HEADER_DEBUG = false;
 
     // logout
     // export const LOGOUT_DEBUG = true

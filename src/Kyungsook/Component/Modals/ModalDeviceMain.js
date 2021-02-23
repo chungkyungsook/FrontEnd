@@ -30,37 +30,44 @@ const ModalDeviceMain = (props)=> {
         const {name} = e.target
 
         if(name === 'ChoiceDevice'){ //기기 선택
-            
-            axios.put(`http://${url}/api/myfarm/select`,{
-                    id : parseInt(JSON.stringify(userInfo.user)),
-                    token : props.cookies.get('token')
+            onSelect()    
+        }else if(name === 'DeleteDevice'){ //삭제
+            console.log("삭제 버튼 클릭")
+            console.log("user",userInfo.user.id)
+            onDelete()
+        }
+    }
+
+    async  function onSelect () {
+
+        await axios.put(`http://${url}/api/myfarm/select`,{
+                id : (JSON.stringify(userInfo.user)),
+                token : props.cookies.get('token')
             }).then(data => {
                 console.log("ModalDevieMain 선택한 기기 통신 성공",data);
                 //선택한 기기 정보 바꾸기 위해서 사용됨
                 value.setIsCheck(1)
             }).catch(e =>{
                 console.log("ModalDeviceMain 선택한 기기 error",e.error);
-            }).finally(closeModal())            
-
-            
-        }else if(name === 'DeleteDevice'){ //삭제
-            console.log("삭제 버튼 클릭")
-            console.log("user",userInfo.user.id)
-            axios.delete(`http://${url}/api/myfarm`,{
-                params: {
-                    id : parseInt(JSON.stringify(userInfo.user))
-                }
-            }).then(d=>{
-                closeModal()
-                //페이지 새롭게 로딩
-                window.location.replace("/")
-            }).catch(e=>{
-                console.error(e)
-            })
-        }
+            }).finally(closeModal())        
     }
 
-    
+    async  function onDelete () {
+
+        await axios.delete(`http://${url}/api/myfarm`,{
+            params: {
+                id : parseInt(JSON.stringify(userInfo.user))
+            }
+        }).then(d=>{
+            closeModal()
+            //페이지 새롭게 로딩
+            window.location.replace("/")
+        }).catch(e=>{
+            console.error(e)
+        })
+    }
+
+
     return(
         <div>
             {/* 등록된 기기 출력 */}
