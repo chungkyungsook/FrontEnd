@@ -163,7 +163,7 @@ const Compare = ({goSlide, chart}) => {
     useEffect(() => {
         setSlideInfo({...slideInfo, width:  responsiveWidth * chart.length});
 
-        chart.map(async (ch,index) => {
+        chart.map(async (ch,i) => {
             await getKinoko(ch.prg_id)
             .then(data => {
                 let chart = {
@@ -248,3 +248,4 @@ const Compare = ({goSlide, chart}) => {
 }
 
 export default Compare;
+export {DescriptionBox, ExtraInfoBox, CardFlex, CardBox, CardContent, CardTitle, TitleBox};

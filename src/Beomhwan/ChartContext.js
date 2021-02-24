@@ -14,7 +14,7 @@ const UserMachineIdContext = createContext();
 const CustomUpdatePrgIdContext = createContext();
 
 // chartjs dataset
-const setChartjsDataset = (date, temp, humi, growth) => {
+export const setChartjsDataset = (date, temp, humi, growth) => {
     let chartdata = {
         labels: date,
         datasets: [
@@ -46,7 +46,6 @@ const ChartContext = ({children, machineId}) => {
     const [customChartDataSet, setCustomChartDataSet] = useState([]);
     const [customChartInfo, setCustomChartInfo] = useState([]);
     const [customUpdateChartInfo, setCustomUpdateChartInfo] = useState({});
-    console.log(machineId);
     // const machineIdValue = cookies.get('deviceNumber');
 
     // const machineIdValue = getMachineId();
@@ -91,29 +90,54 @@ const ChartContext = ({children, machineId}) => {
             });
         });
 
-        getUpdateChartId().then(res => {
-            setCustomUpdateChartInfo(res);
+        getUpdateChartId(18).then(res => {
+            setCustomUpdateChartInfo(res[0]);
+            return res;
+        }).then(prgInfo => {
+            console.log('prgInfo : ', prgInfo)
+            let prgType = 'custom';
+            getUpdate(prgInfo[0].id, prgType).then(res => {
+                setCustomUpdateChartInfo({...prgInfo[0], res, date: res.humidity.length})
+                console.log(customUpdateChartInfo);
+            });
         })
-
     },[]);
 
     // 프로그램 리스트 데이터 get
     const getData = async () => {
         let data = await axios.get(`${URL}/api/farm/custom/list`);
+
         console.log(data);
 
         return data;
     }
 
-    async function getUpdateChartId () {
+    // 현재 프로그램 id, 이름 get
+    async function getUpdateChartId (machineId) {
         let data = await axios.get(`${URL}/api/myfarm/data`, {
             params: {
-                id: 18
+                id: 18 // machineId
             }
         }).then(res => {
             console.log(res);
             return res.data;
+        }).catch(err => {
+            console.log(err);
         })
+        return data;
+    }
+
+    // 현재 프로그램 차트 정보 get
+    async function getUpdate (prgId, prgType) {
+        let data = await axios.get('http://54.210.105.132/api/farm/data', {
+            params: {
+                id: prgId,
+                type: prgType
+            }
+        }).then(res => {
+            return res.data;
+        });
+        
         return data;
     }
 
@@ -148,7 +172,6 @@ export function useCustomChartInfo() {
 
 export function useMachineInfo() {
     const machineinfo = useContext(UserMachineIdContext);
-    console.log(machineinfo);
     if(!machineinfo)
         console.error('기기 정보 없음!');
     return machineinfo;
@@ -157,8 +180,7 @@ export function useMachineInfo() {
 export function useCustomUpdateInfo() {
     const CustomUpdateInfo = useContext(CustomUpdatePrgIdContext);
     console.log(CustomUpdateInfo);
-    if(!CustomUpdateInfo)
-        console.error('업데이트 차트 정보 없음!');
+
     return CustomUpdateInfo;
 }
 

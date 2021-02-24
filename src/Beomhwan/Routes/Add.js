@@ -440,7 +440,7 @@ const Add = () => {
             let temp = [];
             let humi = [];
             chartData.map(ch => {
-                if(ch.Temperature > 35) {
+                if(ch.Temperature > 27) {
                     throw new MyError('TempErrorUp');
                 }
                 else if(ch.Temperature < 17) {
@@ -472,7 +472,7 @@ const Add = () => {
             }).catch(e => {console.error(e);});
         } catch(e) {
             if(e.name === 'TempErrorUp') {
-                alert('온도 제한 35도를 넘었습니다!');
+                alert('온도 제한 27도를 넘었습니다!');
             } 
             else if(e.name === 'TempErrorDown') {
                 alert('온도 제한 17도보다 낮습니다!');
@@ -577,4 +577,4 @@ const Add = () => {
     );  
 };
 
-export {Add, SettingBox, CheckBox, CheckMenu, Menu2, SetDate, SetWaterSun, SettingName};
+export {Add, SettingBox, Select, Button, LogBox, CheckBox, CheckMenu, Menu2, SetDate, SetWaterSun, SettingName};
