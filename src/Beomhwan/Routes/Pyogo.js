@@ -26,7 +26,13 @@ const data = {
 };
 
 const options = {
+    response: true,
     maintainAspectRatio: false,
+    tooltips: {
+        mode: 'index',
+        intersect: false,
+        position: 'nearest'
+    },
     scales: {
         yAxes: [
             {

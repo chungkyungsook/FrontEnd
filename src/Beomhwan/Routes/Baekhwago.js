@@ -32,7 +32,13 @@ const BaekhwagoData = {
 
 // 백화고차트 옵션
 const BaekhwagoOptions = {
+    response: true,
     maintainAspectRatio: false,
+    tooltips: {
+        mode: 'index',
+        intersect: false,
+        position: 'nearest'
+    },
     scales: {
         yAxes: [{
             ticks:{

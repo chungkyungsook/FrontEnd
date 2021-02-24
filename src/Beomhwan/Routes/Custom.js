@@ -123,40 +123,6 @@ const AddMessageBox = styled.div`
     font-size: 1.3em;
 `;
 
-const CardInner = styled.div`
-    position: relative;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    transition: transform 0.6s;
-    transform-style: preserve-3d;
-`;
-
-const Card = styled.div`
-    width: 520px;
-    height: 440px;
-    ${CardInner}:hover {
-        transform: rotateY(180deg);
-    }
-`;
-
-const CardFront = styled.div`
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-`;
-
-const CardBack = styled.div`
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    &:hover {
-        transform: rotateY(180deg);
-    }
-`;
-
 // 커스텀 컴포넌트
 const Custom = () => {
     const chart = useCustomChartList();
@@ -218,7 +184,7 @@ const Custom = () => {
             case 'start':
                 //커스텀 프로그램 적용 put 코드
                 axios.put(`${URL}/api/myfarm/program`, {
-                    id: 1,
+                    id: macid,
                     prgId: prgid
                 }).then(response => {
                     console.log(response);
