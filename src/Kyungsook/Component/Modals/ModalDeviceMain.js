@@ -38,6 +38,7 @@ const ModalDeviceMain = (props)=> {
         }
     }
 
+    //저장
     async  function onSelect () {
 
         await axios.put(`http://${url}/api/myfarm/select`,{
@@ -51,7 +52,7 @@ const ModalDeviceMain = (props)=> {
                 console.log("ModalDeviceMain 선택한 기기 error",e.error);
             }).finally(closeModal())        
     }
-
+    //삭제
     async  function onDelete () {
 
         await axios.delete(`http://${url}/api/myfarm`,{

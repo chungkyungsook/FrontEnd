@@ -51,6 +51,12 @@ const RouterComponent = (props) => {
         prg_id : 0,
         prg_name : ''
     })
+    //버섯 객체 저장하기
+    const [kinokos, setKinokos] = useState({
+        growing : null,
+        harvest : null,
+        whiteflower : null
+    })
     
     //변수 한번에 보내기
     const value = {
@@ -59,6 +65,7 @@ const RouterComponent = (props) => {
         setIsCheck,isCheck, //재배기 선택 여부 판단 1
         prgInfo, setPrgInfo,
         setIsValue,
+        setKinokos, kinokos
     }
 
     //로그인 확인 하기
@@ -90,7 +97,8 @@ const RouterComponent = (props) => {
 
     useEffect(()=>{
         console.log("Router isOn :",isOn);
-    },[isOn])
+        console.log("Router kinokos :",kinokos);
+    },[isOn,kinokos])
 
 
 ////////////////////////////////////////////////////////////////////////////////////
