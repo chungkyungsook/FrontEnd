@@ -167,7 +167,7 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
     //4번  버섯 재배기 안 모든 버섯 객체 정보 저장
     async function mushroom_all () {
         HEADER_DEBUG && console.log("==========4. Myfarm 모든 버섯 객체 저장하기==========")
-        
+        let temp = []
         await axios.get(`${AWS_URL}${MUSHROOM_ALL}/${kinokoState[0]}`,{
             params : {prgId : value.prgInfo.prg_id}
         }).then(data =>{               
@@ -299,33 +299,10 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
         maching_setting(20,50) //재배기 온도 습도 작동 환경
     },[])
 
-    
-
-    //한번만 실행하기
-    useEffect(()=>{
-        console.log("====================MyFarm 처음 실행 화면 ===================");
-        // cookie상태값 확인하기
-        DEBUG && console.log("MyFarm prgInfo 확인", value.prgInfo);
-        DEBUG && console.log("MyFarm isCheck 확인", value.isCheck);
-        //등록된 버섯 재배기 온도,습도 값 결정해 주기
-        console.log("===================end===================="); //선택하면 값이 바뀜
-        //진행중인 프로그램 이름이 있으면
-        if(value.prgInfo.prg_id !== 0){ 
-            start_date() //시작 날짜
-            mushroom_name() // 버섯 배지 이름 가져오기
-            mushroom_all()
-        }else{
-            setDays(0)
-            setKinokoName('')
-        }
-        
-    },[value.prgInfo,value.isCheck])
-
     //화면에 보여줄 모든 버섯, 재비기 , 재배기 상태 가져오기
     useEffect(()=>{
         setIsLoding(false)
         console.log("리스트 실행 isCheck",value.isCheck);
-
         machine_list()
         machine_id()
     },[value.isCheck])
@@ -339,6 +316,29 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
         }
         
     },[isOk.isDevice,value.isOn.id])
+
+    //한번만 실행하기
+    useEffect(()=>{
+        console.log("====================MyFarm 처음 실행 화면 ===================");
+        // cookie상태값 확인하기
+        DEBUG && console.log("MyFarm prgInfo 확인", value.prgInfo);
+        DEBUG && console.log("MyFarm isCheck 확인", value.isCheck);
+        //등록된 버섯 재배기 온도,습도 값 결정해 주기
+        console.log("===================end===================="); //선택하면 값이 바뀜
+        //진행중인 프로그램 이름이 있으면
+        if(value.prgInfo.prg_id !== 0){ 
+            start_date() //시작 날짜
+            mushroom_name() // 버섯 배지 이름 가져오기    
+            mushroom_all()
+        }else{ //진행중인 프로그램 없으면 모든 값 초기화 해주기
+            setDays(0)
+            setKinokoName('')
+            setGrowing(null)
+            setHarvest(null)
+            setWhiteflower(null)
+        }
+        
+    },[value.prgInfo,value.isCheck])
     
     useEffect(()=>{ //날짜 계산해서 일차 구하기
         // console.log("오늘은 며칠?",day.today, day.kinokoDay);
