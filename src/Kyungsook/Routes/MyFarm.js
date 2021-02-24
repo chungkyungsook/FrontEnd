@@ -26,6 +26,7 @@ import MyfarmCss from '../Component/MyfarmComponent/MyfarmCss';   // 해당 페�
 
 import {format} from 'date-fns';
 import { da } from 'date-fns/locale';
+import { concat } from '@amcharts/amcharts4/.internal/core/utils/Iterator';
 const MyFarm = ({cookies,value,logoutOnClick}) => {
 ///////////////////////////////////////////////////////////////////////   변수
     //user 기기 정보 저장
@@ -64,11 +65,17 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
     //배지 이름 변경을 위한 변수들
     const [mushroomName, setMushroomName] = useState('')
 
-    const kinokoState =  ['growing', 'harvest', 'whiteflower']
+    //버섯 객체 저장하기
+    
+    const [growing, setGrowing] = useState(null)
+    const [harvest, setHarvest] = useState(null)
+    const [whiteflower, setWhiteflower] = useState(null)
+
+    const kinokoState = ['growing', 'harvest', 'whiteflower']
 
     //MyfarmCss
     const result2 = {
-        userDeviceInfo,setting,day,days,kinokoName,isNameChange
+        userDeviceInfo,setting,day,days,kinokoName,isNameChange,growing,harvest,whiteflower
     }
 ///////////////////////////////////////////////////////////////////////    실행 함수
     
@@ -158,23 +165,43 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
     }
 
     //4번  버섯 재배기 안 모든 버섯 객체 정보 저장
-    function mushroom_all () {
+    async function mushroom_all () {
         HEADER_DEBUG && console.log("==========4. Myfarm 모든 버섯 객체 저장하기==========")
-        kinokoState.map(data=>(
-            mushroom_set(data)
-        )) 
-    }
-    //버섯 정보 저장하기
-    async function mushroom_set(state){
-        await axios.get(`${AWS_URL}${MUSHROOM_ALL}/${state}`,{
+        
+        await axios.get(`${AWS_URL}${MUSHROOM_ALL}/${kinokoState[0]}`,{
             params : {prgId : value.prgInfo.prg_id}
-        }).then(data =>{
-            console.log("모든 버섯 정보 가져오기 성공",data.data)
-            
+        }).then(data =>{               
+            console.log(data.data);
+            setGrowing(  
+                data.data
+            )
+        }).catch(e =>{
+            console.log("모든 버섯 정보 가져오기 실패",e);
+        })
+
+        await axios.get(`${AWS_URL}${MUSHROOM_ALL}/${kinokoState[1]}`,{
+            params : {prgId : value.prgInfo.prg_id}
+        }).then(data =>{               
+            console.log(data.data);
+            setHarvest(  
+                 data.data
+            )
+        }).catch(e =>{
+            console.log("모든 버섯 정보 가져오기 실패",e);
+        })
+
+        await axios.get(`${AWS_URL}${MUSHROOM_ALL}/${kinokoState[2]}`,{
+            params : {prgId : value.prgInfo.prg_id}
+        }).then(data =>{               
+            console.log(data.data);
+            setWhiteflower(  
+                  data.data
+            )
         }).catch(e =>{
             console.log("모든 버섯 정보 가져오기 실패",e);
         })
     }
+
     //5.재배기 온도,습도 값 바꾸기
     async function maching_setting (temperature,humidity){
         setSetting(
@@ -209,7 +236,7 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
                 kinokoDay : format(new Date(data.data), "yyyy-MM-dd")
             })
         }).catch(e=>{
-            console.log("프로그램 시작 날짜 가져오기 실패");
+            console.log("프로그램 시작 날짜 가져오기 실패",e.response.status,value.prgInfo);
         })
 
     }
@@ -272,12 +299,12 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
         maching_setting(20,50) //재배기 온도 습도 작동 환경
     },[])
 
+    
+
     //한번만 실행하기
     useEffect(()=>{
         console.log("====================MyFarm 처음 실행 화면 ===================");
         // cookie상태값 확인하기
-        DEBUG && console.log("MyFarm 토큰확인",cookies.get('token'));
-        DEBUG && console.log("MyFarm userId 확인",cookies.get('userId'));
         DEBUG && console.log("MyFarm prgInfo 확인", value.prgInfo);
         DEBUG && console.log("MyFarm isCheck 확인", value.isCheck);
         //등록된 버섯 재배기 온도,습도 값 결정해 주기
@@ -287,14 +314,12 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
             start_date() //시작 날짜
             mushroom_name() // 버섯 배지 이름 가져오기
             mushroom_all()
-            
-
         }else{
             setDays(0)
             setKinokoName('')
         }
         
-    },[cookies,value.prgInfo,value.isCheck])
+    },[value.prgInfo,value.isCheck])
 
     //화면에 보여줄 모든 버섯, 재비기 , 재배기 상태 가져오기
     useEffect(()=>{
@@ -310,7 +335,6 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
         console.log("myfarm list prgInfo, isdevice",value.prgInfo,isOk.isDevice);
         if(isOk.isDevice){
             prg_name()
-            mushroom_all() //모든 객체 정보 가져오기
             machine_status()
         }
         
