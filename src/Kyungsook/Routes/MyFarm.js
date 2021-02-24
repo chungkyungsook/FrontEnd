@@ -209,7 +209,7 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
                 kinokoDay : format(new Date(data.data), "yyyy-MM-dd")
             })
         }).catch(e=>{
-            console.log("프로그램 시작 날짜 가져오기 실패",e.response.status,value.prgInfo);
+            console.log("프로그램 시작 날짜 가져오기 실패");
         })
 
     }
