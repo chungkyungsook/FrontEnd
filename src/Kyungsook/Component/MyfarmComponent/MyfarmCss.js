@@ -129,7 +129,7 @@ const MyFarmCss = ({value,isLoding,result2,isOk,onClickChangeName,onChange}) => 
                         { result2.isNameChange ? (<div>{result2.kinokoName}</div>) 
                         : (
                         <>
-                            <input placeholder={value.prgInfo.prg_id !== 0 ? "이름을 입력해 주세요" : "프로그램이 없으면 이름을 바꿀수 없어요"}  onChange={onChange}/> 
+                            <input style={{width: '262px'}} placeholder={value.prgInfo.prg_id !== 0 ? "이름을 입력해 주세요" : "프로그램이 없으면 이름을 바꿀수 없어요"}  onChange={onChange}/> 
                             <button name="changeName" onClick={onClickChangeName}>이름 바꾸기</button>
                         </>)}
                     </div>

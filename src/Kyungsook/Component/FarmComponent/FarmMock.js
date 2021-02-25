@@ -77,7 +77,7 @@ const FarmMock = ({cookies,onClick,view}) => {
                 <Item2>
                     <ProjectName><Text>진행 중인 프로젝트</Text></ProjectName>
                     <GrpBox>
-                        {/* <ProgressChart /> */}
+                        <ProgressChart />
                     </GrpBox>
                 </Item2>
                 
@@ -305,7 +305,8 @@ const InfoBoxs  = styled.div`
 `;
 //
 const InfoBox  = styled.div`
-    flex-basis: 45%;
+    /* flex-basis: 45%; */
+    flex: inherit;
     background: rgb(145, 163, 119,0.8);
     margin: 7px;
 `;
