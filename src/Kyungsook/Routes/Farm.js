@@ -112,6 +112,7 @@ const Farm = ({cookies,value}) => {
     //마지막. 재배기 작동 상태  isValue -> 제일 마지막에 실행 isLoding -> true 화면 보이기    
   useEffect(()=>{
     console.log('===========Farm 처음 실행 상태===========');
+    console.log('===========end===========');
     // mushroom_all()
   },[])
 
