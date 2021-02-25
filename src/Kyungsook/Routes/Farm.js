@@ -27,10 +27,18 @@ const Farm = ({cookies,value}) => {
   const [complete, setComplete] = useState([])
   const [kinokoList, setKinokoList] = useState(null)
 
+  //로딩 화면 대기
   const [loding, setLoding] = useState(false)
 
+  //버섯 상태별
   const kinokoState = ['growing', 'harvest', 'whiteflower', 'complete']
-  
+
+  //버섯 선택 유무 판단
+  const [name, setName] = useState(null)
+  const kinokoOnClick = (e) =>{
+    console.log(e.target.id)
+    setName(e.target.id)
+  }
 
   const onClick = (data) =>{
     console.log("Farm 버섯 객체 누르면 해당 정보 보여주기",data);
@@ -96,6 +104,8 @@ const Farm = ({cookies,value}) => {
           setLoding(true)
       }).catch(e =>{
           console.log("수확한 버섯 정보 가져오기 실패",e);
+          alert('아직 정보가 없어요..')
+          setLoding(1) // 해당 데이터가 없으면 myfarm페이지로 이동
       })
 
     }
@@ -127,7 +137,9 @@ const Farm = ({cookies,value}) => {
     whiteflower,
     complete, 
     kinokoList, 
-    kinoko
+    kinoko,
+    kinokoOnClick,
+    name
   }
   
   
@@ -137,7 +149,7 @@ const Farm = ({cookies,value}) => {
         {/* 선택한 기기 버섯 정보 가져오기 */}
         <KinokoInfo />
         {/* 버섯 화면에 보이기 -> mock은 test파일 원본은 farmBox */}
-        { loding ? (<FarmMock  view={view} onClick={onClick}/>) : (<div>LODING....</div>)}
+        { loding === 1 ? (<Redirect to="/"/> ): (loding ? (<FarmMock  view={view} onClick={onClick}/>) : (<div>LODING....</div>))}
         
       </>
   )  

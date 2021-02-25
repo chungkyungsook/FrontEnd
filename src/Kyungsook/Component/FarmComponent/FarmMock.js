@@ -57,11 +57,11 @@ const FarmMock = ({cookies,onClick,view}) => {
                                 // console.log(data),
                                 
                                 data.mr_status === "whiteflower" ? 
-                                (<KinokoBtn key={index} onClick={() => onClick(data)}>{data.id}</KinokoBtn>)
+                                (<KinokoBtn view={view.name} name={data.mr_status} key={index} onClick={() => onClick(data)}>{data.id}</KinokoBtn>)
                                  : data.mr_status === "harvest" ? 
-                                    (<KinokoBtn key={index} onClick={() => onClick(data)}>{data.id}</KinokoBtn> )
+                                    (<KinokoBtn view={view.name} name={data.mr_status} key={index} onClick={() => onClick(data)}>{data.id}</KinokoBtn> )
                                     : data.mr_status === "growing" ? 
-                                    (<KinokoBtn key={index} onClick={() => onClick(data)}>{data.id}</KinokoBtn> )
+                                    (<KinokoBtn view={view.name} name={data.mr_status} key={index} onClick={() => onClick(data)}>{data.id}</KinokoBtn> )
                                     : null
                                 
                             ))
@@ -84,19 +84,19 @@ const FarmMock = ({cookies,onClick,view}) => {
                 <Item3>
 
                     <Item4>
-                        <NumBox>
+                        <NumBox id="growing" onClick={view.kinokoOnClick}>
                             성장중인 버섯 갯수
                             <KinokoInfoNumber>{view.growing.length}</KinokoInfoNumber>
                         </NumBox>
-                        <NumBox>
+                        <NumBox >
                             오늘 자라난 버섯 갯수
                             <KinokoInfoNumber>{number && number.length}</KinokoInfoNumber>
                         </NumBox>
-                        <NumBox>
+                        <NumBox id="harvest" onClick={view.kinokoOnClick}>
                             수확 가능한 버섯 갯수
                             <KinokoInfoNumber>{view.harvest.length}</KinokoInfoNumber>
                         </NumBox>
-                        <NumBox>
+                        <NumBox id="whiteflower" onClick={view.kinokoOnClick}>
                             백화고 버섯 갯수
                             <KinokoInfoNumber>{view.whiteflower.length}</KinokoInfoNumber>
                         </NumBox>
@@ -263,7 +263,8 @@ const NumBox  = styled.div`
     background : #dddd;
 
     &:hover{
-        background : rgb(145, 163, 119);
+        
+        background : ${props => props.id && 'rgb(145, 163, 119)' }
     }
 `;
 
@@ -311,5 +312,7 @@ const InfoBox  = styled.div`
 
 const KinokoBtn = styled.button`
     padding: 3px 11px;
+    background : ${props => props.name === props.view && 'rgb(145, 163, 119)'  };
+    color : ${props => props.name === props.view && 'white'  };
 `;
 export default withCookies(FarmMock) ;
