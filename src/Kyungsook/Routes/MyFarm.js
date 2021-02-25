@@ -72,7 +72,11 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
     const [whiteflower, setWhiteflower] = useState([])
 
     const kinokoState = ['growing', 'harvest', 'whiteflower']
-
+    const temp = {
+        setGrowing,
+        setHarvest,
+        setWhiteflower
+    }
     //MyfarmCss
     const result2 = {
         userDeviceInfo,setting,day,days,kinokoName,isNameChange,growing,harvest,whiteflower
@@ -380,6 +384,7 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
                     isOk={isOk.isDevice}
                     onClickChangeName={onClickChangeName} //이름 바꾸기
                     onChange={onChange}
+                    temp= {temp}
                 />
             ) : ( //로그인이 풀렸어요
                 <Redirect to = "Login" />

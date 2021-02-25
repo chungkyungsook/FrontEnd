@@ -19,7 +19,7 @@ import {
 
 import { format } from 'date-fns';
 
-const MyFarmCss = ({value,isLoding,result2,isOk,onClickChangeName,onChange}) => {
+const MyFarmCss = ({value,isLoding,result2,isOk,onClickChangeName,onChange,temp}) => {
     
     //선택하 기기 정보 저장
     const [userInfo, setUserInfo] = useState({
@@ -93,6 +93,14 @@ const MyFarmCss = ({value,isLoding,result2,isOk,onClickChangeName,onChange}) => 
         } 
         
     },[result2.day])   
+
+    useEffect(()=>{
+        if(value.prgInfo.prg_id === 0 ){
+            temp.setGrowing([])
+            temp.setHarvest([])
+            temp.setWhiteflower([])
+        }
+    },[value.prgInfo.prg_id])
 
     return (
         <div className="container">

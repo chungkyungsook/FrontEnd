@@ -151,7 +151,7 @@ const Farm = ({cookies,value}) => {
         <KinokoInfo />
         {/* 버섯 화면에 보이기 -> mock은 test파일 원본은 farmBox */}
         {/* { loding === 1 ? (<Redirect to="/"/> ): (loding ? (<FarmMock  view={view} onClick={onClick}/>) : (<div>LODING....</div>))} */}
-        { loding ? (<FarmMock  view={view} onClick={onClick}/>) : (<div>LODING....</div>)}
+        { loding ? (<FarmMock value={value} view={view} onClick={onClick}/>) : (<div>LODING....</div>)}
         
       </>
   )  
