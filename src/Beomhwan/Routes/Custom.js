@@ -61,6 +61,7 @@ const CustomBox = styled.div`
 
 // 커스텀 환경 프로그램 그래프
 const CustomGraphStyle = styled.div`
+    border-radius: 5px;
     margin: 2vw 0 2vw 2vw;
     width: 480px;
     height: auto;
@@ -72,6 +73,7 @@ const CustomGraphStyle = styled.div`
     };
     transition: 0.5s;
     box-shadow: 0 5px 5px rgba(0,0,0,0.4);
+    background-color: white;
 `;
 
 // 커스텀 환경 프로그램 이름
@@ -180,11 +182,12 @@ const Custom = () => {
 
     // 시작 삭제 클릭 시 모달 설정
     const CustomModalFunction = (macid, prgid) => {
+        console.log(macid);
         switch(modalInfo.confirm) {
             case 'start':
                 //커스텀 프로그램 적용 put 코드
                 axios.put(`${URL}/api/myfarm/program`, {
-                    id: macid,
+                    id: 1, //macid
                     prgId: prgid
                 }).then(response => {
                     console.log(response);

@@ -1,4 +1,4 @@
-import React from 'react' ;
+import React, {useEffect} from 'react' ;
 import { Route, Redirect } from 'react-router-dom' ;
 import styled from 'styled-components' ;
 import ChartContext from './ChartContext';
@@ -23,6 +23,7 @@ import {Add} from './Routes/Add' ;
 import Update from './Routes/Update' ;
 
 const Conatiner = styled.div`
+    background-color: rgb(246,246,244);
     margin: 0;
     display: flex;
     width: 100vw - 185px;
@@ -33,11 +34,23 @@ const TemplateContainer = styled.div`
     width: 100%;
 `;
 
-const SettingRouter = ({location, cookies, value}) => {
+// 기기 아이디 확인 후 없으면 이동
+function machineIdCheck(machineId, history) {
+    if(machineId === 0) {
+        alert('기기를 선택해주세요!');
+        history.push('/');
+    }
+}
+
+const SettingRouter = ({location, cookies, value, history}) => {
     const isLoginCheck = cookies.get('token');
     const {pathname} = location;
 
     console.log(value);
+
+    useEffect(() => {
+        return () => {machineIdCheck(value.isOn.id, history)}
+    },[]);
 
     return (
         <>

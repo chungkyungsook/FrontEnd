@@ -27,16 +27,17 @@ const Ul = styled.ul`
 const Li = styled.li`
     font-size: 2vh;
     text-align: center;
-    border: 1px solid gray;
+    border: 2px solid rgba(160,156,128,0.9);
     width: 15vh;
     height: 15vh;
     margin: 1rem;
     line-height: 15vh;
     border-radius: 15vh;
-    cursor: pointer;    
+    cursor: pointer;
     &:hover {
-        background: beige;
-        border: 1px solid beige;
+        background: rgba(160,156,128,0.9);
+        border: 2px solid beige;
+        color: white;
     }
     transition: 0.5s;
     user-select: none;
@@ -53,27 +54,27 @@ const SideMenu = ({pathname}) => {
         <Container>
             <Ul>
                 <LinkStyled to={SETTING}>
-                    <Li style={pathname === '/setting' ? {background: 'beige', border: '1px solid beige'} : {}}>
+                    <Li style={pathname === '/setting' ? {background: 'rgba(160,156,128,0.9)', color: 'white'} : {}}>
                         표고버섯
                     </Li>
                 </LinkStyled>
                 <LinkStyled to={SETTING + BAEKHWAGO}>
-                    <Li style={pathname === '/setting/baekhwago' ? {background: 'beige', border: '1px solid beige'} : {}}>
+                    <Li style={pathname === '/setting/baekhwago' ? {background: 'rgba(160,156,128,0.9)', color: 'white'} : {}}>
                         백화고
                     </Li>
                 </LinkStyled>
                 <LinkStyled to={SETTING + CUSTOM}>
-                    <Li style={pathname === '/setting/custom' ? {background: 'beige', border: '1px solid beige'} : {}}>
+                    <Li style={pathname === '/setting/custom' ? {background: 'rgba(160,156,128,0.9)', color: 'white'} : {}}>
                         커스텀
                     </Li>
                 </LinkStyled>
                 <LinkStyled to={SETTING + SETTING_ADD}>
-                    <Li style={pathname === '/setting/add' ? {background: 'beige', border: '1px solid beige'} : {}}>
+                    <Li style={pathname === '/setting/add' ? {background: 'rgba(160,156,128,0.9)', color: 'white'} : {}}>
                         환경 추가
                     </Li>
                 </LinkStyled>
                 <LinkStyled to={SETTING + SETTING_UPDATE}>
-                    <Li style={pathname === '/setting/update' ? {background: 'beige', border: '1px solid beige'} : {}}>
+                    <Li style={pathname === '/setting/update' ? {background: 'rgba(160,156,128,0.9)', color: 'white'} : {}}>
                         환경 업데이트
                     </Li>
                 </LinkStyled>

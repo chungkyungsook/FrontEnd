@@ -72,29 +72,25 @@ const options = {
 };
 
 const LeftButton = styled.button`
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    border-radius: 20px;
-    left: 365px;
-    top: 195px;
+    background-color: white;
+    font-size: 1.4em;
+    width: 60px;
+    height: 60px;
+    border-radius: 30px;
     &:focus{
         outline: none;
     }
-    z-index: 10;
 `;
 
 const RightButton = styled.button`
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    border-radius: 20px;
-    right: 195px;
-    top: 195px;
+    background-color: white;
+    font-size: 1.4em;
+    width: 60px;
+    height: 60px;
+    border-radius: 30px;
     &:focus{
         outline: none;
     }
-    z-index: 10;
 `;
 
 const RadioButton = styled.div`
@@ -208,7 +204,7 @@ const ChartSilder = () => {
             });
         }
         // ~ 1079 => 1개씩
-        else{
+        else {
             console.log('down');
             setSlideInfo({
                 ...slideInfo,
@@ -286,7 +282,6 @@ const ChartSilder = () => {
         ?
         chart.length > 0 ?
         <>
-        <LeftButton onClick={onLeft}></LeftButton>
         <ChartListBox width={slideInfo.chartSize}>
             <ChartContainer width={slideInfo.width} x={slideInfo.x}>
                 {chart.map((ch, index) => 
@@ -305,7 +300,8 @@ const ChartSilder = () => {
                 )}
             </ChartContainer>
         </ChartListBox>
-        <RightButton onClick={onRight}></RightButton>
+        <LeftButton onClick={onLeft}>{'<'}</LeftButton>
+        <RightButton onClick={onRight}>{'>'}</RightButton>
         <button onClick={changeComponent}>상세</button>
         </>
         : 

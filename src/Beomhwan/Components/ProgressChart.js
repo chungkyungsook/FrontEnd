@@ -5,8 +5,10 @@ import * as am4plugins_bullets from '@amcharts/amcharts4/plugins/bullets';
 import am4themes_animated from '@amcharts/amcharts4/themes/animated';
 import axios from 'axios';
 import styled from 'styled-components';
+import {withCookies} from 'react-cookie';
 
-const ProgressChart = () => {
+const ProgressChart = ({cookies}) => {
+    console.log(cookies);
     console.log(window.location.pathname);
     const [loading, setLoading] = useState(true);
     const [axiosData, setAxiosData] = useState({
@@ -24,23 +26,25 @@ const ProgressChart = () => {
 
         await axios.get('http://54.210.105.132/api/myfarm/data', {
             params: {
-                id: 18 // 기기 id로 바꿔주고 나중에 시스템 갖춰졌을 때 기기 id setting
+                id: 1 // 기기 id로 바꿔주고 나중에 시스템 갖춰졌을 때 기기 id setting
             }
         }).then(response => {
             obj.prg_name = response.data[0].prg_name;
             obj.prg_id = response.data[0].id
         });
+
         await axios.get('http://54.210.105.132/api/myfarm/data/hour', {
             params: {
                 prgId: obj.prg_id, // 프로그램 id
             }
-        }).then(response => {
-            console.log(response);
+        }).then(async response => {
+            console.log('progressChart : ', response);
             let count = 0;
             response.data.temperature.map((da,index) => {
                 // date 제한
-                let a = new Date(da.date).getDate();
-                    if(new Date(da.date).getHours() === 0 && a < 13) {
+                let a = new Date(da.date);
+                if(a < new Date()) {
+                    if(new Date(da.date).getHours() === 0) {
                         obj.chartData.push({
                             Date: new Date(da.date),
                             Temp: da.value,
@@ -56,15 +60,34 @@ const ProgressChart = () => {
                             Humi: response.data.humidity[index].value,
                         });
                     }
+                }
+            })
+            await axios.get('http://54.210.105.132/api/farm/data', {
+                params: {
+                    id: obj.prg_id,
+                    type: 'custom',
+                }
+            }).then(res => {
+                console.log(res.data);
+                res.data.humidity.map((ch,i) => {
+                    if(new Date(ch.setting_date) > new Date()) {
+                        obj.chartData.push({
+                            Date: new Date(ch.setting_date),
+                            Temp: res.data.temperature[i].setting_value,
+                            Humi: ch.setting_value
+                        })
+                    }
                 })
             })
+        })
         
         console.dir(obj);
         return obj;
     }
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         chartRef.current = am4core.create('progressChart', am4charts.XYChart);
+        chartRef.current.dataSource.reloadFrequency = 4000;
         getData().then(value => {
             setAxiosData({
                 prg_name: value.prg_name,
@@ -79,7 +102,7 @@ const ProgressChart = () => {
             let title = chartRef.current.titles.create();
             title.text = axiosData.prg_name;
             title.fontSize = 20;
-            title.tooltipText = "남은 일자는 회색입니다~";
+            title.tooltipText = "당일데이터는 1시간 단위로 측정 중입니다.";
             
             // chart data 삽입
             chartRef.current.data = axiosData.chartData;
@@ -158,16 +181,12 @@ const ProgressChart = () => {
 
             console.log(chartRef);
         });
-
         setTimeout(() => {setLoading(false)}, 2000);
-        return () => {chartRef.current.dispose()};
     }, [loading]);
 
     return (
-        <>
         <ProgressBox ref={chartRef} id="progressChart">
         </ProgressBox>
-        </>
     );
 }
 
@@ -176,4 +195,4 @@ const ProgressBox = styled.div`
     height: 100%;
 `;
 
-export default ProgressChart;
+export default withCookies(ProgressChart);

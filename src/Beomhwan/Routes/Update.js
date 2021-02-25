@@ -264,7 +264,7 @@ const Update = ({cookies}) => {
                                 </Description.CardBox>
                                 <Description.CardBox>
                                     <Description.CardTitle>총 재배일</Description.CardTitle>
-                                    <Description.CardContent>{}일차</Description.CardContent>
+                                    <Description.CardContent>{updateChartInfo.date}일차</Description.CardContent>
                                 </Description.CardBox>
                             </Description.CardFlex>
                             <Description.ExtraInfoBox>

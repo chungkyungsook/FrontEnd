@@ -72,6 +72,8 @@ const CardFlex = styled.div`
 `;
 
 const CardBox = styled.div`
+    background-color: white;
+    border-radius: 10px;
     width: 170px;
     height: 150px;
     border: 1px solid gray;
