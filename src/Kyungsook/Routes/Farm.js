@@ -9,115 +9,136 @@ import axios from 'axios';
 import {
   AWS_URL,
   MUSHROOM_ALL, //모든 버섯 상태 가져오기
-  
+  MACHINE_ID,
+  PRG_NAME,
+  MACHINE_STATUS
 } from '../../Util/api.js'
+import { tr } from 'date-fns/locale';
 const Farm = ({cookies,value}) => {
   
-  //모든 버섯 정보 저장
-  const [imgList, setImgList] = useState({
-    kinokosList : null,
-    kinokoNumber : {
-      allKinoko : 0,
-      thisKinoko: 0,
-      getKinoko : 0,
-      endKinoko : 0
-    }
-  })
-  const {kinokoNumber} = imgList
+
   //선택한 버섯 정보 저장
   const [kinoko,setKinoko] = useState(null)
 
-      
+  //버섯 객체 정보 담기
   const [growing, setGrowing] = useState([])
   const [harvest, setHarvest] = useState([])
   const [whiteflower, setWhiteflower] = useState([])
   const [complete, setComplete] = useState([])
+  const [kinokoList, setKinokoList] = useState(null)
+
+  const [loding, setLoding] = useState(false)
 
   const kinokoState = ['growing', 'harvest', 'whiteflower', 'complete']
   
-  const veiew = {
-    growing, harvest, whiteflower, complete
-  }
-    //4번  버섯 재배기 안 모든 버섯 객체 정보 저장
-  //   const mushroom_all = ()=> {
-  //     console.log("==========4. Myfarm 모든 버섯 객체 저장하기==========")
-  //     let temp = []
-  //     axios.get(`${AWS_URL}${MUSHROOM_ALL}/${kinokoState[0]}`,{
-  //         params : {prgId : value.prgInfo.prg_id}
-  //     }).then(data =>{               
-  //         console.log(data.data);
-  //         setGrowing(  
-  //             data.data
-  //         )
-  //     }).catch(e =>{
-  //         console.log("모든 버섯 정보 가져오기 실패",e);
-  //     })
-
-  //     axios.get(`${AWS_URL}${MUSHROOM_ALL}/${kinokoState[1]}`,{
-  //         params : {prgId : value.prgInfo.prg_id}
-  //     }).then(data =>{               
-  //         console.log(data.data);
-  //         setHarvest(  
-  //               data.data
-  //         )
-  //     }).catch(e =>{
-  //         console.log("모든 버섯 정보 가져오기 실패",e);
-  //     })
-
-  //     axios.get(`${AWS_URL}${MUSHROOM_ALL}/${kinokoState[2]}`,{
-  //         params : {prgId : value.prgInfo.prg_id}
-  //     }).then(data =>{               
-  //         console.log(data.data);
-  //         setWhiteflower(  
-  //               data.data
-  //         )
-  //     }).catch(e =>{
-  //         console.log("모든 버섯 정보 가져오기 실패",e);
-  //     })
-
-  //     axios.get(`${AWS_URL}${MUSHROOM_ALL}/${kinokoState[3]}`,{
-  //       params : {prgId : value.prgInfo.prg_id}
-  //     }).then(data =>{               
-  //         console.log(data.data);
-  //         setComplete(  
-  //               data.data
-  //         )
-  //     }).catch(e =>{
-  //         console.log("모든 버섯 정보 가져오기 실패",e);
-  //     })
-  // }
-
-  const mushroom_all = () =>{
-      
-      axios.get(`${AWS_URL}${MUSHROOM_ALL}`,{
-        params : {prgId : value.prgInfo.prg_id}
-      }).then(data =>{               
-          console.log("ddddd",data.data);
-      }).catch(e =>{
-          console.log("모든 버섯 정보 가져오기 실패",e);
-      })
-  }
 
   const onClick = (data) =>{
     console.log("Farm 버섯 객체 누르면 해당 정보 보여주기",data);
     setKinoko(data)
   }
 
+    //4번  버섯 재배기 안 모든 버섯 객체 정보 저장
+    function mushroom_all () {
+      console.log("==========4. Myfarm 모든 버섯 객체 저장하기==========")
+      
+      axios.get(`${AWS_URL}${MUSHROOM_ALL}/${kinokoState[0]}`,{
+          params : {prgId : value.prgInfo.prg_id}
+      }).then(data =>{               
+          console.log(data.data);
+          setGrowing(  
+              data.data
+          )
+      }).catch(e =>{
+          console.log("자라고 있는 버섯 정보 가져오기 실패",e);
+      })
+
+      axios.get(`${AWS_URL}${MUSHROOM_ALL}/${kinokoState[1]}`,{
+          params : {prgId : value.prgInfo.prg_id}
+      }).then(data =>{               
+          console.log(data.data);
+          setHarvest(  
+                data.data
+          )
+      }).catch(e =>{
+          console.log("수확 버섯 정보 가져오기 실패",e);
+      })
+
+      axios.get(`${AWS_URL}${MUSHROOM_ALL}/${kinokoState[2]}`,{
+          params : {prgId : value.prgInfo.prg_id}
+      }).then(data =>{               
+          console.log(data.data);
+          setWhiteflower(  
+                data.data
+          )
+      }).catch(e =>{
+          console.log("백화고 버섯 정보 가져오기 실패",e);
+      })
+
+      axios.get(`${AWS_URL}${MUSHROOM_ALL}/${kinokoState[3]}`,{
+        params : {prgId : value.prgInfo.prg_id}
+      }).then(data =>{               
+          console.log(data.data);
+          setComplete(  
+                data.data
+          )
+      }).catch(e =>{
+          console.log("수확한 버섯 정보 가져오기 실패",e);
+      })
+
+      axios.get(`${AWS_URL}${MUSHROOM_ALL}`,{
+        params : {prgId : value.prgInfo.prg_id}
+      }).then(data =>{               
+          console.log(data.data);
+          setKinokoList(  
+                data.data
+          )
+
+          setLoding(true)
+      }).catch(e =>{
+          console.log("수확한 버섯 정보 가져오기 실패",e);
+      })
+
+    }
+    //마지막. 재배기 작동 상태  isValue -> 제일 마지막에 실행 isLoding -> true 화면 보이기    
   useEffect(()=>{
     console.log('===========Farm 처음 실행 상태===========');
     // mushroom_all()
-    // console.log(value.prgInfo.prg_id);
-  },[value.prgInfo.prg_id])
+  },[])
 
+  useEffect(()=>{
+    
+    console.log('kinokoList',kinokoList);
+    console.log('kinokoList',growing);
+    console.log('kinokoList',harvest);
+    console.log('kinokoList',whiteflower);
+    console.log('kinokoList',complete);
+    
+  },[kinokoList])
+
+  useEffect(()=>{
+    console.log('===========Farm 처음 실행 상태===========');
+    value.prgInfo.prg_id !== 0 &&  mushroom_all()
+  },[value.prgInfo])
   //버섯 상태별로 저장하기
+
+  const view = {
+    growing,
+    harvest,
+    whiteflower,
+    complete, 
+    kinokoList, 
+    kinoko
+  }
+  
   
     
   return(
       <>
         {/* 선택한 기기 버섯 정보 가져오기 */}
-        <KinokoInfo mushroom_all={mushroom_all} imgList ={imgList}/>
+        <KinokoInfo />
         {/* 버섯 화면에 보이기 -> mock은 test파일 원본은 farmBox */}
-        <FarmMock imgList={imgList} kinoko={kinoko} onClick={onClick}/>
+        { loding ? (<FarmMock  view={view} onClick={onClick}/>) : (<div>LODING....</div>)}
+        
       </>
   )  
 } 

@@ -50,10 +50,10 @@ const MyFarmCss = ({value,isLoding,result2,isOk,onClickChangeName,onChange}) => 
     const [number,setNumber] = useState(null)
     useEffect(()=>{
         (console.log("==================MyFarmCss 처음 실행 화면 =================="));
-        let today = new Date('yyyy MM dd')
+        // let today = new Date('yyyy MM dd')
 
         if(result2.growing){
-            console.log(today);
+            // console.log(today);
             setNumber(result2.growing.filter(data => format(new Date(data.mr_date),'yyyy-MM-dd') === result2.day.today))
         }else(
             setNumber(null)
