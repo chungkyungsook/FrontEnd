@@ -374,7 +374,7 @@ class MyError extends Error {
 }
 
 // ---------------------------------------------------------
-const Add = () => {
+const Add = ({history}) => {
     const [loading, setLoading] = useState(true);
     const date = useRef(6);
     const [chartData, setChartData] = useState([
@@ -468,7 +468,8 @@ const Add = () => {
                 }
             ).then(response => {
                 console.log(response);
-                window.location.href = (`${Local}setting/custom`);
+                alert('등록 성공했습니다!');
+                history.push('/');
             }).catch(e => {console.error(e);});
         } catch(e) {
             if(e.name === 'TempErrorUp') {

@@ -47,6 +47,8 @@ const ChartContext = ({children, machineId}) => {
     const [customChartInfo, setCustomChartInfo] = useState([]);
     const [customUpdateChartInfo, setCustomUpdateChartInfo] = useState({});
     // const machineIdValue = cookies.get('deviceNumber');
+    console.log(machineId);
+
 
     // const machineIdValue = getMachineId();
     
@@ -90,7 +92,7 @@ const ChartContext = ({children, machineId}) => {
             });
         });
 
-        getUpdateChartId(18).then(res => {
+        getUpdateChartId(machineId).then(res => {
             setCustomUpdateChartInfo(res[0]);
             return res;
         }).then(prgInfo => {
@@ -100,7 +102,7 @@ const ChartContext = ({children, machineId}) => {
                 setCustomUpdateChartInfo({...prgInfo[0], res, date: res.humidity.length})
                 console.log(customUpdateChartInfo);
             });
-        })
+        });
     },[]);
 
     // 프로그램 리스트 데이터 get
@@ -116,7 +118,7 @@ const ChartContext = ({children, machineId}) => {
     async function getUpdateChartId (machineId) {
         let data = await axios.get(`${URL}/api/myfarm/data`, {
             params: {
-                id: 18 // machineId
+                id: machineId // machineId
             }
         }).then(res => {
             console.log(res);
