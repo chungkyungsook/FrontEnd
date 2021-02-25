@@ -55,13 +55,11 @@ const MyFarmCss = ({value,isLoding,result2,isOk,onClickChangeName,onChange}) => 
         if(result2.growing){
             console.log(today);
             setNumber(result2.growing.filter(data => format(new Date(data.mr_date),'yyyy-MM-dd') === result2.day.today))
-        }
+        }else(
+            setNumber(null)
+        )
         console.log("값이 바뀜",result2.growing);
-        // result2.growing && result2.growing.map(data=>(
-        
-        //     // console.log(format(new Date(data.mr_date)) === result2.day.today)
-        // ))
-        
+
         console.log( result2.day.today);
 
     },[result2.growing])
@@ -173,8 +171,8 @@ const MyFarmCss = ({value,isLoding,result2,isOk,onClickChangeName,onChange}) => 
                     </div>
                     <div className = "smailInfo">
                         <h1>오늘은 표고버섯이 {number ? number.length : 0}개 자랐습니다.</h1>
-                        <h1>{ result2.harvest ? '수확할 때가 왔습니다!! 상세 페이지에서 확인해 주세요.' : '아직 수확할 버섯은 없네요'}</h1>
-                        <h1>{ result2.whiteflower && '백화고가 자라났습니다! 상세 페이지에서 확인해 주세요'}</h1>
+                        <h1>{ result2.harvest.length !== 0  ? '수확할 때가 왔습니다!! 상세 페이지에서 확인해 주세요.' : '아직 수확할 버섯은 없네요'}</h1>
+                        <h1>{ result2.whiteflower.length !== 0 ?  '백화고가 자라났습니다! 상세 페이지에서 확인해 주세요' : result2.whiteflower}</h1>
                     </div>
                 </div>
                 
@@ -194,14 +192,11 @@ const MyFarmCss = ({value,isLoding,result2,isOk,onClickChangeName,onChange}) => 
 
 //이미지 그림 css
 const LogoImg = styled.img`
-
     background-position : center ;
         
     margin-right : 0.5rem ;
     margin-left : 1rem ;
-
     padding-top: 70px;
-
     cursor : default ;
     `;
 

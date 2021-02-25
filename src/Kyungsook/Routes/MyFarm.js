@@ -67,9 +67,9 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
 
     //버섯 객체 저장하기
     
-    const [growing, setGrowing] = useState(null)
-    const [harvest, setHarvest] = useState(null)
-    const [whiteflower, setWhiteflower] = useState(null)
+    const [growing, setGrowing] = useState([])
+    const [harvest, setHarvest] = useState([])
+    const [whiteflower, setWhiteflower] = useState([])
 
     const kinokoState = ['growing', 'harvest', 'whiteflower']
 
@@ -80,10 +80,10 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
 ///////////////////////////////////////////////////////////////////////    실행 함수
     
     // 1번. user에 등록 된 기기 정보 가져오기
-    async function machine_list () {
+    function machine_list () {
 
         //user에 등록 된 기기 정보 가져오기
-        await axios.post(`${AWS_URL}${MACHINE_LIST}`,{
+        axios.post(`${AWS_URL}${MACHINE_LIST}`,{
             // param :  { token : cookies.get('token') }
             token : cookies.get('token') 
         }).then(data =>{
@@ -114,9 +114,9 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
     }
      
     //2번. 사용자가 선택한 재배기 id,재배기 name
-    async function machine_id () {
+    function machine_id () {
          
-        await axios.get(`${AWS_URL}${MACHINE_ID}`,{
+        axios.get(`${AWS_URL}${MACHINE_ID}`,{
             params: { token : (cookies.get('token')) }
         }).then(data => {
             //재배기 이름 추후 추가할 예정입니다.
@@ -142,9 +142,9 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
         
     }
     //3번 진행중인 프로그램 이름 -> 진행중인 프로그램이 없으면 모든 값들 초기화 시켜주기
-    async function prg_name (){
+    function prg_name (){
         //재배개 작동 상태 가져오기 isValue
-        await axios.get(`${AWS_URL}${PRG_NAME}`,{
+        axios.get(`${AWS_URL}${PRG_NAME}`,{
             params :  {id : value.isOn.id }
         }).then(data =>{
             HEADER_DEBUG && console.log("Myfarm 사용자가 선택한 재배기 프로그램 이름 성공",data.data)
@@ -154,21 +154,28 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
             })
         }).catch(e =>{
             HEADER_DEBUG && console.log("Myfarm 사용자가 선택한 재배기 프로그램 이름 실패",e.response.status);
+            //값 초기화 해주기
+            setDays(0)
+            setKinokoName('') //키노코 이름
+            setGrowing([]) //버섯 상태
+            setHarvest([]) // 수확해야하는 버섯
+            setWhiteflower([]) //백화고
+            setIsNameChange(false)
             value.setPrgInfo({
                 prg_id : 0,
                 prg_name : "진행중인 프로그램이 없습니다."
             })
-            setIsNameChange(false)
+
         })  
 
         HEADER_DEBUG && console.log("===========Myfarm end사용자가 선택한 재배기 작동 상태 확인===============")
     }
 
     //4번  버섯 재배기 안 모든 버섯 객체 정보 저장
-    async function mushroom_all () {
+    function mushroom_all () {
         HEADER_DEBUG && console.log("==========4. Myfarm 모든 버섯 객체 저장하기==========")
         let temp = []
-        await axios.get(`${AWS_URL}${MUSHROOM_ALL}/${kinokoState[0]}`,{
+        axios.get(`${AWS_URL}${MUSHROOM_ALL}/${kinokoState[0]}`,{
             params : {prgId : value.prgInfo.prg_id}
         }).then(data =>{               
             console.log(data.data);
@@ -179,7 +186,7 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
             console.log("모든 버섯 정보 가져오기 실패",e);
         })
 
-        await axios.get(`${AWS_URL}${MUSHROOM_ALL}/${kinokoState[1]}`,{
+        axios.get(`${AWS_URL}${MUSHROOM_ALL}/${kinokoState[1]}`,{
             params : {prgId : value.prgInfo.prg_id}
         }).then(data =>{               
             console.log(data.data);
@@ -190,7 +197,7 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
             console.log("모든 버섯 정보 가져오기 실패",e);
         })
 
-        await axios.get(`${AWS_URL}${MUSHROOM_ALL}/${kinokoState[2]}`,{
+        axios.get(`${AWS_URL}${MUSHROOM_ALL}/${kinokoState[2]}`,{
             params : {prgId : value.prgInfo.prg_id}
         }).then(data =>{               
             console.log(data.data);
@@ -203,15 +210,15 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
     }
 
     //5.재배기 온도,습도 값 바꾸기
-    async function maching_setting (temperature,humidity){
+    function maching_setting (temperature,humidity){
         setSetting(
             {temperature : temperature, humidity : humidity}
         )
     }
     //버섯 배지 이름 가져오기
-    async function mushroom_name (){
+    function mushroom_name (){
         HEADER_DEBUG && console.log("==========6. Myfarm 배지 이름 가져오기==========")
-        await axios.get(`${AWS_URL}${MUSHROOM_NAME}`,{
+        axios.get(`${AWS_URL}${MUSHROOM_NAME}`,{
             params : {id : parseInt(value.prgInfo.prg_id)}
         }).then(data =>{
             console.log("이름 가져오기 성공",data.data)
@@ -224,10 +231,10 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
     }
 
     //프로그램 시작 날짜 가져오기
-    async function start_date () {
+    function start_date () {
 
        
-        await axios.get(`${AWS_URL}${DATE}`,{
+        axios.get(`${AWS_URL}${DATE}`,{
             params: {id : value.prgInfo.prg_id}
         }).then(data =>{
             console.log("프로그램 시작 날짜",data.data)
@@ -248,7 +255,7 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
     }
 
     //배지 이름 바꾸기
-    async function onClickChangeName (e){
+    function onClickChangeName (e){
         const {name} = e.target
         
         if(name === "name"){
@@ -257,7 +264,7 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
         }else if(name === "changeName"){ // 이름 바꾸기
             console.log("버튼이 클릭 됨",name);
                 if(value.prgInfo.prg_id !== 0){
-                    await axios.put(`${AWS_URL}${MUSHROOM_NAME_CHANGE}`,{
+                    axios.put(`${AWS_URL}${MUSHROOM_NAME_CHANGE}`,{
                     
                         id : parseInt(value.prgInfo.prg_id),
                         name : mushroomName
@@ -275,9 +282,9 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
     }
 
     //마지막. 재배기 작동 상태  isValue -> 제일 마지막에 실행 isLoding -> true 화면 보이기
-    async function machine_status () {
+    function machine_status () {
         //재배개 작동 상태 가져오기 isValue
-        await axios.get(`${AWS_URL}${MACHINE_STATUS}`,{
+        axios.get(`${AWS_URL}${MACHINE_STATUS}`,{
             params :  {id : value.isOn.id }
         }).then(data =>{
             HEADER_DEBUG && console.log("Myfarm 사용자가 선택한 재배기 작동 상태 성공",data.data)
@@ -330,15 +337,19 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
             start_date() //시작 날짜
             mushroom_name() // 버섯 배지 이름 가져오기    
             mushroom_all()
-        }else{ //진행중인 프로그램 없으면 모든 값 초기화 해주기
+        }
+        else if(value.prgInfo.prg_id === 0){ //진행중인 프로그램 없으면 모든 값 초기화 해주기
+            console.log(value.prgInfo.prg_id,"ddddddd");
             setDays(0)
             setKinokoName('')
-            setGrowing(null)
-            setHarvest(null)
-            setWhiteflower(null)
+            setGrowing([])
+            setHarvest([])
+            setWhiteflower([])
         }
         
-    },[value.prgInfo,value.isCheck])
+    },[value.prgInfo.prg_id,value.isCheck])
+
+
     
     useEffect(()=>{ //날짜 계산해서 일차 구하기
         // console.log("오늘은 며칠?",day.today, day.kinokoDay);

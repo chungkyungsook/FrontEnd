@@ -13,12 +13,12 @@ import { withCookies } from 'react-cookie';
  */
 const KinokoInfo = (props)=>{
 
-   const {getList} = props;
+   const {mushroom_all} = props;
     //url
     
     useEffect(()=>{
       console.log('===========Farm KinokoInfo 처음 실행 상태===========');
-      getList()
+      mushroom_all()
     },[])
 
     return(
