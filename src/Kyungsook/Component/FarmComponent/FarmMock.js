@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react' ;
+import React, { useEffect, useState } from 'react' ;
 import styled from 'styled-components' ;
 import {Redirect}   from 'react-router-dom' ;
 import { withCookies} from 'react-cookie';
@@ -7,25 +7,35 @@ import KinokoImg from '../../../assets/KinokoImg/kinoko1.png' ;
 
 //그래프
 import ProgressChart from '../../../Beomhwan/Components/ProgressChart'
+import { format } from 'date-fns';
+import { valueToRelative } from '@amcharts/amcharts4/.internal/core/utils/Utils';
 
-const FarmMock = ({cookies, imgList,onClick,kinoko}) => {
+const FarmMock = ({cookies,onClick,view}) => {
     //isLogin cookie 값 확인
     const isLoginCheck = cookies.get('isLogin')
+    const today = format(new Date(),'yyyy-MM-dd')
+    
+    //오늘 자라난 버섯 수
+    const [number,setNumber] = useState(null)
     
     useEffect(()=>{
-        console.log('===========Farm FarmMock 처음 실행 상태===========');
-    },[])
-    
-    //값이 잘 들어 오는 지 확인
-    useEffect(()=>{
-        //전체 버섯의 정보
-        imgList.kinokosList && console.log("FarmMock kinokoLists",imgList.kinokosList,imgList.kinokoNumber);
-        console.log(imgList.kinokoNumber);
-        //값 이 들어오고, 해당 버섯의 상태 저장
-        //진행중인 프로젝트 이름 가져오기
+        (console.log("==================MyFarmCss 처음 실행 화면 =================="));
 
+        if(view.growing){
+            console.log(today,view.growing);
+            
+            setNumber(view.growing.filter(data => 
+                //  today ===  format(new Date(data.mr_date),'yyyy-MM-dd')) 
+                format(new Date(data.mr_date),'yyyy-MM-dd') === today
+            ))
+            
+        }else(
+            setNumber(null)
+        )
         
-    },[imgList])
+    },[view.growing])
+    //값이 잘 들어 오는 지 확인
+
 
 
     return (
@@ -42,10 +52,18 @@ const FarmMock = ({cookies, imgList,onClick,kinoko}) => {
                     <LogoImg src={KinokoImg} draggable="false" width="200" alt={'버섯 배지 사진'}/>
                     <div>
                     {
-                        imgList.kinokosList && (
-                            imgList.kinokosList.map((data,index)=>(
+                        view.kinokoList && (
+                            view.kinokoList.map((data,index)=>(
                                 // console.log(data),
-                                data.status !== "end" && <button key={index} onClick={() => onClick(data)}>{data.id}</button>
+                                
+                                data.mr_status === "whiteflower" ? 
+                                (<KinokoBtn view={view.name} name={data.mr_status} key={index} onClick={() => onClick(data)}>{data.id}</KinokoBtn>)
+                                 : data.mr_status === "harvest" ? 
+                                    (<KinokoBtn view={view.name} name={data.mr_status} key={index} onClick={() => onClick(data)}>{data.id}</KinokoBtn> )
+                                    : data.mr_status === "growing" ? 
+                                    (<KinokoBtn view={view.name} name={data.mr_status} key={index} onClick={() => onClick(data)}>{data.id}</KinokoBtn> )
+                                    : null
+                                
                             ))
                         )
                     }
@@ -66,37 +84,44 @@ const FarmMock = ({cookies, imgList,onClick,kinoko}) => {
                 <Item3>
 
                     <Item4>
-
-                        <NumBox>
-                            <div>누적 버섯 갯수</div>
-                            <KinokoInfoNumber>{imgList.kinokoNumber.allKinoko}</KinokoInfoNumber>
+                        <NumBox id="growing" onClick={view.kinokoOnClick}>
+                            성장중인 버섯 갯수
+                            <KinokoInfoNumber>{view.growing.length}</KinokoInfoNumber>
                         </NumBox>
-                        <NumBox>
-                            현재 버섯 갯수
-                            <KinokoInfoNumber>{imgList.kinokoNumber.thisKinoko}</KinokoInfoNumber>
+                        <NumBox >
+                            오늘 자라난 버섯 갯수
+                            <KinokoInfoNumber>{number && number.length}</KinokoInfoNumber>
                         </NumBox>
-                        <NumBox>
-                            채취해야할 버섯 갯수
-                            <KinokoInfoNumber>{imgList.kinokoNumber.getKinoko}</KinokoInfoNumber>
+                        <NumBox id="harvest" onClick={view.kinokoOnClick}>
+                            수확 가능한 버섯 갯수
+                            <KinokoInfoNumber>{view.harvest.length}</KinokoInfoNumber>
+                        </NumBox>
+                        <NumBox id="whiteflower" onClick={view.kinokoOnClick}>
+                            백화고 버섯 갯수
+                            <KinokoInfoNumber>{view.whiteflower.length}</KinokoInfoNumber>
                         </NumBox>
                         <NumBox>
                             수확한 버섯 갯수
-                            <KinokoInfoNumber>{imgList.kinokoNumber.endKinoko}</KinokoInfoNumber>
+                            <KinokoInfoNumber>{view.complete.length}</KinokoInfoNumber>
+                        </NumBox>
+                        <NumBox>
+                            <div>누적 버섯 갯수</div>
+                            <KinokoInfoNumber>{view.kinokoList.length}</KinokoInfoNumber>
                         </NumBox>
                     </Item4>
 
                     <Item5> 
                         <Photo> 버섯 갤러리
-                            <SwiperImg kinoko={kinoko}/>
+                            <SwiperImg kinoko={view.kinoko}/>
                         </Photo>
                         <InfoBoxs>
                             <InfoBox>
                                 성장률
-                                <KinokoInfoNumber>{kinoko && kinoko.percent}</KinokoInfoNumber>
+                                <KinokoInfoNumber>{view.kinoko && view.kinoko.mr_growthrate}</KinokoInfoNumber>
                             </InfoBox>
                             <InfoBox>
                                 버섯 길이
-                                <KinokoInfoNumber>{kinoko && kinoko.cm}</KinokoInfoNumber>
+                                <KinokoInfoNumber>{view.kinoko && view.kinoko.mr_size}</KinokoInfoNumber>
                             </InfoBox>
                         </InfoBoxs>
                     </Item5>
@@ -238,7 +263,8 @@ const NumBox  = styled.div`
     background : #dddd;
 
     &:hover{
-        background : rgb(145, 163, 119);
+        
+        background : ${props => props.id && 'rgb(145, 163, 119)' }
     }
 `;
 
@@ -266,7 +292,7 @@ const Photo   =  styled.div`
     box-shadow      : 0 0 8px 0 rgba(0, 0, 0, 0.22), 0 0 8px 0 rgba(0, 0, 0, 0.26);
     border-radius: 13px;
     /* flex: 1; */
-    height : 150px;
+    height : 300px;
      
 `;
 
@@ -279,10 +305,15 @@ const InfoBoxs  = styled.div`
 `;
 //
 const InfoBox  = styled.div`
-    flex-basis: 45%;
+    /* flex-basis: 45%; */
+    flex: inherit;
     background: rgb(145, 163, 119,0.8);
     margin: 7px;
 `;
 
-
+const KinokoBtn = styled.button`
+    padding: 3px 11px;
+    background : ${props => props.name === props.view && 'rgb(145, 163, 119)'  };
+    color : ${props => props.name === props.view && 'white'  };
+`;
 export default withCookies(FarmMock) ;

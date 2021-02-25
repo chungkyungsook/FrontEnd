@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { withCookies} from 'react-cookie';
 import styled from 'styled-components';
 import title      from '../../../assets/logoHeight.png' ;
@@ -8,7 +8,57 @@ import {userSelect} from '../../../Util/css' ;
 import SwiperCore from 'swiper';
 import {Swiper, SwiperSlide} from 'swiper/react'
 import 'swiper/swiper-bundle.css'
+import axios from 'axios';
 
+const HelpCss = ({list,kinokoInfo, onClick}) =>{
+    
+    useEffect(()=>{
+        
+    },[])
+
+    useEffect(()=>{
+        console.log('help css', kinokoInfo);
+    },[kinokoInfo])
+
+    return (
+    <Container>
+            <Section1> 
+                
+                <Item1>
+                    
+                    <Item1Img> {/* 선택한 버섯 이미지 */}
+                        <KinokoImg>
+                            <img
+                                src={kinokoInfo.thumnail_url}
+                                alt={kinokoInfo.name}
+                            />
+                        </KinokoImg>
+                        <Text>{kinokoInfo.name}</Text>
+                    </Item1Img>
+
+                    <Item1Info> {/* 선택한 버섯 정보 */}
+                        <Img     src={title}      width="50" height="50"  draggable="false" />
+                        <KinokoInfo>
+                            <KinoText dangerouslySetInnerHTML={{__html:kinokoInfo.effect}}></KinoText>
+                            <KinoText dangerouslySetInnerHTML={{__html:kinokoInfo.environment}}></KinoText>
+                        </KinokoInfo>
+                    </Item1Info>
+
+                </Item1>
+                
+                <Item2> {/* 버섯 종류 아이콘 */}
+                    {list && list.map((data,index) =>(
+                        <KinokoIcons onClick={()=> onClick(data)} key={index}>
+                             <img src={data.thumnail_url} alt={data.name}/>
+                             <Text>{data.name}</Text>
+                        </KinokoIcons>
+                    ))}
+                </Item2>
+            </Section1>
+    <Section2> 기기 사용 방법은 추후 추가할 예정</Section2>
+    </Container>
+    )
+}
 const Container   = styled.div`
 
     width : 100%;
@@ -102,7 +152,6 @@ const Img = styled.img`
 
 `;
 
-
 //버섯 아이콘 구역
 const Item2 = styled.div`
     display: flex;
@@ -142,50 +191,5 @@ const Section2    = styled.div`
     border: 1px solid black;
     border-radius : 20px;
 `;
-const HelpCss = ({list,kinokoInfo, onClick}) =>{
-
-    useEffect(()=>{
-        console.log('help css', kinokoInfo);
-    },[kinokoInfo])
-
-    return (
-    <Container>
-            <Section1> 
-                
-                <Item1>
-                    
-                    <Item1Img> {/* 선택한 버섯 이미지 */}
-                        <KinokoImg>
-                            <img
-                                src={kinokoInfo.thumbnail}
-                                alt={kinokoInfo.title}
-                            />
-                        </KinokoImg>
-                        <Text>{kinokoInfo.title}</Text>
-                    </Item1Img>
-
-                    <Item1Info> {/* 선택한 버섯 정보 */}
-                        <Img     src={title}      width="50" height="50"  draggable="false" />
-                        <KinokoInfo>
-                            <KinoText>{kinokoInfo.list}</KinoText>
-                            <KinoText>{kinokoInfo.genre}</KinoText>
-                        </KinokoInfo>
-                    </Item1Info>
-
-                </Item1>
-                
-                <Item2> {/* 버섯 종류 아이콘 */}
-                    {list.map((data,index) =>(
-                        <KinokoIcons onClick={()=> onClick(data)} key={index}>
-                             <img src={data.thumbnail} alt={data.title}/>
-                             <Text>{data.title}</Text>
-                        </KinokoIcons>
-                    ))}
-                </Item2>
-            </Section1>
-    <Section2> 기기 사용 방법은 추후 추가할 예정</Section2>
-    </Container>
-    )
-}
 
 export default withCookies(HelpCss);

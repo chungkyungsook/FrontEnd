@@ -23,16 +23,16 @@ const SwiperImg  = ({kinoko}) => {
 
   useEffect(()=>{
     console.log("===================farm SwiperImg===================");
-    kinoko && (
-      setSlides(
-        kinoko.thumbnail.map((data,index) =>(
-          setNuber(1),
-          <SwiperSlide key={`slide-${index}`} tag="li">
-            <img src={data} alt={`Thumbanil ${data}`}/>
-          </SwiperSlide>
-        ))
-      ) 
-    )
+    // kinoko && (
+    //   setSlides(
+    //     kinoko.thumbnail.map((data,index) =>(
+    //       setNuber(1),
+    //       <SwiperSlide key={`slide-${index}`} tag="li">
+    //         <img src={data} alt={`Thumbanil ${data}`}/>
+    //       </SwiperSlide>
+    //     ))
+    //   ) 
+    // )
 
     
   },[kinoko])

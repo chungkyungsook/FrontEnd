@@ -1,6 +1,6 @@
 .swiper-container {
   width: 300px;
-  height: 120px;
+  height: 280px;
   text-align: center;
 }
 
@@ -9,5 +9,5 @@
 }
 
 .farm_text {
-  padding: 52px;
+  padding-top: 120px;
 }

@@ -36,7 +36,7 @@ import title from './assets/HeaderTitle.png' ;
 import { withCookies } from 'react-cookie';
 
 // setIsOn -> 선택한 기기 정보 넣기 
-const Header = ({ location, cookies,isOn,isValue,logoutOnClick}) => {
+const Header = ({ location, cookies,isOn,isValue,logoutOnClick,machine_id}) => {
 /////////////////////////////////////////////////////////////////////////////////////
     // 메뉴 데이터
     const menuData = [ 
@@ -71,6 +71,7 @@ const Header = ({ location, cookies,isOn,isValue,logoutOnClick}) => {
 /////////////////////////////////////////////////////////////////////////////////////
     useEffect(()=>{
         HEADER_DEBUG && console.log("================== Header 처음 실행 화면 ==================");
+        machine_id()
         HEADER_DEBUG && console.log("================== end ==================");
     },[])
    

@@ -1,17 +1,20 @@
 import axios from 'axios';
 import React, { useEffect } from 'react'
+import {
+    AWS_URL,
+
+}from '../../../Util/api'
 
 const HelpList = ({setList}) =>{
-    const url = "http://localhost:3000/dummy/KinokoInfo.json";
-
+    
     useEffect(()=>{
         console.log('help List');
-        axios.get(url).then(data => {
-            console.log("helpList",data.data.kinokos);
-            setList(data.data.kinokos)
-        }).catch(e =>{
-            console.log("helpList erorr",e);
-        })    
+        axios.get(`${AWS_URL}/api/list/help`).then(data =>{
+            console.log(data.data);
+            setList(data.data)
+        }).catch(e => {
+            console.log(e);
+        })
     },[])
 
     return(

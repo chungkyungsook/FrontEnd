@@ -17,6 +17,8 @@ import {
     DEBUG
 } from '../../../Util/debugging.js'
 
+import { format } from 'date-fns';
+
 const MyFarmCss = ({value,isLoding,result2,isOk,onClickChangeName,onChange}) => {
     
     //선택하 기기 정보 저장
@@ -45,19 +47,28 @@ const MyFarmCss = ({value,isLoding,result2,isOk,onClickChangeName,onChange}) => 
 
     //진행중인 프로그램 이름 및 프로그램 id 
     
-
+    const [number,setNumber] = useState(null)
     useEffect(()=>{
         (console.log("==================MyFarmCss 처음 실행 화면 =================="));
-        console.log("값이 바뀜",result2.kinokoName);
+        // let today = new Date('yyyy MM dd')
 
-    },[result2.kinokoName])
+        if(result2.growing){
+            // console.log(today);
+            setNumber(result2.growing.filter(data => format(new Date(data.mr_date),'yyyy-MM-dd') === result2.day.today))
+        }else(
+            setNumber(null)
+        )
+        console.log("값이 바뀜",result2.growing);
+
+        console.log( result2.day.today);
+
+    },[result2.growing])
 
     //userInfo값이 변경 되면 실행
     useEffect(()=>{
         console.log('MyFarm userInfo 선택된 값들',userInfo.user)
 
         //값 새롭게 가져오기
-        // userInfo.changUser && value.setIsOn({...value.isOn, id : userInfo.user})
         setUserInfo({
             ...userInfo,
             changUser : false
@@ -73,10 +84,8 @@ const MyFarmCss = ({value,isLoding,result2,isOk,onClickChangeName,onChange}) => 
     },[value.isOn.id])
 
     useEffect(()=>{
-        console.log("오늘은 며칠?", result2.day.today, result2.day.kinokoDay);
+        console.log("오늘은 며칠?", result2.day.today,"버섯 재배 날짜는?", result2.day.kinokoDay);
         if(result2.day.today !== '' ){
-        //     var test = (result2.result2.day.today.getTime() - result2.result2.day.kinokoDay.getTime()) / (1000*60*60*24)
-        //     console.log(test,"일");
         let test = new Date(result2.day.today)
         let test2 = new Date(result2.day.kinokoDay)
 
@@ -117,11 +126,10 @@ const MyFarmCss = ({value,isLoding,result2,isOk,onClickChangeName,onChange}) => 
                 <div className = "box1 kinokoImgBox">
                 
                     <div>                
-                        {/* {result2.kinokoName !== '' ? (<div>{result2.kinokoName}</div>) : (<><input/> <button name="changeName" onClick={onClickChangeName}>이름 바꾸기</button></>)} */}
                         { result2.isNameChange ? (<div>{result2.kinokoName}</div>) 
                         : (
                         <>
-                            <input placeholder={value.prgInfo.prg_id !== 0 ? "이름을 입력해 주세요" : "프로그램이 없으면 이름을 바꿀수 없어요"}  onChange={onChange}/> 
+                            <input style={{width: '262px'}} placeholder={value.prgInfo.prg_id !== 0 ? "이름을 입력해 주세요" : "프로그램이 없으면 이름을 바꿀수 없어요"}  onChange={onChange}/> 
                             <button name="changeName" onClick={onClickChangeName}>이름 바꾸기</button>
                         </>)}
                     </div>
@@ -162,9 +170,9 @@ const MyFarmCss = ({value,isLoding,result2,isOk,onClickChangeName,onChange}) => 
                         <div>진행 상태 : {result2.day && result2.days}일차</div>
                     </div>
                     <div className = "smailInfo">
-                        <h1>오늘은 표고버섯이 {0}개 자랐습니다.</h1>
-                        <h1>{ value.kinokos.harvest ? '수확할 때가 왔습니다!! 상세 페이지에서 확인해 주세요.' : '아직 수확할 버섯은 없네요'}</h1>
-                        <h1>{ value.kinokos.whiteflower && '백화고가 자라났습니다! 상세 페이지에서 확인해 주세요'}</h1>
+                        <h1>오늘은 표고버섯이 {number ? number.length : 0}개 자랐습니다.</h1>
+                        <h1>{ result2.harvest.length !== 0  ? '수확할 때가 왔습니다!! 상세 페이지에서 확인해 주세요.' : '아직 수확할 버섯은 없네요'}</h1>
+                        <h1>{ result2.whiteflower.length !== 0 ?  '백화고가 자라났습니다! 상세 페이지에서 확인해 주세요' : result2.whiteflower}</h1>
                     </div>
                 </div>
                 
@@ -184,14 +192,11 @@ const MyFarmCss = ({value,isLoding,result2,isOk,onClickChangeName,onChange}) => 
 
 //이미지 그림 css
 const LogoImg = styled.img`
-
     background-position : center ;
         
     margin-right : 0.5rem ;
     margin-left : 1rem ;
-
     padding-top: 70px;
-
     cursor : default ;
     `;
 
