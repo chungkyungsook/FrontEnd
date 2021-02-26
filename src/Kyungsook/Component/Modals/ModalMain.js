@@ -74,12 +74,11 @@ const ModalMain = (props)=> {
                 }
             })
             .then(data =>{
-                data.status === 200 && setOpenStr({...openStr,isKey:1})
+                setOpenStr({...openStr,isKey:1})
                 console.log("status",data.status)
             })
             .catch(e=>{
-                    
-                    e.response.status === 400 && setOpenStr({...openStr,isKey:2})
+                    setOpenStr({...openStr,isKey:2})
             })
         }else if(name === 'pwd'){ //기기 비밀번호 확인
             axios.get(`http://${url}/api/pin/auth`,{
@@ -89,7 +88,7 @@ const ModalMain = (props)=> {
                 }
             })
             .then(data =>{
-                data.status === 200 && setOpenStr({...openStr,isPwd:1})
+                setOpenStr({...openStr,isPwd:1})
                 console.log("status",data.status)
             })
             .catch(
@@ -107,7 +106,7 @@ const ModalMain = (props)=> {
                 
             })
             .then(data =>{
-                data.status === 200 && setOpenStr({...openStr,isNickName:1})
+                setOpenStr({...openStr,isNickName:1})
                 console.log("MyFram data 출력 ModalMain ",data)
                 //page새롭게 로딩
                 window.location.replace("/")

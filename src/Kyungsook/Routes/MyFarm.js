@@ -27,6 +27,7 @@ import MyfarmCss from '../Component/MyfarmComponent/MyfarmCss';   // 해당 페�
 import {format} from 'date-fns';
 import { da } from 'date-fns/locale';
 import { concat } from '@amcharts/amcharts4/.internal/core/utils/Iterator';
+import io from 'socket.io-client'
 const MyFarm = ({cookies,value,logoutOnClick}) => {
 ///////////////////////////////////////////////////////////////////////   변수
     //user 기기 정보 저장
@@ -75,7 +76,8 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
     const temp = {
         setGrowing,
         setHarvest,
-        setWhiteflower
+        setWhiteflower,
+        setIsLoding
     }
     //MyfarmCss
     const result2 = {
@@ -109,7 +111,8 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
 
         }).catch(e=>{
             console.log( e,"등록된 버섯 재배기 정보 가져오기 실패");
-            
+            setUserDeviceInfo([])            
+        
             //서버 통신 오류 확인
             setIsOk({
                 isDevice : 1
@@ -159,6 +162,7 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
         }).catch(e =>{
             HEADER_DEBUG && console.log("Myfarm 사용자가 선택한 재배기 프로그램 이름 실패",e.response.status);
             //값 초기화 해주기
+            setIsLoding(true)
             setDays(0)
             setKinokoName('') //키노코 이름
             setGrowing([]) //버섯 상태
@@ -210,7 +214,12 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
             )
         }).catch(e =>{
             console.log("모든 버섯 정보 가져오기 실패",e);
+        }).finally(e=>{
+            value.prgInfo.prg_id !== 0 && 
+            setIsLoding(true)
         })
+
+        
     }
 
     //5.재배기 온도,습도 값 바꾸기
@@ -237,7 +246,6 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
     //프로그램 시작 날짜 가져오기
     function start_date () {
 
-       
         axios.get(`${AWS_URL}${DATE}`,{
             params: {id : value.prgInfo.prg_id}
         }).then(data =>{
@@ -293,7 +301,7 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
         }).then(data =>{
             HEADER_DEBUG && console.log("Myfarm 사용자가 선택한 재배기 작동 상태 성공",data.data)
             value.setIsValue(data.data)
-            setIsLoding(true) //마지막 로딩 끝내주기
+            // setIsLoding(true) //마지막 로딩 끝내주기
         }).catch(e =>{
             HEADER_DEBUG && console.log("Myfarm 사용자가 선택한 재배기 작동 상태 실패",e);
             
@@ -305,9 +313,18 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
 //////////////////////////////////////////////////////////////////////////////////////////////////////변수
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////// useEffect
-    //
+    //소켓 통신
+    const socket = io('http://192.168.0.10:3000')
+
     useEffect(()=>{
-        maching_setting(20,50) //재배기 온도 습도 작동 환경
+    maching_setting(20,50) //재배기 온도 습도 작동 환경
+    // // 온, 습도 데이터 요청
+    // socket.emit('req_cosdata', "23");
+    // // 온, 습도 데이터 받아오는 이벤트
+    // socket.on('res_cosdata', (data) => {
+    //     console.log("socket 통신",data);
+    // });
+    
     },[])
 
     //화면에 보여줄 모든 버섯, 재비기 , 재배기 상태 가져오기
@@ -341,6 +358,7 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
             start_date() //시작 날짜
             mushroom_name() // 버섯 배지 이름 가져오기    
             mushroom_all()
+            
         }
         else if(value.prgInfo.prg_id === 0){ //진행중인 프로그램 없으면 모든 값 초기화 해주기
             console.log(value.prgInfo.prg_id,"ddddddd");
