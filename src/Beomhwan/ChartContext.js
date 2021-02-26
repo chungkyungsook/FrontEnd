@@ -118,7 +118,7 @@ const ChartContext = ({children, machineId}) => {
     async function getUpdateChartId (machineId) {
         let data = await axios.get(`${URL}/api/myfarm/data`, {
             params: {
-                id: machineId // machineId
+                id: 1 // machineId
             }
         }).then(res => {
             console.log(res);
