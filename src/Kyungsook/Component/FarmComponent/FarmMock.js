@@ -9,15 +9,20 @@ import KinokoImg from '../../../assets/KinokoImg/kinoko1.png' ;
 import ProgressChart from '../../../Beomhwan/Components/ProgressChart'
 import { format } from 'date-fns';
 import { valueToRelative } from '@amcharts/amcharts4/.internal/core/utils/Utils';
+import axios from 'axios';
 
-const FarmMock = ({cookies,onClick,view}) => {
+import {
+    AWS_URL,
+    MUSHROOM_NAME
+} from '../../../Util/api'
+const FarmMock = ({cookies,onClick,view,value}) => {
     //isLogin cookie 값 확인
     const isLoginCheck = cookies.get('isLogin')
     const today = format(new Date(),'yyyy-MM-dd')
     
     //오늘 자라난 버섯 수
     const [number,setNumber] = useState(null)
-    
+    const [kinokoName, setKinokoName] = useState('')
     useEffect(()=>{
         (console.log("==================MyFarmCss 처음 실행 화면 =================="));
 
@@ -34,6 +39,19 @@ const FarmMock = ({cookies,onClick,view}) => {
         )
         
     },[view.growing])
+
+    useEffect(()=>{
+        axios.get(`${AWS_URL}${MUSHROOM_NAME}`,{
+            params : {id : parseInt(value.prgInfo.prg_id)}
+        }).then(data =>{
+            console.log("이름 가져오기 성공",data.data)
+            setKinokoName(data.data)
+        }).catch(e =>{
+            console.log(e);
+        })
+    },[])
+
+
     //값이 잘 들어 오는 지 확인
 
 
@@ -45,7 +63,7 @@ const FarmMock = ({cookies,onClick,view}) => {
         <Container>
             <Section1>
                 
-                <ItemName><Text>키노코짱</Text></ItemName>
+                <ItemName><Text>{kinokoName}</Text></ItemName>
                 {/* 3D배지 구역 */}
                 <ItemImg>
                     {/*서버와 통신이 성공하면  */}

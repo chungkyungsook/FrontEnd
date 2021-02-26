@@ -19,7 +19,7 @@ import {
 
 import { format } from 'date-fns';
 
-const MyFarmCss = ({value,isLoding,result2,isOk,onClickChangeName,onChange}) => {
+const MyFarmCss = ({value,isLoding,result2,isOk,onClickChangeName,onChange,temp}) => {
     
     //선택하 기기 정보 저장
     const [userInfo, setUserInfo] = useState({
@@ -94,6 +94,14 @@ const MyFarmCss = ({value,isLoding,result2,isOk,onClickChangeName,onChange}) => 
         
     },[result2.day])   
 
+    useEffect(()=>{
+        if(value.prgInfo.prg_id === 0 ){
+            temp.setGrowing([])
+            temp.setHarvest([])
+            temp.setWhiteflower([])
+        }
+    },[value.prgInfo.prg_id])
+
     return (
         <div className="container">
             
@@ -113,12 +121,10 @@ const MyFarmCss = ({value,isLoding,result2,isOk,onClickChangeName,onChange}) => 
             </div>{/* 기기관리 끝*/}
             {/* 해당 user에 등록된 기긱가 없을 때 */}
             { 
-            isLoding ? 
-            ( result2.userDeviceInfo.length === 0 ? 
-                    (<div className="item item4"> 재배기를 등록 해 주세요</div> )
-                    : (value.isOn.id === 0 ? 
-                    (<div className="item item4"> 선택 된 재배기가 없습니다. 재배기를 선택해 주세요</div> )
-                    :
+            isLoding ? (
+             result2.userDeviceInfo.userInfo.length === 0 ? (<div className="item item4"> 재배기를 등록 해 주세요</div> )
+                    : value.isOn.id === 0 ? 
+                    (<div className="item item4"> 선택 된 재배기가 없습니다. 재배기를 선택해 주세요</div> ) :
             (
                 <>
                 <div className="item item2">
@@ -141,7 +147,6 @@ const MyFarmCss = ({value,isLoding,result2,isOk,onClickChangeName,onChange}) => 
                     <button className = "kinokoBtn" onClick={imgChang}>{
                        img ? "< 뒤 >" : "< 앞 >" 
                     }</button>
-                    {/* {result2.kinokoName !== '' ?  (<button name='name' className="change_name" onClick={onClickChangeName}>이름 바꾸기</button>) : null} */}
                     { result2.isNameChange ?  (<button name='name' className="change_name" onClick={onClickChangeName}>이름 바꾸기</button>) : null}
                     </div>
                 </div>
@@ -180,11 +185,9 @@ const MyFarmCss = ({value,isLoding,result2,isOk,onClickChangeName,onChange}) => 
                     <button className="pageInfo">상세 페이지</button>
                 </Link>
             </div>
+
             </>
-            )
-            
-            )) : 
-            (<div className="item item4"> Loding...</div> )
+            )) : (<div className="item item4"> Loding...</div> )
             }
         </div>
     );
