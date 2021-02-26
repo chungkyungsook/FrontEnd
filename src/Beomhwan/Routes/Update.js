@@ -95,12 +95,12 @@ class MyError extends Error {
     }
 }
 
-const Update = ({cookies}) => {
+const Update = ({cookies, history}) => {
     const updateChartInfo = useCustomUpdateInfo();
     console.log(updateChartInfo);
     if(updateChartInfo === {}) {
         alert('현재 진행중인 프로그램이 없습니다!');
-        window.location.href='http://localhost:3000/setting';
+        history.push('/setting');
     }
     const [loading, setLoading] = useState(1);
     const [compareChart, setCompareChart] = useState({});
@@ -123,7 +123,9 @@ const Update = ({cookies}) => {
             date.push((i + 1) + '일차');
             temp.push(updateChartInfo.res.temperature[i].setting_value);
             humi.push(ch.setting_value);
-            grow.push(updateChartInfo.res.growthRate[i].gr_value);
+            if(updateChartInfo.res.growthRate.length !== 0) {
+                grow.push(updateChartInfo.res.growthRate[i].gr_value);
+            }
         });
         setCompareChart(setChartjsDataset(date, temp, humi, grow));
         setTimeout(() => setLoading(0),2000);
