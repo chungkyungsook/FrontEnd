@@ -111,7 +111,7 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
 
         }).catch(e=>{
             console.log( e,"등록된 버섯 재배기 정보 가져오기 실패");
-            setUserDeviceInfo([])            
+            // setUserDeviceInfo([])            
         
             //서버 통신 오류 확인
             setIsOk({
@@ -314,7 +314,7 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////// useEffect
     //소켓 통신
-    const socket = io('http://192.168.0.10:3000')
+    // const socket = io('http://192.168.0.10:3000')
 
     useEffect(()=>{
     maching_setting(20,50) //재배기 온도 습도 작동 환경
