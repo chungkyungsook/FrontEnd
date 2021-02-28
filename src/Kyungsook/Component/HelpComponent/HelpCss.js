@@ -28,8 +28,8 @@ const HelpCss = ({list,kinokoInfo, onClick}) =>{
                     
                     <Item1Img> {/* 선택한 버섯 이미지 */}
                         <KinokoImg>
-                            <img
-                                src={kinokoInfo.thumnail_url}
+                            <KinokoImage
+                                src={`http://54.210.105.132/api/help/image/${kinokoInfo.thumnail_url}`}
                                 alt={kinokoInfo.name}
                             />
                         </KinokoImg>
@@ -49,7 +49,7 @@ const HelpCss = ({list,kinokoInfo, onClick}) =>{
                 <Item2> {/* 버섯 종류 아이콘 */}
                     {list && list.map((data,index) =>(
                         <KinokoIcons onClick={()=> onClick(data)} key={index}>
-                             <img src={data.thumnail_url} alt={data.name}/>
+                             <KinokoImage src={`http://54.210.105.132/api/help/image/${data.thumnail_url}`} alt={data.name}/>
                              <Text>{data.name}</Text>
                         </KinokoIcons>
                     ))}
@@ -176,6 +176,12 @@ const KinokoIcons = styled.div`
     &:hover{
         background : #ddd;
     }
+`;
+
+const KinokoImage = styled.img`
+    width: 144px;
+    height: 115px;
+    margin-top: 1px;
 `;
 
 //기기 사용법 구역
