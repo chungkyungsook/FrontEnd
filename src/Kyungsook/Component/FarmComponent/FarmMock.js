@@ -10,7 +10,7 @@ import ProgressChart from '../../../Beomhwan/Components/ProgressChart'
 import { format } from 'date-fns';
 import { valueToRelative } from '@amcharts/amcharts4/.internal/core/utils/Utils';
 
-const FarmMock = ({cookies,onClick,view}) => {
+const FarmMock = ({cookies,onClick,view,value}) => {
     //isLogin cookie 값 확인
     const isLoginCheck = cookies.get('isLogin')
     const today = format(new Date(),'yyyy-MM-dd')
@@ -77,7 +77,7 @@ const FarmMock = ({cookies,onClick,view}) => {
                 <Item2>
                     <ProjectName><Text>진행 중인 프로젝트</Text></ProjectName>
                     <GrpBox>
-                        <ProgressChart />
+                        <ProgressChart prgInfo ={value.prgInfo}/>
                     </GrpBox>
                 </Item2>
                 
