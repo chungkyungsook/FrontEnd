@@ -486,7 +486,7 @@ const Add = ({history}) => {
 
     const [count, setCount] = useState({
         sunCount: 0,
-        waterCount: 1
+        waterCount: 3
     });
 
     const sunChange = (e) => {
@@ -514,9 +514,9 @@ const Add = ({history}) => {
                     : setCount({...count, waterCount: 10});
                 break;
             case '-' :
-                count.waterCount > 1
+                count.waterCount > 3
                     ? setCount({...count, waterCount: count.waterCount - 1})
-                    : setCount({...count, waterCount: 1});
+                    : setCount({...count, waterCount: 3});
                 break;
             default :
                 break;
