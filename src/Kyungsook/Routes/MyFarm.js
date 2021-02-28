@@ -28,7 +28,7 @@ import {format} from 'date-fns';
 import { da } from 'date-fns/locale';
 import { concat } from '@amcharts/amcharts4/.internal/core/utils/Iterator';
 import io from 'socket.io-client'
-const MyFarm = ({cookies,value,logoutOnClick}) => {
+const MyFarm = ({cookies,value,logoutOnClick,location}) => {
 ///////////////////////////////////////////////////////////////////////   변수
     //user 기기 정보 저장
     const [userDeviceInfo, setUserDeviceInfo] = useState({
@@ -313,20 +313,33 @@ const MyFarm = ({cookies,value,logoutOnClick}) => {
 //////////////////////////////////////////////////////////////////////////////////////////////////////변수
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////// useEffect
-    //소켓 통신
-    // const socket = io('http://192.168.0.10:3000')
 
-    useEffect(()=>{
-    maching_setting(20,50) //재배기 온도 습도 작동 환경
-    // // 온, 습도 데이터 요청
-    // socket.emit('req_cosdata', "23");
-    // // 온, 습도 데이터 받아오는 이벤트
-    // socket.on('res_cosdata', (data) => {
-    //     console.log("socket 통신",data);
-    // });
+    // const socket = io.connect('http://192.168.0.10:3000')
+
+    // useEffect(()=>{
+    //   // // 온, 습도 데이터 요청
+    //   socket.emit('req_cosdata', "23");
+    //   // 온, 습도 데이터 받아오는 이벤트
+    //   socket.on('res_cosdata', (data) => {
+    //       console.log("socket 통신",data);
+    //     //   maching_setting(data.humidity,data.temperature) //재배기 온도 습도 작동 환경
+    //   });
+
+    //   return()=>{
+          
+    //       socket.onclose = function(e){
+    //         console.log("종룔ㅇ련ㅇ랸오ㅓ");
+    //           if(e.wasClean){
+    //             console.log("[colse]커넥션 종료");
+    //           }else {
+    //             console.log("[close]커넥션 error");
+    //           }
+              
+    //       }
+    //   }
+      
+    //   },[])
     
-    },[])
-
     //화면에 보여줄 모든 버섯, 재비기 , 재배기 상태 가져오기
     useEffect(()=>{
         setIsLoding(false)
