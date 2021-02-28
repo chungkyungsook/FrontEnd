@@ -141,8 +141,8 @@ const Custom = () => {
         confirm: ''
     });
 
-    useEffect(() => {
-        chart.map((ch, i) => {
+    async function setChart () {
+        await chart.map((ch, i) => {
             setCustomChart(cus => cus.concat({
                 prg_id: chartInfo[i].id,
                 prg_name: chartInfo[i].prg_name,
@@ -150,8 +150,10 @@ const Custom = () => {
                 prg_count: chartInfo[i].prg_count
             }));
         });
+    }
 
-        setTimeout(() => {setLoading(false)}, 1500);
+    useEffect(() => {
+        setChart().then(() => {setLoading(false)});
     },[]);
 
     // 커스텀 환경 적용 클릭 시 모달 on 및 텍스트 변경
@@ -243,10 +245,7 @@ const Custom = () => {
             <>Now loading...</>
             :
                 <CustomBox>
-                {chart.length === 0
-                ? 
-                    <AddMessageBox> 커스텀 환경이 없습니다. '환경 추가'에서 커스텀 환경을 추가해주세요! </AddMessageBox>
-                :   customChart.map((ch,index) =>
+                   {customChart.map((ch,index) =>
                         <div key={index}>
                                 <CustomGraphStyle>
                                 <GraphTitle>- {ch.prg_name} -</GraphTitle>
@@ -259,9 +258,7 @@ const Custom = () => {
                                     macid={machineId} />
                             </CustomGraphStyle>
                         </div>
-                    )
-                }
-                
+                   )}
                 <Modal opacity={modalInfo.opacity} customId={modalInfo.customId} onClose={onClose} width='500' height='200'>
                     <ModalTitleBox>{modalInfo.titleText}</ModalTitleBox>
                     <ModalTextBox>{modalInfo.modalTextfirst}</ModalTextBox>
