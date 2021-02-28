@@ -5,8 +5,9 @@ import * as am4core from '@amcharts/amcharts4/core';
 import am4themes_animated from '@amcharts/amcharts4/themes/animated';
 import {withCookies} from 'react-cookie';
 
-const LogoutChartComponent = ({date, prg}) => {
+const LogoutChartComponent = ({date}) => {
     const [loading, setLoading] = useState(false);
+    
 
     useLayoutEffect(() => {
         setLoading(true);
@@ -93,11 +94,12 @@ const LogoutChartComponent = ({date, prg}) => {
 }
 
 
-const LogoutChart = ({cookies}) => {
+const LogoutChart = ({cookies, value}) => {
     const [loading, setLoading] = useState(false);
     const [date, setDate] = useState('');
     const token = cookies.get('token');
-    const userId = cookies.get('userId'); 
+    const userId = cookies.get('userId');
+    console.log(value); 
 
     useEffect(() => {
         setLoading(true);

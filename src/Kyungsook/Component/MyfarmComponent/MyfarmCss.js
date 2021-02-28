@@ -168,7 +168,7 @@ const MyFarmCss = ({value,isLoding,result2,isOk,onClickChangeName,onChange,temp}
 
             <div className="item item3">
                 <div className = "graph">
-                    <LogoutChart/>
+                    <LogoutChart value={value}/>
                 </div>
                 <div className = "notification">
                     <div className = "programName">
