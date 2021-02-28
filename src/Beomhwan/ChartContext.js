@@ -161,21 +161,21 @@ export default withCookies(ChartContext);
 export function useCustomChartList() {
     const chartjsListContext = useContext(CustomChartListContext);
     if(!chartjsListContext) 
-        console.error('차트 데이터셋 없음');
+        return '차트 데이터셋 없음';
     return chartjsListContext;
 };
 
 export function useCustomChartInfo() {
     const customInfoContext = useContext(CustomChartListInfoContext);
     if(customInfoContext.length === 0) 
-        console.error('차트 정보 없음');
+        return '차트 정보 없음!';
     return customInfoContext;
 };
 
 export function useMachineInfo() {
     const machineinfo = useContext(UserMachineIdContext);
     if(!machineinfo)
-        console.error('기기 정보 없음!');
+        return '기기 정보 없음!';
     return machineinfo;
 };
 
