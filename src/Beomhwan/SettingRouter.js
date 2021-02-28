@@ -46,7 +46,7 @@ const SettingRouter = ({location, cookies, value, history}) => {
     const isLoginCheck = cookies.get('token');
     const {pathname} = location;
 
-    console.log(value);
+    console.log('asdklfhlasjdhflkasjld', value);
 
     useEffect(() => {
         return () => {machineIdCheck(value.isOn.id, history)}
