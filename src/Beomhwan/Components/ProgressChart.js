@@ -258,7 +258,7 @@ const ProgressChart = ({cookies, prgInfo}) => {
         }
 
         return () => {
-            chart.dispose();
+            chart.dispose();;
         }
     }
     }, [loading]);
