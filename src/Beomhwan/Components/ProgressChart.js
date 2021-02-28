@@ -7,64 +7,121 @@ import axios from 'axios';
 import styled from 'styled-components';
 import {withCookies} from 'react-cookie';
 
-async function getPrgInfo() {
-    let prgInfo = {
-        prg_name: '',
-        prg_id: null
-    };
 
-    await axios.get('http://54.210.105.132/api/myfarm/data', {
-        params: {
-            id: 1 // 기기 id로 바꿔주고 나중에 시스템 갖춰졌을 때 기기 id setting
+function useGetPrgInfo () {
+    const [prgInfo, setPrgInfo] = useState({})
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        setLoading(true);
+        async function getPrgInfo() {
+            await axios.get('http://54.210.105.132/api/myfarm/data', {
+                params: {
+                    id: 1 // 기기 id로 바꿔주고 나중에 시스템 갖춰졌을 때 기기 id setting
+                }
+            }).then(response => {
+                setPrgInfo({
+                    prg_name: response.data[0].prg_name,
+                    prg_id: response.data[0].id
+                });
+                setLoading(false);
+            });
         }
-    }).then(response => {
-        prgInfo.prg_name = response.data[0].prg_name;
-        prgInfo.prg_id = response.data[0].id;
-    });
+
+        getPrgInfo();
+    },[]);
+
+    if(loading) {
+        return 'loading';
+    }
 
     return prgInfo;
 }
 
-async function getPrgData(prg_id) {
 
-    let chartData = [];
-    
-    await axios.get('http://54.210.105.132/api/farm/data', {
-        params: {
-            id: prg_id,
-            type: 'custom',
-        }
-    }).then(res => {
-        console.log(res.data);
-        res.data.humidity.map((ch,i) => {
-            if(new Date(ch.setting_date) > new Date()) {
-                chartData.push({
-                    Date: new Date(ch.setting_date),
-                    Temp: res.data.temperature[i].setting_value,
-                    Humi: ch.setting_value
-                });
-            }
-        })
-        return chartData;
-    });
-}
-
-const ProgressChart = ({cookies}) => {
-    console.log(cookies);
-    console.log(window.location.pathname);
-    const [axiosData, setAxiosData] = useState({
-        prgInfo: {},
+function useGetPrgData() {
+    const [prgData, setPrgData] = useState({
+        prgInfo: useGetPrgInfo(),
         chartData: []
     });
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        setAxiosData({
-            ...axiosData,
-            prgInfo: getPrgInfo()
-        });
-    }, []);
+        setLoading(true);
+        async function getPrgData(prg_id) {
+
+            let chartData = [];
+            
+            await axios.get('http://54.210.105.132/api/farm/data', {
+                params: {
+                    id: 5,
+                    type: 'custom',
+                }
+            }).then(res => {
+                console.log(res.data);
+                res.data.humidity.map((ch,i) => {
+                    if(new Date(ch.setting_date) > new Date()) {
+                        chartData.push({
+                            Date: new Date(ch.setting_date),
+                            Temp: res.data.temperature[i].setting_value,
+                            Humi: ch.setting_value
+                        });
+                    }
+                })
+                setPrgData({...prgData, chartData: chartData});
+                setLoading(false);
+            });
+        }
+
+        getPrgData();
+    },[prgData.prgInfo]);
+
+    console.log(prgData);
+
+    if(loading) {
+        return 'Now Loading...';
+    }
+
+    return prgData;
+}
+
+
+const ProgressChart = ({cookies, prgInfo}) => {
+    console.log(cookies);
+    console.log(window.location.pathname);
+    const [chartData, setChartData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    console.log(prgInfo);
+
+    useEffect(() => {
+        async function getPrgData(prg_id) {
+            let chartData = [];
+            await axios.get('http://54.210.105.132/api/farm/data', {
+                params: {
+                    id: prg_id,
+                    type: 'custom',
+                }
+            }).then(res => {
+                console.log(res.data);
+                res.data.humidity.map((ch,i) => {
+                    if(new Date(ch.setting_date) > new Date()) {
+                        chartData.push({
+                            Date: new Date(ch.setting_date),
+                            Temp: res.data.temperature[i].setting_value,
+                            Humi: ch.setting_value
+                        });
+                    }
+                })
+                setChartData(chartData);
+                setLoading(false);
+            });
+        }
+
+        getPrgData(prgInfo.prg_id);
+    },[]);
 
     useLayoutEffect(() => {
+        if(!loading) {
         // 진행 차트
         let chart = am4core.create('progressChart', am4charts.XYChart);
 
@@ -74,19 +131,18 @@ const ProgressChart = ({cookies}) => {
         chart.dataSource.updateCurrentData = true;
 
         let title = chart.titles.create();
-        title.text = axiosData.prg_name;
+        title.text = prgInfo.prg_name;
         title.fontSize = 20;
         title.tooltipText = "당일데이터는 1시간 단위로 측정 중입니다.";
 
         // data 부터 받아오기
-        chart.dataSource.url = 'http://54.210.105.132/api/myfarm/data/hour?prgId=5';
+        chart.dataSource.url = `http://54.210.105.132/api/myfarm/data/hour?prgId=${prgInfo.prg_id}`;
         chart.dataSource.parser = new am4core.JSONParser();
         chart.dataSource.parser.options.emptyAs = 0;
+        chart.dataSource.updateCurrentData = true;
 
         chart.dataSource.events.on('parseended', function (ev) {
             let obj = {
-                prg_id: null,
-                prg_name: '',
                 chartData: []
             }
             let count = 0;
@@ -94,7 +150,7 @@ const ProgressChart = ({cookies}) => {
             console.log(data);
 
             data.temperature.map((da, index) => {
-                // date 제한
+                // 생장률 하루 한번 기록
                 let a = new Date(da.date);
                 if(a < new Date()) {
                     if(new Date(da.date).getHours() === 0) {
@@ -115,10 +171,15 @@ const ProgressChart = ({cookies}) => {
                     }
                 }
             })
+            console.log(chartData);
 
-            ev.target.data = obj.chartData;
+            let chart = obj.chartData.concat(chartData);
 
-            if(ev.target.data.length === 0) {
+            console.log(obj.chartData);
+
+            ev.target.data = chart;
+
+            if(prgInfo.prg_id === 0 && prgInfo.prg_name === '') {
                 title.text = '현재 환경 프로그램이 실행 되고 있지 않습니다.';
                 chart.tooltipText = '버섯을 재배할 준비를 마친 후 팜 환경설정에서 프로그램을 시작해주세요.'
             }
@@ -199,11 +260,16 @@ const ProgressChart = ({cookies}) => {
         return () => {
             chart.dispose();
         }
-    }, []);
+    }
+    }, [loading]);
 
-    // if(!axiosData.prg_name && axiosData.chartData.length === 0) {
-    //     return <ProgressBox id='nullChart' />
-    // }
+    if(loading) {
+        return <>Now Loading...</>
+    }
+
+    if(prgInfo.prg_id === 0) {
+        return <>현재 프로그램이 실행 되고 있지 않습니다.</>
+    }
 
     return (
         <ProgressBox id="progressChart" />
@@ -216,58 +282,3 @@ const ProgressBox = styled.div`
 `;
 
 export default withCookies(ProgressChart);
-
-
-
-    // // 진행중인 프로그램 데이터 받아오기
-    // async function getData () {
-    //     let obj = {
-    //         prg_id: 0,
-    //         prg_name: '',
-    //         chartData: []
-    //     };
-
-    //     await axios.get('http://54.210.105.132/api/myfarm/data', {
-    //         params: {
-    //             id: 1 // 기기 id로 바꿔주고 나중에 시스템 갖춰졌을 때 기기 id setting
-    //         }
-    //     }).then(response => {
-    //         obj.prg_name = response.data[0].prg_name;
-    //         obj.prg_id = response.data[0].id
-    //     });
-
-    //     await axios.get('http://54.210.105.132/api/myfarm/data/hour', {
-    //         params: {
-    //             prgId: obj.prg_id, // 프로그램 id
-    //         }
-    //     }).then(async response => {
-    //         console.log('progressChart : ', response);
-    //         let count = 0;
-    //         response.data.temperature.map((da,index) => {
-    //             // date 제한
-    //             let a = new Date(da.date);
-    //             if(a < new Date()) {
-    //                 if(new Date(da.date).getHours() === 0) {
-    //                     obj.chartData.push({
-    //                         Date: new Date(da.date),
-    //                         Temp: da.value,
-    //                         Humi: response.data.humidity[index].value,
-    //                         Grow: response.data.growthRate[count].gr_value
-    //                     });
-    //                     count++;
-    //                 }
-    //                 else {
-    //                     obj.chartData.push({
-    //                         Date: new Date(da.date),
-    //                         Temp: da.value,
-    //                         Humi: response.data.humidity[index].value,
-    //                     });
-    //                 }
-    //             }
-    //         })
-            
-    //     })
-        
-    //     console.dir(obj);
-    //     return obj;
-    // }

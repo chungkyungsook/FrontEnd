@@ -5,10 +5,10 @@ import * as am4core from '@amcharts/amcharts4/core';
 import am4themes_animated from '@amcharts/amcharts4/themes/animated';
 import {withCookies} from 'react-cookie';
 
-const LogoutChartComponent = ({date}) => {
+const LogoutChartComponent = ({date, value}) => {
     const [loading, setLoading] = useState(false);
+    console.log(value);
     
-
     useLayoutEffect(() => {
         setLoading(true);
 
@@ -25,7 +25,7 @@ const LogoutChartComponent = ({date}) => {
         chart.legend = new am4charts.Legend();
 
         // data 삽입 => prg.prg_id도 추가할 것!
-        chart.dataSource.url = `http://54.210.105.132/api/farm/logout/list?prgId=5&date=${date}`;
+        chart.dataSource.url = `http://54.210.105.132/api/farm/logout/list?prgId=${value.prgInfo.prg_id}&date=${date}`;
         chart.dataSource.parser = new am4core.JSONParser();
         chart.dataSource.parser.options.emptyAs = 0;
         chart.dataSource.events.on("parseended", function(ev) {
@@ -42,10 +42,12 @@ const LogoutChartComponent = ({date}) => {
             
             ev.target.data = a;
 
-            if(a.length === 0) {
-                chart.openModal('프로그램이 실행 중이지 않거나 최근 로그아웃 1시간 이내 입니다.');
+            if(value.prgInfo.prg_id === 0) {
+                chart.openModal('적용된 환경 프로그램이 없습니다.');
+            } else if(a.length === 0 && value.prgInfo.prg_id > 0) {
+                chart.openModal('로그아웃 시간이 1시간 이내 입니다.');
             }
-            title.text = '최근 로그아웃 기간 동안의 온도, 습도 그래프';
+            title.text = '로그아웃 기간 동안의 재배기 온도, 습도 변화';
         })
 
         // axis 생성
@@ -99,7 +101,6 @@ const LogoutChart = ({cookies, value}) => {
     const [date, setDate] = useState('');
     const token = cookies.get('token');
     const userId = cookies.get('userId');
-    console.log(value); 
 
     useEffect(() => {
         setLoading(true);
@@ -130,7 +131,7 @@ const LogoutChart = ({cookies, value}) => {
     }
 
     return (
-        <LogoutChartComponent date={date}/>
+        <LogoutChartComponent value={value} date={date}/>
     );
 }
 
