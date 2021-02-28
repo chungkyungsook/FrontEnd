@@ -13,6 +13,7 @@ import Kinoko2 from '../../../assets/KinokoImg/kinoko2.png' ;
 import axios from 'axios';
 import { withCookies } from 'react-cookie';
 
+import LogoutChart from '../../../Beomhwan/Components/LogoutChart';
 import {
     DEBUG
 } from '../../../Util/debugging.js'
@@ -166,7 +167,9 @@ const MyFarmCss = ({value,isLoding,result2,isOk,onClickChangeName,onChange,temp}
             </div>
 
             <div className="item item3">
-                <div className = "graph">그래프 구역</div>
+                <div className = "graph">
+                    <LogoutChart/>
+                </div>
                 <div className = "notification">
                     <div className = "programName">
                         <div>진행중인 프로그램 이름</div>

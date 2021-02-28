@@ -14,10 +14,8 @@ import {
     MACHINE_STATUS //재배기 상태 가졍괴
 } from '../../../Util/api.js'
 
-import {
-    DEBUG,
-    HEADER_DEBUG
-} from '../../../Util/debugging'
+
+
 
 const MyfarmInfo = ({result, value : { isOn, prgInfo, isCheck, setIsCheck },cookies})=>{ //machine_list,machine_id,prg_name,machine_status
 
