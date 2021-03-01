@@ -43,7 +43,7 @@ const Movie = (props) => {
       for(let i = 0 ; i < FILE_NUM ; i++) {
           for(let j = 0 ; j < FILE_NUM -4 ; j++) {
               const img = new Image() ;
-              img.src = `http://${api}/api/help/image/${j + 1}` ;
+              img.src = `http://${AWS_URL}/api/help/image/${j + 1}` ;
               
               arr.push(img)
           }
@@ -65,6 +65,7 @@ const Movie = (props) => {
       viewList.map((data,index) =>(
         // console.log("2번",data), index => 고유 숫자
         //alt 이름
+        <>
         <SwiperSlide key={`slide-${index}`} tag="li"> 
           {/* <img 
             width= '500px'
@@ -74,10 +75,13 @@ const Movie = (props) => {
           /> */}
           <canvas
               ref={canvas}
-              width={700}
-              height={706 + 70}
+              width={500}
+              height={500}
           />
+          
         </SwiperSlide>
+        <button onClick={replay}> 재생 </button>
+        </>
       ))
     )
   },[viewList])
@@ -126,7 +130,7 @@ const Movie = (props) => {
                 >
                   {slides}
                 </Swiper>
-                <button onClick={replay}> 재생 </button>
+                
               </div>
             ) 
             : 
