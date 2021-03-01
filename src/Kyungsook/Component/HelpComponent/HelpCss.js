@@ -10,6 +10,10 @@ import {Swiper, SwiperSlide} from 'swiper/react'
 import 'swiper/swiper-bundle.css'
 import axios from 'axios';
 
+import {
+    AWS_URL
+} from '../../../Util/api.js'
+
 const HelpCss = ({list,kinokoInfo, onClick}) =>{
     
     useEffect(()=>{
@@ -29,7 +33,7 @@ const HelpCss = ({list,kinokoInfo, onClick}) =>{
                     <Item1Img> {/* 선택한 버섯 이미지 */}
                         <KinokoImg>
                             <KinokoImage
-                                src={`http://54.210.105.132/api/help/image/${kinokoInfo.thumnail_url}`}
+                                src={`${AWS_URL}/api/help/image/${kinokoInfo.thumnail_url}`}
                                 alt={kinokoInfo.name}
                             />
                         </KinokoImg>
@@ -49,7 +53,7 @@ const HelpCss = ({list,kinokoInfo, onClick}) =>{
                 <Item2> {/* 버섯 종류 아이콘 */}
                     {list && list.map((data,index) =>(
                         <KinokoIcons onClick={()=> onClick(data)} key={index}>
-                             <KinokoImage src={`http://54.210.105.132/api/help/image/${data.thumnail_url}`} alt={data.name}/>
+                             <KinokoImage src={`${AWS_URL}/api/help/image/${data.thumnail_url}`} alt={data.name}/>
                              <Text>{data.name}</Text>
                         </KinokoIcons>
                     ))}
