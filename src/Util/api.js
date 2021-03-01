@@ -68,3 +68,6 @@ export const PLY = '/api/ply'
 
 //사진 가져오기
 export const COMPOST = '/api/compost'
+
+//모든 배지 사진 가져오기
+export const CLUSTER = '/api/compost/image/cluster'

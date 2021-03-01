@@ -56,10 +56,10 @@ const MyFarm = ({cookies,value,logoutOnClick,location}) => {
     })
 
     //로딩화면 보여주기
-    const [isLoding, setIsLoding] = useState(false)
+    const [isLoding, setIsLoding]         = useState(false)
 
     //버섯 배지 이름 저장
-    const [kinokoName, setKinokoName] = useState('')
+    const [kinokoName, setKinokoName]     = useState('')
     
     //버섯 이름 바꾸는 버튼 바꾸기 false면 -> 기존 이름 바꾸기, true -> 해당 버섯 배지이름 없음
     const [isNameChange, setIsNameChange] = useState(false)
@@ -69,9 +69,10 @@ const MyFarm = ({cookies,value,logoutOnClick,location}) => {
 
     //버섯 객체 저장하기
     
-    const [growing, setGrowing] = useState([])
-    const [harvest, setHarvest] = useState([])
+    const [growing, setGrowing]         = useState([])
+    const [harvest, setHarvest]         = useState([])
     const [whiteflower, setWhiteflower] = useState([])
+    const [video, setVideo]           = useState()
 
     const kinokoState = ['growing', 'harvest', 'whiteflower']
     const temp = {
@@ -225,10 +226,17 @@ const MyFarm = ({cookies,value,logoutOnClick,location}) => {
 
     //5.재배기 온도,습도 값 바꾸기
     function maching_setting (temperature,humidity){
+
         setSetting(
             {temperature : temperature, humidity : humidity}
         )
     }
+
+    //영상 처리하기
+    function video_view(res_video){
+
+    }
+
     //버섯 배지 이름 가져오기
     function mushroom_name (){
         HEADER_DEBUG && console.log("==========6. Myfarm 배지 이름 가져오기==========")
@@ -295,9 +303,9 @@ const MyFarm = ({cookies,value,logoutOnClick,location}) => {
     }
 
     //마지막. 재배기 작동 상태  isValue -> 제일 마지막에 실행 isLoding -> true 화면 보이기
-    function machine_status () {
+     function machine_status () {
         //재배개 작동 상태 가져오기 isValue
-        axios.get(`${AWS_URL}${MACHINE_STATUS}`,{
+         axios.get(`${AWS_URL}${MACHINE_STATUS}`,{
             params :  {id : value.isOn.id }
         }).then(data =>{
             HEADER_DEBUG && console.log("Myfarm 사용자가 선택한 재배기 작동 상태 성공",data.data)
@@ -325,7 +333,7 @@ const MyFarm = ({cookies,value,logoutOnClick,location}) => {
     //     // socket.emit('req_video', true) ;
     //     // socket.on('res_video', (data) => {
     //     //   console.log(data) ;
-          
+           //   video_view(data)
     //     // }) ;
     
     //     // 온, 습도 데이터 요청

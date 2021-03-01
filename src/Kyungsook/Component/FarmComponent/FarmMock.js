@@ -12,7 +12,6 @@ import { valueToRelative } from '@amcharts/amcharts4/.internal/core/utils/Utils'
 
 const FarmMock = ({cookies,onClick,view,value}) => {
     //isLogin cookie 값 확인
-    const isLoginCheck = cookies.get('isLogin')
     const today = format(new Date(),'yyyy-MM-dd')
     
     //오늘 자라난 버섯 수
@@ -25,7 +24,6 @@ const FarmMock = ({cookies,onClick,view,value}) => {
             console.log(today,view.growing);
             
             setNumber(view.growing.filter(data => 
-                //  today ===  format(new Date(data.mr_date),'yyyy-MM-dd')) 
                 format(new Date(data.mr_date),'yyyy-MM-dd') === today
             ))
             
@@ -35,7 +33,6 @@ const FarmMock = ({cookies,onClick,view,value}) => {
         
     },[view.growing])
     //값이 잘 들어 오는 지 확인
-
 
 
     return (

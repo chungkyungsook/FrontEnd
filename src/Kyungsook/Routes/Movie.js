@@ -12,7 +12,8 @@ import 'swiper/swiper-bundle.css';
 import '../Css/Movie.css';
 // import { number } from '@amcharts/amcharts4/core';
 import{
-  AWS_URL
+  AWS_URL,
+  CLUSTER
 }from '../../Util/api'
 import { log } from 'three';
 SwiperCore.use([Navigation, Pagination,Thumbs]);
@@ -21,50 +22,79 @@ SwiperCore.use([Navigation, Pagination,Thumbs]);
 const Movie = (props) => {
   //isLogin cookie 값 확인
 
-  const url = "http://localhost:3002/dummy/Movie.json";
-  const test = 'dd'
-  const [viewList, setViewList] = useState([])
   //슬리아더 저장 변수
   const [slides, setSlides] = useState([]);
 
   const [number, setNumber] = useState(0)
 
-  const canvas = useRef()
+  const canvas = [useRef(),useRef(),useRef()]
         
-  const WIDTH = 500 - 120, HEIGHT = 800 - 100, FPS = 5;
-  const FILE_NUM = 6 ;
-  
-  const api = '18.205.150.140'
+  const WIDTH = 500 - 120, HEIGHT = 500 - 50, FPS = 3;
 
   const arr = []
   const [images, setImages] = useState('') //모든 이미지 저장
 
+  const [temp, setTemp] = useState() //모든 이미지 저장
+
+
   useEffect(()=>{
       
+      
+    const kinokoImg = async () => { // 모든 이미지 저장 temp
+        await axios.get(`${AWS_URL}${CLUSTER}/1`, {
+          params : {
+            token : props.cookies.get('token') 
+          }
+        }).then(data => {
+            console.log(data);
+            setTemp(data.data)
+            setImages(
+              data.data.map(data => data.members)
+            )
+        }).catch(e => {
+          console.log('movie 값 오류 났습니다.');
+        });
+        
+    }
 
-      for(let i = 0 ; i < FILE_NUM -2; i++) {
-          for(let j = 0 ; j < FILE_NUM -4 ; j++) {
+    kinokoImg();
+
+    const test = async () => {
+      await axios.get(`${AWS_URL}/farm/enddate`,{
+        params:{id:1}
+      }).then(data => {
+        console.log(data);
+      })
+    }
+
+    test()
+      
+  },[])
+
+    useEffect(() =>{
+
+      if(temp && temp){
+
+        for(let i = 0 ; i < temp.length; i++) {
+          for(let j = 0 ; j < temp[i].members.length ; j++) {
               const img = new Image() ;
-              img.src = `${AWS_URL}/api/help/image/${j + 1}` ;
+              img.src = `${AWS_URL}/api/compost/${temp[i].members[j]}` ;
               img.width = 480
               arr.push(img)
           } 
       }
 
       setImages(arr) // 모든 데이터 저장
-      
-  },[])
+      setNumber(1)
+
+      }
+    
+  },[temp])
 
   useEffect(()=>{
 
-    number === 0 && ( axios.get(url).then(data =>{ // 모든 객체 사진 가져오기
-      console.log("1번",number);
-      setNumber(1)
-      setViewList(data.data.MovieList) // 영상 리스트 
-    }))
-
     number === 1 && setSlides(
-      viewList.map((data,index) =>(
+      canvas.map((data,index) =>(
         //alt 이름
         
         <SwiperSlide key={`slide-${index}`} tag="li"> 
@@ -79,13 +109,23 @@ const Movie = (props) => {
       ))
 
     )
-  },[viewList])
+  },[number])
 
   useEffect(()=>{
     //aix 값 다 바뀌면 확인을 위한 선언
     number === 1 && setNumber(2)
   },[slides])
 
+  // useEffect(() =>{
+  //   if(temp && temp){
+  //     setImgList(
+  //     temp.map(data =>(
+  //       data.members
+  //     ))
+  //     )
+  //   }
+    
+  // },[temp])
   
     // 사진 합쳐서 영상처럼 보여주기
     const replay = (index) =>{
