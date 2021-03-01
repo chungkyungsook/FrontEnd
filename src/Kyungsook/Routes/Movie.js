@@ -11,7 +11,9 @@ import SwiperCore ,{Navigation, Pagination,Thumbs}from 'swiper';
 import 'swiper/swiper-bundle.css';
 import '../Css/Movie.css';
 // import { number } from '@amcharts/amcharts4/core';
-
+import{
+  AWS_URL
+}from '../../Util/api'
 SwiperCore.use([Navigation, Pagination,Thumbs]);
 
 
