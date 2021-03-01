@@ -38,7 +38,7 @@ const Farm = ({cookies,value}) => {
   const [harvest, setHarvest] = useState([])
   const [whiteflower, setWhiteflower] = useState([])
   const [complete, setComplete] = useState([])
-  const [kinokoList, setKinokoList] = useState(null)
+  const [kinokoList, setKinokoList] = useState([])
 
   //로딩 화면 대기
   const [loding, setLoding] = useState(false)
@@ -117,7 +117,8 @@ const Farm = ({cookies,value}) => {
           setLoding(true)
       }).catch(e =>{
           console.log("수확한 버섯 정보 가져오기 실패",e);
-          alert('아직 정보가 없어요..')
+          // alert('아직 정보가 없어요..')
+          
           setLoding(1) // 해당 데이터가 없으면 myfarm페이지로 이동
       })
 
@@ -162,6 +163,7 @@ const Farm = ({cookies,value}) => {
     
   return(
       <>
+        
         {/* 선택한 기기 버섯 정보 가져오기 */}
         <KinokoInfo />
         {/* 버섯 화면에 보이기 -> mock은 test파일 원본은 farmBox */}

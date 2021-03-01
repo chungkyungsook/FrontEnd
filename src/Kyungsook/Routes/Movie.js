@@ -12,7 +12,8 @@ import 'swiper/swiper-bundle.css';
 import '../Css/Movie.css';
 // import { number } from '@amcharts/amcharts4/core';
 import{
-  AWS_URL
+  AWS_URL,
+  CLUSTER
 }from '../../Util/api'
 import { log } from 'three';
 SwiperCore.use([Navigation, Pagination,Thumbs]);
@@ -23,25 +24,26 @@ const Movie = (props) => {
 
   const url = "http://localhost:3002/dummy/Movie.json";
   const test = 'dd'
+  
   const [viewList, setViewList] = useState([])
   //슬리아더 저장 변수
   const [slides, setSlides] = useState([]);
 
   const [number, setNumber] = useState(0)
 
-  const canvas = useRef()
+  const canvas = [useRef(),useRef(),useRef()]
         
-  const WIDTH = 500 - 120, HEIGHT = 800 - 100, FPS = 5;
+  const WIDTH = 500 - 120, HEIGHT = 500 - 50, FPS = 5;
   const FILE_NUM = 6 ;
-  
-  const api = '18.205.150.140'
 
   const arr = []
   const [images, setImages] = useState('') //모든 이미지 저장
 
+  const [temp, setTemp] = useState('')
+
   useEffect(()=>{
       
-
+      setTemp(kinokoImg())
       for(let i = 0 ; i < FILE_NUM -2; i++) {
           for(let j = 0 ; j < FILE_NUM -4 ; j++) {
               const img = new Image() ;
@@ -55,6 +57,16 @@ const Movie = (props) => {
       
   },[])
 
+  async function kinokoImg(){
+    const data = await axios.get(`${AWS_URL}${CLUSTER}/1`,{
+      params : {
+        token : props.cookies.get('token')
+      }
+    });
+    console.log(data);
+    return data;
+  }
+
   useEffect(()=>{
 
     number === 0 && ( axios.get(url).then(data =>{ // 모든 객체 사진 가져오기
@@ -64,7 +76,7 @@ const Movie = (props) => {
     }))
 
     number === 1 && setSlides(
-      viewList.map((data,index) =>(
+      canvas.map((data,index) =>(
         //alt 이름
         
         <SwiperSlide key={`slide-${index}`} tag="li"> 
