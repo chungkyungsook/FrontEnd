@@ -25,7 +25,7 @@ const LogoutChartComponent = ({date, value}) => {
         chart.legend = new am4charts.Legend();
 
         // data 삽입 => prg.prg_id도 추가할 것!
-        chart.dataSource.url = `http://54.210.105.132/api/farm/logout/list?prgId=${value.prgInfo.prg_id}&date=${date}`;
+        chart.dataSource.url = `${URL}/api/farm/logout/list?prgId=${value.prgInfo.prg_id}&date=${date}`;
         chart.dataSource.parser = new am4core.JSONParser();
         chart.dataSource.parser.options.emptyAs = 0;
         chart.dataSource.events.on("parseended", function(ev) {
@@ -105,7 +105,7 @@ const LogoutChart = ({cookies, value}) => {
     useEffect(() => {
         setLoading(true);
         const getDate = async () => {
-            await axios.get('http://54.210.105.132/api/logout/date', {
+            await axios.get(`${URL}/api/logout/date`, {
                 params: {
                     token: token,
                     id: userId

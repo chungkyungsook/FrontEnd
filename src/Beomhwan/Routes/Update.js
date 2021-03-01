@@ -6,6 +6,7 @@ import {useCustomUpdateInfo, setChartjsDataset} from '../ChartContext';
 import axios from 'axios';
 import * as Description from '../Components/Compare';
 import {withCookies} from 'react-cookie';
+import {URL} from '../Util';
 
 // ------------------------지금까지의 환경 그래프------------------------
 
@@ -218,7 +219,7 @@ const Update = ({cookies, history}) => {
             console.log(prgId);
             console.log(count);
 
-            axios.put('http://54.210.105.132/api/farm/period/extend', {
+            axios.put(`${URL}/api/farm/period/extend`, {
                     id: prgId,
                     token: token,
                     period: period,

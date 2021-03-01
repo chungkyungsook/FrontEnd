@@ -131,7 +131,7 @@ const ChartContext = ({children, machineId}) => {
 
     // 현재 프로그램 차트 정보 get
     async function getUpdate (prgId, prgType) {
-        let data = await axios.get('http://54.210.105.132/api/farm/data', {
+        let data = await axios.get(`${URL}/api/farm/data`, {
             params: {
                 id: prgId,
                 type: prgType
