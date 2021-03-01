@@ -6,85 +6,7 @@ import am4themes_animated from '@amcharts/amcharts4/themes/animated';
 import axios from 'axios';
 import styled from 'styled-components';
 import {withCookies} from 'react-cookie';
-
-
-function useGetPrgInfo () {
-    const [prgInfo, setPrgInfo] = useState({})
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        setLoading(true);
-        async function getPrgInfo() {
-            await axios.get('http://54.210.105.132/api/myfarm/data', {
-                params: {
-                    id: 1 // 기기 id로 바꿔주고 나중에 시스템 갖춰졌을 때 기기 id setting
-                }
-            }).then(response => {
-                setPrgInfo({
-                    prg_name: response.data[0].prg_name,
-                    prg_id: response.data[0].id
-                });
-                setLoading(false);
-            });
-        }
-
-        getPrgInfo();
-    },[]);
-
-    if(loading) {
-        return 'loading';
-    }
-
-    return prgInfo;
-}
-
-
-function useGetPrgData() {
-    const [prgData, setPrgData] = useState({
-        prgInfo: useGetPrgInfo(),
-        chartData: []
-    });
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        setLoading(true);
-        async function getPrgData(prg_id) {
-
-            let chartData = [];
-            
-            await axios.get('http://54.210.105.132/api/farm/data', {
-                params: {
-                    id: 5,
-                    type: 'custom',
-                }
-            }).then(res => {
-                console.log(res.data);
-                res.data.humidity.map((ch,i) => {
-                    if(new Date(ch.setting_date) > new Date()) {
-                        chartData.push({
-                            Date: new Date(ch.setting_date),
-                            Temp: res.data.temperature[i].setting_value,
-                            Humi: ch.setting_value
-                        });
-                    }
-                })
-                setPrgData({...prgData, chartData: chartData});
-                setLoading(false);
-            });
-        }
-
-        getPrgData();
-    },[prgData.prgInfo]);
-
-    console.log(prgData);
-
-    if(loading) {
-        return 'Now Loading...';
-    }
-
-    return prgData;
-}
-
+import {URL} from '../Util';
 
 const ProgressChart = ({cookies, prgInfo}) => {
     console.log(cookies);
@@ -96,7 +18,7 @@ const ProgressChart = ({cookies, prgInfo}) => {
     useEffect(() => {
         async function getPrgData(prg_id) {
             let chartData = [];
-            await axios.get('http://54.210.105.132/api/farm/data', {
+            await axios.get(`${URL}/api/farm/data`, {
                 params: {
                     id: prg_id,
                     type: 'custom',
@@ -136,7 +58,7 @@ const ProgressChart = ({cookies, prgInfo}) => {
         title.tooltipText = "당일데이터는 1시간 단위로 측정 중입니다.";
 
         // data 부터 받아오기
-        chart.dataSource.url = `http://54.210.105.132/api/myfarm/data/hour?prgId=${prgInfo.prg_id}`;
+        chart.dataSource.url = `${URL}/api/myfarm/data/hour?prgId=${prgInfo.prg_id}`;
         chart.dataSource.parser = new am4core.JSONParser();
         chart.dataSource.parser.options.emptyAs = 0;
         chart.dataSource.updateCurrentData = true;
