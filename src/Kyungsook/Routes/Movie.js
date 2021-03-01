@@ -21,6 +21,7 @@ const Movie = (props) => {
   //isLogin cookie 값 확인
 
   const url = "http://localhost:3002/dummy/Movie.json";
+  const test = 'dd'
   const [viewList, setViewList] = useState([])
   //슬리아더 저장 변수
   const [slides, setSlides] = useState([]);
