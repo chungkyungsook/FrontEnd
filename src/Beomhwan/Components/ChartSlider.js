@@ -216,8 +216,7 @@ const ChartSilder = () => {
         console.log(chart);
     }, [windowSize]);
 
-    // 해결해야할 문제
-    // 화면 리사이즈 시 카운트 초기화 필요
+    // 해결해야할 문제 => 화면 리사이즈 시 카운트 초기화 필요
 
     // x축 슬라이드 설정 -> 왼쪽으로
     const onLeft = () => {
