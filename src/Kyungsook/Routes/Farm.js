@@ -34,11 +34,11 @@ const Farm = ({cookies,value}) => {
   const [kinoko,setKinoko] = useState(null)
 
   //버섯 객체 정보 담기
-  const [growing, setGrowing] = useState([])
-  const [harvest, setHarvest] = useState([])
+  const [growing, setGrowing]         = useState([])
+  const [harvest, setHarvest]         = useState([])
   const [whiteflower, setWhiteflower] = useState([])
-  const [complete, setComplete] = useState([])
-  const [kinokoList, setKinokoList] = useState([])
+  const [complete, setComplete]       = useState([])
+  const [kinokoList, setKinokoList]   = useState([])
 
   //로딩 화면 대기
   const [loding, setLoding] = useState(false)

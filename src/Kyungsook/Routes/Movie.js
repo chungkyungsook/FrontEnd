@@ -22,10 +22,6 @@ SwiperCore.use([Navigation, Pagination,Thumbs]);
 const Movie = (props) => {
   //isLogin cookie 값 확인
 
-  const url = "http://localhost:3002/dummy/Movie.json";
-  const test = 'dd'
-
-  const [viewList, setViewList] = useState([])
   //슬리아더 저장 변수
   const [slides, setSlides] = useState([]);
 
@@ -34,13 +30,11 @@ const Movie = (props) => {
   const canvas = [useRef(),useRef(),useRef()]
         
   const WIDTH = 500 - 120, HEIGHT = 500 - 50, FPS = 3;
-  const FILE_NUM = 6 ;
 
   const arr = []
   const [images, setImages] = useState('') //모든 이미지 저장
 
   const [temp, setTemp] = useState() //모든 이미지 저장
-  const [imgList, setImgList] = useState()
 
 
   useEffect(()=>{
@@ -64,6 +58,16 @@ const Movie = (props) => {
     }
 
     kinokoImg();
+
+    const test = async () => {
+      await axios.get(`${AWS_URL}/farm/enddate`,{
+        params:{id:1}
+      }).then(data => {
+        console.log(data);
+      })
+    }
+
+    test()
       
   },[])
 
