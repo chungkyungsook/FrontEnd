@@ -14,6 +14,7 @@ import '../Css/Movie.css';
 import{
   AWS_URL
 }from '../../Util/api'
+import { log } from 'three';
 SwiperCore.use([Navigation, Pagination,Thumbs]);
 
 
@@ -28,7 +29,7 @@ const Movie = (props) => {
 
   const [number, setNumber] = useState(0)
 
-  const canvas = useRef('')
+  const canvas = useRef()
         
   const WIDTH = 500 - 120, HEIGHT = 800 - 100, FPS = 5;
   const FILE_NUM = 6 ;
@@ -41,13 +42,13 @@ const Movie = (props) => {
   useEffect(()=>{
       
 
-      for(let i = 0 ; i < FILE_NUM ; i++) {
+      for(let i = 0 ; i < FILE_NUM -2; i++) {
           for(let j = 0 ; j < FILE_NUM -4 ; j++) {
               const img = new Image() ;
-              img.src = `http://${AWS_URL}/api/help/image/${j + 1}` ;
-              
+              img.src = `${AWS_URL}/api/help/image/${j + 1}` ;
+              img.width = 480
               arr.push(img)
-          }
+          } 
       }
 
       setImages(arr) // 모든 데이터 저장
@@ -64,26 +65,19 @@ const Movie = (props) => {
 
     number === 1 && setSlides(
       viewList.map((data,index) =>(
-        // console.log("2번",data), index => 고유 숫자
         //alt 이름
-        <>
+        
         <SwiperSlide key={`slide-${index}`} tag="li"> 
-          {/* <img 
-            width= '500px'
-            // style={{listStyle : 'none'}}
-            src={data.thumbnail} 
-            alt={`Thumbnail ${data}`}
-          /> */}
           <canvas
-              ref={canvas}
-              width={500}
+              ref={canvas[index]}
+              width={500 -100}
               height={500}
+              
           />
-          
+          <button onClick={() =>replay(index)}> 재생 </button>
         </SwiperSlide>
-        <button onClick={replay}> 재생 </button>
-        </>
       ))
+
     )
   },[viewList])
 
@@ -94,9 +88,10 @@ const Movie = (props) => {
 
   
     // 사진 합쳐서 영상처럼 보여주기
-    const replay = () =>{
+    const replay = (index) =>{
       let count = 0;
-      const ctx = canvas.current.getContext('2d')
+      const ctx = canvas[index].current.getContext('2d')
+      console.log("해당 페이지 번호 ",index)
       //배경 설정
       ctx.fillStyle = 'black'
       ctx.fillRect(0, 0, 700, 706 + 70 )

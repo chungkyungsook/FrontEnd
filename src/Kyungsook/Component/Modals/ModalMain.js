@@ -34,8 +34,7 @@ const ModalMain = (props)=> {
     const {makeBtn} = input
 
     //url
-    // const url = '172.26.3.62'
-    const url = '54.210.105.132'
+    
     const {isKey,isPwd,isNickName} = openStr
 ///////////////////////////////////////////////////////////////////// 함수
 
@@ -68,7 +67,7 @@ const ModalMain = (props)=> {
         const {name} = e.target
         
         if(name === 'key'){ // 기기 key 번호 확인
-            axios.get(`http://${url}/api/pin/check`,{
+            axios.get(`${AWS_URL}/api/pin/check`,{
                 params:{
                     pin : input.keyOnchange
                 }
@@ -81,7 +80,7 @@ const ModalMain = (props)=> {
                     setOpenStr({...openStr,isKey:2})
             })
         }else if(name === 'pwd'){ //기기 비밀번호 확인
-            axios.get(`http://${url}/api/pin/auth`,{
+            axios.get(`${AWS_URL}/api/pin/auth`,{
                 params:{
                     pin : input.keyOnchange,
                     pw : input.pwdOnchange
@@ -97,7 +96,7 @@ const ModalMain = (props)=> {
                     setOpenStr({...openStr,isPwd:2})
             })       
         }else if(name === 'makeDevice'){ //기기 등록
-            axios.put(`http://${url}/api/myfarm/register`,{
+            axios.put(`${AWS_URL}/api/myfarm/register`,{
                 
                     pin : input.keyOnchange,
                     pw : input.pwdOnchange,

@@ -4,13 +4,17 @@ import DeviceModal from './DeviceModal';
 import {withCookies} from 'react-cookie';
 import { Redirect } from 'react-router-dom';
 
+import {
+    AWS_URL
+}from '../../../Util/api'
+
 const ModalDeviceMain = (props)=> {
     //useState를 사용하여 open상태를 변경한다. (open일때 true로 만들어 열리는 방식)
     const [modalOpen, setModalOnpen] = useState(false)
     const {userDeviceInfo,deviceNum,userInfo,setUserInfo,value} = props
     //url
     // const url = '172.26.3.62'
-    const url = '54.210.105.132'
+    
 
     const [deviceOn, setDeviceOn] = useState(false)
 
@@ -41,7 +45,7 @@ const ModalDeviceMain = (props)=> {
     //저장
     async  function onSelect () {
 
-        await axios.put(`http://${url}/api/myfarm/select`,{
+        await axios.put(`${AWS_URL}/api/myfarm/select`,{
                 id : (JSON.stringify(userInfo.user)),
                 token : props.cookies.get('token')
             }).then(data => {
@@ -55,7 +59,7 @@ const ModalDeviceMain = (props)=> {
     //삭제
     async  function onDelete () {
 
-        await axios.delete(`http://${url}/api/myfarm`,{
+        await axios.delete(`${AWS_URL}/api/myfarm`,{
             params: {
                 id : parseInt(JSON.stringify(userInfo.user))
             }

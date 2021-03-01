@@ -3,10 +3,10 @@
 }
 .test .swiper-container {
   width: 500px;
-  height: 500px;
+  height: 600px;
   text-align: center;
 }
 
 .test .swiper-wrapper {
-  /* padding-inline-start: 0; */
+  padding-inline-start: 0;
 }
