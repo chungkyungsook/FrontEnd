@@ -7,6 +7,10 @@ import axios from 'axios';
 import * as Description from '../Components/Compare';
 import {withCookies} from 'react-cookie';
 import {URL} from '../Util';
+import {getKinoko} from '../CRUD';
+import Modal from '../Components/Modal';
+import {Button as ModalButton, ModalTitleBox, ModalTextBox, ModalFooter} from '../Components/ModalContent';
+
 
 // ------------------------지금까지의 환경 그래프------------------------
 
@@ -112,6 +116,13 @@ const Update = ({cookies, history}) => {
         Humidity: 80
     }]);
     const dateLimit = updateChartInfo.date;
+    const [kinokoCount, setKinokoCount] = useState(0);
+    const [modalInfo, setModalInfo] = useState({
+        opacity: 0,
+        customId: null,
+        titleText: '',
+        modalTextfirst: '',
+    });
 
     useEffect(() => {
         let date = [];
@@ -119,6 +130,10 @@ const Update = ({cookies, history}) => {
         let humi = [];
         let grow = [];
         console.log(updateChartInfo);
+
+        getKinoko(updateChartInfo.id).then(res => {
+            setKinokoCount(res.length);
+        })
 
         updateChartInfo.res.humidity.map((ch,i) => {
             date.push((i + 1) + '일차');
@@ -157,7 +172,7 @@ const Update = ({cookies, history}) => {
 
     const [count, setCount] = useState({
         sunCount: 0,
-        waterCount: 1
+        waterCount: 3
     });
 
     const sunChange = (e) => {
@@ -185,9 +200,9 @@ const Update = ({cookies, history}) => {
                     : setCount({...count, waterCount: 10});
                 break;
             case '-' :
-                count.waterCount > 1
+                count.waterCount > 3
                     ? setCount({...count, waterCount: count.waterCount - 1})
-                    : setCount({...count, waterCount: 1});
+                    : setCount({...count, waterCount: 3});
                 break;
             default :
                 break;
@@ -229,6 +244,12 @@ const Update = ({cookies, history}) => {
                     sunshine: count.sunCount
             }).then(res => {
                 console.log(res);
+                setModalInfo({
+                    opacity: 1,
+                    customId: prgId,
+                    titleText: '프로그램을 성공적으로 연장했습니다.',
+                    modalTextfirst: '',
+                });
             })
 
         }catch(e) {
@@ -239,6 +260,10 @@ const Update = ({cookies, history}) => {
                 alert('온도 제한 17도보다 낮습니다!');
             }
         }
+    }
+
+    function onSubmit() {
+
     }
 
     return (
@@ -263,7 +288,7 @@ const Update = ({cookies, history}) => {
                             <Description.CardFlex>
                                 <Description.CardBox>
                                     <Description.CardTitle>수확한 버섯 수</Description.CardTitle>
-                                    <Description.CardContent>{}개</Description.CardContent>
+                                    <Description.CardContent>{kinokoCount}개</Description.CardContent>
                                 </Description.CardBox>
                                 <Description.CardBox>
                                     <Description.CardTitle>총 재배일</Description.CardTitle>
@@ -311,6 +336,14 @@ const Update = ({cookies, history}) => {
                     </SettingName>
                 </SettingBox>
             </CustomUpdateDivRow>
+            <Modal opacity={modalInfo.opacity} customId={modalInfo.customId}>
+                <ModalTitleBox>
+                    {modalInfo.titleText}
+                </ModalTitleBox>
+                <ModalTextBox>
+                    <button>확인</button>
+                </ModalTextBox>
+            </Modal>
         </>
         }
         </>
@@ -318,3 +351,5 @@ const Update = ({cookies, history}) => {
 };
 
 export default withCookies(Update);
+
+// modal 띄운 뒤에 이동시킬 것!

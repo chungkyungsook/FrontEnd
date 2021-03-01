@@ -82,6 +82,12 @@ const LogoutChartComponent = ({date, value}) => {
         humiSeries.fill = am4core.color('rgba(0,0,255,1)');
         humiSeries.tooltipText = "{dateX.formatDate('MM-dd HH:mm')} : {valueY}%";
 
+        // bullet 생성
+        // let tempBullet = tempSeries.bullets.push(new am4charts.Bullet());
+        // let square = tempBullet.createChild(am4core.Rectangle);
+        // square.width = 10;
+        // square.height = 10;
+        // square.fill = am4core.color('rgba(255,0,0,0.5)');
 
         setLoading(false);
         return () => {console.log('hi')};
