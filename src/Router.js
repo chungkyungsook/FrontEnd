@@ -71,10 +71,10 @@ const RouterComponent = (props) => {
     const [isLogin, setIsLogin] = useState(props.cookies.get('token') && true)
 /////////////////////////////////////////////////////////////////////////////////// *이후 
     //logout 버튼 클릭
-    const logoutOnClick = () =>{
+    const logoutOnClick = async() =>{
         
         
-        axios.put(`${AWS_URL}${LOGOUT}`,{
+        await axios.put(`${AWS_URL}${LOGOUT}`,{
             token: props.cookies.get('token')
         }).then((data) => {
             LOGOUT_DEBUG && console.log(data,'로그아웃 성공')
