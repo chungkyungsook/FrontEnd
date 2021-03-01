@@ -1,5 +1,5 @@
 .test {
-  padding-top: 40px;
+  padding-top: 120px;
 }
 .test .swiper-container {
   width: 500px;
@@ -8,5 +8,5 @@
 }
 
 .test .swiper-wrapper {
-  padding-inline-start: 0;
+  /* padding-inline-start: 0; */
 }
