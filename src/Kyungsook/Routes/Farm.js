@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react' ;
+import React, { useEffect, useRef, useState } from 'react' ;
 import styled from 'styled-components' ;
 import {Redirect}   from 'react-router-dom' ;
 import { withCookies} from 'react-cookie';
@@ -6,16 +6,29 @@ import KinokoInfo from '../Component/FarmComponent/KinokoInfo';
 import FarmMock from '../Component/FarmComponent/FarmMock'
 import axios from 'axios';
 
+import io from 'socket.io-client'
+
 import {
   AWS_URL,
   MUSHROOM_ALL, //모든 버섯 상태 가져오기
-  MACHINE_ID,
-  PRG_NAME,
-  MACHINE_STATUS
+  PLY
 } from '../../Util/api.js'
-import { tr } from 'date-fns/locale';
+import { pl, tr } from 'date-fns/locale';
+
+import * as THREE from 'three' ;
+import { PLYLoader } from '../../../node_modules/three/examples/jsm/loaders/PLYLoader' ;
+import { OrbitControls } from '../../../node_modules/three/examples/jsm/controls/OrbitControls' ;
+import Stats from '../../../node_modules/three/examples/jsm/libs/stats.module' ;
+
+
+const WIDTH = 1000 ;
+const HIGHT = 600 ;
+
+const loader = new PLYLoader() ;
+
 const Farm = ({cookies,value}) => {
   
+  const element = useRef() ;
 
   //선택한 버섯 정보 저장
   const [kinoko,setKinoko] = useState(null)
@@ -111,9 +124,9 @@ const Farm = ({cookies,value}) => {
     }
     //마지막. 재배기 작동 상태  isValue -> 제일 마지막에 실행 isLoding -> true 화면 보이기    
   useEffect(()=>{
+
     console.log('===========Farm 처음 실행 상태===========');
-    console.log('===========end===========');
-    // mushroom_all()
+ 
   },[])
 
   useEffect(()=>{
@@ -130,6 +143,8 @@ const Farm = ({cookies,value}) => {
     console.log('===========Farm 처음 실행 상태===========');
     value.prgInfo.prg_id !== 0 &&  mushroom_all()
   },[value.prgInfo])
+
+
   //버섯 상태별로 저장하기
 
   const view = {
@@ -150,7 +165,6 @@ const Farm = ({cookies,value}) => {
         {/* 선택한 기기 버섯 정보 가져오기 */}
         <KinokoInfo />
         {/* 버섯 화면에 보이기 -> mock은 test파일 원본은 farmBox */}
-        {/* { loding === 1 ? (<Redirect to="/"/> ): (loding ? (<FarmMock  view={view} onClick={onClick}/>) : (<div>LODING....</div>))} */}
         { loding ? (<FarmMock value={value} view={view} onClick={onClick}/>) : (<div>LODING....</div>)}
         
       </>

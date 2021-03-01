@@ -75,7 +75,7 @@ const FarmMock = ({cookies,onClick,view,value}) => {
             <Section2>
                 
                 <Item2>
-                    <ProjectName><Text>진행 중인 프로젝트</Text></ProjectName>
+                    <ProjectName><Text>진행 중인 프로그램 [{value.prgInfo.prg_name}]</Text></ProjectName>
                     <GrpBox>
                         <ProgressChart prgInfo ={value.prgInfo}/>
                     </GrpBox>

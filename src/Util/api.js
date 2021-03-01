@@ -1,4 +1,4 @@
-export const AWS_URL = 'http://54.210.105.132'
+export const AWS_URL = 'http://34.227.176.206'
 
 //////////////////////////////////////////////////버섯 재배기 정보 API
 //해당 버섯 재배기의 번호와 진행중인 프로젝트 이름 
@@ -62,3 +62,9 @@ export const LOGIN = '/api/login'
 //token
 //200, 404
 export const LOGOUT = '/api/logout'
+
+//3D ply 파일 가져오기
+export const PLY = '/api/ply'
+
+//사진 가져오기
+export const COMPOST = '/api/compost'
