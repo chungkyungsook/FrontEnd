@@ -189,7 +189,7 @@ const Custom = () => {
             case 'start':
                 //커스텀 프로그램 적용 put 코드
                 axios.put(`${URL}/api/myfarm/program`, {
-                    id: 1, //macid
+                    id: macid, //macid
                     prgId: prgid
                 }).then(response => {
                     console.log(response);
