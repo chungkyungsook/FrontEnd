@@ -142,7 +142,7 @@ const MyFarm = ({cookies,value,logoutOnClick,location}) => {
             setIsLoding(true) //선택한 재배기 없으면 로딩 끝내주기
             value.setIsOn({
                 id : 0,
-                prgName : "실험중입니다."
+                prgName : ""
             })
         })
 
