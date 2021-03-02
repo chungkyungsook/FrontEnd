@@ -9,7 +9,7 @@ import {withCookies} from 'react-cookie';
 import {URL} from '../Util';
 import {getKinoko} from '../CRUD';
 import Modal from '../Components/Modal';
-import {Button as ModalButton, ModalTitleBox, ModalTextBox, ModalFooter} from '../Components/ModalContent';
+import {Button as ModalButton, ModalTitleBox, ModalFooter} from '../Components/ModalContent';
 
 
 // ------------------------지금까지의 환경 그래프------------------------
@@ -103,9 +103,11 @@ class MyError extends Error {
 const Update = ({cookies, history}) => {
     const updateChartInfo = useCustomUpdateInfo();
     console.log(updateChartInfo);
+    const [nodata, setNodata] = useState(0);
     if(updateChartInfo === {}) {
         alert('현재 진행중인 프로그램이 없습니다!');
-        history.push('/setting');
+        //history.push('/setting');
+        setNodata(1);
     }
     const [loading, setLoading] = useState(1);
     const [compareChart, setCompareChart] = useState({});
@@ -125,25 +127,27 @@ const Update = ({cookies, history}) => {
     });
 
     useEffect(() => {
-        let date = [];
-        let temp = [];
-        let humi = [];
-        let grow = [];
-        console.log(updateChartInfo);
+        if(!nodata) {
+            let date = [];
+            let temp = [];
+            let humi = [];
+            let grow = [];
+            console.log(updateChartInfo);
 
-        getKinoko(updateChartInfo.id).then(res => {
-            setKinokoCount(res.length);
-        })
+            getKinoko(updateChartInfo.id).then(res => {
+                setKinokoCount(res.length);
+            })
 
-        updateChartInfo.res.humidity.map((ch,i) => {
-            date.push((i + 1) + '일차');
-            temp.push(updateChartInfo.res.temperature[i].setting_value);
-            humi.push(ch.setting_value);
-            if(updateChartInfo.res.growthRate.length !== 0) {
-                grow.push(updateChartInfo.res.growthRate[i].gr_value);
-            }
-        });
-        setCompareChart(setChartjsDataset(date, temp, humi, grow));
+            updateChartInfo.res.humidity.map((ch,i) => {
+                date.push((i + 1) + '일차');
+                temp.push(updateChartInfo.res.temperature[i].setting_value);
+                humi.push(ch.setting_value);
+                if(updateChartInfo.res.growthRate.length !== 0) {
+                    grow.push(updateChartInfo.res.growthRate[i].gr_value);
+                }
+            });
+            setCompareChart(setChartjsDataset(date, temp, humi, grow));
+        }
         setTimeout(() => setLoading(0),2000);
     },[]);
 
@@ -251,7 +255,6 @@ const Update = ({cookies, history}) => {
                     modalTextfirst: '',
                 });
             })
-
         }catch(e) {
             if(e.name === 'TempErrorUp') {
                 alert('온도 제한 27도를 넘었습니다!');
@@ -262,8 +265,14 @@ const Update = ({cookies, history}) => {
         }
     }
 
-    function onSubmit() {
-
+    function onClose () {
+        setModalInfo({
+            opacity: 0,
+            customId: null,
+            titleText: '',
+            modalTextfirst: '',
+        })
+        history.push('/');
     }
 
     return (
@@ -336,13 +345,13 @@ const Update = ({cookies, history}) => {
                     </SettingName>
                 </SettingBox>
             </CustomUpdateDivRow>
-            <Modal opacity={modalInfo.opacity} customId={modalInfo.customId}>
+            <Modal onClose={onClose} opacity={modalInfo.opacity} customId={modalInfo.customId} width={400} height={200}>
                 <ModalTitleBox>
                     {modalInfo.titleText}
                 </ModalTitleBox>
-                <ModalTextBox>
-                    <button>확인</button>
-                </ModalTextBox>
+                <ModalFooter>
+                    <ModalButton onClick={() => onClose()}>확인</ModalButton>
+                </ModalFooter>
             </Modal>
         </>
         }
