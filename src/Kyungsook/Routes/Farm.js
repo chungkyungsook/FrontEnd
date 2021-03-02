@@ -11,7 +11,8 @@ import io from 'socket.io-client'
 import {
   AWS_URL,
   MUSHROOM_ALL, //모든 버섯 상태 가져오기
-  PLY
+  PLY,
+  MUSHROOM_NAME
 } from '../../Util/api.js'
 import { pl, tr } from 'date-fns/locale';
 
@@ -48,6 +49,9 @@ const Farm = ({cookies,value}) => {
 
   //버섯 선택 유무 판단
   const [name, setName] = useState(null)
+
+  const [kinokoName, setKinokoName] = useState()
+
   const kinokoOnClick = (e) =>{
     console.log(e.target.id)
     setName(e.target.id)
@@ -57,7 +61,19 @@ const Farm = ({cookies,value}) => {
     console.log("Farm 버섯 객체 누르면 해당 정보 보여주기",data);
     setKinoko(data)
   }
-
+    //버섯 배지 이름 가져오기
+  function mushroom_name (){
+      
+      axios.get(`${AWS_URL}${MUSHROOM_NAME}`,{
+          params : {id : parseInt(value.prgInfo.prg_id)}
+      }).then(data =>{
+          console.log("이름 가져오기 성공",data.data)
+          setKinokoName(data.data)
+      }).catch(e =>{
+          console.log(e);
+      })
+      
+  }
     //4번  버섯 재배기 안 모든 버섯 객체 정보 저장
     function mushroom_all () {
       console.log("==========4. Myfarm 모든 버섯 객체 저장하기==========")
@@ -117,7 +133,7 @@ const Farm = ({cookies,value}) => {
           setLoding(true)
       }).catch(e =>{
           console.log("수확한 버섯 정보 가져오기 실패",e);
-          // alert('아직 정보가 없어요..')
+          alert('아직 자라난 표고버섯이 없어요..')
           
           setLoding(1) // 해당 데이터가 없으면 myfarm페이지로 이동
       })
@@ -142,7 +158,12 @@ const Farm = ({cookies,value}) => {
 
   useEffect(()=>{
     console.log('===========Farm 처음 실행 상태===========');
-    value.prgInfo.prg_id !== 0 &&  mushroom_all()
+
+    if(value.prgInfo.prg_id !== 0){
+      mushroom_name()
+      mushroom_all()
+    } 
+
   },[value.prgInfo])
 
 
@@ -156,7 +177,8 @@ const Farm = ({cookies,value}) => {
     kinokoList, 
     kinoko,
     kinokoOnClick,
-    name
+    name,
+    kinokoName
   }
   
   

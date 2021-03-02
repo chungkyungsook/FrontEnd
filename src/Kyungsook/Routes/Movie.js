@@ -73,20 +73,24 @@ const Movie = (props) => {
 
     useEffect(() =>{
 
-      if(temp && temp){
-
-        for(let i = 0 ; i < temp.length; i++) {
-          for(let j = 0 ; j < temp[i].members.length ; j++) {
-              const img = new Image() ;
-              img.src = `${AWS_URL}/api/compost/${temp[i].members[j]}` ;
-              img.width = 480
-              arr.push(img)
-          } 
-      }
-
-      setImages(arr) // 모든 데이터 저장
-      setNumber(1)
-
+      if(temp !== undefined ){
+          if(temp.length !== 0){
+            
+            for(let i = 0 ; i < temp.length; i++) {
+              for(let j = 0 ; j < temp[i].members.length ; j++) {
+                  const img = new Image() ;
+                  img.src = `${AWS_URL}/api/compost/${temp[i].members[j]}` ;
+                  img.width = 480
+                  arr.push(img)
+              } 
+            }
+    
+              setImages(arr) // 모든 데이터 저장
+              setNumber(1)
+    
+          }else if(temp.length === 0){
+            alert('아직 완성된 영상이 없어요..')
+          }
       }
     
   },[temp])

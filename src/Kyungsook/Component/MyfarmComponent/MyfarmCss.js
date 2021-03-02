@@ -145,9 +145,9 @@ const MyFarmCss = ({value,isLoding,result2,isOk,onClickChangeName,onChange,temp}
                         <LogoImg src={img ? Kinoko2 : Kinoko1} draggable="false" width="200"/>
                     </div>
                     <div className='kinokoBtns'>
-                    <button className = "kinokoBtn" onClick={imgChang}>{
+                    {/* <button className = "kinokoBtn" onClick={imgChang}>{
                        img ? "< 뒤 >" : "< 앞 >" 
-                    }</button>
+                    }</button> */}
                     { result2.isNameChange ?  (<button name='name' className="change_name" onClick={onClickChangeName}>이름 바꾸기</button>) : null}
                     </div>
                 </div>
