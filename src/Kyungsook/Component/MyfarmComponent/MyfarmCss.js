@@ -143,6 +143,7 @@ const MyFarmCss = ({value,isLoding,result2,isOk,onClickChangeName,onChange,temp}
                     {/* 버섯 이미지 */}
                     <div className = "kinokoImg">
                         <LogoImg src={img ? Kinoko2 : Kinoko1} draggable="false" width="200"/>
+                        
                     </div>
                     <div className='kinokoBtns'>
                     {/* <button className = "kinokoBtn" onClick={imgChang}>{

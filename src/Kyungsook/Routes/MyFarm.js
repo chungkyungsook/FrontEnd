@@ -233,8 +233,11 @@ const MyFarm = ({cookies,value,logoutOnClick,location}) => {
     }
 
     //영상 처리하기
-    function video_view(res_video){
-
+    function video_view(data){
+        var reader = new FileReader();
+        reader.onload = function(e){
+            console.log(e);
+        }
     }
 
     //버섯 배지 이름 가져오기
