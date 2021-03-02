@@ -9,6 +9,7 @@ import KinokoImg from '../../../assets/KinokoImg/kinoko1.png' ;
 import ProgressChart from '../../../Beomhwan/Components/ProgressChart'
 import { format } from 'date-fns';
 import { valueToRelative } from '@amcharts/amcharts4/.internal/core/utils/Utils';
+import Veido from './Veido';
 // import Veido from './Veido';
 
 const FarmMock = ({cookies,onClick,view,value}) => {
@@ -48,8 +49,8 @@ const FarmMock = ({cookies,onClick,view,value}) => {
                 <ItemImg>
                     {/*서버와 통신이 성공하면  */}
                     {/* 3D파일 보여주기 */}
-                    {/* <Veido/> */}
-                    <LogoImg src={KinokoImg} draggable="false" width="200" alt={'버섯 배지 사진'}/>
+                    <Veido/>
+                    {/* <LogoImg src={KinokoImg} draggable="false" width="200" alt={'버섯 배지 사진'}/> */}
                     <div>
                     {
                         view.kinokoList && (
