@@ -47,11 +47,12 @@ const Movie = (props) => {
           }
         }).then(data => {
             console.log(data);
-            setTemp(data.data)
+            setTemp(data.data.filter(data => data !== null ))
             setImages(
-              data.data.map(data => data.members)
+              data.data.filter(data => data !== null )
             )
         }).catch(e => {
+          alert('해당 데이터가 없습니다.')
           console.log('movie 값 오류 났습니다.');
         });
         
@@ -73,9 +74,9 @@ const Movie = (props) => {
 
     useEffect(() =>{
 
-      if(temp !== undefined ){
+      if(temp !== undefined ){ //빈 값이 없는 지 확인 후 실행
           if(temp.length !== 0){
-            
+            console.log(temp.length);
             for(let i = 0 ; i < temp.length; i++) {
               for(let j = 0 ; j < temp[i].members.length ; j++) {
                   const img = new Image() ;
@@ -98,7 +99,7 @@ const Movie = (props) => {
   useEffect(()=>{
 
     number === 1 && setSlides(
-      canvas.map((data,index) =>(
+      temp.map((data,index) =>(
         //alt 이름
         
         <SwiperSlide key={`slide-${index}`} tag="li"> 
