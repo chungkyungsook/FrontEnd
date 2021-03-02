@@ -135,7 +135,7 @@ const RouterComponent = (props) => {
             
             value.setIsOn({
                 id : 0,
-                prgName : "실험중입니다."
+                prgName : ""
             })
         })    
     }
