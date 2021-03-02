@@ -5,12 +5,12 @@ import { PLYLoader } from '../../../../node_modules/three/examples/jsm/loaders/P
 import { OrbitControls } from '../../../../node_modules/three/examples/jsm/controls/OrbitControls' ;
 import Stats from '../../../../node_modules/three/examples/jsm/libs/stats.module' ;
 import axios from 'axios';
-
+import styled from 'styled-components' ;
 import {
   AWS_URL,
 }from '../../../Util/api';
 const WIDTH = 500 ;
-const HIGHT = 500 ;
+const HIGHT = 600 ;
 
 const loader = new PLYLoader() ;
 
@@ -113,11 +113,12 @@ const Veido  = () =>{
     },[])
 
     return(
-      <div ref={element}>
-
-      </div>
+      <View ref={element}>
+      </View>
     )
 }
 
-
+const View = styled.div`
+    padding: 54px 0 0 55px;
+`;
 export default Veido;

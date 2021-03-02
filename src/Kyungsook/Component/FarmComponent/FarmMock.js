@@ -192,6 +192,7 @@ const ItemImg   =  styled.div`
     margin-top: 10px;
     background: rgb(118 94 70);
     border-radius: 13px;
+    /* padding-top: 67px; */
     flex: 4;
 `;
 
@@ -314,4 +315,6 @@ const KinokoBtn = styled.button`
     background : ${props => props.name === props.view && 'rgb(145, 163, 119)'  };
     color : ${props => props.name === props.view && 'white'  };
 `;
+
+
 export default withCookies(FarmMock) ;
