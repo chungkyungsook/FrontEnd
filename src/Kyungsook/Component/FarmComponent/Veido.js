@@ -5,12 +5,12 @@ import { PLYLoader } from '../../../../node_modules/three/examples/jsm/loaders/P
 import { OrbitControls } from '../../../../node_modules/three/examples/jsm/controls/OrbitControls' ;
 import Stats from '../../../../node_modules/three/examples/jsm/libs/stats.module' ;
 import axios from 'axios';
-
+import styled from 'styled-components' ;
 import {
   AWS_URL,
 }from '../../../Util/api';
 const WIDTH = 500 ;
-const HIGHT = 500 ;
+const HIGHT = 600 ;
 
 const loader = new PLYLoader() ;
 
@@ -30,22 +30,29 @@ const Veido  = () =>{
         
               const { data } = img_3d ;
         
+              //3D공상 만들기
               var scene = new THREE.Scene();
         
-        
               const axesHelper = new THREE.GridHelper(10)
-          scene.add(axesHelper)
-          scene.background = new THREE.Color(0x222222) ;
-        
-          var camera = new THREE.PerspectiveCamera( 75, WIDTH/HIGHT, 0.1, 100 );
-          var renderer = new THREE.WebGLRenderer();
-          renderer.setSize( WIDTH, HIGHT );
-          var light = new THREE.SpotLight();
-          light.position.set(20, 20, 20)
-          scene.add(light);
-          element.current.appendChild( renderer.domElement );
-        
-          camera.position.z = 10 ;
+              scene.add(axesHelper)
+              scene.background = new THREE.Color(0x222222) ;
+            
+              //카메라
+              var camera = new THREE.PerspectiveCamera( 75, WIDTH/HIGHT, 0.1, 100 );
+              
+              //렌더러 정의 및 크기 지정, 문서에 추가
+              var renderer = new THREE.WebGLRenderer();
+              renderer.setSize( WIDTH, HIGHT );
+
+              //빛 생성
+              var light = new THREE.SpotLight();
+              //적당한 위치에 놓기
+              light.position.set(20, 20, 20)
+              //생성한 모델 장면에 추가(빛)
+              scene.add(light);
+              element.current.appendChild( renderer.domElement );
+              //카메라 뒤로 후진
+              camera.position.z = 10 ;
         
         
           const controls = new OrbitControls(camera, renderer.domElement) ;
@@ -72,7 +79,7 @@ const Veido  = () =>{
             mesh.position.x = 0 ;
             mesh.position.z = 0.3 ;
         
-        
+            //생성한 모델 장면에 추가
             scene.add(mesh) ;
         
             },(xhr) => {
@@ -85,15 +92,18 @@ const Veido  = () =>{
           const stats = Stats() ;
         
           function animate() {
+
+            //프레임 처리
             requestAnimationFrame( animate );
             stats.update() ;
             render() ;
           };
         
-          function render() {
+          function render() { // 랜더링 수행
             renderer.render( scene, camera );
           }
-        
+
+          //최초에 한번은 수행
           animate();
             }) ;
         
@@ -103,11 +113,12 @@ const Veido  = () =>{
     },[])
 
     return(
-      <div ref={element}>
-
-      </div>
+      <View ref={element}>
+      </View>
     )
 }
 
-
+const View = styled.div`
+    padding: 54px 0 0 55px;
+`;
 export default Veido;
