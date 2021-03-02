@@ -42,7 +42,7 @@ const FarmMock = ({cookies,onClick,view,value}) => {
         <Container>
             <Section1>
                 
-                <ItemName><Text>키노코짱</Text></ItemName>
+                <ItemName><Text>{view.kinokoName}</Text></ItemName>
                 {/* 3D배지 구역 */}
                 <ItemImg>
                     {/*서버와 통신이 성공하면  */}
