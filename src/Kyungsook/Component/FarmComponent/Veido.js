@@ -6,8 +6,11 @@ import { OrbitControls } from '../../../../node_modules/three/examples/jsm/contr
 import Stats from '../../../../node_modules/three/examples/jsm/libs/stats.module' ;
 import axios from 'axios';
 
+import {
+  AWS_URL,
+}from '../../../Util/api';
 const WIDTH = 500 ;
-const HIGHT = 700 ;
+const HIGHT = 500 ;
 
 const loader = new PLYLoader() ;
 
@@ -19,7 +22,7 @@ const Veido  = () =>{
     useEffect(() =>{
 
         const api = axios.create({
-            baseURL : 'http://54.163.128.160'
+            baseURL : `${AWS_URL}`
           }) ;
           
           function get3dData() {
@@ -47,7 +50,7 @@ const Veido  = () =>{
         
           const controls = new OrbitControls(camera, renderer.domElement) ;
         
-          loader.load(`http://54.163.128.160/api/url/ply?url=${data}`, function(geometry){
+          loader.load(`${AWS_URL}/api/url/ply?url=${data}`, function(geometry){
         
             geometry.computeVertexNormals() ;
             
@@ -96,9 +99,14 @@ const Veido  = () =>{
         
           }
         
-        //   get3dData() ;
+         get3dData() ;
     },[])
-  
+
+    return(
+      <div ref={element}>
+
+      </div>
+    )
 }
 
 

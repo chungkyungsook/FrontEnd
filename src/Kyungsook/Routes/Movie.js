@@ -29,7 +29,7 @@ const Movie = (props) => {
 
   const canvas = [useRef(),useRef(),useRef()]
         
-  const WIDTH = 500 - 120, HEIGHT = 500 - 50, FPS = 3;
+  const WIDTH = 500 - 120, HEIGHT = 500 - 50, FPS = 6;
 
   const arr = []
   const [images, setImages] = useState('') //모든 이미지 저장
@@ -77,10 +77,10 @@ const Movie = (props) => {
       if(temp !== undefined ){ //빈 값이 없는 지 확인 후 실행
           if(temp.length !== 0){
             console.log(temp.length);
-            for(let i = 0 ; i < temp.length; i++) {
-              for(let j = 0 ; j < temp[i].members.length ; j++) {
+            for(let i = 0 ; i < temp.length + 5; i++) {
+              for(let j = 0 ; j < temp[0].members.length ; j++) {
                   const img = new Image() ;
-                  img.src = `${AWS_URL}/api/compost/${temp[i].members[j]}` ;
+                  img.src = `${AWS_URL}/api/compost/${temp[0].members[j]}` ;
                   img.width = 480
                   arr.push(img)
               } 
