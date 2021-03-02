@@ -1,9 +1,7 @@
-import React,{useState, useRef, useLayoutEffect, useEffect} from 'react';
+import React,{useState, useEffect} from 'react';
 import styled from 'styled-components';
 import { flexAlign } from '../../Util/css';
 import {NotoSansRegular} from '../css/cssModule';
-// import * as am4core from '@amcharts/amcharts4/core';
-// import * as am4charts from '@amcharts/amcharts4/charts';
 import {Line} from 'react-chartjs-2';
 import {getKinoko} from '../CRUD';
 
@@ -74,7 +72,7 @@ const CardFlex = styled.div`
 const CardBox = styled.div`
     background-color: white;
     border-radius: 10px;
-    width: 170px;
+    width: 150px;
     height: 150px;
     border: 1px solid gray;
     margin: 20px;
@@ -111,20 +109,6 @@ const LineChart = ({data}) => {
     console.log(data);
     return <Line data={data} options={options} />
 };
-
-// const CompareChart = () => {
-
-//     useLayoutEffect(() => {
-//         let chart = am4core.create('chartDiv', am4charts.XYChart);
-
-
-//         return () => {chart.dispose()};
-//     }, []);
-
-//     return (
-//         <div id='chartDiv' style={{width: '100%', height: '100%'}}></div>
-//     );
-// }
 
 function useGetClientWidth() {
     function vh(v) {
@@ -228,9 +212,9 @@ const Compare = ({goSlide, chart}) => {
                             <ExtraInfoBox>
                                 <button onClick={goSlide}>뒤로</button>
                                 <button onClick={onPreview}>전</button>
-                                <button onClick={onNext}>다음</button>
-                                햇빛{ch.prg_sunshine}
-                                물{ch.prg_water}
+                                <button onClick={onNext}>다음</button> <br/>
+                                햇빛 : {ch.prg_sunshine} <br/>
+                                물 : {ch.prg_water}
                             </ExtraInfoBox>
                         </DescriptionBox>    
                     </CompareBox>

@@ -10,6 +10,7 @@ import {flexAlign} from '../../Util/css';
 import axios from 'axios';
 import { useMachineInfo } from '../ChartContext';
 import {Local, URL} from '../Util';
+import Modal from '../Components/Modal';
 
 // 커스텀 차트
 export const CustomChart = ({Data, titleMsg}) => {

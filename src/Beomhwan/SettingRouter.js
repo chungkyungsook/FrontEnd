@@ -47,10 +47,13 @@ const SettingRouter = ({location, cookies, value, history}) => {
     const {pathname} = location;
 
     console.log('asdklfhlasjdhflkasjld', value);
+    
+    //
 
-    useEffect(() => {
-        return () => {machineIdCheck(value.isOn.id, history)}
-    },[]);
+    if(value.isOn.id === 0) {
+        alert('기기를 선택해주세요!');
+        history.push('/');
+    }
 
     return (
         <>
