@@ -121,10 +121,15 @@ const ChartContext = ({children, machineId}) => {
                 id: 1 // machineId
             }
         }).then(res => {
-            console.log(res);
+            console.log('slkdflksalkfasjflksjsadsafasfasfd', res);
+
+            if(res.data.length === 0) {
+                return [{prgId:0, }];
+            }
             return res.data;
         }).catch(err => {
             console.log(err);
+            return [{prgId:0, }];
         })
         return data;
     }
