@@ -50,7 +50,6 @@ const ProgressChart = ({cookies, prgInfo}) => {
             am4core.useTheme(am4themes_animated);
             chart.scrollbarX = new am4core.Scrollbar();
             chart.cursor = new am4charts.XYCursor();
-            chart.dataSource.updateCurrentData = true;
 
             let title = chart.titles.create();
             title.text = prgInfo.prg_name;
@@ -61,7 +60,6 @@ const ProgressChart = ({cookies, prgInfo}) => {
             chart.dataSource.url = `${URL}/api/myfarm/data/hour?prgId=${prgInfo.prg_id}`;
             chart.dataSource.parser = new am4core.JSONParser();
             chart.dataSource.parser.options.emptyAs = 0;
-            chart.dataSource.updateCurrentData = true;
 
             chart.dataSource.events.on('parseended', function (ev) {
                 let obj = {

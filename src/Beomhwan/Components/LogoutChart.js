@@ -68,6 +68,7 @@ const LogoutChartComponent = ({date, value}) => {
         tempSeries.dataFields.valueY = 'temp';
         tempSeries.dataFields.dateX = 'date';
         tempSeries.stroke = am4core.color('rgba(255,0,0,0.5)');
+        tempSeries.fill = am4core.color('rgba(255,0,0,1)');
         tempSeries.strokeWidth = 3;
         tempSeries.tensionX = 0.8;
         tempSeries.tooltipText = '{dateX.formatDate("MM-dd HH:mm")} : {valueY}도';
@@ -83,11 +84,9 @@ const LogoutChartComponent = ({date, value}) => {
         humiSeries.tooltipText = "{dateX.formatDate('MM-dd HH:mm')} : {valueY}%";
 
         // bullet 생성
-        // let tempBullet = tempSeries.bullets.push(new am4charts.Bullet());
-        // let square = tempBullet.createChild(am4core.Rectangle);
-        // square.width = 10;
-        // square.height = 10;
-        // square.fill = am4core.color('rgba(255,0,0,0.5)');
+        let tempBullet = tempSeries.bullets.push(new am4charts.Bullet());
+        tempBullet.width = 10;
+        tempBullet.height = 10;
 
         setLoading(false);
         return () => {console.log('hi')};
