@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react' ;
 
 import * as THREE from 'three' ;
-import { PLYLoader } from '../node_modules/three/examples/jsm/loaders/PLYLoader' ;
-import { OrbitControls } from '../node_modules/three/examples/jsm/controls/OrbitControls' ;
-import Stats from '../node_modules/three/examples/jsm/libs/stats.module' ;
+import { PLYLoader } from '../../../../node_modules/three/examples/jsm/loaders/PLYLoader' ;
+import { OrbitControls } from '../../../../node_modules/three/examples/jsm/controls/OrbitControls' ;
+import Stats from '../../../../node_modules/three/examples/jsm/libs/stats.module' ;
 import axios from 'axios';
 
 const WIDTH = 500 ;
@@ -96,7 +96,7 @@ const Veido  = () =>{
         
           }
         
-          get3dData() ;
+        //   get3dData() ;
     },[])
   
 }
