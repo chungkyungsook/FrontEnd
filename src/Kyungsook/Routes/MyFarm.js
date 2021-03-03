@@ -47,11 +47,11 @@ const MyFarm = ({cookies,value,logoutOnClick,location}) => {
     //일차 
     const [days, setDays] = useState('')
 
-    // // 재배기 온도, 습도 값 저장
-    // const [setting, setSetting] = useState({
-    //     temperature : 0, //온도
-    //     humidity : 0,    //습도
-    // })
+    // 재배기 온도, 습도 값 저장
+    const [setting, setSetting] = useState({
+        temperature : 0, //온도
+        humidity : 0,    //습도
+    })
 
     //재배기 정보 가져기
     const [isOk, setIsOk] = useState({
@@ -75,6 +75,7 @@ const MyFarm = ({cookies,value,logoutOnClick,location}) => {
     const [growing, setGrowing]         = useState([])
     const [harvest, setHarvest]         = useState([])
     const [whiteflower, setWhiteflower] = useState([])
+    const [video, setVideo]           = useState()
 
     const kinokoState = ['growing', 'harvest', 'whiteflower']
     const temp = {
@@ -85,7 +86,7 @@ const MyFarm = ({cookies,value,logoutOnClick,location}) => {
     }
     //MyfarmCss
     const result2 = {
-        userDeviceInfo,day,days,kinokoName,isNameChange,growing,harvest,whiteflower,canvas
+        userDeviceInfo,setting,day,days,kinokoName,isNameChange,growing,harvest,whiteflower
     }
 ///////////////////////////////////////////////////////////////////////    실행 함수
     
@@ -227,14 +228,20 @@ const MyFarm = ({cookies,value,logoutOnClick,location}) => {
         
     }
 
-    // //5.재배기 온도,습도 값 바꾸기
-    // function maching_setting (temperature,humidity){
+    //5.재배기 온도,습도 값 바꾸기
+    function maching_setting (temperature,humidity){
 
-    //     setSetting(
-    //         {temperature : temperature, humidity : humidity}
-    //     )
-    // }
-   
+        setSetting(
+            {temperature : temperature, humidity : humidity}
+        )
+    }
+
+    //영상 처리하기
+    function video_view(data){
+        
+    }
+
+    
 
     //버섯 배지 이름 가져오기
     function mushroom_name (){
@@ -426,6 +433,7 @@ const MyFarm = ({cookies,value,logoutOnClick,location}) => {
                     onClickChangeName={onClickChangeName} //이름 바꾸기
                     onChange={onChange}
                     temp= {temp}
+                    canvas={canvas}
                 />
             ) : ( //로그인이 풀렸어요
                 <Redirect to = "Login" />

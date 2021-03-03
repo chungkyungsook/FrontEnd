@@ -1,5 +1,5 @@
 // MyFarm 전체 내용
-import React, { useEffect, useRef, useState } from 'react' ;
+import React, { useEffect, useState } from 'react' ;
 import '../../Css/MyFarm.css';
 import {Link} from 'react-router-dom';
 import styled from 'styled-components' ;
@@ -20,7 +20,7 @@ import {
 
 import { format } from 'date-fns';
 
-const MyFarmCss = ({value,isLoding,result2,isOk,onClickChangeName,onChange,temp}) => {
+const MyFarmCss = ({value,isLoding,result2,onClickChangeName,onChange,temp,canvas}) => {
     
     //선택하 기기 정보 저장
     const [userInfo, setUserInfo] = useState({
@@ -28,9 +28,6 @@ const MyFarmCss = ({value,isLoding,result2,isOk,onClickChangeName,onChange,temp}
         changUser : false
     })
 
-    //이미지 저장 용
-    const canvas = useRef(null)
-    const [image, setImage] = useState(null)
     //선택한 기기 정보 저장하기
     const deviceNum = (data)=>{
         DEBUG && console.log("userInfo. changUser", userInfo.changUser)
@@ -52,54 +49,6 @@ const MyFarmCss = ({value,isLoding,result2,isOk,onClickChangeName,onChange,temp}
     //진행중인 프로그램 이름 및 프로그램 id 
     
     const [number,setNumber] = useState(null)
-
-        // 재배기 온도, 습도 값 저장
-    const [setting, setSetting] = useState({
-        temperature : 0, //온도
-        humidity : 0,    //습도
-    })
-
-    //5.재배기 온도,습도 값 바꾸기
-    function maching_setting (temperature,humidity){
-
-        setSetting(
-            {temperature : temperature, humidity : humidity}
-        )
-    }
-
-    // useEffect(() =>{
-    //     maching_setting(24, 60)
-    // },[])
-
-    // useEffect(() => {
-    
-    //     // 소켓 연결 코드
-    //     const socket = io('http://192.168.0.10:3000') ;
-    //     const temp = new Image()
-    //     
-    //     socket.emit('req_video', true) ;
-    //     socket.on('res_video', (data) => {
-    //         
-    //       console.log(data) ;
-    //          //video_view(data)
-    //          
-    //     }) ;
-    
-    //     // 온, 습도 데이터 요청
-    //     socket.emit('req_cosdata');
-    //     // 온, 습도 데이터 받아오는 이벤트
-    //     socket.on('res_cosdata', (data) => {
-    //             console.log(data);
-    //             maching_setting(parseInt(data.temperature), parseInt(data.humidity) ,) //재배기 온도 습도 작동 환경
-    //     });
-
-    //     return () => {
-    //       socket.disconnect() ;
-    //     }
-        
-    //   }, []) ;
-
-
     useEffect(()=>{
         (console.log("==================MyFarmCss 처음 실행 화면 =================="));
         // let today = new Date('yyyy MM dd')
@@ -154,7 +103,6 @@ const MyFarmCss = ({value,isLoding,result2,isOk,onClickChangeName,onChange,temp}
         }
     },[value.prgInfo.prg_id])
 
-    
     return (
         <div className="container">
             
@@ -213,13 +161,11 @@ const MyFarmCss = ({value,isLoding,result2,isOk,onClickChangeName,onChange,temp}
                 <div className = "box1 environment">
                     <div className = "box2 progress">
                         <span className="span">온도</span>
-                        {/* <Progress color={'secondary'} value={result2.setting.temperature} name={'온도'}/> */}
-                        <Progress color={'secondary'} value={setting.temperature} name={'온도'}/>
+                        <Progress color={'secondary'} value={result2.setting.temperature} name={'온도'}/>
                     </div>       
                     <div className = "box2 progress">
                         <span className="span">습도</span>
-                        {/* <Progress value={result2.setting.humidity}/> */}
-                        <Progress value={setting.humidity}/>
+                        <Progress value={result2.setting.humidity}/>
                     </div>       
                 </div>
 
