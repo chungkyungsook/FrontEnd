@@ -175,7 +175,7 @@ const MyFarm = ({cookies,value,logoutOnClick,location}) => {
             setIsNameChange(false)
             value.setPrgInfo({
                 prg_id : 0,
-                prg_name : "진행중인 프로그램이 없습니다."
+                prg_name : "진행중인 프로그램이 없습니다"
             })
 
         })  
