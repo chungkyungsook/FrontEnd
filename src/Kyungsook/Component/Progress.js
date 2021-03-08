@@ -59,8 +59,7 @@ export default function CircularStatic(props) {
 
     React.useEffect(()=>{
         setProgress(props.value);
-    
-    },[])
+    },[props.value])
 
   return <CircularProgressWithLabel value={progress} color={props.color} name={props.name}/>;
 }
