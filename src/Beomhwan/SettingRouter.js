@@ -48,12 +48,7 @@ const SettingRouter = ({location, cookies, value, history}) => {
 
     console.log('asdklfhlasjdhflkasjld', value);
     
-    //
-
-    if(value.isOn.id === 0) {
-        alert('기기를 선택해주세요!');
-        history.push('/');
-    }
+    machineIdCheck(value.isOn.id, history);
 
     return (
         <>

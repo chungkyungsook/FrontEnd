@@ -185,7 +185,7 @@ const MyFarmCss = ({value,isLoding,result2,onClickChangeName,onChange,temp,image
                         <div>진행중인 프로그램 이름</div>
                         <div>{value.prgInfo.prg_name}</div>
                         <br/>
-                        <div>진행 상태 : {result2.day && result2.days}일차</div>
+                        <div>진행 상태 : {result2.day && result2.days+1}일차</div>
                     </div>
                     <div className = "smailInfo">
                         <h1>오늘은 표고버섯이 {number ? number.length : 0}개 자랐습니다.</h1>

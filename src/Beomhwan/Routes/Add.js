@@ -61,6 +61,7 @@ export const CustomChart = ({Data, titleMsg}) => {
             TempSeries.dataFields.valueY = "Temperature";
             TempSeries.dataFields.categoryX = "Date";
             TempSeries.tooltip.pointerOrientation = "vertical";
+            TempSeries.stroke = am4core.color('rgb(255,0,0)');
             TempSeries.tooltip.dy = -8;
             TempSeries.sequencedInterpolation = 1500;
             TempSeries.defaultState.interpolationDuration = 1500;

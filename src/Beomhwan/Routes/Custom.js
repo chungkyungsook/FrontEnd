@@ -126,7 +126,7 @@ const AddMessageBox = styled.div`
 `;
 
 // 커스텀 컴포넌트
-const Custom = () => {
+const Custom = ({value}) => {
     const chart = useCustomChartList();
     const chartInfo = useCustomChartInfo();
     const machineId = useMachineInfo();
@@ -140,6 +140,8 @@ const Custom = () => {
         modalTextsecond: '',
         confirm: ''
     });
+
+    console.log(value);
 
     async function setChart () {
         await chart.map((ch, i) => {
@@ -187,6 +189,7 @@ const Custom = () => {
         console.log(macid);
         switch(modalInfo.confirm) {
             case 'start':
+                // if(prgid === )
                 //커스텀 프로그램 적용 put 코드
                 axios.put(`${URL}/api/myfarm/program`, {
                     id: macid, //macid
@@ -194,12 +197,12 @@ const Custom = () => {
                 }).then(response => {
                     console.log(response);
                     setModalInfo({
-                        ...modalInfo,
                         opacity: 1,
                         customId: prgid,
                         titleText: '',
                         modalTextfirst: '적용 했습니다.',
-                        modalTextsecond: '프로그램이 종료 될 때까지 프로그램을 바꿀 수 없으니 주의해주세요.'
+                        modalTextsecond: '프로그램이 종료 될 때까지 프로그램을 바꿀 수 없으니 주의해주세요.',
+                        confirm: ''
                     });
                 }).catch(err => {
                     console.error(err);
@@ -212,11 +215,11 @@ const Custom = () => {
                     console.log(response);
                     setCustomChart(cu => cu.filter(id => id.prg_id !== prgid));
                     setModalInfo({
-                        ...modalInfo,
                         opacity: 1,
                         customId: prgid,
                         titleText: '',
                         modalTextfirst: '삭제 했습니다.',
+                        confirm: ''
                     });
                 }).catch(err => {
                     console.error(err);
@@ -224,7 +227,10 @@ const Custom = () => {
                 
                 break;
             default:
-                return 0;
+                setModalInfo({
+                    ...modalInfo,
+                    opacity: 0
+                })
         }
     };
 
