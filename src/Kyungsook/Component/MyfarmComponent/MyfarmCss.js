@@ -1,5 +1,5 @@
 // MyFarm 전체 내용
-import React, { useEffect, useState } from 'react' ;
+import React, { useEffect, useRef, useState } from 'react' ;
 import '../../Css/MyFarm.css';
 import {Link} from 'react-router-dom';
 import styled from 'styled-components' ;
@@ -19,9 +19,10 @@ import {
 } from '../../../Util/debugging.js'
 
 import { format } from 'date-fns';
+import FileBase64 from './FileBase64';
 
-const MyFarmCss = ({value,isLoding,result2,isOk,onClickChangeName,onChange,temp}) => {
-    
+const MyFarmCss = ({value,isLoding,result2,onClickChangeName,onChange,temp,image,temperature,humidity}) => {
+
     //선택하 기기 정보 저장
     const [userInfo, setUserInfo] = useState({
         user : '',
@@ -102,6 +103,13 @@ const MyFarmCss = ({value,isLoding,result2,isOk,onClickChangeName,onChange,temp}
             temp.setWhiteflower([])
         }
     },[value.prgInfo.prg_id])
+    
+    useEffect(()=>{
+        console.log('온도',temperature);
+        console.log('습도',humidity);
+        
+    },[temperature,humidity])
+    
 
     return (
         <div className="container">
@@ -142,7 +150,8 @@ const MyFarmCss = ({value,isLoding,result2,isOk,onClickChangeName,onChange,temp}
                     </div>
                     {/* 버섯 이미지 */}
                     <div className = "kinokoImg">
-                        <LogoImg src={img ? Kinoko2 : Kinoko1} draggable="false" width="200"/>
+                        {/* <LogoImg src={Kinoko1} draggable="false" width="200"/> */}
+                        <img src={image} alt='버섯 실시간 사진' width="400px" height="505px" />
                         
                     </div>
                     <div className='kinokoBtns'>
@@ -157,11 +166,11 @@ const MyFarmCss = ({value,isLoding,result2,isOk,onClickChangeName,onChange,temp}
                 <div className = "box1 environment">
                     <div className = "box2 progress">
                         <span className="span">온도</span>
-                        <Progress color={'secondary'} value={result2.setting.temperature} name={'온도'}/>
+                        <Progress color={'secondary'} value={temperature} name={'온도'}/>
                     </div>       
                     <div className = "box2 progress">
                         <span className="span">습도</span>
-                        <Progress value={result2.setting.humidity}/>
+                        <Progress value={humidity}/>
                     </div>       
                 </div>
 

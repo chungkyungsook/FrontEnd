@@ -55,41 +55,41 @@ const Veido  = () =>{
               camera.position.z = 10 ;
         
         
-          const controls = new OrbitControls(camera, renderer.domElement) ;
-        
-          loader.load(`${AWS_URL}/api/url/ply?url=${data}`, function(geometry){
-        
-            geometry.computeVertexNormals() ;
-            
-            const material = new THREE.MeshPhysicalMaterial({
-              color: 0xffffff,
-            
-              metalness: .25,
-              roughness: 0.1,
-              transparent: true,
-              transmission: 1.0,
-              side: THREE.DoubleSide,
-              clearcoat: 1.0,
-              clearcoatRoughness: .25
-          });
+              const controls = new OrbitControls(camera, renderer.domElement) ;
           
-            const mesh = new THREE.Mesh(geometry, material) ; 
-        
-            mesh.position.y = 0 ;
-            mesh.position.x = 0 ;
-            mesh.position.z = 0.3 ;
-        
-            //생성한 모델 장면에 추가
-            scene.add(mesh) ;
-        
-            },(xhr) => {
-               console.log( (xhr.loaded / xhr.total * 100) + '% loaded')
-            },
-            (error) => {
-                console.log(error);
-            }
-          ) ; 
-          const stats = Stats() ;
+              loader.load(`${AWS_URL}/api/url/ply?url=${data}`, function(geometry){
+          
+              geometry.computeVertexNormals() ;
+              
+              const material = new THREE.MeshPhysicalMaterial({
+                color: 0xffffff,
+              
+                metalness: .25,
+                roughness: 0.1,
+                transparent: true,
+                transmission: 1.0,
+                side: THREE.DoubleSide,
+                clearcoat: 1.0,
+                clearcoatRoughness: .25
+            });
+            
+              const mesh = new THREE.Mesh(geometry, material) ; 
+          
+              mesh.position.y = 0 ;
+              mesh.position.x = 0 ;
+              mesh.position.z = 0.3 ;
+          
+              //생성한 모델 장면에 추가
+              scene.add(mesh) ;
+          
+              },(xhr) => {
+                console.log( (xhr.loaded / xhr.total * 100) + '% loaded')
+              },
+              (error) => {
+                  console.log(error);
+              }
+            ) ; 
+            const stats = Stats() ;
         
           function animate() {
 

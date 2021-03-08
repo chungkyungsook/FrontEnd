@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react' ;
+import React,{useState,useEffect, useRef} from 'react' ;
 import '../Css/MyFarm.css';
 import {Redirect}   from 'react-router-dom' ;
 import { withCookies} from 'react-cookie';
@@ -29,8 +29,12 @@ import {format} from 'date-fns';
 import { da } from 'date-fns/locale';
 import { concat } from '@amcharts/amcharts4/.internal/core/utils/Iterator';
 import io from 'socket.io-client'
+
 const MyFarm = ({cookies,value,logoutOnClick,location}) => {
 ///////////////////////////////////////////////////////////////////////   변수
+    
+    //이미지 저장용
+    const [image, setImage] = useState(null)
     //user 기기 정보 저장
     const [userDeviceInfo, setUserDeviceInfo] = useState({
         userInfo : []
@@ -45,11 +49,8 @@ const MyFarm = ({cookies,value,logoutOnClick,location}) => {
     const [days, setDays] = useState('')
 
     // 재배기 온도, 습도 값 저장
-    const [setting, setSetting] = useState({
-        temperature : 0, //온도
-        humidity : 0,    //습도
-    })
-
+    const [temperature, setTemperature] = useState(0)
+    const [humidity, setHumidity] = useState(0)
     //재배기 정보 가져기
     const [isOk, setIsOk] = useState({
         isDevice :false
@@ -61,7 +62,7 @@ const MyFarm = ({cookies,value,logoutOnClick,location}) => {
     //버섯 배지 이름 저장
     const [kinokoName, setKinokoName]     = useState('')
     
-    //버섯 이름 바꾸는 버튼 바꾸기 false면 -> 기존 이름 바꾸기, true -> 해당 버섯 배지이름 없음
+    //버섯 이름 바꾸는 버튼 바꾸기 false면 -> 기존 이름 바꾸기, true -> 해당 버섯 배지이름se 없음
     const [isNameChange, setIsNameChange] = useState(false)
 
     //배지 이름 변경을 위한 변수들
@@ -72,7 +73,7 @@ const MyFarm = ({cookies,value,logoutOnClick,location}) => {
     const [growing, setGrowing]         = useState([])
     const [harvest, setHarvest]         = useState([])
     const [whiteflower, setWhiteflower] = useState([])
-    const [video, setVideo]           = useState()
+    
 
     const kinokoState = ['growing', 'harvest', 'whiteflower']
     const temp = {
@@ -83,7 +84,7 @@ const MyFarm = ({cookies,value,logoutOnClick,location}) => {
     }
     //MyfarmCss
     const result2 = {
-        userDeviceInfo,setting,day,days,kinokoName,isNameChange,growing,harvest,whiteflower
+        userDeviceInfo,day,days,kinokoName,isNameChange,growing,harvest,whiteflower
     }
 ///////////////////////////////////////////////////////////////////////    실행 함수
     
@@ -150,6 +151,7 @@ const MyFarm = ({cookies,value,logoutOnClick,location}) => {
         HEADER_DEBUG && console.log("==============Myfarm 사용자가 선택한 재배기 확인end==============")
         
     }
+    
     //3번 진행중인 프로그램 이름 -> 진행중인 프로그램이 없으면 모든 값들 초기화 시켜주기
     function prg_name (){
         //재배개 작동 상태 가져오기 isValue
@@ -173,7 +175,7 @@ const MyFarm = ({cookies,value,logoutOnClick,location}) => {
             setIsNameChange(false)
             value.setPrgInfo({
                 prg_id : 0,
-                prg_name : "진행중인 프로그램이 없습니다."
+                prg_name : "진행중인 프로그램이 없습니다"
             })
 
         })  
@@ -223,22 +225,7 @@ const MyFarm = ({cookies,value,logoutOnClick,location}) => {
 
         
     }
-
-    //5.재배기 온도,습도 값 바꾸기
-    function maching_setting (temperature,humidity){
-
-        setSetting(
-            {temperature : temperature, humidity : humidity}
-        )
-    }
-
-    //영상 처리하기
-    function video_view(data){
-        var reader = new FileReader();
-        reader.onload = function(e){
-            console.log(e);
-        }
-    }
+   
 
     //버섯 배지 이름 가져오기
     function mushroom_name (){
@@ -324,32 +311,53 @@ const MyFarm = ({cookies,value,logoutOnClick,location}) => {
     
 //////////////////////////////////////////////////////////////////////////////////////////////////////변수
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////// useEffect
+///////////////////////////////////////////////////////////////////////////////////////////////////////// 
 
     useEffect(() => {
-    
+       if(cookies.get('token')){
         // 소켓 연결 코드
-    //     const socket = io('http://192.168.0.10:3000') ;
-    
-       
-    //     socket.emit('req_video', true) ;
-    //     socket.on('res_video', (data) => {
-    //       console.log(data) ;
-    //          //video_view(data)
-    //     }) ;
-    
-    // //     // // 온, 습도 데이터 요청
-    // //    socket.emit('req_cosdata');
-    // //     // // 온, 습도 데이터 받아오는 이벤트
-    // //     socket.on('res_cosdata', (data) => {
-    // //             console.log(data);
-    // //             maching_setting(parseInt(data.temperature), parseInt(data.humidity) ,) //재배기 온도 습도 작동 환경
-    // //     });
-
-    //     return () => {
-    //       socket.disconnect() ;
-    //     }
+        const socket = io('http://192.168.0.10:3000') ;
         
+        socket.emit('req_video', true) ;
+        socket.on('res_video', (data) => {
+        
+            const byte_chars = atob(data)
+
+            const byteNumbers = new Array(byte_chars.length) ;
+      
+            for(let i = 0 ; i < byte_chars.length ; i++) {
+              byteNumbers[i] = byte_chars.charCodeAt(i) ;
+            }
+            const byteArray = new Uint8Array(byteNumbers) ;
+      
+            const blob = new Blob([byteArray], { type : 'image/png' }) ;
+          
+            setImage(URL.createObjectURL(blob)) ;
+      
+             
+        }) ;
+    
+        // 온, 습도 데이터 요청
+        socket.emit('req_cosdata');
+        // 온, 습도 데이터 받아오는 이벤트
+        socket.on('res_cosdata', (data) => {
+                console.log(data);
+        // 재배기 온도 습도 작동 
+        //  parseInt(data.temperature) && parseInt(data.humidity) && maching_setting(parseInt(data.temperature), parseInt(data.humidity) ) 
+        // maching_setting(parseInt(data.temperature), parseInt(data.humidity) )
+        if(data.temperature != null && data.humidity != null){
+            setTemperature(parseInt(data.temperature))
+            setHumidity(parseInt(data.humidity))
+        }
+        
+        });
+    
+        return () => { // 화면 끝
+          socket.disconnect() ;
+          console.log('myfarm 끝');
+        }
+
+       }    //예외 처리
       }, []) ;
     
     //화면에 보여줄 모든 버섯, 재비기 , 재배기 상태 가져오기
@@ -404,15 +412,17 @@ const MyFarm = ({cookies,value,logoutOnClick,location}) => {
         
         let test = new Date(day.today)
         let test2 = new Date(day.kinokoDay)
-        setDays((test.getTime() - test2.getTime()) / (1000*60*60*24))
+        setDays((test.getTime() - test2.getTime()) / (1000*60*60*24) + 1)
         
         } 
         
     },[day])   
     //끝 화면에 보여줄 모든 버섯, 재비기 , 재배기 상태 가져오기 
     useEffect(()=>{
+        if(cookies.get('token') ){
         (console.log("==================MyFarmCss 처음 실행 화면 =================="));
         console.log("값이 바뀜",result2.kinokoName);
+    }
         
     },[result2.kinokoName])
     
@@ -428,6 +438,9 @@ const MyFarm = ({cookies,value,logoutOnClick,location}) => {
                     onClickChangeName={onClickChangeName} //이름 바꾸기
                     onChange={onChange}
                     temp= {temp}
+                    image={image} //이미지 보내기
+                    temperature={temperature}
+                    humidity={humidity}
                 />
             ) : ( //로그인이 풀렸어요
                 <Redirect to = "Login" />

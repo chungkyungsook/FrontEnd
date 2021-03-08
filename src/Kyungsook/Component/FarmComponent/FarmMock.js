@@ -49,7 +49,7 @@ const FarmMock = ({cookies,onClick,view,value}) => {
                 <ItemImg>
                     {/*서버와 통신이 성공하면  */}
                     {/* 3D파일 보여주기 */}
-                    <Veido/>
+                    {/* <Veido/> */}
                     {/* <LogoImg src={KinokoImg} draggable="false" width="200" alt={'버섯 배지 사진'}/> */}
                     <div>
                     {
