@@ -124,7 +124,7 @@ const ChartContext = ({children, machineId}) => {
             console.log('slkdflksalkfasjflksjsadsafasfasfd', res);
 
             if(res.data.length === 0) {
-                return [{prgId:0, }];
+                return [{id:0, prg_name: ''}];
             }
             return res.data;
         }).catch(err => {
@@ -190,19 +190,3 @@ export function useCustomUpdateInfo() {
 
     return CustomUpdateInfo;
 }
-
-
-
-    // // UserId를 통한 기기 id get
-    // const getMachineId = async () => {
-    //     console.log(userIdvalue);
-    //     let machineIdPromise = await axios.get('http://172.26.3.62/api/myfarm/id', {
-    //         params: {userId: 'SZ4S71'} // <--userIdvalue로 고쳐야 함!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //     }).then(response => {
-    //         console.log(response);
-    //         return response.data;
-    //     }).catch(err => {
-    //         console.error(err);
-    //     });
-    //     return machineIdPromise;
-    // }

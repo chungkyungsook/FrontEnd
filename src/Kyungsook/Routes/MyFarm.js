@@ -329,26 +329,26 @@ const MyFarm = ({cookies,value,logoutOnClick,location}) => {
     useEffect(() => {
     
         // 소켓 연결 코드
-        // const socket = io('http://192.168.0.10:3000') ;
+    //     const socket = io('http://192.168.0.10:3000') ;
     
        
-        // socket.emit('req_video', true) ;
-        // socket.on('res_video', (data) => {
-        //   console.log(data) ;
-        //      //video_view(data)
-        // }) ;
+    //     socket.emit('req_video', true) ;
+    //     socket.on('res_video', (data) => {
+    //       console.log(data) ;
+    //          //video_view(data)
+    //     }) ;
     
-        // // 온, 습도 데이터 요청
-        // socket.emit('req_cosdata');
-        // // 온, 습도 데이터 받아오는 이벤트
-        // socket.on('res_cosdata', (data) => {
-        //         console.log(data);
-        //         maching_setting(parseInt(data.temperature), parseInt(data.humidity) ,) //재배기 온도 습도 작동 환경
-        // });
+    // //     // // 온, 습도 데이터 요청
+    // //    socket.emit('req_cosdata');
+    // //     // // 온, 습도 데이터 받아오는 이벤트
+    // //     socket.on('res_cosdata', (data) => {
+    // //             console.log(data);
+    // //             maching_setting(parseInt(data.temperature), parseInt(data.humidity) ,) //재배기 온도 습도 작동 환경
+    // //     });
 
-        // return () => {
-        //   socket.disconnect() ;
-        // }
+    //     return () => {
+    //       socket.disconnect() ;
+    //     }
         
       }, []) ;
     

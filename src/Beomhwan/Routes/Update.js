@@ -127,7 +127,7 @@ const Update = ({cookies, history}) => {
     });
 
     useEffect(() => {
-        if(!nodata) {
+        if(!loading) {
             let date = [];
             let temp = [];
             let humi = [];
@@ -147,9 +147,10 @@ const Update = ({cookies, history}) => {
                 }
             });
             setCompareChart(setChartjsDataset(date, temp, humi, grow));
+
         }
         setTimeout(() => setLoading(0),2000);
-    },[]);
+    },[loading]);
 
     // 1일 추가
     const Add = () => {
@@ -349,9 +350,6 @@ const Update = ({cookies, history}) => {
                 <ModalTitleBox>
                     {modalInfo.titleText}
                 </ModalTitleBox>
-                <ModalFooter>
-                    <ModalButton onClick={() => onClose()}>확인</ModalButton>
-                </ModalFooter>
             </Modal>
         </>
         }
