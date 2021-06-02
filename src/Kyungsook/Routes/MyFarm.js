@@ -1,4 +1,4 @@
-import React,{useState,useEffect, useRef} from 'react' ;
+import React,{useState,useEffect} from 'react' ;
 import '../Css/MyFarm.css';
 import {Redirect}   from 'react-router-dom' ;
 import { withCookies} from 'react-cookie';
@@ -14,7 +14,6 @@ import {
     MACHINE_STATUS, //재배기 상태 가졍괴
     MUSHROOM_NAME, //버섯 배지이름 가져오기
     MUSHROOM_NAME_CHANGE, //버섯 배지이름 변경
-    COMPOST
 } from '../../Util/api.js'
 
 import {
@@ -22,12 +21,9 @@ import {
     HEADER_DEBUG
 } from '../../Util/debugging.js'
 
-import MyfarmInfo from '../Component/MyfarmComponent/MyfarmInfo'; //정보 값 가져오기
 import MyfarmCss from '../Component/MyfarmComponent/MyfarmCss';   // 해당 페이지 보여주기
 
 import {format} from 'date-fns';
-import { da } from 'date-fns/locale';
-import { concat } from '@amcharts/amcharts4/.internal/core/utils/Iterator';
 import io from 'socket.io-client'
 
 const MyFarm = ({cookies,value,logoutOnClick,location}) => {
@@ -187,6 +183,7 @@ const MyFarm = ({cookies,value,logoutOnClick,location}) => {
     function mushroom_all () {
         HEADER_DEBUG && console.log("==========4. Myfarm 모든 버섯 객체 저장하기==========")
         let temp = []
+
         axios.get(`${AWS_URL}${MUSHROOM_ALL}/${kinokoState[0]}`,{
             params : {prgId : value.prgInfo.prg_id}
         }).then(data =>{               
@@ -318,7 +315,7 @@ const MyFarm = ({cookies,value,logoutOnClick,location}) => {
         // 소켓 연결 코드
         const socket = io('http://192.168.0.10:3000') ;
         
-        socket.emit('req_video', true) ;
+        socket.emit('req_video', true);
         socket.on('res_video', (data) => {
         
             const byte_chars = atob(data)
@@ -343,8 +340,6 @@ const MyFarm = ({cookies,value,logoutOnClick,location}) => {
         socket.on('res_cosdata', (data) => {
                 console.log(data);
         // 재배기 온도 습도 작동 
-        //  parseInt(data.temperature) && parseInt(data.humidity) && maching_setting(parseInt(data.temperature), parseInt(data.humidity) ) 
-        // maching_setting(parseInt(data.temperature), parseInt(data.humidity) )
         if(data.temperature != null && data.humidity != null){
             setTemperature(parseInt(data.temperature))
             setHumidity(parseInt(data.humidity))
