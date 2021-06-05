@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from 'react' ;
 import axios from 'axios';
 import styled from 'styled-components';
@@ -29,7 +28,7 @@ const Movie = (props) => {
 
   const canvas = [useRef(),useRef(),useRef()]
         
-  const WIDTH = 500 - 22, HEIGHT = 500 - 22, FPS = 6;
+  const WIDTH = 500 - 120, HEIGHT = 500 - 50, FPS = 6;
 
   const arr = []
   const [images, setImages] = useState('') //모든 이미지 저장
@@ -105,11 +104,11 @@ const Movie = (props) => {
         <SwiperSlide key={`slide-${index}`} tag="li"> 
           <canvas
               ref={canvas[index]}
-              width={500}
+              width={500 -100}
               height={500}
               
           />
-          <Btn_play onClick={() =>replay(index)}> 재생 </Btn_play>
+          <button onClick={() =>replay(index)}> 재생 </button>
         </SwiperSlide>
       ))
 
@@ -120,6 +119,17 @@ const Movie = (props) => {
     //aix 값 다 바뀌면 확인을 위한 선언
     number === 1 && setNumber(2)
   },[slides])
+
+  // useEffect(() =>{
+  //   if(temp && temp){
+  //     setImgList(
+  //     temp.map(data =>(
+  //       data.members
+  //     ))
+  //     )
+  //   }
+    
+  // },[temp])
   
     // 사진 합쳐서 영상처럼 보여주기
     const replay = (index) =>{
@@ -199,11 +209,4 @@ const SliderContainer = styled.div`
   width: 100%;
   display: flex; //이미지들을 가로로 나열합니다.
 `;
-
-const Btn_play = styled.button`
-    display: block;
-    margin-left: 236px;
-    margin-top: 9px;
-    
-`
 export default withCookies(Movie) ;

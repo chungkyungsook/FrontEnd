@@ -249,7 +249,7 @@ const Farm = ({cookies,value}) => {
     if(value.prgInfo.prg_id !== 0){
       mushroom_name()
       mushroom_all()
-      get3dData() ;
+      // get3dData() ;
     } 
 
   },[value.prgInfo])
