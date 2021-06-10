@@ -69,28 +69,28 @@ const ProgressChart = ({cookies, prgInfo}) => {
                 let data = ev.target.data;
                 console.log(data);
 
-                    data.temperature.map((da, index) => {
-                        // 생장률 하루 한번 기록
-                        let a = new Date(da.date);
-                        if(a < new Date()) {
-                            if(new Date(da.date).getHours() === 0) {
-                                obj.chartData.push({
-                                    Date: new Date(da.date),
-                                    Temp: da.value,
-                                    Humi: data.humidity[index].value,
-                                    Grow: data.growthRate[count].gr_value
-                                });
-                                count++;
-                            }
-                            else {
-                                obj.chartData.push({
-                                    Date: new Date(da.date),
-                                    Temp: da.value,
-                                    Humi: data.humidity[index].value,
-                                });
-                            }
+                data.temperature.map((da, index) => {
+                    // 생장률 하루 한번 기록
+                    let a = new Date(da.date);
+                    if(a < new Date()) {
+                        if(new Date(da.date).getHours() === 0) {
+                            obj.chartData.push({
+                                Date: new Date(da.date),
+                                Temp: da.value,
+                                Humi: data.humidity[index].value,
+                                Grow: data.growthRate[count].gr_value
+                            });
+                            count++;
                         }
-                    })
+                        else {
+                            obj.chartData.push({
+                                Date: new Date(da.date),
+                                Temp: da.value,
+                                Humi: data.humidity[index].value,
+                            });
+                        }
+                    }
+                })
                 console.log(chartData);
 
                 let chart = obj.chartData.concat(chartData);

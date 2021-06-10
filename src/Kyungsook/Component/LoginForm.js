@@ -31,7 +31,7 @@ const LoginForm = ({onClickLogin}) => {
                         <LoginBox>
                     
                             <KaKaoBtn
-                            jsKey={'f8f1fac656c36d6630bc59140a724fb5'}
+                            jsKey={'91224fabd87ed64c0173372e3b0e3581'}
                             buttonText="카카오 계정으로 회원가입"
                             onSuccess={onClickLogin} //로그인 성공한 경우 실행할 함수
                             getProfile={true}
