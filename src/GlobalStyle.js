@@ -3,7 +3,19 @@ import reset from 'styled-reset' ;
 
 const globalStyle = createGlobalStyle`
     ${reset}
+    html{
+        height: 100%;
+    }
+    #root{
+        height: 100%;
+    }
     body {
+        height: 100%;
+        color: #333;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 1.4;
+        font-family: 'Nanum Gothic', sans-serif;
     }
     * {
         padding : 0 ;
@@ -16,6 +28,14 @@ const globalStyle = createGlobalStyle`
         &:active {
             color : black ;
         }
+    }
+    img{
+        display: block;
+    }
+    .inner{
+        width: 1100px;
+        margin: auto;
+        position: relative;
     }
 `;
 

@@ -7,6 +7,7 @@ import {
     HOME,  
     LOGIN, 
     JOIN, 
+
     SETTING, 
     FARM,
     HELP 
@@ -140,25 +141,25 @@ const RouterComponent = (props) => {
         })    
     }
     
-    useEffect(()=>{
-        console.log("===========Router============")
-        // console.log(isOn,"값 바뀜");
-        console.log(isCheck,"isCheck 값 바뀜");
-        isCheck === 1 && setIsCheck(0)
-    },[isCheck])
+    // useEffect(()=>{
+    //     console.log("===========Router============")
+    //     // console.log(isOn,"값 바뀜");
+    //     console.log(isCheck,"isCheck 값 바뀜");
+    //     isCheck === 1 && setIsCheck(0)
+    // },[isCheck])
 
-    useEffect(()=>{
-        console.log("Router isOn :",isOn);
-    },[isOn])
-    useEffect(()=>{
-        console.log("===========Router 처음============")
+    // useEffect(()=>{
+    //     console.log("Router isOn :",isOn);
+    // },[isOn])
+    // useEffect(()=>{
+    //     console.log("===========Router 처음============")
         
-    },[])
+    // },[])
 
 ////////////////////////////////////////////////////////////////////////////////////
     return (
         <Router> 
-            <Header setIsOn={setIsOn} isOn={isOn} isValue={isValue} setIsValue={setIsValue} isLogin={isLogin}setIsLogin={setIsLogin} isCheck={isCheck} setIsCheck={setIsCheck} logoutOnClick={logoutOnClick} machine_id={machine_id}/>
+            <Header />
             <Switch>
                 <Route path={HOME} exact 
                 render = { (props)=> <MyFarm {...props} value={value} logoutOnClick={logoutOnClick}/> } />

@@ -150,14 +150,9 @@ const MyFarmCss = ({value,isLoding,result2,onClickChangeName,onChange,temp,image
                     </div>
                     {/* 버섯 이미지 */}
                     <div className = "kinokoImg">
-                        {/* <LogoImg src={Kinoko1} draggable="false" width="200"/> */}
                         <img src={image} alt='버섯 실시간 사진' width="400px" height="505px" />
-                        
                     </div>
                     <div className='kinokoBtns'>
-                    {/* <button className = "kinokoBtn" onClick={imgChang}>{
-                       img ? "< 뒤 >" : "< 앞 >" 
-                    }</button> */}
                     { result2.isNameChange ?  (<button name='name' className="change_name" onClick={onClickChangeName}>이름 바꾸기</button>) : null}
                     </div>
                 </div>
