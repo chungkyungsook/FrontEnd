@@ -36,7 +36,7 @@ import title from './assets/HeaderTitle.png' ;
 import { withCookies } from 'react-cookie';
 
 // setIsOn -> 선택한 기기 정보 넣기 
-const Header = ({ location, cookies,isOn,isValue,logoutOnClick,machine_id}) => {
+const Header = ({ location, cookies}) => {
 /////////////////////////////////////////////////////////////////////////////////////
     // 메뉴 데이터
     const menuData = [ 
@@ -69,15 +69,14 @@ const Header = ({ location, cookies,isOn,isValue,logoutOnClick,machine_id}) => {
     // const [token, setToken] = useState('')
 
 /////////////////////////////////////////////////////////////////////////////////////
-    useEffect(()=>{
-        HEADER_DEBUG && console.log("================== Header 처음 실행 화면 ==================");
-        machine_id()
-        HEADER_DEBUG && console.log("================== end ==================");
-    },[])
+    // useEffect(()=>{
+    //     HEADER_DEBUG && console.log("================== Header 처음 실행 화면 ==================");
+    //     // machine_id()
+    //     HEADER_DEBUG && console.log("================== end ==================");
+    // },[])
    
     return (
         <>
-        { cookies.get('token') ? (
             <Container views={ menuData.some(data => pathCheck === data.route) } >
                 <TitleImgContainer>
                     <LogoImg src={logoHeight} width="70" height="70" draggable="false" />
@@ -98,17 +97,15 @@ const Header = ({ location, cookies,isOn,isValue,logoutOnClick,machine_id}) => {
                     
                     {/* 기기 관리 */}
                     <MachineContainer>
-                        <MachineName isValue={isValue}>-선택 기기- {isOn.prgName} </MachineName>
-                        <MachineStatus>{isValue ? 'On' : 'Off'}</MachineStatus>
+                        <MachineName >-선택 기기-  </MachineName>
+                        <MachineStatus></MachineStatus>
                     </MachineContainer>
 
                     <UserContainer>
-                        <LoginStatus onClick={logoutOnClick}>Logout</LoginStatus>
+                        <LoginStatus >Logout</LoginStatus>
                     </UserContainer>
                 </InformationContainer>
-            </Container> ) :
-            (<Redirect to="login" />)
-            }
+            </Container> 
         </>
     ) ;
 } ;
