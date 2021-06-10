@@ -32,7 +32,7 @@ export default function Join(){
       console.log("카카오 인증 액세스 토큰이 존재합니다.");
       window.Kakao.Auth.logout(()=>{
         console.log('로그아웃 되었습니다. ');
-        setIsLogin(false)
+        setIsLogin(false);
         localStorage.clear()
       })
     }
