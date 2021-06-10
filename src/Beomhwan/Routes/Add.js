@@ -97,7 +97,6 @@ export const CustomChart = ({Data, titleMsg}) => {
             TempCircle.radius = 8;
             TempCircle.fill = am4core.color('rgb(255,50,0)');
 
-            // 습도 불릿 생성
             const HumiLabelBullet = HumiSeries.bullets.push(new am4charts.LabelBullet());
             HumiLabelBullet.strokeOpacity = 0;
             HumiLabelBullet.label.text = "{valueY.value.formatNumber('#.')}%";
@@ -117,7 +116,6 @@ export const CustomChart = ({Data, titleMsg}) => {
             HumiCircle.radius = 8;
             HumiCircle.fill = am4core.color('rgb(0,100,255)');
 
-            // 온, 습도 드래그 이벤트
             TempBullet.events.on("drag", event => {
                 handleDrag(event, valueAxis, chart.current, "Temperature");
             });
