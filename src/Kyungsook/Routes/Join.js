@@ -42,7 +42,7 @@ export default function Join(){
     localStorage.setItem('userInfo',JSON.stringify(res.profile))
     console.log(res);
     setIsLogin(true)
-    swal(`반갑습니다. ${res.profile.properties.nickname}님!:)`)
+    swal(`반갑습니다. ${res.profile.properties.nickname}님!:)`);
 
   }
 
