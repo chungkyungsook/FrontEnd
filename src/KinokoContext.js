@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer } from 'react'
+import React, { createContext, useContext, useReducer, useState } from 'react'
 
 import {
   createAsyncDispatcher,
@@ -11,7 +11,7 @@ import * as api from './KinokoApi';
 const initialState = {
   users: initialAsyncState,
   user: initialAsyncState,
-  kinokologout: initialAsyncState
+  kinokologout: initialAsyncState,
 };
 
 const usersHandler = createAsyncHandler('GET_USERS', 'users');
@@ -35,13 +35,16 @@ function usersReducer(state, action) {
 
 const KinokoStateContext = createContext(null);
 const KinokoDispatchContext = createContext(null);
-
+const IsLoginContext = createContext()
 export function KinokoProvider({children}){
   const [state, dispatch] = useReducer(usersReducer,initialState)
+  const [isLogin, setIsLogin] = useState(false)
   return(
     <KinokoStateContext.Provider value={state}>
       <KinokoDispatchContext.Provider value={dispatch}>
-        {children}
+        <IsLoginContext.Provider value={{isLogin, setIsLogin}}>
+          {children}
+        </IsLoginContext.Provider>
       </KinokoDispatchContext.Provider>
     </KinokoStateContext.Provider>
   )
@@ -64,5 +67,9 @@ export function useKinokoDispatch() {
   return dispatch;
 }
 
+export function useLoginContext() {
+  return useContext(IsLoginContext)
+}
+
 export const getUsers = createAsyncDispatcher('GET_USERS', api.getUsers);
-export const getlogout = createAsyncDispatcher('LOGOUT', api.getUsers);
+export const getlogout = createAsyncDispatcher('LOGOUT', api.getLogoutAccount);

@@ -29,7 +29,7 @@ import { withCookies } from 'react-cookie';
 import { useState } from 'react';
 import { getLogoutAccount } from './Kyungsook/Component/apiComponent';
 import axios from 'axios';
-
+import { useKinokoDispatch, useKinokoState, getlogout } from './KinokoContext';
 // setIsOn -> 선택한 기기 정보 넣기 
 const Header = ({ location}) => {
 
@@ -53,14 +53,24 @@ const Header = ({ location}) => {
       }
   ] ;
 
-  const [state, setState] = useState({
-    isLogin: true
-  })
+  const state = useKinokoState();
+  const dispatch = useKinokoDispatch();
+  const [isLogout, setIsLogout] = useState(true);
+  
+  const logoutBtn = ()=>{
+    getlogout(dispatch);
+    if(window.Kakao.Auth.getAccessToken()){
+        console.log("카카오 인증 액세스 토큰이 존재합니다.");
+        
+        window.Kakao.Auth.logout(()=>{
+        console.log('로그아웃 되었습니다. ');
+        setIsLogout(false)
+        localStorage.clear()
 
-  const [users, setUsers] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+      });
+    }
 
+  };
   
   // route 이름
   const { pathname } = location ;
@@ -71,49 +81,19 @@ const Header = ({ location}) => {
           : pathname.includes(SETTING) ? SETTING : pathname ;  
 
   //로그아웃
-  const logout = ()=>{
-    console.log('logout');
-    getLogoutAccount()
-    if(window.Kakao.Auth.getAccessToken()){
-      console.log("카카오 인증 액세스 토큰이 존재합니다.");
-      window.Kakao.Auth.logout(()=>{
-        console.log('로그아웃 되었습니다. ');
-        setState({isLogin: false})
-        localStorage.clear()
-      })
-    }
-  }
-
-  const fetchUsers = async () => {
-    try {
-      // 요청이 시작 할 때에는 error 와 users 를 초기화하고
-      setError(null);
-      setUsers(null);
-      setLoading(true);
-      const response = await axios.get(`${AWS_URL}${MACHINE_LIST}`,{
-        params:{
-          token: window.Kakao.Auth.getAccessToken()
-        }
-      });
-      setUsers(response.data); // 데이터는 response.data 안에 들어있습니다.
-    } catch (e) {
-      setError(e);
-    }
-    setLoading(false);
-  };
 
   useEffect(()=>{
     console.log('header');
-    fetchUsers()
+    // fetchUsers()
   },[])
   
   if(!window.Kakao.Auth.getAccessToken()) return <Redirect to='/join'/>
   
-  if (loading) return <divv className='loding-wrap'>
-    <div className="container">
-      <div className="spinner"><i className="fas fa-circle-notch fa-5x"></i></div>
-    </div>
-  </divv>;
+  // if (loading) return <divv className='loding-wrap'>
+  //   <div className="container">
+  //     <div className="spinner"><i className="fas fa-circle-notch fa-5x"></i></div>
+  //   </div>
+  // </divv>;
 
 
   return (
@@ -135,7 +115,7 @@ const Header = ({ location}) => {
                           </HeaderMenu>
                   )) }
               </MenuContainer>
-              <LogoutBtn onClick={logout} >로그아웃</LogoutBtn>
+              <LogoutBtn onClick={logoutBtn} >로그아웃</LogoutBtn>
           </Container> 
       </div>
   ) ;
