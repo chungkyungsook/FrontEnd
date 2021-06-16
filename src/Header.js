@@ -1,8 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react' ;
-import { withRouter,Redirect } from 'react-router-dom' ;
-import axios from "axios";
+import React, { useEffect } from 'react' ;
+import { withRouter} from 'react-router-dom' ;
 import styled from 'styled-components' ;
-
+import {Redirect}   from 'react-router-dom' ;
 // Util
 import { 
     HOME,
@@ -17,103 +16,135 @@ import {
 } from './Util/css' ;
 
 import {
-    AWS_URL,
-    LOGOUT,
-    MACHINE_ID,
-    MACHINE_STATUS
+  AWS_URL,
+  MACHINE_LIST
 }from './Util/api'
-
-import{
-    LOGOUT_DEBUG,
-    HEADER_DEBUG
-}from './Util/debugging'
 
 import HeaderMenu from './HeaderMenu' ;
 
 // 그림 리소스
 import logoHeight from './assets/logoHeight.png' ;
-import title from './assets/HeaderTitle.png' ;
+import title from './assets/header_title.png' ;
 import { withCookies } from 'react-cookie';
+import { useState } from 'react';
+import { getLogoutAccount } from './Kyungsook/Component/apiComponent';
+import axios from 'axios';
 
 // setIsOn -> 선택한 기기 정보 넣기 
-const Header = ({ location, cookies}) => {
-/////////////////////////////////////////////////////////////////////////////////////
-    // 메뉴 데이터
-    const menuData = [ 
-        {
-            route : HOME,
-            text : '마이 팜'
-        },
-        {
-            route : SETTING,
-            text : '팜 환경설정'
-        },
-        {
-            route : FARM,
-            text : '팜 정보'
-        },
-        {
-            route : HELP,
-            text : '도움말'
+const Header = ({ location}) => {
+
+  // 메뉴 데이터
+  const menuData = [ 
+      {
+          route : HOME,
+          text : '마이 팜'
+      },
+      {
+          route : SETTING,
+          text : '팜 환경설정'
+      },
+      {
+          route : FARM,
+          text : '팜 정보'
+      },
+      {
+          route : HELP,
+          text : '도움말'
+      }
+  ] ;
+
+  const [state, setState] = useState({
+    isLogin: true
+  })
+
+  const [users, setUsers] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  
+  // route 이름
+  const { pathname } = location ;
+
+  //path Check /login, /join 일시 가리는 값
+  const pathCheck = pathname.includes(FARM) ? 
+          FARM 
+          : pathname.includes(SETTING) ? SETTING : pathname ;  
+
+  //로그아웃
+  const logout = ()=>{
+    console.log('logout');
+    getLogoutAccount()
+    if(window.Kakao.Auth.getAccessToken()){
+      console.log("카카오 인증 액세스 토큰이 존재합니다.");
+      window.Kakao.Auth.logout(()=>{
+        console.log('로그아웃 되었습니다. ');
+        setState({isLogin: false})
+        localStorage.clear()
+      })
+    }
+  }
+
+  const fetchUsers = async () => {
+    try {
+      // 요청이 시작 할 때에는 error 와 users 를 초기화하고
+      setError(null);
+      setUsers(null);
+      setLoading(true);
+      const response = await axios.get(`${AWS_URL}${MACHINE_LIST}`,{
+        params:{
+          token: window.Kakao.Auth.getAccessToken()
         }
-    ] ;
-    
-    // route 이름
-    const { pathname } = location ;
+      });
+      setUsers(response.data); // 데이터는 response.data 안에 들어있습니다.
+    } catch (e) {
+      setError(e);
+    }
+    setLoading(false);
+  };
 
-    //path Check /login, /join 일시 가리는 값
-    const pathCheck = pathname.includes(FARM) ? 
-            FARM 
-            : pathname.includes(SETTING) ? SETTING : pathname ;  
-//----------------------------------------------------------------------
-    // const [token, setToken] = useState('')
+  useEffect(()=>{
+    console.log('header');
+    fetchUsers()
+  },[])
+  
+  if(!window.Kakao.Auth.getAccessToken()) return <Redirect to='/join'/>
+  
+  if (loading) return <divv className='loding-wrap'>
+    <div className="container">
+      <div className="spinner"><i className="fas fa-circle-notch fa-5x"></i></div>
+    </div>
+  </divv>;
 
-/////////////////////////////////////////////////////////////////////////////////////
-    // useEffect(()=>{
-    //     HEADER_DEBUG && console.log("================== Header 처음 실행 화면 ==================");
-    //     // machine_id()
-    //     HEADER_DEBUG && console.log("================== end ==================");
-    // },[])
-   
-    return (
-        <>
-            <Container views={ menuData.some(data => pathCheck === data.route) } >
-                <TitleImgContainer>
-                    <LogoImg src={logoHeight} width="70" height="70" draggable="false" />
-                    <Img src={title} width="175" height="30" draggable="false" />
-                </TitleImgContainer>
-                <MenuContainer>
-                    { menuData.map((menu, index) => (
-                            <HeaderMenu 
-                                key={index}
-                                path={menu.route}
-                                pathname={`/${pathname.split('/')[1]}`}
-                            >
-                                {menu.text}
-                            </HeaderMenu>
-                    )) }
-                </MenuContainer>
-                <InformationContainer>
-                    
-                    {/* 기기 관리 */}
-                    <MachineContainer>
-                        <MachineName >-선택 기기-  </MachineName>
-                        <MachineStatus></MachineStatus>
-                    </MachineContainer>
 
-                    <UserContainer>
-                        <LoginStatus >Logout</LoginStatus>
-                    </UserContainer>
-                </InformationContainer>
-            </Container> 
-        </>
-    ) ;
+  return (
+      <div className='inner'>
+          <Container views={ menuData.some(data => pathCheck === data.route) } >
+              <TitleImgContainer>
+                  <LogoImg src={logoHeight} width="70" height="70" draggable="false" />
+                  <Img src={title} width="175" height="40" draggable="false" />
+              </TitleImgContainer>
+              <MenuContainer>
+                  { menuData.map((menu, index) => (
+                          <HeaderMenu 
+                              key={index}
+                              path={menu.route}
+                              pathname={`/${pathname.split('/')[1]}`}
+                          >
+                              {menu.text}
+                              
+                          </HeaderMenu>
+                  )) }
+              </MenuContainer>
+              <LogoutBtn onClick={logout} >로그아웃</LogoutBtn>
+          </Container> 
+      </div>
+  ) ;
 } ;
 
 const Container = styled.header`
     display : ${props => props.views ? 'flex' : 'none' } ;
     background: rgb(160, 156, 128,0.9);
-    /* background-color : ; */
+    font-weight: 700;
 `;
 
 const TitleImgContainer = styled.div`
@@ -125,7 +156,7 @@ const TitleImgContainer = styled.div`
 const Img = styled.img`
     ${userSelect}
 
-    margin-top : 1.5rem ;
+    margin-top : 1.0rem ;
 
     cursor : default ;
 `;
@@ -147,46 +178,33 @@ const MenuContainer = styled.ul`
     flex : 0.6 ;
 `;
 
-const InformationContainer = styled.div`
-    ${flexAlign}
+const LogoutBtn = styled.button`
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  margin: 5px auto;
+  
+  width: 80px;
+  padding: 5px;
+  border: 2px solid #333;
+  border-radius: 14px;
+  color: #333;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  box-sizing: border-box;
+  display: block;
+  transition: .4s;
 
-    justify-content : flex-end ;
-    flex : 0.2 ;
+  :hover{
+    background-color: #333;
+    color: #fff;
+}
+
 `;
+const loding_wrap = styled.div`
 
-const MachineContainer = styled.div`
-    ${flexAlign}
-    height : 75% ;
-    flex: 1;
-    // 로그인 글자 사이 줄 색깔
-    border-right : 1px solid #111 ;
+
 `;
-
-const UserContainer = styled.div`
-    
-`;  
-
-const MachineName = styled.div`
-    ${userSelect}
-    flex : 1;
-    text-align: center;
-    cursor : default ;
-    color : ${props => props.isValue ? 'white' : 'gray' };
-`;
-
-
-
-const MachineStatus = styled.span`  
-    ${userSelect}
-    
-    padding: 9px;
-    cursor : pointer ;
-`;
-
-const LoginStatus = styled.span`
-    ${userSelect}
-    
-    padding : 30px ;
-`;
-
 export default withRouter(withCookies(Header)) ;

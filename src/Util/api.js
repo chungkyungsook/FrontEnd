@@ -1,4 +1,4 @@
-export const AWS_URL = 'http://54.144.186.21'
+export const AWS_URL = 'http://184.73.45.24'
 
 //////////////////////////////////////////////////버섯 재배기 정보 API
 //해당 버섯 재배기의 번호와 진행중인 프로젝트 이름 
@@ -7,7 +7,7 @@ export const AWS_URL = 'http://54.144.186.21'
 //param
 export const PRG_NAME = '/api/myfarm/data'
 
-// 해당 계정의 버섯 재배기 목록을 가져옴
+// 해당 계정의 기기목록을 가져옴
 export const MACHINE_LIST = '/api/myfarm/list'
 
 //재배기 가동 상태

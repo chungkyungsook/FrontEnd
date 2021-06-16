@@ -1,0 +1,7 @@
+.myfarm-wrap{
+  height: calc(100% - 70px);
+}
+.myfarm-wrap .inner{
+  background-color: rgb(224 224 218);
+  height: 100%;
+}

@@ -14,10 +14,21 @@ import "swiper/swiper.min.css";
 import "swiper/components/effect-cube/effect-cube.min.css"
 import "swiper/components/pagination/pagination.min.css"
 
+//API
+import {
+  AWS_URL,
+  REGISTER,
+  LOGIN,
+}from '../../Util/api'
+
+import * as api_function from '../Component/apiComponent'
+
 // import Swiper core and required modules
 import SwiperCore, {
   EffectCube,Autoplay
 } from 'swiper/core';
+
+import axios from 'axios';
 
 // install Swiper modules
 SwiperCore.use([EffectCube,Autoplay]);
@@ -26,26 +37,51 @@ export default function Join(){
 
   const [isLogin, setIsLogin] = useState(false)
 
-  const logout = ()=>{
-    console.log('logout');
-    if(window.Kakao.Auth.getAccessToken()){
-      console.log("카카오 인증 액세스 토큰이 존재합니다.");
-      window.Kakao.Auth.logout(()=>{
-        console.log('로그아웃 되었습니다. ');
-        setIsLogin(false);
-        localStorage.clear()
-      })
-    }
-  }
-
+  //로그인
   const login = (res) =>{
     localStorage.setItem('userInfo',JSON.stringify(res.profile))
-    console.log(res);
+    console.log("kakao",res);
+    getJoinAccount(res.profile)
     setIsLogin(true)
-    swal(`반갑습니다. ${res.profile.properties.nickname}님!:)`);
+    swal(`반갑습니다. ${res.profile.properties.nickname}님!:)`); //window 창
 
   }
 
+  //회원가입 api
+  async function getJoinAccount( data ){
+    
+    await axios.post(`${AWS_URL}${REGISTER}`,{
+      id: data.id,
+      email: data.kakao_account.email
+    }).then(response =>{
+      console.log("회원가입 성공",response);
+      swal(`회원 가입에 성공하였습니다. 어서오세요 ${data.profile.properties.nickname}님!:)`); //window 창
+      getLoginAccount(data)
+    }).catch(e=>{
+      let message = e.response.data
+      if (message === '이미 가입된 계정입니다.'){
+        getLoginAccount(data)
+      }
+    })
+  
+  }
+
+  //로그인 api
+  async function getLoginAccount( data ){
+    
+    await axios.post(`${AWS_URL}${LOGIN}`,{
+      token: window.Kakao.Auth.getAccessToken(),
+      id: data.id
+    }).then(response =>{
+      console.log("로그인 성공",response);
+    }).catch(e=>{
+      console.log("로그인 실패",e);
+      
+    })
+  }
+ 
+
+  // token 없으면 로그인 페이지로 이동
   if( window.Kakao.Auth.getAccessToken() || isLogin )return <Redirect to='/' />
 
   return(
@@ -75,6 +111,7 @@ export default function Join(){
                 <SwiperSlide><img src={logoimg2} alt='logo'/></SwiperSlide>
                 </Swiper>
           </div>
+
           <div className='kakao-btn'>
             <KakaoLogin
                 jsKey={'f8f1fac656c36d6630bc59140a724fb5'}

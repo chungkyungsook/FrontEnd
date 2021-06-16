@@ -37,6 +37,25 @@ const globalStyle = createGlobalStyle`
         margin: auto;
         position: relative;
     }
+    .container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .spinner {
+        animation: spin 2s linear infinite;
+        color: rgb(87,101,116);
+      }
+      @keyframes spin {
+        from {
+          transform: rotate(0);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+    }
 `;
 
 export default globalStyle ;
