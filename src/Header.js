@@ -88,13 +88,6 @@ const Header = ({ location}) => {
   },[])
   
   if(!window.Kakao.Auth.getAccessToken()) return <Redirect to='/join'/>
-  
-  // if (loading) return <divv className='loding-wrap'>
-  //   <div className="container">
-  //     <div className="spinner"><i className="fas fa-circle-notch fa-5x"></i></div>
-  //   </div>
-  // </divv>;
-
 
   return (
       <div className='inner'>
