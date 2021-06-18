@@ -79,7 +79,6 @@ const Header = ({ location}) => {
 
   };
 
-  //정보 가져오기
   const getMuchinList = ()=>{
     getMuchineList(dispatch)
     getMuchineDeviceId(dispatch)
