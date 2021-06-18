@@ -8,7 +8,6 @@ import HelpList from '../Component/HelpComponent/HelpList';
 const Help = (props) => {
 
     //isLogin cookie 값 확인
-    const isLoginCheck = props.cookies.get('isLogin')
     //axios 값 담기
     const [list, setList] = useState([])
     const [kinokoInfo, setKinokoInfo] = useState([])
@@ -20,7 +19,7 @@ const Help = (props) => {
 
     useEffect(()=>{
         console.log('help main',list);
-        
+
     },[])
 
     useEffect(()=>{
@@ -28,19 +27,12 @@ const Help = (props) => {
         list.map(data => ( data.id === 1 && setKinokoInfo(data)))
     },[list])
 
+    if(!window.Kakao.Auth.getAccessToken()) return <Redirect to='/join'/>
+
     return (
         <>
-        {
-            props.cookies.get('token') ? 
-            (
-                <>
-                    <HelpList setList={setList} setKinokoInfo={setKinokoInfo}/>
-                    <HelpCss list ={list} kinokoInfo={kinokoInfo} onClick={onClick}/>
-                </>
-            )
-            :
-            (<Redirect to="/login" />)
-        }
+            <HelpList setList={setList} setKinokoInfo={setKinokoInfo}/>
+            <HelpCss list ={list} kinokoInfo={kinokoInfo} onClick={onClick}/>
         </>
     );
 };

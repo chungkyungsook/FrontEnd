@@ -33,7 +33,7 @@ const globalStyle = createGlobalStyle`
         display: block;
     }
     .inner{
-        width: 1100px;
+        width: 1200px;
         margin: auto;
         position: relative;
     }

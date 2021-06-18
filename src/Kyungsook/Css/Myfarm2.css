@@ -4,4 +4,129 @@
 .myfarm-wrap .inner{
   background-color: rgb(224 224 218);
   height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
+.myfarm-wrap .myfarm-left{
+  height: 100%;
+  width: 14%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+}
+
+.myfarm-wrap .myfarm-left .btn-group{
+  background: #fff;
+  border: 2px solid rgb(145, 163, 119, 0.8);
+  border-radius: 15px;
+  margin: 10px;
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.myfarm-wrap .myfarm-left .btn-group::-webkit-scrollbar{
+  display: none; /* Chrome, Safari, Opera*/
+}
+
+.myfarm-wrap .myfarm-left .btn-group .muchine-title{
+  background: rgb(145, 163, 119, 0.8);
+  width: 100%;
+  border-bottom: 2px solid rgb(145, 163, 119, 0.8);
+  border-radius: 12px 13px 0 0;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  font-weight: 700;
+  z-index: 2;
+}
+.myfarm-wrap .myfarm-left .btn-group .muchine-title span{
+  color: #fff;
+}
+.myfarm-wrap .myfarm-left .btn-group .muchine-btn:first-child{
+  width: 130px;
+  height: 60px;
+  margin-top: 25px;
+  border: 2px solid #333;
+  border-radius: 7px;
+  background: rgb(90, 109, 62);
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.12), 0 0 8px 0 rgba(0, 0, 0, 0.06);
+  color: rgb(224, 224, 224);
+  font-size: 25px;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  box-sizing: border-box;
+  display: block;
+  transition: .4s;
+}
+.myfarm-wrap .myfarm-left .btn-group .muchine-btn{
+  width: 130px;
+  height: 60px;
+  margin: 6px;
+  border: 2px solid #333;
+  border-radius: 7px;
+  background: rgb(90, 109, 62);
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.12), 0 0 8px 0 rgba(0, 0, 0, 0.06);
+  color: rgb(224, 224, 224);
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  box-sizing: border-box;
+  display: block;
+  transition: .4s;
+}
+.myfarm-wrap .myfarm-left .btn-group .muchine-btn:first-child:hover{
+  background: rgb(92, 76, 78);
+  color: #fff;
+}
+.myfarm-wrap .myfarm-left .muchine-btn:hover{
+  background: rgb(92, 76, 78);
+  color: #fff;
+}
+.myfarm-wrap .myfarm-right{
+  height: 100%;
+  width: 87%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+}
+.myfarm-wrap .myfarm-right .right-wrap{
+  width: 98%;
+  background: #fff;
+  border-radius: 15px;
+  margin: 10px;
+  box-sizing: border-box;
+  border: 2px solid rgb(145, 163, 119, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column
+  
+}
+.myfarm-wrap .myfarm-right .right-wrap .grap-wrap{
+  height: 40%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.myfarm-wrap .myfarm-right .right-wrap .grap-wrap .grap{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgb(145, 163, 119);
+  border-radius: 12px;
+  height: 86%;
+  width: 90%;
+}
+.myfarm-wrap .myfarm-right .right-wrap .kinokoInfo-wrap{
+  height: 60%;
+  width: 100%;
+  background: rgb(231, 231, 135);
+}
+
+
+

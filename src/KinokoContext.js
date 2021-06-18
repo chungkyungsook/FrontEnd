@@ -12,10 +12,25 @@ const initialState = {
   users: initialAsyncState,
   user: initialAsyncState,
   kinokologout: initialAsyncState,
+  muchinList: initialAsyncState,
+  muchinKey : initialAsyncState,
+  muchinPwd: initialAsyncState,
+  muchinMakeDevice: initialAsyncState,
+  muchinSetting:initialAsyncState,
+  muchinDelete:initialAsyncState,
+  muchinDeviceId:initialAsyncState
 };
 
 const usersHandler = createAsyncHandler('GET_USERS', 'users');
+const muchinListHandler = createAsyncHandler('GET_MUCHIN_LIST','muchinList');
+const muchinKeyHandler = createAsyncHandler('GET_MUCHIN_KEY','muchinKey');
+const muchinPwdHandler = createAsyncHandler('GET_MUCHIN_PWD','muchinPwd');
+const muchinMakeDeviceHandler = createAsyncHandler('GET_MUCHIN_MAKE_DEVICE','muchinMakeDevice');
+const muchinDevicIdeHandler = createAsyncHandler('GET_MUCHIN_DEVICE_ID','muchinDeviceId');
+const muchinSettingHandler = createAsyncHandler('GET_MUCHIN_SETTING','muchinSetting');
+const muchinDeleteHandler = createAsyncHandler('GET_MUCHIN_DELETE','muchinDelete');
 const logoutHandler = createAsyncHandler('LOGOUT','logout');
+
 
 // 위에서 만든 객체 / 유틸 함수들을 사용하여 리듀서 작성
 function usersReducer(state, action) {
@@ -24,6 +39,34 @@ function usersReducer(state, action) {
     case 'GET_USERS_SUCCESS':
     case 'GET_USERS_ERROR':
       return usersHandler(state, action);
+    case 'GET_MUCHIN_LIST':
+    case 'GET_MUCHIN_LIST_SUCCESS':
+    case 'GET_MUCHIN_LIST_ERROR':
+      return muchinListHandler(state, action);
+    case 'GET_MUCHIN_KEY':
+    case 'GET_MUCHIN_KEY_SUCCESS':
+    case 'GET_MUCHIN_KEY_ERROR':
+      return muchinKeyHandler(state, action);
+    case 'GET_MUCHIN_PWD':
+    case 'GET_MUCHIN_PWD_SUCCESS':
+    case 'GET_MUCHIN_PWD_ERROR':
+      return muchinPwdHandler(state, action);
+    case 'GET_MUCHIN_MAKE_DEVICE':
+    case 'GET_MUCHIN_MAKE_DEVICE_SUCCESS':
+    case 'GET_MUCHIN_MAKE_DEVICE_ERROR':
+      return muchinMakeDeviceHandler(state, action);
+    case 'GET_MUCHIN_DEVICE_ID':
+    case 'GET_MUCHIN_DEVICE_ID_SUCCESS':
+    case 'GET_MUCHIN_DEVICE_ID_ERROR':
+      return muchinDevicIdeHandler(state, action);
+    case 'GET_MUCHIN_SETTING':
+    case 'GET_MUCHIN_SETTING_SUCCESS':
+    case 'GET_MUCHIN_SETTING_ERROR':
+      return muchinSettingHandler(state, action);
+    case 'GET_MUCHIN_DELETE':
+    case 'GET_MUCHIN_DELETE_SUCCESS':
+    case 'GET_MUCHIN_DELETE_ERROR':
+      return muchinDeleteHandler(state, action);
     case 'LOGOUT':
     case 'LOGOUT_SUCCESS':
     case 'LOGOUT_ERROR':
@@ -36,6 +79,7 @@ function usersReducer(state, action) {
 const KinokoStateContext = createContext(null);
 const KinokoDispatchContext = createContext(null);
 const IsLoginContext = createContext()
+
 export function KinokoProvider({children}){
   const [state, dispatch] = useReducer(usersReducer,initialState)
   const [isLogin, setIsLogin] = useState(false)
@@ -71,5 +115,13 @@ export function useLoginContext() {
   return useContext(IsLoginContext)
 }
 
+// 1번
 export const getUsers = createAsyncDispatcher('GET_USERS', api.getUsers);
+export const getMuchineList = createAsyncDispatcher('GET_MUCHIN_LIST', api.getMachineList);
 export const getlogout = createAsyncDispatcher('LOGOUT', api.getLogoutAccount);
+export const getMuchineKey = createAsyncDispatcher('GET_MUCHIN_KEY', api.getMachineKey)
+export const getMuchinePwd = createAsyncDispatcher('GET_MUCHIN_PWD', api.getMachinePwd)
+export const getMuchineMakeDevice = createAsyncDispatcher('GET_MUCHIN_MAKE_DEVICE', api.getMachineMakeDevice)
+export const getMuchineDeviceId = createAsyncDispatcher('GET_MUCHIN_DEVICE_ID', api.getMachineDeviceId)
+export const getMuchineSetting = createAsyncDispatcher('GET_MUCHIN_SETTING', api.getMachineSetting)
+export const getMuchineDelete = createAsyncDispatcher('GET_MUCHIN_DELETE', api.getMachineDelete)

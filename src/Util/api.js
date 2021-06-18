@@ -44,6 +44,25 @@ export const MUSHROOM_NAME = '/api/farm/compostname'
 //id : (int) 유저 id, name : (string)이름
 //json 200	403
 export const MUSHROOM_NAME_CHANGE = '/api/farm/compostname'
+
+// 기기 key 번호 확인
+// get, pin: int
+export const MUCHIN_KYE = '/api/pin/check'
+
+// 기기 pwd 번호 확인
+// get, pin:int pw : string
+export const MUCHIN_PWD = '/api/pin/auth'
+//기기 등록하기, 저장
+//PUT
+export const MUCHIN_MAKE_DEVICE = '/api/myfarm/register'
+//기기 사용
+//PUT
+export const MUCHIN_SETTING = '/api/myfarm/select'
+//기기 삭제
+//delete
+export const MUCHIN_DELETE = '/api/myfarm'
+
+
 /////////////////////////////////////////////////로그인 관련된 API
 //회원가입
 //post ,json
@@ -71,3 +90,4 @@ export const COMPOST = '/api/compost'
 
 //모든 배지 사진 가져오기
 export const CLUSTER = '/api/compost/image/cluster'
+

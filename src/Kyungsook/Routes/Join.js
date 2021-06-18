@@ -33,8 +33,6 @@ import { useLoginContext } from '../../KinokoContext';
 SwiperCore.use([EffectCube,Autoplay]);
 
 export default function Join(){
-
-  // const [isLogin, setIsLogin] = useState(false)
   const {isLogin, setIsLogin} = useLoginContext()
 
   //로그인
@@ -42,7 +40,6 @@ export default function Join(){
     localStorage.setItem('userInfo',JSON.stringify(res.profile))
     console.log("kakao",res);
     getJoinAccount(res.profile)
-    setIsLogin(true) // 전역 context변수 사용 (X)
     swal(`반갑습니다. ${res.profile.properties.nickname}님!:)`); //window 창
   }
 
@@ -69,11 +66,13 @@ export default function Join(){
   async function getLoginAccount( data ){
     
     await axios.post(`${AWS_URL}${LOGIN}`,{
-      token: window.Kakao.Auth.getAccessToken(),
+      // token: window.Kakao.Auth.getAccessToken(),
+      token: '1111',
       id: data.id
     }).then(response =>{
       console.log("로그인 성공",response);
       localStorage.setItem('isLogin', '로그인성공')
+      setIsLogin(true) // 전역 context변수 사용 (X)
     }).catch(e=>{
       console.log("로그인 실패",e);
     })

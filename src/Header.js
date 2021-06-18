@@ -15,10 +15,6 @@ import {
     userSelect
 } from './Util/css' ;
 
-import {
-  AWS_URL,
-  MACHINE_LIST
-}from './Util/api'
 
 import HeaderMenu from './HeaderMenu' ;
 
@@ -26,10 +22,8 @@ import HeaderMenu from './HeaderMenu' ;
 import logoHeight from './assets/logoHeight.png' ;
 import title from './assets/header_title.png' ;
 import { withCookies } from 'react-cookie';
-import { useState } from 'react';
-import { getLogoutAccount } from './Kyungsook/Component/apiComponent';
-import axios from 'axios';
-import { useKinokoDispatch, useKinokoState, getlogout } from './KinokoContext';
+
+import { useKinokoDispatch, useKinokoState, getlogout, useLoginContext, getMuchineList ,getMuchineDeviceId} from './KinokoContext';
 // setIsOn -> 선택한 기기 정보 넣기 
 const Header = ({ location}) => {
 
@@ -52,25 +46,6 @@ const Header = ({ location}) => {
           text : '도움말'
       }
   ] ;
-
-  const state = useKinokoState();
-  const dispatch = useKinokoDispatch();
-  const [isLogout, setIsLogout] = useState(true);
-  
-  const logoutBtn = ()=>{
-    getlogout(dispatch);
-    if(window.Kakao.Auth.getAccessToken()){
-        console.log("카카오 인증 액세스 토큰이 존재합니다.");
-        
-        window.Kakao.Auth.logout(()=>{
-        console.log('로그아웃 되었습니다. ');
-        setIsLogout(false)
-        localStorage.clear()
-
-      });
-    }
-
-  };
   
   // route 이름
   const { pathname } = location ;
@@ -80,25 +55,51 @@ const Header = ({ location}) => {
           FARM 
           : pathname.includes(SETTING) ? SETTING : pathname ;  
 
-  //로그아웃
+  const state    = useKinokoState();
+  const dispatch = useKinokoDispatch();
+  const {isLogin, setIsLogin} = useLoginContext()
+
+  const { data: muchinList, loading, error } = state.muchinList; // state.data 를 users 키워드로 조회
+
+  //로그아웃 
+  const logoutBtn = ()=>{
+    getlogout(dispatch);
+
+    if(window.Kakao.Auth.getAccessToken()){
+
+        console.log("카카오 인증 액세스 토큰이 존재합니다.");
+        
+        window.Kakao.Auth.logout(()=>{
+        console.log('로그아웃 되었습니다. ');
+        setIsLogin(false)
+        localStorage.clear();
+      });
+
+    }
+
+  };
+
+  //정보 가져오기
+  const getMuchinList = ()=>{
+    getMuchineList(dispatch)
+    getMuchineDeviceId(dispatch)
+  }
 
   useEffect(()=>{
     console.log('header');
-    // fetchUsers()
-  },[])
-  
+    if(isLogin){
+        console.log('로그인 되었습니다.');
+        getMuchinList()
+    }
+  },[isLogin])
+
+  if(window.Kakao.Auth.getAccessToken()) setIsLogin(true)
   if(!window.Kakao.Auth.getAccessToken()) return <Redirect to='/join'/>
   
-  // if (loading) return <divv className='loding-wrap'>
-  //   <div className="container">
-  //     <div className="spinner"><i className="fas fa-circle-notch fa-5x"></i></div>
-  //   </div>
-  // </divv>;
-
 
   return (
-      <div className='inner'>
-          <Container views={ menuData.some(data => pathCheck === data.route) } >
+      <>
+          <Container views={ menuData.some(data => pathCheck === data.route) } className='inner'>
               <TitleImgContainer>
                   <LogoImg src={logoHeight} width="70" height="70" draggable="false" />
                   <Img src={title} width="175" height="40" draggable="false" />
@@ -117,7 +118,7 @@ const Header = ({ location}) => {
               </MenuContainer>
               <LogoutBtn onClick={logoutBtn} >로그아웃</LogoutBtn>
           </Container> 
-      </div>
+      </>
   ) ;
 } ;
 
