@@ -1,16 +1,15 @@
-import React, {useRef, useEffect, useState, createContext} from 'react';
+import React, {useRef, useEffect, useState} from 'react';
 import styled from 'styled-components';
 import {Line} from 'react-chartjs-2';
 import {
-    useCustomChartInfo, 
-    useCustomChartList, 
     useMachineInfo
 } from '../ChartContext';
 import Modal from '../Components/Modal';
 import axios from 'axios';
 import {Button, ModalTitleBox, ModalTextBox, ModalFooter} from '../Components/ModalContent';
-import {URL} from '../Util';
+import {URL, setChartjsDataset} from '../Util';
 import {flexAlign} from '../../Util/css';
+import {getCustomProgramList} from '../api';
 
 // chart의 options 설정
 export const options = {
@@ -61,19 +60,17 @@ const CustomBox = styled.div`
 
 // 커스텀 환경 프로그램 그래프
 const CustomGraphStyle = styled.div`
-    border-radius: 5px;
+    border-radius: 0 10px 0 10px;
     margin: 2vw 0 2vw 2vw;
-    width: 480px;
+    width: 400px;
     height: auto;
-    border: 1px solid rgba(0,0,0,0.3);
+    border: 1px solid #BBBBBB;
     flex-wrap: wrap;
     align-items: center;
-    &:hover {
-        border: 1px solid black;
-    };
     transition: 0.5s;
-    box-shadow: 0 5px 5px rgba(0,0,0,0.4);
+    box-shadow: 5px 5px 5px #DDDDDD;
     background-color: white;
+    position: relative;
 `;
 
 // 커스텀 환경 프로그램 이름
@@ -83,13 +80,8 @@ const GraphTitle = styled.div`
     font-size: 1.2em;
     text-align: center;
     line-height: 60px;
-    border-radius : 5px;
-    color: rgba(0,0,0,0.7);
-    border: 1px solid rgba(0,0,0,0.3);
-    &:hover {
-        color: black;
-        border: 1px solid black;
-    };
+    border-radius : 10px;
+    border-bottom: 1px solid #BBBBBB;
     transition: 0.5s;
 `;
 
@@ -97,13 +89,29 @@ const GraphTitle = styled.div`
 const CustomButton = styled.button`
     width: 100px;
     height: 40px;
-    border: 1px solid gray;
+    border: 1px solid #BBBBBB;
     background-color: white;
     position: relative;
     top: 10px;
-    left: 279px;
+    left: 199px;
     user-select: none;
-    box-shadow: 0 5px 5px rgba(0,0,0,0.4);
+    box-shadow: 5px 5px 5px #DDDDDD;
+    cursor: pointer;
+
+    &:hover &::after {
+        opacity: 1;
+    }
+
+    &::after {
+        top: 0;
+        left: 0;
+        width: 100px;
+        height: 40px;
+        opacity: 0;
+        position: absolute;
+        background-color: #7FDBDA;
+        transition: opacity ease-in 0.3s;
+    }
 `;
 
 const CustomStart = ({onStart, onRemove, prgid}) => {
@@ -116,19 +124,18 @@ const CustomStart = ({onStart, onRemove, prgid}) => {
     );
 };
 
-const AddMessageBox = styled.div`
-    ${flexAlign};
-    height: 200px;
-    border: 1px solid gray;
-    border-radius: 20px;
-    flex: 1;
-    font-size: 1.3em;
+const LoadingContainer = styled.div`
+    width: 100%;
+    height: 100%;
+`;
+
+const LoadingMessage = styled.p`
+    font-size: 1.4em;
+    text-align: center;
 `;
 
 // 커스텀 컴포넌트
-const Custom = ({value}) => {
-    const chart = useCustomChartList();
-    const chartInfo = useCustomChartInfo();
+const Custom = () => {
     const machineId = useMachineInfo();
     const [loading, setLoading] = useState(true);
     const [customChart, setCustomChart] = useState([]);
@@ -141,21 +148,49 @@ const Custom = ({value}) => {
         confirm: ''
     });
 
-    console.log(value);
-
-    async function setChart () {
-        await chart.map((ch, i) => {
-            setCustomChart(cus => cus.concat({
-                prg_id: chartInfo[i].id,
-                prg_name: chartInfo[i].prg_name,
-                data: ch,
-                prg_count: chartInfo[i].prg_count
-            }));
-        });
-    }
-
     useEffect(() => {
-        setChart().then(() => {setLoading(false)});
+        // get chart data
+        getCustomProgramList()
+        .then(res => {
+            // api 데이터 가져왔고
+            let da = res.data;
+            return da;
+        })
+        .then(async ch => {
+            await ch.forEach(data => {
+                // chartjs 양식에 맞추기 위한 배열들 선언
+                let dateArr = [];   // 날짜
+                let tempArr = [];   // 온도
+                let humiArr = [];   // 습도
+                let growthArr = []; // 생장률
+                
+                // 온도 데이터
+                data.temperature.forEach((temp,index) => {
+                    dateArr.push((index + 1) + "일차");
+                    tempArr.push(temp.setting_value);
+                });
+                // 습도 데이터
+                data.humidity.forEach(humi => {
+                    humiArr.push(humi.setting_value);
+                });
+                // 생장률 데이터
+                data.growthRate.forEach(growth => {
+                    growthArr.push(growth.gr_value);
+                });
+                // chartjs 데이터셋 생성
+                setCustomChart(
+                    ch =>
+                    ch.concat(
+                        {
+                            prg_id: data.id,
+                            prg_name: data.prg_name,
+                            prg_count: data.prg_count,
+                            data: setChartjsDataset(dateArr, tempArr, humiArr, growthArr)
+                        }
+                    )
+                );
+            });
+        }).then(() => setLoading(false));
     },[]);
 
     // 커스텀 환경 적용 클릭 시 모달 on 및 텍스트 변경
@@ -245,39 +280,46 @@ const Custom = ({value}) => {
         });
     };
 
+    if(loading) return <LoadingContainer><LoadingMessage>loading..</LoadingMessage></LoadingContainer>
+
     return (
-        <>
-        { loading ?
-            <>Now loading...</>
-            :
-                <CustomBox>
-                   {customChart.map((ch,index) =>
-                        <div key={index}>
-                                <CustomGraphStyle>
-                                <GraphTitle>- {ch.prg_name} -</GraphTitle>
-                                <LineChart chartData={ch.data}/>
-                                <p style={{userSelect: 'none'}}>사용 횟수 : {ch.prg_count}</p>
-                                <CustomStart 
-                                    onStart={onStart}
-                                    onRemove={onRemove} 
-                                    prgid={ch.prg_id}
-                                    macid={machineId} />
-                            </CustomGraphStyle>
-                        </div>
-                   )}
-                <Modal opacity={modalInfo.opacity} customId={modalInfo.customId} onClose={onClose} width='500' height='200'>
-                    <ModalTitleBox>{modalInfo.titleText}</ModalTitleBox>
-                    <ModalTextBox>{modalInfo.modalTextfirst}</ModalTextBox>
-                    <ModalTextBox>{modalInfo.modalTextsecond}</ModalTextBox>
-                    <ModalFooter>
+        <CustomBox>
+            {customChart.map((ch,index) =>
+                <CustomGraphStyle key={index}>
+                    <GraphTitle>- {ch.prg_name} -</GraphTitle>
+                    <LineChart chartData={ch.data}/>
+                    <CountCard>사용 횟수 : {ch.prg_count}</CountCard>
+                    <CustomStart 
+                        onStart={onStart}
+                        onRemove={onRemove} 
+                        prgid={ch.prg_id}
+                        macid={machineId} />
+                </CustomGraphStyle>
+            )}
+            <Modal opacity={modalInfo.opacity} customId={modalInfo.customId} onClose={onClose} width='500' height='200'>
+                <ModalTitleBox>{modalInfo.titleText}</ModalTitleBox>
+                <ModalTextBox>{modalInfo.modalTextfirst}</ModalTextBox>
+                <ModalTextBox>{modalInfo.modalTextsecond}</ModalTextBox>
+                <ModalFooter>
                     <Button onClick={() => CustomModalFunction(machineId, modalInfo.customId)}>확인</Button>
                     <Button onClick={onClose}>취소</Button>
-                    </ModalFooter>
-                </Modal>
-            </CustomBox>
-        }
-        </>
+                </ModalFooter>
+            </Modal>
+        </CustomBox>
     );
 };
+
+const CountCard = styled.span`
+    user-select: 'none';
+    width: 100px;
+    height: 30px;
+    border: 1px solid #BBBBBB;
+    background-color: white;
+    position: absolute;
+    text-align: center;
+    line-height: 30px;
+    top: -10px;
+    left: -1px;
+`;
 
 export default Custom;

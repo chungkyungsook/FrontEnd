@@ -1,8 +1,8 @@
 import React, {useEffect} from 'react' ;
 import { Route, Redirect } from 'react-router-dom' ;
 import styled from 'styled-components' ;
-import ChartContext from './ChartContext';
 import {withCookies} from 'react-cookie';
+import ChartContext from './ChartContext';
 
 import { 
     SETTING,
@@ -19,15 +19,12 @@ import SideMenu from './SideMenu' ;
 import Pyogo from './Routes/Pyogo' ;
 import Baekhwago from './Routes/Baekhwago' ;
 import Custom from './Routes/Custom' ;
-import {Add} from './Routes/Add' ;
+import Add from './Routes/Add' ;
 import Update from './Routes/Update' ;
 
-const Conatiner = styled.div`
-    background-color: rgb(246,246,244);
-    margin: 0;
+const Container = styled.div`
+    /* background-color: rgb(246,246,244); */
     display: flex;
-    width: 100vw - 185px;
-    height: 100vh - 70px;
 `;
 
 const TemplateContainer = styled.div`
@@ -54,16 +51,16 @@ const SettingRouter = ({location, cookies, value, history}) => {
         <>
         {!isLoginCheck ? (<Redirect to="/login" />) : (
         <ChartContext machineId={value.isOn.id}>
-        <Conatiner>
-            <SideMenu pathname={pathname} />
-            <TemplateContainer>
-                <Route exact path={SETTING} component={Pyogo}/>
-                <Route path={`${SETTING}${BAEKHWAGO}`} component={Baekhwago} />
-                <Route path={`${SETTING}${CUSTOM}`} component={Custom} />
-                <Route path={`${SETTING}${SETTING_ADD}`} component={Add} />
-                <Route path={`${SETTING}${SETTING_UPDATE}`} component={Update} />
-            </TemplateContainer>
-        </Conatiner>
+            <Container className="inner">
+                <SideMenu pathname={pathname} />
+                <TemplateContainer>
+                    <Route exact path={SETTING} component={Pyogo}/>
+                    <Route path={`${SETTING}${BAEKHWAGO}`} component={Baekhwago} />
+                    <Route path={`${SETTING}${CUSTOM}`} component={Custom} />
+                    <Route path={`${SETTING}${SETTING_ADD}`} component={Add} />
+                    <Route path={`${SETTING}${SETTING_UPDATE}`} component={Update} />
+                </TemplateContainer>
+            </Container>
         </ChartContext>
         )}
         </>

@@ -157,10 +157,17 @@ export default function Farm(){
 
 //     }
 
+<<<<<<< HEAD
+    //3D
+    const api = axios.create({
+      baseURL : 'http://184.73.45.24'
+    }) ;
+=======
 //     //3D
 //     const api = axios.create({
 //       baseURL : 'http://54.163.128.160'
 //     }) ;
+>>>>>>> 0c8d782b5e71868597809606a1e116658fc5fb46
     
 //     //3D
 //     function get3dData() {
@@ -190,7 +197,11 @@ export default function Farm(){
 
 //         const controls = new OrbitControls(camera, renderer.domElement) ;
 
+<<<<<<< HEAD
+        loader.load(`http://184.73.45.24/api/url/ply?url=${data}`, function(geometry){
+=======
 //         loader.load(`http://54.163.128.160/api/url/ply?url=${data}`, function(geometry){
+>>>>>>> 0c8d782b5e71868597809606a1e116658fc5fb46
 
 //           geometry.computeVertexNormals() ;
           
