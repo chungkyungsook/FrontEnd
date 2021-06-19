@@ -15,11 +15,23 @@ import swal from 'sweetalert';
 
 //그래프
 import LogoutChart from '../../Beomhwan/Components/LogoutChart';
-
+import Progress from '../Component/Progress'
 import {
   AWS_URL,
 }from '../../Util/api'
-import { getMuchineList,getMuchineDeviceId,getMuchineKey,getMuchinePwd,getMuchineMakeDevice, getMuchineSetting,getMuchineDelete,useKinokoDispatch, useKinokoState } from '../../KinokoContext';
+import { 
+  getProgramInfo,
+  getMuchineKey,
+  getMuchinePwd,
+  getMuchineList,
+  getMuchineDelete,
+  getMuchineSetting,
+  getMuchineDeviceId,
+  getMuchineMakeDevice,
+  getMushroomInfo,
+  useKinokoDispatch,
+  useKinokoState 
+} from '../../KinokoContext';
 import Modal from '../Component/Modal/Modal'; 
 import ModalDel from '../Component/Modal/ModalDel';
 
@@ -29,11 +41,14 @@ export default function MyFarm(){
   const state    = useKinokoState();
   const dispatch = useKinokoDispatch();
 
-  const { data: muchinList, loading, error } = state.muchinList; // state.data 를 users 키워드로 조회
-  const { data: muchinKey, error: errKey, isOk: isOkKey } = state.muchinKey; // state.data 를 users 키워드로 조회
-  const { error: errPwd, isOk:isOkPwd } = state.muchinPwd; // state.data 를 users 키워드로 조회
-  const {  error: errDevice, isOk:isOkDevice } = state.muchinMakeDevice; // state.data 를 users 키워드로 조회
-  const { data:DeviceId, error: errDeviceId, isOk:isOkDeviceId } = state.muchinDeviceId; // state.data 를 users 키워드로 조회
+  const { data: muchinList, loading, error } = state.muchinList; 
+  const { data: muchinKey, error: errKey, isOk: isOkKey } = state.muchinKey; 
+  const { error: errPwd, isOk:isOkPwd } = state.muchinPwd; 
+  const {  error: errDevice, isOk:isOkDevice } = state.muchinMakeDevice; 
+  const { data:DeviceId, error: errDeviceId, isOk:isOkDeviceId } = state.muchinDeviceId; 
+  const { data:programInfo, error: errProgramInfo, isOk:isOkProgramInfo } = state.programInfo; 
+
+
   const [nodivice, setNodivece] = useState(false); // 처음 디바이스 정보 가져올 때
   const [deviceNumber, setDeviceNumber] = useState("")
   const [setDevice, isSetDevice] =useState('muchine-btn')
@@ -45,8 +60,8 @@ export default function MyFarm(){
   //실시간 소캣 이미지 저장용
   const [image, setImage] = useState(null)
   // 재배기 온도, 습도 값 저장
-  const [temperature, setTemperature] = useState(0)
-  const [humidity, setHumidity] = useState(0)
+  const [temperature, setTemperature] = useState(100)
+  const [humidity, setHumidity] = useState(100)
 
   //가짜 데이터
   const [value, setValue] = useState(false)
@@ -54,6 +69,7 @@ export default function MyFarm(){
   const openModal = () => {
     setModalOpen(true);
   }
+  
   const closeModal = () => {
     setModalOpen(false);
     setInputValue('')
@@ -78,7 +94,6 @@ export default function MyFarm(){
       console.log('삭제, 선택 성공!');
       setNodivece(false)
       getMuchinList()
-      
     }else{
       console.log('삭제, 선택 실패!');
     }
@@ -114,7 +129,8 @@ export default function MyFarm(){
   const getMuchinList = ()=>{
     setNodivece(false)
     getMuchineList(dispatch)
-    getMuchineDeviceId(dispatch)
+    getMuchineDeviceId(dispatch) //해당 디바이스 끝나면 실행합시다
+    // getProgramInfo(dispatch,DeviceId.id)
   }
 
   //선택
@@ -127,10 +143,6 @@ export default function MyFarm(){
   const onDelMuchin = ()=>{
     console.log('onDelMuchin',deviceNumber);
     getMuchineDelete(dispatch,deviceNumber)
-  }
-
-  const onMoveForm = () =>{
-    console.log('상세 페이지로 이동');
   }
 
   //============= useEffect =======================
@@ -150,9 +162,17 @@ export default function MyFarm(){
     ))
     
     //선택된 디바이스 있는 지 확인
+    DeviceId && getProgramInfo(dispatch,DeviceId.id)
     DeviceId && console.log('DeviceId',DeviceId);
+    programInfo && console.log('programInfo',programInfo);
 
-  },[loading, error,muchinList,DeviceId,isOkDevice,isOkDeviceId])
+  },[loading, error,muchinList,DeviceId,isOkDevice,isOkDeviceId,dispatch,programInfo])
+
+  // useEffect(()=>{
+  //   //모든 버섯 정보 가져오기
+  //   // programInfo && getMushroomInfo(dispatch,programInfo.id)
+  //   programInfo && console.log(programInfo);
+  // },[programInfo,dispatch])
 
   //실시간 소캣 통신 
   useEffect(() => {
@@ -259,8 +279,10 @@ export default function MyFarm(){
               <div className='right-wrap'>
                 {nodivice && <span >등록된 기기가 없습니다. 기기를 등록해 주세요</span>}
                 {!nodivice && !loading && isOkDeviceId !==202 && <span >선택된 기기가 없습니다. 기기를 선택해 주세요</span>}
+                {!nodivice && !loading && !programInfo && <span >선택된 프로그램이 없습니다. 팜 환경 설정에서 프로그램을 선택해 주세요</span>}
                 {loading && <span >Loding...</span>}
-                { DeviceId && 
+                {/* !nodivice &&  임의로 지정*/}
+                { programInfo && 
                   <><div className='grap-wrap'>
                     <div className = "grap">
                         <LogoutChart value={deviceNumber&&deviceNumber}/>
@@ -278,20 +300,38 @@ export default function MyFarm(){
                     </div>
 
                     <div className='kinokoInfo'> 
+
                       <div className='info-top'>
+                        {/* 온도 습도 */}
                         <div className='info-left'>
+                            <div className = "progress">
+                              <span>온도</span>
+                              <Progress color={'secondary'} value={temperature} name={'온도'}/>
+                            </div>    
 
+                            <div className = "progress">
+                              <span>습도</span>
+                              <Progress value={humidity}/>
+                            </div>       
                         </div>
+
                         <div className='info-right'>
-
+                          <div className='today-box'>
+                            <span>오늘 자란 버섯 수</span>
+                          </div>
+                          <div className='today-box'>
+                            <span>수확 가능한 버섯 수</span>
+                          </div>
                         </div>
+
+
                       </div>
 
 
                       <div className='info-bottom'>
 
                         <div className='today-info'>
-                          <h3>오늘 자란 버섯 수</h3>
+                          <h3>  오늘 자란 버섯 수  </h3>
                           <span className='today-growth'>4개</span>
                           {/* <span className='today-growth'>0...</span> */}
                         </div>
