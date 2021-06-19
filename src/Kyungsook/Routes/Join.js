@@ -67,7 +67,7 @@ export default function Join(){
     
     await axios.post(`${AWS_URL}${LOGIN}`,{
       // token: window.Kakao.Auth.getAccessToken(),
-      token: '2222',
+      token: window.Kakao.Auth.getAccessToken(),
       id: data.id
     }).then(response =>{
       console.log("로그인 성공",response);

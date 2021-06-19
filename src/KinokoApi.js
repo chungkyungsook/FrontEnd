@@ -8,7 +8,9 @@ import {
   MUCHIN_MAKE_DEVICE,
   MUCHIN_SETTING,
   MUCHIN_DELETE,
-  MACHINE_ID
+  MACHINE_ID,
+  MUSHROOM_ALL,
+  PRG_NAME
 } from './Util/api'
 
 export async function getUsers() {
@@ -31,7 +33,7 @@ export async function getLogoutAccount( ){
   const response = await axios.put(
     `${AWS_URL}${LOGOUT}`,
     // {token: window.Kakao.Auth.getAccessToken()}
-    {token: '2222'}
+    {token: window.Kakao.Auth.getAccessToken()}
   )
   return response.data
 }
@@ -40,7 +42,7 @@ export async function getMachineList(){
   const response = await axios.get(`${AWS_URL}${MACHINE_LIST}`,{
     params:{
       // token: window.Kakao.Auth.getAccessToken()
-      token: '2222'
+      token: window.Kakao.Auth.getAccessToken()
     }
   });
 
@@ -51,7 +53,7 @@ export async function getMachineDeviceId(){
   const response = await axios.get(`${AWS_URL}${MACHINE_ID}`,{
     params:{
       // token: window.Kakao.Auth.getAccessToken()
-      token: '2222'
+      token: window.Kakao.Auth.getAccessToken()
     }
   });
 
@@ -86,7 +88,7 @@ export async function getMachineMakeDevice({pin,pw,machineName}){
       pw : pw,
       machineName : machineName,
       // token: window.Kakao.Auth.getAccessToken()
-      token: '2222'
+      token: window.Kakao.Auth.getAccessToken()
   });
 
   return response.data
@@ -96,7 +98,7 @@ export async function getMachineSetting(id){
   const response = await axios.put(`${AWS_URL}${MUCHIN_SETTING}`,{
       id : id,
         // token: window.Kakao.Auth.getAccessToken()
-      token: '2222'
+      token: window.Kakao.Auth.getAccessToken()
   });
   console.log('gggg',response);
   return response.data
@@ -105,6 +107,37 @@ export async function getMachineSetting(id){
 export async function getMachineDelete(id){
   const response = await axios.delete(`${AWS_URL}${MUCHIN_DELETE}`,{
     params:{id:id}
+  });
+  return response.data
+}
+
+//프로그램 id, name : 파라미터  기기 id
+export async function getProgramInfo(id){
+  const response = await axios.get(`${AWS_URL}${PRG_NAME}`,{
+    params:{id:id}
+  });
+  return response.data
+}
+
+// 모든 버섯 정보 가져오기 : 프로그램 id
+export async function getMushroomInfo(prgId){
+  console.log('prgid',prgId);
+  const response = await axios.get(`${AWS_URL}${MUSHROOM_ALL}`,{
+    params:{prgId:prgId}
+  });
+  return response.data
+}
+// 오늘 성장한 버섯 정보 가져오기
+export async function getMushroomGrowInfo(prgId){
+  const response = await axios.get(`${AWS_URL}${MUCHIN_DELETE}/growing`,{
+    params:{prgId:prgId}
+  });
+  return response.data
+}
+// 수확 가능한 버섯 정보 가져오기
+export async function getMushroomHarvestInfo(prgId){
+  const response = await axios.get(`${AWS_URL}${MUCHIN_DELETE}/harvest`,{
+    params:{prgId:prgId}
   });
   return response.data
 }
