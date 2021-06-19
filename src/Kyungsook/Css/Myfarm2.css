@@ -211,6 +211,18 @@
   border: 1px solid rgb(128, 150, 68);
   margin-right: 5px;
   border-radius: 5px;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.myfarm-wrap .myfarm-right .right-wrap .kinokoInfo-wrap .kinokoInfo .info-top .info-left .progress{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.myfarm-wrap .myfarm-right .right-wrap .kinokoInfo-wrap .kinokoInfo .info-top .info-left .progress span{
+  font-weight: 700;
 }
 .myfarm-wrap .myfarm-right .right-wrap .kinokoInfo-wrap .kinokoInfo .info-top .info-right{
   width: 50%;
@@ -237,6 +249,7 @@
 }
 .myfarm-wrap .myfarm-right .right-wrap .kinokoInfo-wrap .kinokoInfo .info-bottom .today-info h3{
   font-weight: 700;
+  margin-bottom: 10px;
 }
 .myfarm-wrap .myfarm-right .right-wrap .kinokoInfo-wrap .kinokoInfo .info-bottom .today-info .today-growth{
   font-size: 52px;
