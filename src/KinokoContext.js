@@ -20,7 +20,8 @@ const initialState = {
   muchinDelete:initialAsyncState,
   muchinDeviceId:initialAsyncState,
   programInfo: initialAsyncState,
-  getMushroomInfo:initialAsyncState
+  getMushroomInfo:initialAsyncState,
+  getStartDay: initialAsyncState
 };
 
 const usersHandler = createAsyncHandler('GET_USERS', 'users');
@@ -40,6 +41,7 @@ const programInfoHandler = createAsyncHandler('GET_PROGRAM_INFO', 'programInfo')
 
 //getMushroomInfo
 const mushroomInfoHandler = createAsyncHandler('GET_MUSHROOM_INFO', 'getMushroomInfo')
+const startDayHandler = createAsyncHandler('GET_START_DATE', 'getStartDay')
 const logoutHandler = createAsyncHandler('LOGOUT','logout');
 
 
@@ -93,6 +95,11 @@ function usersReducer(state, action) {
     case 'GET_MUSHROOM_INFO_SUCCESS':
     case 'GET_MUSHROOM_INFO_ERROR':
       return mushroomInfoHandler(state, action);
+    // 프로그램 시작날짜 가져오기
+    case 'GET_START_DATE':
+    case 'GET_START_DATE_SUCCESS':
+    case 'GET_START_DATE_ERROR':
+      return startDayHandler(state, action);
     case 'LOGOUT':
     case 'LOGOUT_SUCCESS':
     case 'LOGOUT_ERROR':
@@ -164,6 +171,8 @@ export const getMuchineDelete = createAsyncDispatcher('GET_MUCHIN_DELETE', api.g
 // 선택한 재배기의 프로그램 이름, id 가져오기
 export const getProgramInfo = createAsyncDispatcher('GET_PROGRAM_INFO',api.getProgramInfo)
 
+// 프로그램 시작한 날짜 가져오기
+export const getStartDay = createAsyncDispatcher('GET_START_DATE',api.getStartDay)
 
 // 모든 버섯 성장 정보 가져오기
 export const getMushroomInfo = createAsyncDispatcher('GET_MUSHROOM_INFO',api.getMushroomInfo)
