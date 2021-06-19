@@ -48,7 +48,6 @@ export default function MyFarm(){
   const { data:DeviceId, error: errDeviceId, isOk:isOkDeviceId } = state.muchinDeviceId; 
   const { data:programInfo, error: errProgramInfo, isOk:isOkProgramInfo } = state.programInfo; 
 
-
   const [nodivice, setNodivece] = useState(false); // 처음 디바이스 정보 가져올 때
   const [deviceNumber, setDeviceNumber] = useState("")
   const [setDevice, isSetDevice] =useState('muchine-btn')
@@ -161,18 +160,13 @@ export default function MyFarm(){
       console.log(obj))
     ))
     
-    //선택된 디바이스 있는 지 확인
-    DeviceId && getProgramInfo(dispatch,DeviceId.id)
-    DeviceId && console.log('DeviceId',DeviceId);
-    programInfo && console.log('programInfo',programInfo);
+    if(isOkDeviceId === 202){
+      console.log('DeviceId', DeviceId.id);
+      getProgramInfo(dispatch,DeviceId.id)
+    }
 
-  },[loading, error,muchinList,DeviceId,isOkDevice,isOkDeviceId,dispatch,programInfo])
+  },[loading, error,muchinList,isOkDeviceId,DeviceId])
 
-  // useEffect(()=>{
-  //   //모든 버섯 정보 가져오기
-  //   // programInfo && getMushroomInfo(dispatch,programInfo.id)
-  //   programInfo && console.log(programInfo);
-  // },[programInfo,dispatch])
 
   //실시간 소캣 통신 
   useEffect(() => {
@@ -282,10 +276,10 @@ export default function MyFarm(){
                 {!nodivice && !loading && !programInfo && <span >선택된 프로그램이 없습니다. 팜 환경 설정에서 프로그램을 선택해 주세요</span>}
                 {loading && <span >Loding...</span>}
                 {/* !nodivice &&  임의로 지정*/}
-                { programInfo && 
+                { !nodivice && !loading && programInfo && 
                   <><div className='grap-wrap'>
                     <div className = "grap">
-                        <LogoutChart value={deviceNumber&&deviceNumber}/>
+                        <LogoutChart />
                     </div>
                   </div>
 
@@ -358,7 +352,6 @@ export default function MyFarm(){
               }
               </div>
             </div>
-
 
           </div>
         </div>
