@@ -1,9 +1,9 @@
 import React,{useState,useEffect} from 'react' ;
 import '../Css/Myfarm2.css';
 import {Redirect}   from 'react-router-dom' ;
-import { withCookies} from 'react-cookie';
-import axios from 'axios';
-
+import logoimg1 from '../../assets/logo.png' ;
+import farmer from '../../assets/farmer.png';
+import {Link} from 'react-router-dom';
  // 해당 페이지 보여주기
 
 import {format} from 'date-fns';
@@ -18,12 +18,12 @@ import LogoutChart from '../../Beomhwan/Components/LogoutChart';
 
 import {
   AWS_URL,
-  LOGOUT,
-  MUCHIN_SETTING
 }from '../../Util/api'
 import { getMuchineList,getMuchineDeviceId,getMuchineKey,getMuchinePwd,getMuchineMakeDevice, getMuchineSetting,getMuchineDelete,useKinokoDispatch, useKinokoState } from '../../KinokoContext';
 import Modal from '../Component/Modal/Modal'; 
 import ModalDel from '../Component/Modal/ModalDel';
+
+
 export default function MyFarm(){
   
   const state    = useKinokoState();
@@ -35,13 +35,21 @@ export default function MyFarm(){
   const {  error: errDevice, isOk:isOkDevice } = state.muchinMakeDevice; // state.data 를 users 키워드로 조회
   const { data:DeviceId, error: errDeviceId, isOk:isOkDeviceId } = state.muchinDeviceId; // state.data 를 users 키워드로 조회
   const [nodivice, setNodivece] = useState(false); // 처음 디바이스 정보 가져올 때
-  const [isDevice, setIsDevice] = useState(false)
   const [deviceNumber, setDeviceNumber] = useState("")
+  const [setDevice, isSetDevice] =useState('muchine-btn')
   // useState를 사용하여 open상태를 변경한다. (open일때 true로 만들어 열리는 방식)
   const [ modalOpen, setModalOpen ] = useState(false);
   const [ modalDelOpen, setModalDelOpen ] = useState(false);
   const [inputValue, setInputValue] = useState('')
+  
+  //실시간 소캣 이미지 저장용
+  const [image, setImage] = useState(null)
+  // 재배기 온도, 습도 값 저장
+  const [temperature, setTemperature] = useState(0)
+  const [humidity, setHumidity] = useState(0)
 
+  //가짜 데이터
+  const [value, setValue] = useState(false)
 
   const openModal = () => {
     setModalOpen(true);
@@ -52,6 +60,7 @@ export default function MyFarm(){
     getMuchinePwd(dispatch,'me')
     getMuchineKey(dispatch,'me')
     getMuchineMakeDevice(dispatch,'me')
+    getMuchinList()
   }
 
   // 선택 삭제
@@ -65,10 +74,11 @@ export default function MyFarm(){
     setDeviceNumber('')
     getMuchineSetting(dispatch,'me')
     getMuchineDelete(dispatch,'me')
-    if(argIsOk === 200 ){
+    if(argIsOk === 202 ){
       console.log('삭제, 선택 성공!');
       setNodivece(false)
-      getMuchineList(dispatch)
+      getMuchinList()
+      
     }else{
       console.log('삭제, 선택 실패!');
     }
@@ -107,15 +117,23 @@ export default function MyFarm(){
     getMuchineDeviceId(dispatch)
   }
 
+  //선택
   const onSetMuchin = ()=>{
     console.log('onsetMuchin',deviceNumber);
     getMuchineSetting(dispatch,deviceNumber)
   }
 
+  //삭제
   const onDelMuchin = ()=>{
     console.log('onDelMuchin',deviceNumber);
     getMuchineDelete(dispatch,deviceNumber)
   }
+
+  const onMoveForm = () =>{
+    console.log('상세 페이지로 이동');
+  }
+
+  //============= useEffect =======================
 
   useEffect(()=>{
     console.log("Myfarm");
@@ -125,13 +143,64 @@ export default function MyFarm(){
       setNodivece(true)
     }
     
+    //사용자가 등록된 모든 기기 list 가져오기
     muchinList && muchinList.map( (obj)=>(
-      (obj.machine_ison !== "false" && setIsDevice(true),
+      (obj.machine_ison !== "false" && isSetDevice('muchine-btn-setCheck'),
       console.log(obj))
     ))
+    
+    //선택된 디바이스 있는 지 확인
     DeviceId && console.log('DeviceId',DeviceId);
 
-  },[loading, error,muchinList,DeviceId])
+  },[loading, error,muchinList,DeviceId,isOkDevice,isOkDeviceId])
+
+  //실시간 소캣 통신 
+  useEffect(() => {
+    if(value){
+     // 소켓 연결 코드
+     const socket = io('http://192.168.0.10:3000') ;
+     
+     socket.emit('req_video', true) ;
+     socket.on('res_video', (data) => {
+     
+         const byte_chars = atob(data)
+
+         const byteNumbers = new Array(byte_chars.length) ;
+   
+         for(let i = 0 ; i < byte_chars.length ; i++) {
+           byteNumbers[i] = byte_chars.charCodeAt(i) ;
+         }
+         const byteArray = new Uint8Array(byteNumbers) ;
+   
+         const blob = new Blob([byteArray], { type : 'image/png' }) ;
+       
+         setImage(URL.createObjectURL(blob)) ;
+   
+          
+     }) ;
+ 
+     // 온, 습도 데이터 요청
+     socket.emit('req_cosdata');
+     // 온, 습도 데이터 받아오는 이벤트
+     socket.on('res_cosdata', (data) => {
+             console.log(data);
+     // 재배기 온도 습도 작동 
+     //  parseInt(data.temperature) && parseInt(data.humidity) && maching_setting(parseInt(data.temperature), parseInt(data.humidity) ) 
+     // maching_setting(parseInt(data.temperature), parseInt(data.humidity) )
+     if(data.temperature != null && data.humidity != null){
+         setTemperature(parseInt(data.temperature))
+         setHumidity(parseInt(data.humidity))
+     }
+     
+     });
+ 
+     return () => { // 화면 끝
+       socket.disconnect() ;
+       console.log('myfarm 끝');
+     }
+
+    }    //예외 처리
+   }, []) ;
 
 
   
@@ -178,7 +247,7 @@ export default function MyFarm(){
                 <button className='muchine-btn' onClick={openModal}> <span>+</span> </button>
                 {
                   muchinList && muchinList.map( (obj)=>(
-                    <button className='muchine-btn' onClick={() =>{openModalDel(); (()=>{setDeviceNumber(obj.id)})() }}> <span>{obj.machine_name}</span> </button>
+                    <button className={setDevice} onClick={() =>{openModalDel(); (()=>{setDeviceNumber(obj.id)})() }}> <span>{obj.machine_name}</span> </button>
                   ))
                 }
                 <button className='muchine-btn' onClick={getMuchinList}> <span>새로 불러오기</span> </button>
@@ -189,7 +258,7 @@ export default function MyFarm(){
             <div className='myfarm-right'>
               <div className='right-wrap'>
                 {nodivice && <span >등록된 기기가 없습니다. 기기를 등록해 주세요</span>}
-                {/* {!loading && !isDevice && <span >선택된 기기가 없습니다. 기기를 선택해 주세요</span>} */}
+                {!nodivice && !loading && isOkDeviceId !==202 && <span >선택된 기기가 없습니다. 기기를 선택해 주세요</span>}
                 {loading && <span >Loding...</span>}
                 { DeviceId && 
                   <><div className='grap-wrap'>
@@ -200,8 +269,48 @@ export default function MyFarm(){
 
                   <div className='kinokoInfo-wrap'>
 
-                    <div className='soket'> 실시간 소캣 </div>
-                    <div > 버섯 정보 영역</div>
+                    <div className='soket'> 
+                      <div className='soket-img'>
+                        <div className='soket-title'><span>실시간 영상</span></div>
+                        {image && <img src={image} alt='실시간 통신'/>}
+                        {/* <img src={logoimg1} alt='logo' className='logo1'/> */}
+                      </div>
+                    </div>
+
+                    <div className='kinokoInfo'> 
+                      <div className='info-top'>
+                        <div className='info-left'>
+
+                        </div>
+                        <div className='info-right'>
+
+                        </div>
+                      </div>
+
+
+                      <div className='info-bottom'>
+
+                        <div className='today-info'>
+                          <h3>오늘 자란 버섯 수</h3>
+                          <span className='today-growth'>4개</span>
+                          {/* <span className='today-growth'>0...</span> */}
+                        </div>
+
+                        <div className='today-grow'>
+                          <h3>수확 가능한 버섯이 있어요!</h3>
+                          <img src={farmer} alt='farmer' className='farmer' />
+                          {/* <h3>아직은 수확 가능한 버섯이 없네요...</h3> */}
+                        </div>
+
+                        <div className='from-move'> 
+                          <Link to="/farm">
+                            <span className='move'>상세 페이지로 이동 </span>
+                          </Link>
+                        </div>
+                        
+                      </div>
+
+                    </div>
 
 
                   </div>

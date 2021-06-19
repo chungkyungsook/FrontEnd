@@ -104,7 +104,7 @@ export async function getMachineSetting(id){
 
 export async function getMachineDelete(id){
   const response = await axios.delete(`${AWS_URL}${MUCHIN_DELETE}`,{
-    id:id
+    params:{id:id}
   });
   return response.data
 }

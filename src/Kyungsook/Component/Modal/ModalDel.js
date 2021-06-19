@@ -20,7 +20,7 @@ const ModalDel = ( props ) => {
     }else if(errDelete) {
         swal('삭제 실패 했습니다....')
         close('3')
-    }else if(isOkDelete === 200) {
+    }else if(isOkDelete === 202) {
         swal('삭제되었습니다! :)')
         close(isOkDelete)
     }
