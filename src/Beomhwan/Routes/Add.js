@@ -9,9 +9,9 @@ import InputPrgName from '../Components/InputprgName';
 import {flexAlign} from '../../Util/css';
 import {BoxShadowTrick, SvgSize} from '../css/cssModule';
 import axios from 'axios';
-import { useMachineInfo } from '../ChartContext';
 import {URL} from '../Util';
 import Modal from '../Components/Modal';
+import {useKinokoState} from '../../KinokoContext';
 
 // 커스텀 차트
 export const CustomChart = ({Data, titleMsg}) => {
@@ -408,7 +408,10 @@ const Add = ({history}) => {
             Date: 5 + "일차"
         },
     ]);
-    const machineId = useMachineInfo();
+
+    const state = useKinokoState();
+    const { data:DeviceId } = state.muchinDeviceId;
+
 
     // 1일 추가
     const Add = () => {
@@ -456,7 +459,7 @@ const Add = ({history}) => {
 
             axios.post(`${URL}/api/farm/custom`, 
                 {
-                    machineId: machineId, // machineId = 1
+                    machineId: DeviceId.id, // machineId = 1
                     water: count.waterCount,
                     sunshine: count.sunCount,
                     period: chartData.length,

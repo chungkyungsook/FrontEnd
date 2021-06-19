@@ -2,7 +2,9 @@ import {css} from 'styled-components';
 
 export const BoxShadowTrick = css`
     box-shadow: 5px 5px 5px #dddddd;
+    font-size: 0.9em;
     &:active {
+        font-size: 0.85em;
         box-shadow: inset -5px 5px 5px #dddddd;
     }
     transition: box-shadow 0.1s ease-in;
