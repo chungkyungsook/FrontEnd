@@ -12,7 +12,12 @@ const Container = styled.li`
     color : ${props => props.active ? '#3d5712' : 'white'} ;
     
     text-align : center ;
+    :hover{
+        color: #3d5712;
+        transition: .4s;
+    }
 `;
+
 
 const HeaderMenu = ({ path, pathname, children}) => {
     
@@ -22,6 +27,7 @@ const HeaderMenu = ({ path, pathname, children}) => {
                 active={path === pathname}    
             >
                 { children }
+                
             </Container>
             
         </Link>

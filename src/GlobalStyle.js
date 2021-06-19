@@ -33,9 +33,28 @@ const globalStyle = createGlobalStyle`
         display: block;
     }
     .inner{
-        width: 1100px;
+        width: 1200px;
         margin: auto;
         position: relative;
+    }
+    .container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .spinner {
+        animation: spin 2s linear infinite;
+        color: rgb(87,101,116);
+      }
+      @keyframes spin {
+        from {
+          transform: rotate(0);
+        }
+        to {
+          transform: rotate(360deg);
+        }
     }
 `;
 

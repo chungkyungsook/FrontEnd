@@ -28,7 +28,7 @@ const FarmMenu = ({pathname}) => {
     
     return (
         <>
-        <Container>
+        <Container className='inner'>
             <Ul>
                 <Link to="/farm">
                     <Li>
