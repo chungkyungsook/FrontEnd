@@ -28,32 +28,37 @@ export default function MyFarm(){
   
   const state    = useKinokoState();
   const dispatch = useKinokoDispatch();
-
+  //api axios 
   const { data: muchinList, loading, error } = state.muchinList; // state.data 를 users 키워드로 조회
-  const { data: muchinKey, error: errKey, isOk: isOkKey } = state.muchinKey; // state.data 를 users 키워드로 조회
+  const { error: errKey, isOk: isOkKey } = state.muchinKey; // state.data 를 users 키워드로 조회
   const { error: errPwd, isOk:isOkPwd } = state.muchinPwd; // state.data 를 users 키워드로 조회
   const {  error: errDevice, isOk:isOkDevice } = state.muchinMakeDevice; // state.data 를 users 키워드로 조회
-  const { data:DeviceId, error: errDeviceId, isOk:isOkDeviceId } = state.muchinDeviceId; // state.data 를 users 키워드로 조회
+  const { data:DeviceId, isOk:isOkDeviceId } = state.muchinDeviceId; // state.data 를 users 키워드로 조회
+  
+  
   const [nodivice, setNodivece] = useState(false); // 처음 디바이스 정보 가져올 때
   const [deviceNumber, setDeviceNumber] = useState("")
   const [setDevice, isSetDevice] =useState('muchine-btn')
-  // useState를 사용하여 open상태를 변경한다. (open일때 true로 만들어 열리는 방식)
+  // useState를 사용하여 open상태를 변경한다. (모달 창에서 사용됨)
   const [ modalOpen, setModalOpen ] = useState(false);
   const [ modalDelOpen, setModalDelOpen ] = useState(false);
   const [inputValue, setInputValue] = useState('')
   
   //실시간 소캣 이미지 저장용
   const [image, setImage] = useState(null)
+  
   // 재배기 온도, 습도 값 저장
   const [temperature, setTemperature] = useState(0)
   const [humidity, setHumidity] = useState(0)
 
-  //가짜 데이터
+  //가짜 데이터 : 실시간 소캣 통신 일단 막기 위해 사용됨 -> true로 바꿔줘야 실행
   const [value, setValue] = useState(false)
 
   const openModal = () => {
     setModalOpen(true);
   }
+
+  //key,pwd,device 모달 창 닫기 : 초기화 과정 진행 
   const closeModal = () => {
     setModalOpen(false);
     setInputValue('')
@@ -68,6 +73,7 @@ export default function MyFarm(){
     setModalDelOpen(true);
   }
 
+  // 선택, 삭제 모달 창 닫기 : 초기화 과정 진행
   const closeModalDel = (argIsOk) => {
     setModalDelOpen(false);
     setInputValue('')
@@ -85,6 +91,7 @@ export default function MyFarm(){
   }
   
 
+  //모달 창에서 사용 됨, key, pwd,device 맞는 지 확인 과정
   const onClickBtn = (e)=>{
     const {name} = e.target
 
@@ -98,6 +105,7 @@ export default function MyFarm(){
 
   }
 
+  //재배기 in,key,nikcname 입력값
   const onChange = (e)=>{
     const {name,value} = e.target
     
@@ -129,15 +137,13 @@ export default function MyFarm(){
     getMuchineDelete(dispatch,deviceNumber)
   }
 
-  const onMoveForm = () =>{
-    console.log('상세 페이지로 이동');
-  }
+
 
   //============= useEffect =======================
 
   useEffect(()=>{
     console.log("Myfarm");
-    console.log('loading',loading);
+    console.log('처음 loading',loading);
     if(error){
       console.log('error', error.response.data);
       setNodivece(true)
@@ -199,7 +205,7 @@ export default function MyFarm(){
        console.log('myfarm 끝');
      }
 
-    } 
+    }    //예외 처리
    }, []) ;
 
 
