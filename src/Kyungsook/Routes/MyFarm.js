@@ -199,7 +199,7 @@ export default function MyFarm(){
        console.log('myfarm 끝');
      }
 
-    }    //예외 처리
+    } 
    }, []) ;
 
 
