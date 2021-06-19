@@ -6,9 +6,8 @@ import am4themes_animated from '@amcharts/amcharts4/themes/animated';
 import {useKinokoState} from '../../KinokoContext';
 import {URL} from '../Util';
 
-const LogoutChartComponent = ({date, value}) => {
-    const [loading, setLoading] = useState(false);
-    console.log(value);
+const LogoutChartComponent = ({prgId, date}) => {
+    const [loading, setLoading] = useState(true);
     
     useLayoutEffect(() => {
         setLoading(true);
@@ -26,7 +25,7 @@ const LogoutChartComponent = ({date, value}) => {
         chart.legend = new am4charts.Legend();
 
         // data 삽입 => prg.prg_id도 추가할 것!
-        chart.dataSource.url = `${URL}/api/farm/logout/list?prgId=${value.prgInfo.prg_id}&date=${date}`;
+        chart.dataSource.url = `${URL}/api/farm/logout/list?prgId=${prgId}&date=${date}`;
         chart.dataSource.parser = new am4core.JSONParser();
         chart.dataSource.parser.options.emptyAs = 0;
         chart.dataSource.events.on("parseended", function(ev) {
@@ -43,9 +42,9 @@ const LogoutChartComponent = ({date, value}) => {
             
             ev.target.data = a;
 
-            if(value.prgInfo.prg_id === 0) {
+            if(prgId === 0) {
                 chart.openModal('적용된 환경 프로그램이 없습니다.');
-            } else if(a.length === 0 && value.prgInfo.prg_id > 0) {
+            } else if(a.length === 0 && prgId > 0) {
                 chart.openModal('로그아웃 시간이 1시간 이내 입니다.');
             }
             title.text = '로그아웃 기간 동안의 재배기 온도, 습도 변화';
@@ -102,10 +101,12 @@ const LogoutChartComponent = ({date, value}) => {
 }
 
 
-const LogoutChart = ({value}) => {
+const LogoutChart = () => {
     const [loading, setLoading] = useState(true);
     const [date, setDate] = useState('');
     const state = useKinokoState();
+    const {data: programInfo} = state.programInfo;
+    console.log(programInfo[0].id);
     const token = window.Kakao.Auth.getAccessToken()
     let userInfoString = window.localStorage.getItem('userInfo');
     const userInfo = JSON.parse(userInfoString);
@@ -128,7 +129,7 @@ const LogoutChart = ({value}) => {
         }
 
         getDate();
-    },[]);
+    }, []);
 
     // loading 중일 때
     if(loading) {
@@ -141,7 +142,7 @@ const LogoutChart = ({value}) => {
     }
 
     return (
-        <LogoutChartComponent value={value} date={date}/>
+        <LogoutChartComponent prgId={programInfo[0].id} date={date}/>
     );
 }
 
