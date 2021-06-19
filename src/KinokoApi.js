@@ -10,7 +10,8 @@ import {
   MUCHIN_DELETE,
   MACHINE_ID,
   MUSHROOM_ALL,
-  PRG_NAME
+  PRG_NAME,
+  DATE
 } from './Util/api'
 
 export async function getUsers() {
@@ -127,6 +128,36 @@ export async function getMushroomInfo(prgId){
   });
   return response.data
 }
+// 프로그램 시작 날짜 가져오기
+export async function getStartDay(prgId){
+  console.log('prgid',prgId);
+  const response = await axios.get(`${AWS_URL}${DATE}`,{
+    params:{prgId:prgId}
+  });
+  return response.data
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // 오늘 성장한 버섯 정보 가져오기
 export async function getMushroomGrowInfo(prgId){
   const response = await axios.get(`${AWS_URL}${MUCHIN_DELETE}/growing`,{

@@ -30,6 +30,7 @@ import {
   getMuchineMakeDevice,
   getMushroomInfo,
   useKinokoDispatch,
+  getStartDay,
   useKinokoState 
 } from '../../KinokoContext';
 import Modal from '../Component/Modal/Modal'; 
@@ -89,6 +90,7 @@ export default function MyFarm(){
     setDeviceNumber('')
     getMuchineSetting(dispatch,'me')
     getMuchineDelete(dispatch,'me')
+    getProgramInfo(dispatch,'me')
     if(argIsOk === 202 ){
       console.log('삭제, 선택 성공!');
       setNodivece(false)
@@ -165,8 +167,16 @@ export default function MyFarm(){
       getProgramInfo(dispatch,DeviceId.id)
     }
 
-  },[loading, error,muchinList,isOkDeviceId,DeviceId])
+  },[loading, error,muchinList,isOkDeviceId,DeviceId,dispatch])
 
+  // 모든 버섯 정보 가졍괴
+  useEffect(()=>{
+    if(isOkProgramInfo === 202){
+      console.log('isOkProgramInfo',programInfo[0]);
+      getMushroomInfo(dispatch,programInfo[0].id)
+      getStartDay(dispatch,programInfo[0].id)
+    }
+  },[isOkProgramInfo])
 
   //실시간 소캣 통신 
   useEffect(() => {
@@ -273,7 +283,7 @@ export default function MyFarm(){
               <div className='right-wrap'>
                 {nodivice && <span >등록된 기기가 없습니다. 기기를 등록해 주세요</span>}
                 {!nodivice && !loading && isOkDeviceId !==202 && <span >선택된 기기가 없습니다. 기기를 선택해 주세요</span>}
-                {!nodivice && !loading && !programInfo && <span >선택된 프로그램이 없습니다. 팜 환경 설정에서 프로그램을 선택해 주세요</span>}
+                {!nodivice && !loading && isOkDeviceId ===202 && !programInfo && <span >선택된 프로그램이 없습니다. 팜 환경 설정에서 프로그램을 선택해 주세요</span>}
                 {loading && <span >Loding...</span>}
                 {/* !nodivice &&  임의로 지정*/}
                 { !nodivice && !loading && programInfo && 
@@ -311,10 +321,12 @@ export default function MyFarm(){
 
                         <div className='info-right'>
                           <div className='today-box'>
-                            <span>오늘 자란 버섯 수</span>
+                            <span>진행 중인 프로그램</span>
+                            <span>{isOkProgramInfo === 202 && programInfo[0].prg_name}</span>
                           </div>
                           <div className='today-box'>
-                            <span>수확 가능한 버섯 수</span>
+                            <span>진행 날짜</span>
+                            <span></span>
                           </div>
                         </div>
 
