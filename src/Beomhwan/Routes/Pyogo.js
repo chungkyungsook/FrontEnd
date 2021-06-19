@@ -3,25 +3,24 @@ import styled from 'styled-components';
 import { Line } from 'react-chartjs-2';
 import Modal from '../Components/Modal';
 import {flexAlign} from '../../Util/css';
-import {NotoSansLight, NotoSansRegular} from '../css/cssModule';
+import {BoxShadowTrick} from '../css/cssModule';
 import ModalContent from '../Components/ModalContent';
 
 const data = {
     labels: ['1일차','2일차','3일차','4일차','5일차','6일차','7일차','8일차','9일차','10일차','11일차','12일차','13일차','14일차'],
     datasets: [
-    {
-        label: 'Temperature',
-        data: [25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25,],
-        fill: true,
-        borderColor: 'red',
-        backgroundColor: 'rgba(255,0,0,0.2)'
-    },
-    {
-        label: 'Humidity',
-        data: [80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, ],
-        fill: false,
-        borderColor: 'blue',
-    }
+        {
+            label: 'Temperature',
+            data: [25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25,],
+            fill: false,
+            borderColor: 'red',
+        },
+        {
+            label: 'Humidity',
+            data: [80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, ],
+            fill: false,
+            borderColor: 'blue',
+        }
     ]
 };
 
@@ -86,16 +85,17 @@ const GrowStartBox = styled.div`
 `;
 
 const GrowStartButton = styled.button`
-    flex: 1;
-    outline: none;
-    border-radius: 10px;
-    border: 3px solid rgba(0,0,0,0.4);
-    background: none;
-    &:hover{
-        background: beige;
-    }
+    width: 100px;
+    height: 40px;
+    border-radius: 5px;
+    border: 3px solid #dddddd;
+    background-color: white;
     transition: 0.3s;
     cursor: pointer;
+    &:focus {
+        outline: none;
+    }
+    ${BoxShadowTrick};
 `;
 
 const ModalOnButton = ({onModal}) => {

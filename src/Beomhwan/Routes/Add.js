@@ -7,9 +7,10 @@ import ChartSlider from '../Components/ChartSlider';
 import Select from '../Components/Select';
 import InputPrgName from '../Components/InputprgName';
 import {flexAlign} from '../../Util/css';
+import {BoxShadowTrick, SvgSize} from '../css/cssModule';
 import axios from 'axios';
 import { useMachineInfo } from '../ChartContext';
-import {Local, URL} from '../Util';
+import {URL} from '../Util';
 import Modal from '../Components/Modal';
 
 // 커스텀 차트
@@ -61,21 +62,22 @@ export const CustomChart = ({Data, titleMsg}) => {
             TempSeries.dataFields.valueY = "Temperature";
             TempSeries.dataFields.categoryX = "Date";
             TempSeries.tooltip.pointerOrientation = "vertical";
-            TempSeries.stroke = am4core.color('rgb(255,0,0)');
+            TempSeries.stroke = am4core.color('#EC5858');
             TempSeries.tooltip.dy = -8;
             TempSeries.sequencedInterpolation = 1500;
             TempSeries.defaultState.interpolationDuration = 1500;
-            TempSeries.columns.template.fill = am4core.color('rgb(255,50,0)');
+            TempSeries.columns.template.fill = am4core.color('#EC5858');
 
             // 습도 시리즈 생성
             const HumiSeries = chart.current.series.push(new am4charts.ColumnSeries());
             HumiSeries.dataFields.valueY = "Humidity";
             HumiSeries.dataFields.categoryX = "Date";
             HumiSeries.tooltip.pointerOrientation = "vertical";
+            HumiSeries.stroke = am4core.color('#00BCD4');
             HumiSeries.tooltip.dy = -8;
             HumiSeries.sequencedInterpolation = 1500;
             HumiSeries.defaultState.interpolationDuration = 1500;
-            HumiSeries.columns.template.fill = am4core.color('rgb(0,100,255)');
+            HumiSeries.columns.template.fill = am4core.color('#00BCD4');
 
             // 온도 불릿 생성
             const TempLabelBullet = TempSeries.bullets.push(new am4charts.LabelBullet());
@@ -95,7 +97,7 @@ export const CustomChart = ({Data, titleMsg}) => {
 
             const TempCircle = TempBullet.createChild(am4core.Circle);
             TempCircle.radius = 8;
-            TempCircle.fill = am4core.color('rgb(255,50,0)');
+            TempCircle.fill = am4core.color('#EC5858');
 
             // 습도 불릿 생성
             const HumiLabelBullet = HumiSeries.bullets.push(new am4charts.LabelBullet());
@@ -115,7 +117,7 @@ export const CustomChart = ({Data, titleMsg}) => {
 
             const HumiCircle = HumiBullet.createChild(am4core.Circle);
             HumiCircle.radius = 8;
-            HumiCircle.fill = am4core.color('rgb(0,100,255)');
+            HumiCircle.fill = am4core.color('#00BCD4');
 
             // 온, 습도 드래그 이벤트
             TempBullet.events.on("drag", event => {
@@ -242,36 +244,39 @@ export const CustomChart = ({Data, titleMsg}) => {
         console.log(eventArg.pointer.point.x, eventArg.pointer.point.y);
     };
 
-    return (
-        <>
-        <DrawGraphBox id="CustomChartObj" ref={chart}></DrawGraphBox>
-        </>
-    );
+    return <DrawGraphBox id="CustomChartObj" ref={chart}></DrawGraphBox>;
 };
 
 const ButtonBox = ({Add, Remove}) => {
     return (
         <>
-            <Button onClick={Add}>1일 추가</Button>
             <Button onClick={Remove}>1일 빼기</Button>
+            <Button onClick={Add}>1일 추가</Button>
         </>
     );
 }
 
-
 // 전체 박스
 const CustomAddDiv = styled.div`
+    width: 100%;
+    height: 500px;
+    display: flex;
+    flex-wrap: wrap;
+`;
+
+const SettingContainer = styled.div`
     width: 100%;
     height: auto;
     display: flex;
     flex-wrap: wrap;
+    flex-direction: column;
 `;
 
 // -------------------커스텀에서 선택한 환경-------------------
 const SelectedCustom = styled.div`
     padding: 10px;
     flex: 1;
-    height: 45vh;
+    height: 100%;
     border-bottom: 1px solid rgba(0,0,0,0.3);
     overflow: hidden;
     display: flex;
@@ -282,88 +287,86 @@ const SelectedCustom = styled.div`
 // 그래프 설정 박스
 const DrawGraphBox = styled.div`
     padding: 10px;
-    flex: 1.5;
-    height: 45vh;
+    width: 100%;
+    height: 500px;
+    margin-bottom: 10px;
 `;
 //-----------------------------------------------------------
 
 // -------------------추가 설정 및 등록 박스-------------------
 
 // 전체 div
-const SettingBox = styled.div`
+export const SettingBox = styled.div`
     flex: 1;
-    height: 45vh;
     display: flex;
     flex-direction: column;
 `;
 
 // 온, 습도 체크, 날짜, 물주기, 햇빛, 이름 세팅을 감싸는 div
-const CheckBox = styled.div`
-    flex: 3;
+export const CheckBox = styled.div`
+    height: 250px;
     display: flex;
     flex-direction: row;
 `;
 
 // 온, 습도 체크 div
-const CheckMenu = styled.div`
+export const CheckMenu = styled.div`
     flex: 1;
-    border: 1px solid gray;
+    border: 1px solid #dddddd;
+    margin-left: 30px;
     padding: 10px;
     font-size: 0.9em;
+    overflow-y: scroll;
 `;
 
 // 날짜, 물주기, 햇빛 세팅 div
-const Menu2 = styled.div`
+export const Menu2 = styled.div`
     flex: 2;
     display: flex;
     flex-direction: column;
-    border: 1px solid gray;
 `;
 
 // 날짜 세팅 div
-const SetDate = styled.div`
+export const SetDate = styled.div`
     flex: 1;
-    border: 1px solid gray;
     padding: 10px;
     ${flexAlign};
 `;
 
 // 물주기, 햇빛 세팅 div
-const SetWaterSun = styled.div`
+export const SetWaterSun = styled.div`
     flex: 2;
-    border: 1px solid gray;
     padding: 10px;
     ${flexAlign};
 `;
 
 // 커스텀 환경 이름 세팅 div
-const SettingName = styled.div`
-    flex: 1;
-    border: 1px solid gray;
+export const SettingName = styled.div`
+    height: 100px;
     padding: 10px;
     ${flexAlign};
 `;
 
-const LogBox = styled.div`
+export const LogBox = styled.div`
     margin: 5px 0 5px 0;
     height: 20px;
     width: 100%;
-    border: 1px solid gray;
-    color: red;
+    border: 1px solid #dddddd;
+    color: #EC5858;
     ${flexAlign};
     border-radius: 5px;
     font-size: 12px;
 `;
 
-const Button = styled.button`
+export const Button = styled.button`
     margin-left: 10px;
     width: 100px;
     height: 40px;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
     background-color: white;
-    &:hover {
-        background-color: beige;
-    }
-    transition-duration: 0.4s;
+    cursor: pointer;
+    ${BoxShadowTrick};
 `;
 
 // ---------------------------------------------------------
@@ -377,7 +380,6 @@ class MyError extends Error {
 
 // ---------------------------------------------------------
 const Add = ({history}) => {
-    const [loading, setLoading] = useState(true);
     const date = useRef(6);
     const [chartData, setChartData] = useState([
         {
@@ -407,12 +409,6 @@ const Add = ({history}) => {
         },
     ]);
     const machineId = useMachineInfo();
-
-    useEffect(() => {
-        setTimeout(() => {
-            setLoading(false);
-        }, 2000); // 로딩 2초 세팅
-    },[]);
 
     // 1일 추가
     const Add = () => {
@@ -471,7 +467,7 @@ const Add = ({history}) => {
             ).then(response => {
                 console.log(response);
                 alert('등록 성공했습니다!');
-                history.push('/');
+                history.push('/setting/custom');
             }).catch(e => {console.error(e);});
         } catch(e) {
             if(e.name === 'TempErrorUp') {
@@ -534,21 +530,18 @@ const Add = ({history}) => {
     };
 
     return (
-        <>
-        {loading 
-        ? <>now Loading...</>
-        : <>           
+        <>           
             <CustomAddDiv>
                 <SelectedCustom>
                     <ChartSlider />
                 </SelectedCustom>
             </CustomAddDiv>
-            <CustomAddDiv>
+            <SettingContainer>
                 <CustomChart Data={chartData} titleMsg="그래프를 드래그해서 온도, 습도를 조절해보자!" />
                 <SettingBox>
                 <CheckBox>
                     <CheckMenu>
-                        <p>온도는 35도 이하로 제한됩니다.</p>
+                        <WarningText>온도는 35도 이하로 제한됩니다.</WarningText>
                         {chartData.map((ch,index) => {
                             if(ch.Temperature > 27)
                                 return <LogBox>{ch.Date} 온도가 27도 이상입니다!</LogBox>
@@ -574,10 +567,14 @@ const Add = ({history}) => {
                     <Button onClick={Save}>저장</Button>
                 </SettingName>
                 </SettingBox>
-            </CustomAddDiv>
-            </>}
+            </SettingContainer>
         </>
     );  
 };
 
-export {Add, SettingBox, Select, Button, LogBox, CheckBox, CheckMenu, Menu2, SetDate, SetWaterSun, SettingName};
+export const WarningText = styled.p`
+    text-align: center;
+    font-size: 1.3em;
+`;
+
+export default Add;

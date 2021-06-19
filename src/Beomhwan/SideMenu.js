@@ -21,18 +21,18 @@ const Container = styled.aside`
 
 const Ul = styled.ul`
     margin: 1.2rem;
-    height: 100vh - 70px;
+    height: 100%;
 `;
 
 const Li = styled.li`
-    font-size: 2vh;
+    font-size: 1.2em;
     text-align: center;
     border: 2px solid rgba(160,156,128,0.9);
-    width: 15vh;
-    height: 15vh;
+    width: 100px;
+    height: 100px;
     margin: 1rem;
-    line-height: 15vh;
-    border-radius: 15vh;
+    line-height: 100px;
+    border-radius: 100px;
     cursor: pointer;
     &:hover {
         background: rgba(160,156,128,0.9);
@@ -45,7 +45,6 @@ const Li = styled.li`
 
 const LinkStyled = styled(Link)`
     cursor: default;
-    
 `;
 
 const SideMenu = ({pathname}) => {
@@ -75,7 +74,7 @@ const SideMenu = ({pathname}) => {
                 </LinkStyled>
                 <LinkStyled to={SETTING + SETTING_UPDATE}>
                     <Li style={pathname === '/setting/update' ? {background: 'rgba(160,156,128,0.9)', color: 'white'} : {}}>
-                        환경 업데이트
+                        업데이트
                     </Li>
                 </LinkStyled>
             </Ul>

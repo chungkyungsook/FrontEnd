@@ -143,7 +143,7 @@ const Farm = ({cookies,value}) => {
 
     //3D
     const api = axios.create({
-      baseURL : 'http://54.163.128.160'
+      baseURL : 'http://184.73.45.24'
     }) ;
     
     //3D
@@ -174,7 +174,7 @@ const Farm = ({cookies,value}) => {
 
         const controls = new OrbitControls(camera, renderer.domElement) ;
 
-        loader.load(`http://54.163.128.160/api/url/ply?url=${data}`, function(geometry){
+        loader.load(`http://184.73.45.24/api/url/ply?url=${data}`, function(geometry){
 
           geometry.computeVertexNormals() ;
           

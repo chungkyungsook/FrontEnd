@@ -1,21 +1,46 @@
-import React, {useState, useEffect, useLayoutEffect} from 'react';
+import React, {useState, useEffect, useLayoutEffect, useRef} from 'react';
 import { Line } from 'react-chartjs-2';
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 import { flexAlign } from '../../Util/css';
-import {useCustomChartInfo, useCustomChartList} from '../ChartContext';
 import Compare from './Compare';
+import {getCustomProgramList} from '../api';
+import { setChartjsDataset } from '../Util';
+import {FcCheckmark} from 'react-icons/fc';
+import {GrPrevious, GrNext} from 'react-icons/gr';
+import { BoxShadowTrick } from '../css/cssModule';
+
+const SlideIconCss = css`
+    width: 30px;
+    height: 30px;
+    color: '#DDDDDD';
+`;
+
+const CheckIcon = styled(FcCheckmark)`
+    opacity: ${p => p.opacity ? 1 : 0};
+    width: 30px;
+    height: 30px;
+    transition: opacity ease-in 0.1s;
+`;
+
+const PreviousIcon = styled(GrPrevious)`
+    ${SlideIconCss};
+`;
+
+const NextIcon = styled(GrNext)`
+    ${SlideIconCss};
+`;
 
 const CompareBox = styled.div`
     ${flexAlign};
     width: 100%;
-    height: 100%;
+    height: 400px;
     overflow: hidden;
 `;
 
 // 차트의 전체 div
 const ChartContainer = styled.div`
-    width: ${props => props.width}px;
-    height: 100%;
+    width: ${p=>p.width}px;
+    height: 400px;
     transition-duration: 0.5s;
     transform: translate3d(-${props => props.x}px,0,0);
 `;
@@ -23,9 +48,8 @@ const ChartContainer = styled.div`
 // 차트 리스트 박스 div
 const ChartListBox = styled.div`
     width: ${props => props.width}px;
-    height: calc(45vh - 70px);
+    height: 400px;
     overflow: hidden;
-    border: 1px solid gray;
 `;
 
 // 차트 하나의 크기 div
@@ -35,7 +59,10 @@ const ChartContentBox = styled.div`
     height: 100%;
     display: flex;
     flex-direction: column;
-    border: 1px solid gray;
+    border: ${p=>p.toggle ? '2px solid #7FDBDA' : '2px solid #dddddd'};
+    margin: 0 10px 0 10px;
+    border-radius: 0 20px 0 20px;
+    position: relative;
 `;
 
 const ChartStyle = styled.div`
@@ -45,6 +72,85 @@ const ChartStyle = styled.div`
 const ChartDescription = styled.div`
     flex: 1;
 `;
+
+const ControlButton = styled.button`
+    background-color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 60px;
+    border: 1px solid #dddddd;
+    color: #dddddd;
+    cursor: pointer;
+    margin: 0 5px 10px 5px;
+    &:focus{
+        outline: none;
+    }
+    ${BoxShadowTrick};
+`;
+
+const RadioButton = styled.div`
+    width: 30px;
+    height: 30px;
+    border-radius: 30px;
+    border: ${p=>p.toggle ? '2px solid #7FDBDA' : '2px solid #dddddd'};
+    ${flexAlign}
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    left: 368px;
+    background-color: white;
+`;
+
+// 선택된 환경이 없을 경우 렌더링될 div
+const NoGraphSelected = styled.div`
+    margin: auto;
+    flex: 0.4;
+    height: 100px;
+    font-size: 1.4em;
+    text-align: center;
+    line-height: 100px;
+    border: 1px solid rgba(0,0,0,0.3);
+    border-radius: 10px;
+    box-shadow: 0 5px 5px rgba(0,0,0,0.4);
+    user-select: none;
+`;
+
+const ProgramTitle = styled.p`
+    text-align: center;
+    font-size: 1.4em;
+`;
+
+const CountContainer = styled.div`
+    width: 100px;
+    height: 40px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+`;
+
+const ControlContainer = styled.div`
+    ${flexAlign};
+    flex-direction: column;
+`;
+
+const SlideControlContainer = styled.div`
+    ${flexAlign};
+`;
+
+const DetailButton = styled.button`
+    width: 100px;
+    height: 40px;
+    font-weight: bold;
+    background-color: white;
+    border: 1px solid #D8E3E7;
+    border-radius: 5px;
+    cursor: pointer;
+    &:focus {
+        outline: none;
+    }
+    ${BoxShadowTrick};
+`;
+
 
 const options = {
     responsive: true,
@@ -71,58 +177,6 @@ const options = {
     }
 };
 
-const LeftButton = styled.button`
-    background-color: white;
-    font-size: 1.4em;
-    width: 60px;
-    height: 60px;
-    border-radius: 30px;
-    &:focus{
-        outline: none;
-    }
-`;
-
-const RightButton = styled.button`
-    background-color: white;
-    font-size: 1.4em;
-    width: 60px;
-    height: 60px;
-    border-radius: 30px;
-    &:focus{
-        outline: none;
-    }
-`;
-
-const RadioButton = styled.div`
-    width: 20px;
-    height: 20px;
-    border-radius: 10px;
-    border: 1px solid gray;
-    ${flexAlign}
-`;
-
-const CheckedStyle = styled.div`
-    display: ${props => props.opacity ? 'block' : 'none'};
-    width: 10px;
-    height: 10px;
-    background-color: aquamarine;
-    border-radius: 5px;
-`;
-
-// 선택된 환경이 없을 경우 렌더링될 div
-const NoGraphSelected = styled.div`
-    margin: auto;
-    flex: 0.4;
-    height: 100px;
-    font-size: 1.4em;
-    text-align: center;
-    line-height: 100px;
-    border: 1px solid rgba(0,0,0,0.3);
-    border-radius: 10px;
-    box-shadow: 0 5px 5px rgba(0,0,0,0.4);
-    user-select: none;
-`;
-
 const ChartInstance = ({chartData}) => {
 
     return (
@@ -130,134 +184,97 @@ const ChartInstance = ({chartData}) => {
     )
 }
 
-function DetectDocumentSize() {
-    const [width, setWidth] = useState(0);
-
-    useLayoutEffect(() => {
-        function getSize() {
-            setWidth(document.documentElement.clientWidth);
-        };
-
-        window.addEventListener("resize", getSize);
-        getSize();
-
-        return () => window.removeEventListener("resize", getSize);
-    }, []);
-
-    return width;
-}
-
 const ChartSilder = () => {
     const [slideInfo, setSlideInfo] = useState({
-        width: 0, // 차트 전체 길이용 변수
+        width: 840, // 차트 전체 길이용 변수
+        chartLength: 0,
         x: 0, // x좌표
-        count: 0, // 슬라이드 관리용 변수
         chartSize: 0, // 차트 사이즈용 변수
-        slideNum: 0 // 몇 개씩 넘길지 정할 변수
     });
-    const windowSize = DetectDocumentSize(); // 현재 창의 사이즈
-    const chartInfo = useCustomChartInfo(); // 커스텀 차트 리스트 정보
-    const chartList = useCustomChartList(); // 커스텀 차트 리스트 데이터
+    const slideCount = useRef(0);
     const [chart, setChart] = useState([]); // 전체 커스텀 차트 정보
     const [detailChart, setDetailChart] = useState([]); // 상세 비교로 넘길 차트 배열
     const [slideOpacity, setSlideOpacity] = useState(true);
-
-    console.log(chartInfo);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // 종합적인 커스텀 차트 리스트 정보들
-        chartInfo.map((ch, index) => {
-            ch.prg_count !== 0 &&
-            setChart(chart => chart.concat({
-                prg_id: ch.id,
-                prg_name: ch.prg_name,
-                prg_count: ch.prg_count,
-                prg_water: ch.prg_water,
-                prg_sunshine: ch.prg_sunshine,
-                toggle: false,
-                data: chartList[index]
-            }));    
-        });
+        // get chart data
+        getCustomProgramList()
+        .then(res => {
+            // api 데이터 가져왔고
+            return res.data;
+        })
+        .then(async ch => {
+            await ch.forEach( async data => {
+                    console.log('실행했엉')
+                // if(data.prg_count > 0) {
+                    // chartjs 양식에 맞추기 위한 배열들 선언
+                    let dateArr = [];   // 날짜
+                    let tempArr = [];   // 온도
+                    let humiArr = [];   // 습도
+                    let growthArr = []; // 생장률
+                    
+                    // 온도 데이터
+                    data.temperature.forEach((temp,index) => {
+                        dateArr.push((index + 1) + "일차");
+                        tempArr.push(temp.setting_value);
+                    });
+                    // 습도 데이터
+                    data.humidity.forEach(humi => {
+                        humiArr.push(humi.setting_value);
+                    });
+                    // 생장률 데이터
+                    data.growthRate.forEach(growth => {
+                        growthArr.push(growth.gr_value);
+                    });
+                    // chartjs 데이터셋 생성
+                    await setChart(
+                        ch =>
+                        ch.concat(
+                            {
+                                prg_id: data.id,
+                                prg_name: data.prg_name,
+                                prg_count: data.prg_count,
+                                prg_water: data.prg_water,
+                                prg_sunshine: data.prg_sunshine,
+                                toggle: false,
+                                data: setChartjsDataset(dateArr, tempArr, humiArr, growthArr)
+                            }
+                        )
+                    );
+                // }
+            });
+            setSlideInfo({
+                ...slideInfo,
+                width: ch.length * 420,
+                chartLength: ch.length,
+                chartSize: 840
+            });
+        }).then(() => {
+            setLoading(false);
+        })
     }, []);
-
-    useLayoutEffect(() => {
-        console.log(windowSize);
-        // window 크기에 따른 슬라이더 반응형
-        // 1400 ~ => 3개씩
-        if(windowSize > 1400) {
-            console.log('up');
-            setSlideInfo({
-                ...slideInfo,
-                width: chart.length * 400,
-                chartSize: 1200,
-                slideNum: 3
-            });
-        }
-        // 1080 ~ 1399 => 2개씩
-        else if(windowSize > 1080 && windowSize < 1399) {
-            console.log('middle');
-            setSlideInfo({
-                ...slideInfo,
-                width: chart.length * 400,
-                chartSize: 800,
-                slideNum: 2
-            });
-        }
-        // ~ 1079 => 1개씩
-        else {
-            console.log('down');
-            setSlideInfo({
-                ...slideInfo,
-                width: chart.length * 400,
-                chartSize: 400,
-                slideNum: 1
-            });
-        };
-        console.log(chart);
-    }, [windowSize]);
-
-    // 해결해야할 문제 => 화면 리사이즈 시 카운트 초기화 필요
 
     // x축 슬라이드 설정 -> 왼쪽으로
     const onLeft = () => {
-        slideInfo.count === 0 
-        ? setSlideInfo({...slideInfo})
-        : setSlideInfo({...slideInfo, count: --slideInfo.count});
-        switch(slideInfo.slideNum) {
-            case 1:
-                setSlideInfo({...slideInfo, x: slideInfo.x - 400});
-                break;
-            case 2:
-                setSlideInfo({...slideInfo, x: slideInfo.x - 800});
-                break;
-            case 3:
-                setSlideInfo({...slideInfo, x: slideInfo.x - 1200});
-                break;
-            default:
-                break;
-        };
-        console.log(slideInfo.count);
+        if(slideInfo.x < 1) {
+            slideCount.current = 0;    
+        } else {
+            slideCount.current -= 1;
+            setSlideInfo({...slideInfo, x: slideInfo.x - 840});
+        }
+        console.log(slideInfo.x);
+        console.log(slideCount.current);
     };
 
     // x축 슬라이드 설정 -> 오른쪽으로
     const onRight = () => {
-        if(slideInfo.count < (chart.length / slideInfo.slideNum) - 1) {
-            setSlideInfo({...slideInfo, count: ++slideInfo.count});
-            console.log(slideInfo.count);
-            switch(slideInfo.slideNum) {
-                case 1:
-                    setSlideInfo({...slideInfo, x: 400 * slideInfo.count});
-                    break;
-                case 2:
-                    setSlideInfo({...slideInfo, x: 800 * slideInfo.count});
-                    break;
-                case 3:
-                    setSlideInfo({...slideInfo, x: 1200 * slideInfo.count});
-                    break;
-                default:
-                    break;
-            };
-        }
+        if(slideCount.current < (slideInfo.chartLength / 2) - 1) {
+            slideCount.current += 1;
+            setSlideInfo({...slideInfo, x: slideInfo.x + 840});
+        };
+        console.log(slideInfo.x);
+        console.log(slideCount.current);
     };
 
     // toggle checked 확인
@@ -273,47 +290,56 @@ const ChartSilder = () => {
 
         setSlideOpacity(!slideOpacity);
     }
+    
+    if(loading)
+        return <>Loading...</>
 
+    if(chart.length === 0) 
+        return (
+            <NoGraphSelected>
+                현재 생성된 커스텀 그래프가 없습니다!
+            </NoGraphSelected>
+        );
 
     return (
         <CompareBox>
         {slideOpacity
-        ?
-        chart.length > 0 ?
-        <>
-        <ChartListBox width={slideInfo.chartSize}>
-            <ChartContainer width={slideInfo.width} x={slideInfo.x}>
-                {chart.map((ch, index) => 
-                <ChartContentBox key={index}>
-                    <ChartStyle>
-                        <ChartInstance chartData={ch.data}/>
-                    </ChartStyle>
-                    <ChartDescription>
-                        <p>프로그램 이름 : {ch.prg_name}</p>
-                        <p>사용 횟수 : {ch.prg_count}</p>
-                        <RadioButton onClick={() => onToggle(ch.prg_id)}>
-                            <CheckedStyle opacity={ch.toggle} />
-                        </RadioButton>
-                    </ChartDescription>
-                </ChartContentBox>
-                )}
-            </ChartContainer>
-        </ChartListBox>
-        <LeftButton onClick={onLeft}>{'<'}</LeftButton>
-        <RightButton onClick={onRight}>{'>'}</RightButton>
-        <button onClick={changeComponent}>상세</button>
-        </>
-        : 
-        <NoGraphSelected>
-            현재 생성된 커스텀 그래프가 없습니다!
-        </NoGraphSelected>
-
-        : <>
-        <Compare goSlide={changeComponent} chart={detailChart} />
-        </>
+            ?
+                <>
+                <ChartListBox width={slideInfo.chartSize}>
+                    <ChartContainer width={slideInfo.width} x={slideInfo.x}>
+                        {chart.map((ch, index) => 
+                        <ChartContentBox toggle={ch.toggle} key={index}>
+                            <ChartDescription>
+                            <ProgramTitle>- {ch.prg_name} -</ProgramTitle>
+                            <CountContainer>{ch.prg_count}회 사용</CountContainer>
+                            <RadioButton toggle={ch.toggle} onClick={() => onToggle(ch.prg_id)}>
+                                <CheckIcon opacity={ch.toggle} />
+                            </RadioButton>
+                            </ChartDescription>
+                            <ChartStyle>
+                                <ChartInstance chartData={ch.data}/>
+                            </ChartStyle>
+                        </ChartContentBox>
+                        )}
+                    </ChartContainer>
+                </ChartListBox>
+                <ControlContainer>
+                    <SlideControlContainer>
+                        <ControlButton onClick={onLeft}><PreviousIcon /></ControlButton>
+                        <ControlButton onClick={onRight}><NextIcon /></ControlButton>
+                    </SlideControlContainer>
+                    <DetailButton onClick={changeComponent}>상세</DetailButton>
+                </ControlContainer>
+                </>
+            : 
+            <>
+                <Compare goSlide={changeComponent} chart={detailChart} />
+            </>
         }
         </CompareBox>
     );
 };
+
 
 export default ChartSilder;

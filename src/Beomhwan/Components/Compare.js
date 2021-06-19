@@ -1,9 +1,12 @@
 import React,{useState, useEffect} from 'react';
 import styled from 'styled-components';
 import { flexAlign } from '../../Util/css';
-import {NotoSansRegular} from '../css/cssModule';
+import {NotoSansRegular, SvgSize, BoxShadowTrick} from '../css/cssModule';
 import {Line} from 'react-chartjs-2';
-import {getKinoko} from '../CRUD';
+import {getKinoko} from '../api';
+import {GiWaterDrop} from 'react-icons/gi';
+import {RiArrowGoBackLine} from 'react-icons/ri';
+import {BiArrowToLeft, BiArrowToRight} from 'react-icons/bi'; 
 
 const options = {
     response: true,
@@ -30,9 +33,43 @@ const options = {
     },
 };
 
+const NextSvg = styled(BiArrowToRight)`
+    ${SvgSize};
+    color: #dddddd;
+    &:hover {
+        color: gray;
+    }
+`;
+
+const BackSvg = styled(BiArrowToLeft)`
+    ${SvgSize};
+    color: #dddddd;
+    &:hover {
+        color: gray;
+    }
+`;
+
+const BackButton = styled(RiArrowGoBackLine)`
+    ${SvgSize};
+    color: gray;
+    cursor: pointer;
+    &:hover {
+        color: black;
+    }
+    transition-duration: 0.2s;
+    position: absolute;
+    top: 0;
+`;
+
+const Water = styled(GiWaterDrop)`
+    width: 40px;
+    height: 40px;
+    color: #00BCD4;
+`;
+
 const ContainerBox = styled.div`
-    width: ${p=>p.width}px;
-    height: calc(45vh - 70px);
+    width: 1010px;
+    height: 100%;
     overflow: hidden;
 `;
 
@@ -47,7 +84,6 @@ const CompareListBox = styled.div`
 const ChartBox = styled.div`
     flex: 4;
     height: 100%;
-    border-right: 1px solid gray;
 `;
 
 const DescriptionBox = styled.div`
@@ -59,7 +95,7 @@ const DescriptionBox = styled.div`
 
 const CompareBox = styled.div`
     float: left;
-    width: ${p => p.width}px;
+    width: ${p=>p.width}px;
     height: 100%;
     ${flexAlign}
 `;
@@ -71,10 +107,10 @@ const CardFlex = styled.div`
 
 const CardBox = styled.div`
     background-color: white;
+    border: 1px solid #dddddd;
     border-radius: 10px;
     width: 150px;
     height: 150px;
-    border: 1px solid gray;
     margin: 20px;
     ${flexAlign};
     flex-direction: column;
@@ -85,7 +121,6 @@ const TitleBox = styled.div`
     width: 100%;
     font-size: 1.2em;
     flex: 1;
-    border-bottom: 1px solid gray;
     ${flexAlign};
 `;
 
@@ -105,26 +140,77 @@ const ExtraInfoBox = styled.div`
     flex: 2;
 `;
 
+const WaterCard = styled.div`
+    width: 50px;
+    position: relative;
+    height: 50px;
+    perspective: 150em;
+    text-align: center;
+    user-select: none;
+
+    .side {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        height: 100%;
+        margin: auto;
+        backface-visibility: hidden;
+        transition: all .6s ease;
+        border: 1px solid #dddddd;
+        border-radius: 50px;
+        background-color: #FFF; 
+    }
+
+    .front {
+    }
+    
+    .back {
+        transform: rotateY(180deg);
+    }
+
+    &:hover .front {
+        transform: rotateY(-180deg);
+    }
+    &:hover .back {
+        transform: rotateY(0);
+    }
+
+    .description {
+        text-transform: uppercase;
+    }
+`;
+
+const ButtonContainer = styled.div`
+    width: 100%;
+    display: flex;
+`;
+
+const Button = styled.button`
+    background-color: rgba(0,0,0,0);
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    flex: 1;
+    height: 40px;
+    cursor: pointer;
+    &:focus {
+        outline: none;
+    }
+    &:hover ${NextSvg}, &:hover ${BackSvg} {
+        color: gray;
+    }
+    &:hover {
+        border: 1px solid gray;
+    }
+`;
+
 const LineChart = ({data}) => {
     console.log(data);
     return <Line data={data} options={options} />
 };
 
 function useGetClientWidth() {
-    function vh(v) {
-        let h = Math.max(window.document.documentElement.clientHeight, window.innerHeight || 0);
-        return (v * h) / 100;
-    }
-
-    console.log('clientSize: ', window.document.documentElement.clientWidth);
-    console.log('vhSize: ', vh(20));
-
-    let size = (window.document.documentElement.clientWidth - Math.round(vh(20))) - 40;
-    if(size <= 1080) {
-        size = (window.document.documentElement.clientWidth - Math.round(vh(20)));
-    } else if(size <= 1300) {
-        size = (window.document.documentElement.clientWidth - Math.round(vh(20))) - 90;
-    }
+    let size = 1010;
     return size;
 }
 
@@ -210,11 +296,23 @@ const Compare = ({goSlide, chart}) => {
                                 </CardBox>
                             </CardFlex>
                             <ExtraInfoBox>
-                                <button onClick={goSlide}>뒤로</button>
-                                <button onClick={onPreview}>전</button>
-                                <button onClick={onNext}>다음</button> <br/>
-                                햇빛 : {ch.prg_sunshine} <br/>
-                                물 : {ch.prg_water}
+                                <BackButton onClick={goSlide} /> 
+                                <ButtonContainer>
+                                    <Button onClick={onPreview}><BackSvg /></Button>
+                                    <Button onClick={onNext}><NextSvg /></Button> 
+                                </ButtonContainer>
+                                <WaterCard>
+                                    <div class="side front">
+                                        <div class="descrition">
+                                            <Water /> 
+                                        </div>
+                                    </div>
+                                    <div class="side back">
+                                        <div class="description">
+                                            {ch.prg_water}회
+                                        </div>
+                                    </div>
+                                </WaterCard>
                             </ExtraInfoBox>
                         </DescriptionBox>    
                     </CompareBox>
@@ -224,14 +322,30 @@ const Compare = ({goSlide, chart}) => {
             : 
             <>
                 <CompareBox style={{flexDirection: 'column'}} width={responsiveWidth}>
-                    체크 된 리스트가 없습니다.
-                    <button onClick={goSlide}>체크하러 가기</button>
+                    <NoneCheckedMessage>체크 된 프로그램이 없습니다 !</NoneCheckedMessage>
+                    <ReturnButton onClick={goSlide}>돌아가기</ReturnButton>
                 </CompareBox>
             </>
             }
         </ContainerBox>
     )
 }
+
+const NoneCheckedMessage = styled.p`
+    text-align: center;
+    font-size: 1.3em;
+    margin: 10px auto;
+`;
+
+const ReturnButton = styled.button`
+    width: 200px;
+    height: 50px;
+    border: 1px solid #dddddd;
+    background-color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    ${BoxShadowTrick};
+`;
 
 export default Compare;
 export {DescriptionBox, ExtraInfoBox, CardFlex, CardBox, CardContent, CardTitle, TitleBox};

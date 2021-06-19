@@ -1,57 +1,76 @@
 import React from 'react';
 import styled from 'styled-components';
 import {flexAlign} from '../../Util/css';
+import {BoxShadowTrick, SvgSize} from '../css/cssModule';
+import { BiMinus, BiPlus } from 'react-icons/bi';
+
+const PlusIcon = styled(BiPlus)`
+    ${SvgSize};
+    color: #BBBBBB;
+`;
+const MinusIcon = styled(BiMinus)`
+    ${SvgSize};
+    color: #BBBBBB;
+`;
+
+const Container = styled.div`
+    ${flexAlign};
+`;
 
 const SelectBox = styled.div`
-    width: 200px;
     height: 80px;
-    border: 1px solid gray;
-    display: flex;
-    flex-direction: row;
+    ${flexAlign};
+    flex-direction: column;
+    margin: 0 10px 0 10px;
 `;
 
 const SelectEnvi = styled.div`
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    ${flexAlign};
 `;
 
-const UpDown = styled.div`
+const UpDown = styled.button`
     flex: 1;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    ${flexAlign};
+    background-color: white;
+    width: 40px;
+    height: 40px;
+    border: 1px solid #dddddd;
+    border-radius: 40px;
     user-select: none;
     cursor: pointer;
+    ${BoxShadowTrick};
 `;
 
 const NumBox = styled.div`
-    width: 100%;
-    flex: 1;
-    border: 1px solid gray;
-    ${flexAlign}
+    width: 40px;
+    height: 40px;
+    font-size: 1.2em;
+    ${flexAlign};
+    margin: 0 10px 0 10px;
 `;
-
 
 const Select = ({count, sunChange, waterChange}) => {
     console.log(count);
     return (
-        <SelectBox>
-            {/* <SelectEnvi>
+        <Container>
+            <SelectBox>
                 <div>일조 횟수</div>
-                <UpDown onClick={() => sunChange('+')}> + </UpDown>
+                <SelectEnvi>
+                <UpDown onClick={() => sunChange('-')}> <MinusIcon /> </UpDown>
                 <NumBox>{count.sunCount}번</NumBox>
-                <UpDown onClick={() => sunChange('-')}> - </UpDown>
-            </SelectEnvi> */}
-            <SelectEnvi>
+                <UpDown onClick={() => sunChange('+')}> <PlusIcon /> </UpDown>
+                </SelectEnvi>
+            </SelectBox>
+            <SelectBox>
                 <div>물 주기 횟수</div>
-                <UpDown onClick={() => waterChange('+')}> + </UpDown>
+                <SelectEnvi>
+                <UpDown onClick={() => waterChange('-')}> <MinusIcon /> </UpDown>
                 <NumBox>{count.waterCount}번</NumBox>
-                <UpDown onClick={() => waterChange('-')}> - </UpDown>
-            </SelectEnvi>
-        </SelectBox>
+                <UpDown onClick={() => waterChange('+')}> <PlusIcon /> </UpDown>
+                </SelectEnvi>
+            </SelectBox>
+        </Container>
     );
 };
 

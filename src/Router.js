@@ -89,6 +89,7 @@ const RouterComponent = (props) => {
     const machine_id =  ()=> {
          
         axios.get(`${AWS_URL}${MACHINE_ID}`,{
+            headers: {"Access-Control-Allow-Origin": "*"},
             params: { token : (cookies.get('token')) }
         }).then(data => {
             //재배기 이름 추후 추가할 예정입니다.
@@ -111,6 +112,7 @@ const RouterComponent = (props) => {
           })  
   
           axios.get(`${AWS_URL}${PRG_NAME}`,{
+              headers: {"Access-Control-Allow-Origin": "*"},
               params :  {id : JSON.stringify(data.data.id)}
           }).then(data =>{
               console.log("Myfarm 사용자가 선택한 재배기 프로그램 이름 성공",data.data)

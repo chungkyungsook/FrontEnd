@@ -35,11 +35,11 @@ const ModalHeader = styled.div`
     z-index: 11;
     justify-content: flex-end;
     padding-right: 10px;
-    border-bottom: 1px solid rgba(0,0,0,0.3);
+    border-bottom: 1px solid #dddddd;
     background-color: #f1f1f1;
 `;
 
-const CloseButton = styled.p`
+const CloseButton = styled.span`
     ${NotoSansRegular}
     font-size: 2.0em;
     user-select: none;
@@ -49,7 +49,7 @@ const CloseButton = styled.p`
         color: black;
     }
     transition: 0.3s;
-    height: 0;
+    height: 40px;
 `;
 
 const Modal = ({opacity, onClose, children, width, height, customId}) => {

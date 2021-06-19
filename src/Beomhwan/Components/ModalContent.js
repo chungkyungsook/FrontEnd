@@ -59,7 +59,8 @@ export const Button = styled.button`
     height: 50px;
     margin: 0 10px 0 10px;
     background-color: white;
-    border-radius: 12px;
+    border: 1px solid #dddddd;
+    border-radius: 10px;
     &:focus{
         outline: none;
     };
