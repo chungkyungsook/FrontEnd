@@ -162,17 +162,22 @@ export default function MyFarm(){
     ))
     
     //선택된 디바이스 있는 지 확인
-    DeviceId && getProgramInfo(dispatch,DeviceId.id)
-    DeviceId && console.log('DeviceId',DeviceId);
-    programInfo && console.log('programInfo',programInfo);
+    // DeviceId && getProgramInfo(dispatch,DeviceId.id)
+    // DeviceId && console.log('DeviceId',DeviceId);
+    // programInfo && console.log('programInfo',programInfo);
 
-  },[loading, error,muchinList,DeviceId,isOkDevice,isOkDeviceId,dispatch,programInfo])
+  },[loading, error,muchinList])
+
+  useEffect(() =>{
+    DeviceId && console.log('DeviceId',DeviceId.id);
+    DeviceId && getProgramInfo(dispatch,DeviceId.id)
+  },[DeviceId,dispatch])
 
   // useEffect(()=>{
   //   //모든 버섯 정보 가져오기
-  //   // programInfo && getMushroomInfo(dispatch,programInfo.id)
-  //   programInfo && console.log(programInfo);
-  // },[programInfo,dispatch])
+  //   // isOkDeviceId  === 202 && getProgramInfo(dispatch,DeviceId.id)
+  //   // isOkDeviceId === 202 && console.log('isOkDeviceId',isOkDeviceId,DeviceId.id);
+  // },[programInfo,dispatch,isOkDeviceId,DeviceId])
 
   //실시간 소캣 통신 
   useEffect(() => {
