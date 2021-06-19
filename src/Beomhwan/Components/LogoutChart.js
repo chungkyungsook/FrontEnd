@@ -1,4 +1,5 @@
-import React, {useLayoutEffect, useState, useEffect} from 'react';
+import React, {useLayoutEffect, useState, useEffect, useRef} from 'react';
+import styled from 'styled-components';
 import axios from 'axios';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import * as am4core from '@amcharts/amcharts4/core';
@@ -6,13 +7,12 @@ import am4themes_animated from '@amcharts/amcharts4/themes/animated';
 import {useKinokoState} from '../../KinokoContext';
 import {URL} from '../Util';
 
-const LogoutChartComponent = ({prgId, date}) => {
-    const [loading, setLoading] = useState(true);
+const LogoutChartComponent = ({loading, prgId, date}) => {
+    const chartRef = useRef();
     
     useLayoutEffect(() => {
-        setLoading(true);
 
-        let chart = am4core.create('logoutChart', am4charts.XYChart);
+        let chart = am4core.create('logoutDiv', am4charts.XYChart);
         am4core.useTheme(am4themes_animated);
         chart.scrollbarX = new am4core.Scrollbar();
         chart.cursor = new am4charts.XYCursor();
@@ -87,18 +87,22 @@ const LogoutChartComponent = ({prgId, date}) => {
         tempBullet.width = 10;
         tempBullet.height = 10;
 
-        setLoading(false);
-        return () => {console.log('hi')};
-    }, []);
+        chartRef.current = chart;
+        
+        return () => chart.dispose();
+    }, [loading]);
 
     if(loading) {
         return <>Chart Loading...</>
     }
 
-    return (
-        <div id="logoutChart" style={{width: '100%', height: '100%'}} />
-    );
+    return <ChartContainer id="logoutDiv"></ChartContainer>;
 }
+
+const ChartContainer = styled.div`
+    width: 100%;
+    height: 100%;
+`;
 
 
 const LogoutChart = () => {
@@ -107,7 +111,7 @@ const LogoutChart = () => {
     const state = useKinokoState();
     const {data: programInfo} = state.programInfo;
     console.log(programInfo[0].id);
-    const token = window.Kakao.Auth.getAccessToken()
+    const token = window.Kakao.Auth.getAccessToken();
     let userInfoString = window.localStorage.getItem('userInfo');
     const userInfo = JSON.parse(userInfoString);
 
@@ -121,14 +125,16 @@ const LogoutChart = () => {
             }).then(response => {
                 console.log(response);
                 setDate(response.data);
-                setLoading(false);
+                
             }).catch(err => {
                 setDate(null);
                 setLoading(false);
             })
         }
 
-        getDate();
+        getDate().then(() => {
+            setLoading(false);
+        });
     }, []);
 
     // loading 중일 때
@@ -142,7 +148,7 @@ const LogoutChart = () => {
     }
 
     return (
-        <LogoutChartComponent prgId={programInfo[0].id} date={date}/>
+        <LogoutChartComponent loading={loading} prgId={programInfo[0].id} date={date}/>
     );
 }
 
