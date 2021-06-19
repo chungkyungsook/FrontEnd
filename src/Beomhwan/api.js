@@ -15,7 +15,8 @@ export async function getKinoko(prgId) {
         console.log(response);
         return response.data;
     }).catch(err => {
-        return err;
+        console.log(err);
+        return [];
     });
 
     return kinokoInfo;

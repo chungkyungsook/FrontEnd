@@ -1,8 +1,7 @@
 import React, {useEffect} from 'react' ;
 import { Route, Redirect } from 'react-router-dom' ;
 import styled from 'styled-components' ;
-import {withCookies} from 'react-cookie';
-import ChartContext from './ChartContext';
+import {useKinokoState} from '../KinokoContext';
 
 import { 
     SETTING,
@@ -31,27 +30,18 @@ const TemplateContainer = styled.div`
     width: 100%;
 `;
 
-// 기기 아이디 확인 후 없으면 이동
-function machineIdCheck(machineId, history) {
-    if(machineId === 0) {
-        alert('기기를 선택해주세요!');
-        history.push('/');
-    }
-}
-
-const SettingRouter = ({location, cookies, value, history}) => {
-    const isLoginCheck = cookies.get('token');
+const SettingRouter = ({location, value, history}) => {
     const {pathname} = location;
 
-    console.log('asdklfhlasjdhflkasjld', value);
-    
-    machineIdCheck(value.isOn.id, history);
+    const state = useKinokoState();
+    const { data:DeviceId } = state.muchinDeviceId;
+
+    if(!window.Kakao.Auth.getAccessToken()) return <Redirect to='/join'/>
+
+    if(!DeviceId) return <Redirect to='/' />
 
     return (
-        <>
-        {!isLoginCheck ? (<Redirect to="/login" />) : (
-        <ChartContext machineId={value.isOn.id}>
-            <Container className="inner">
+        <Container className="inner">
                 <SideMenu pathname={pathname} />
                 <TemplateContainer>
                     <Route exact path={SETTING} component={Pyogo}/>
@@ -60,11 +50,8 @@ const SettingRouter = ({location, cookies, value, history}) => {
                     <Route path={`${SETTING}${SETTING_ADD}`} component={Add} />
                     <Route path={`${SETTING}${SETTING_UPDATE}`} component={Update} />
                 </TemplateContainer>
-            </Container>
-        </ChartContext>
-        )}
-        </>
+        </Container>
     );
 };
 
-export default withCookies(SettingRouter) ;
+export default SettingRouter ;

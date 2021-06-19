@@ -4,12 +4,11 @@ import {Line} from 'react-chartjs-2';
 import {CustomChart as UpdateCustomChart, WarningText, SettingBox, Button, LogBox, CheckBox, CheckMenu, Menu2, SetDate, SetWaterSun, SettingName} from './Add';
 import axios from 'axios';
 import * as Description from '../Components/Compare';
-import {withCookies} from 'react-cookie';
 import { URL, setChartjsDataset } from '../Util';
 import {getRunningChartName ,getRunningChartInfo, getKinoko} from '../api';
 import Modal from '../Components/Modal';
 import {Button as ModalButton, ModalTitleBox, ModalFooter} from '../Components/ModalContent';
-import { useMachineInfo } from '../ChartContext';
+import { useKinokoState } from '../../KinokoContext';
 import Select from '../Components/Select';
 
 
@@ -111,12 +110,16 @@ const Update = ({cookies, history}) => {
         modalTextfirst: '',
     });
 
-    const machineId = useMachineInfo();
+    const state = useKinokoState();
+    const { data:DeviceId } = state.muchinDeviceId;
 
     useEffect(() => {
-        getRunningChartName(machineId).then(res => {
+        getRunningChartName(DeviceId.id).then(res => {
             return res[0];
         }).then(async prgInfo => {
+            if(prgInfo.id === 0) {
+                return false;
+            }
             console.log('asklflasjfkljasfl: ', prgInfo);
 
             await setCompareChartInfo({
@@ -154,8 +157,12 @@ const Update = ({cookies, history}) => {
                     }
                 });
                 await setCompareChartData(setChartjsDataset(date, temp, humi, grow));
-            }).then(() => {
-                setLoading(false);
+                return true;
+            }).then(res => {
+                if(!res)
+                    setLoading(true);
+                else
+                    setLoading(false);
             })
         })
     },[]);
@@ -358,6 +365,6 @@ const Update = ({cookies, history}) => {
     );
 };
 
-export default withCookies(Update);
+export default Update;
 
 // modal 띄운 뒤에 이동시킬 것!

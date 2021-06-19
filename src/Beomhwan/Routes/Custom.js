@@ -1,15 +1,13 @@
 import React, {useRef, useEffect, useState} from 'react';
 import styled from 'styled-components';
 import {Line} from 'react-chartjs-2';
-import {
-    useMachineInfo
-} from '../ChartContext';
 import Modal from '../Components/Modal';
 import axios from 'axios';
 import {Button, ModalTitleBox, ModalTextBox, ModalFooter} from '../Components/ModalContent';
 import {URL, setChartjsDataset} from '../Util';
 import {flexAlign} from '../../Util/css';
 import {getCustomProgramList} from '../api';
+import {useKinokoState} from '../../KinokoContext';
 
 // chart의 options 설정
 export const options = {
@@ -136,7 +134,8 @@ const LoadingMessage = styled.p`
 
 // 커스텀 컴포넌트
 const Custom = () => {
-    const machineId = useMachineInfo();
+    const state = useKinokoState();
+    const { data:DeviceId } = state.muchinDeviceId;
     const [loading, setLoading] = useState(true);
     const [customChart, setCustomChart] = useState([]);
     const [modalInfo, setModalInfo] = useState({
@@ -293,7 +292,7 @@ const Custom = () => {
                         onStart={onStart}
                         onRemove={onRemove} 
                         prgid={ch.prg_id}
-                        macid={machineId} />
+                        macid={DeviceId.id} />
                 </CustomGraphStyle>
             )}
             <Modal opacity={modalInfo.opacity} customId={modalInfo.customId} onClose={onClose} width='500' height='200'>
@@ -301,7 +300,7 @@ const Custom = () => {
                 <ModalTextBox>{modalInfo.modalTextfirst}</ModalTextBox>
                 <ModalTextBox>{modalInfo.modalTextsecond}</ModalTextBox>
                 <ModalFooter>
-                    <Button onClick={() => CustomModalFunction(machineId, modalInfo.customId)}>확인</Button>
+                    <Button onClick={() => CustomModalFunction(DeviceId.id, modalInfo.customId)}>확인</Button>
                     <Button onClick={onClose}>취소</Button>
                 </ModalFooter>
             </Modal>

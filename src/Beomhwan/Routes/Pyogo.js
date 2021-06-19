@@ -5,6 +5,7 @@ import Modal from '../Components/Modal';
 import {flexAlign} from '../../Util/css';
 import {BoxShadowTrick} from '../css/cssModule';
 import ModalContent from '../Components/ModalContent';
+import PyogoTimeLine from '../Components/PyogoTimeLine';
 
 const data = {
     labels: ['1일차','2일차','3일차','4일차','5일차','6일차','7일차','8일차','9일차','10일차','11일차','12일차','13일차','14일차'],
@@ -134,7 +135,7 @@ const Pyogo = () => {
             </PyogoGraphBox>
             <FooterBox>
                 <Description>
-                    표고버섯은 일정한 생장 환경을 제공합니다.
+                    <PyogoTimeLine />
                 </Description>
                 <GrowStartBox>
                     <ModalOnButton onModal={onModal}>적용</ModalOnButton>

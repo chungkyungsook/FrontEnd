@@ -5,11 +5,9 @@ import * as am4plugins_bullets from '@amcharts/amcharts4/plugins/bullets';
 import am4themes_animated from '@amcharts/amcharts4/themes/animated';
 import axios from 'axios';
 import styled from 'styled-components';
-import {withCookies} from 'react-cookie';
 import {URL} from '../Util';
 
-const ProgressChart = ({cookies, prgInfo}) => {
-    console.log(cookies);
+const ProgressChart = ({prgInfo}) => {
     console.log(window.location.pathname);
     const [chartData, setChartData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -207,4 +205,4 @@ const ProgressBox = styled.div`
     height: 100%;
 `;
 
-export default withCookies(ProgressChart);
+export default ProgressChart;

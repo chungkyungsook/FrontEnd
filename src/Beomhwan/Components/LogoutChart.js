@@ -3,7 +3,7 @@ import axios from 'axios';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import * as am4core from '@amcharts/amcharts4/core';
 import am4themes_animated from '@amcharts/amcharts4/themes/animated';
-import {withCookies} from 'react-cookie';
+import {useKinokoState} from '../../KinokoContext';
 import {URL} from '../Util';
 
 const LogoutChartComponent = ({date, value}) => {
@@ -102,25 +102,29 @@ const LogoutChartComponent = ({date, value}) => {
 }
 
 
-const LogoutChart = ({cookies, value}) => {
-    const [loading, setLoading] = useState(false);
+const LogoutChart = ({value}) => {
+    const [loading, setLoading] = useState(true);
     const [date, setDate] = useState('');
-    const token = cookies.get('token');
-    const userId = cookies.get('userId');
+    const state = useKinokoState();
+    const token = window.Kakao.Auth.getAccessToken()
+    let userInfoString = window.localStorage.getItem('userInfo');
+    const userInfo = JSON.parse(userInfoString);
 
     useEffect(() => {
-        setLoading(true);
         const getDate = async () => {
             await axios.get(`${URL}/api/logout/date`, {
                 params: {
-                    token: token,
-                    id: userId
+                    id: userInfo.id,
+                    token: token
                 }
             }).then(response => {
                 console.log(response);
                 setDate(response.data);
-            });
-            setLoading(false);
+                setLoading(false);
+            }).catch(err => {
+                setDate(null);
+                setLoading(false);
+            })
         }
 
         getDate();
@@ -133,7 +137,7 @@ const LogoutChart = ({cookies, value}) => {
 
     // date 없을 시 null 반환
     if(!date) {
-        return null;
+        return <>현재 환경 프로그램이 없습니다!</>;
     }
 
     return (
@@ -141,4 +145,4 @@ const LogoutChart = ({cookies, value}) => {
     );
 }
 
-export default withCookies(LogoutChart);
+export default LogoutChart;
