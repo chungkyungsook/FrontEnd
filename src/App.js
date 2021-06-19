@@ -1,14 +1,15 @@
-import React from 'react' ;
+import React, { useReducer } from 'react' ;
 
 import GlobalStyle from './GlobalStyle' ;
 import Router from './Router' ;
+import { KinokoProvider } from './KinokoContext'
 
 function App() {
   return (
-    <>
-      <GlobalStyle />
-      <Router />
-    </>
+      <KinokoProvider>
+        <GlobalStyle />
+        <Router />
+      </KinokoProvider>
   ) ;
 }
 

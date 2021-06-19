@@ -120,17 +120,6 @@ const Movie = (props) => {
     //aix 값 다 바뀌면 확인을 위한 선언
     number === 1 && setNumber(2)
   },[slides])
-
-  // useEffect(() =>{
-  //   if(temp && temp){
-  //     setImgList(
-  //     temp.map(data =>(
-  //       data.members
-  //     ))
-  //     )
-  //   }
-    
-  // },[temp])
   
     // 사진 합쳐서 영상처럼 보여주기
     const replay = (index) =>{
@@ -149,33 +138,31 @@ const Movie = (props) => {
           ctx.drawImage(images[count++], 10, 10, WIDTH, HEIGHT) ;
       }, 1000 / FPS) ; 
   }
+
+  if(!window.Kakao.Auth.getAccessToken()) return <Redirect to='/join'/>
   
     return (
       <>
         {
-            props.cookies.get('token') ? 
-            
             number === 2 && (
-               <div className='test'>              
-                <Swiper 
-                id="main"
-                tag="section" 
-                wrapperTag="ul" 
-                // navigation 
-                pagination 
-                spaceBetween={0} 
-                slidesPerView={1}
-                onInit ={(swiper) => console.log('Swiper initalized!')}
-                onSlideChange={(swiper) => {console.log("Slide index changed to:", swiper.activeIndex);}}
-                onReachEnd={()=>console.log('Swiper end reached')}
-                >
-                  {slides}
-                </Swiper>
-                
-              </div>
-            ) 
-            : 
-            (<Redirect to="/login" />)
+              <div className='test'>              
+              <Swiper 
+              id="main"
+              tag="section" 
+              wrapperTag="ul" 
+              // navigation 
+              pagination 
+              spaceBetween={0} 
+              slidesPerView={1}
+              onInit ={(swiper) => console.log('Swiper initalized!')}
+              onSlideChange={(swiper) => {console.log("Slide index changed to:", swiper.activeIndex);}}
+              onReachEnd={()=>console.log('Swiper end reached')}
+              >
+                {slides}
+              </Swiper>
+              
+            </div>
+            )
         }
         </>
     );

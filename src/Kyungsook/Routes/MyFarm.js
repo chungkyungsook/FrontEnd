@@ -1,455 +1,328 @@
-import React,{useState,useEffect, useRef} from 'react' ;
-import '../Css/MyFarm.css';
+import React,{useState,useEffect} from 'react' ;
+import '../Css/Myfarm2.css';
 import {Redirect}   from 'react-router-dom' ;
-import { withCookies} from 'react-cookie';
-import axios from 'axios';
-
-import {
-    AWS_URL,
-    MACHINE_LIST, //재배기 목록
-    PRG_NAME, // 프로그램 이름,id
-    MUSHROOM_ALL, //모든 버섯 상태 가져오기
-    DATE, //재배기 실행 날짜
-    MACHINE_ID, //재배기 id가져오기 
-    MACHINE_STATUS, //재배기 상태 가졍괴
-    MUSHROOM_NAME, //버섯 배지이름 가져오기
-    MUSHROOM_NAME_CHANGE, //버섯 배지이름 변경
-    COMPOST
-} from '../../Util/api.js'
-
-import {
-    DEBUG,
-    HEADER_DEBUG
-} from '../../Util/debugging.js'
-
-import MyfarmInfo from '../Component/MyfarmComponent/MyfarmInfo'; //정보 값 가져오기
-import MyfarmCss from '../Component/MyfarmComponent/MyfarmCss';   // 해당 페이지 보여주기
+import logoimg1 from '../../assets/logo.png' ;
+import farmer from '../../assets/farmer.png';
+import {Link} from 'react-router-dom';
+ // 해당 페이지 보여주기
 
 import {format} from 'date-fns';
 import { da } from 'date-fns/locale';
 import { concat } from '@amcharts/amcharts4/.internal/core/utils/Iterator';
 import io from 'socket.io-client'
+import MyFarmComponent from '../Component/MyFarmComponent';
+import swal from 'sweetalert';
 
-const MyFarm = ({cookies,value,logoutOnClick,location}) => {
-///////////////////////////////////////////////////////////////////////   변수
-    
-    //이미지 저장용
-    const [image, setImage] = useState(null)
-    //user 기기 정보 저장
-    const [userDeviceInfo, setUserDeviceInfo] = useState({
-        userInfo : []
-    })
+//그래프
+import LogoutChart from '../../Beomhwan/Components/LogoutChart';
 
-    //오늘 날짜, 키노코 키운 날짜
-    const [day, setDay] = useState({
-        today :  '',
-        kinokoDay : ''
-    })
-    //일차 
-    const [days, setDays] = useState('')
+import {
+  AWS_URL,
+}from '../../Util/api'
+import { getMuchineList,getMuchineDeviceId,getMuchineKey,getMuchinePwd,getMuchineMakeDevice, getMuchineSetting,getMuchineDelete,useKinokoDispatch, useKinokoState } from '../../KinokoContext';
+import Modal from '../Component/Modal/Modal'; 
+import ModalDel from '../Component/Modal/ModalDel';
 
-    // 재배기 온도, 습도 값 저장
-    const [temperature, setTemperature] = useState(0)
-    const [humidity, setHumidity] = useState(0)
-    //재배기 정보 가져기
-    const [isOk, setIsOk] = useState({
-        isDevice :false
-    })
 
-    //로딩화면 보여주기
-    const [isLoding, setIsLoding]         = useState(false)
+export default function MyFarm(){
+  
+  const state    = useKinokoState();
+  const dispatch = useKinokoDispatch();
 
-    //버섯 배지 이름 저장
-    const [kinokoName, setKinokoName]     = useState('')
-    
-    //버섯 이름 바꾸는 버튼 바꾸기 false면 -> 기존 이름 바꾸기, true -> 해당 버섯 배지이름se 없음
-    const [isNameChange, setIsNameChange] = useState(false)
+  const { data: muchinList, loading, error } = state.muchinList; // state.data 를 users 키워드로 조회
+  const { data: muchinKey, error: errKey, isOk: isOkKey } = state.muchinKey; // state.data 를 users 키워드로 조회
+  const { error: errPwd, isOk:isOkPwd } = state.muchinPwd; // state.data 를 users 키워드로 조회
+  const {  error: errDevice, isOk:isOkDevice } = state.muchinMakeDevice; // state.data 를 users 키워드로 조회
+  const { data:DeviceId, error: errDeviceId, isOk:isOkDeviceId } = state.muchinDeviceId; // state.data 를 users 키워드로 조회
+  const [nodivice, setNodivece] = useState(false); // 처음 디바이스 정보 가져올 때
+  const [deviceNumber, setDeviceNumber] = useState("")
+  const [setDevice, isSetDevice] =useState('muchine-btn')
+  // useState를 사용하여 open상태를 변경한다. (open일때 true로 만들어 열리는 방식)
+  const [ modalOpen, setModalOpen ] = useState(false);
+  const [ modalDelOpen, setModalDelOpen ] = useState(false);
+  const [inputValue, setInputValue] = useState('')
+  
+  //실시간 소캣 이미지 저장용
+  const [image, setImage] = useState(null)
+  // 재배기 온도, 습도 값 저장
+  const [temperature, setTemperature] = useState(0)
+  const [humidity, setHumidity] = useState(0)
 
-    //배지 이름 변경을 위한 변수들
-    const [mushroomName, setMushroomName] = useState('')
+  //가짜 데이터
+  const [value, setValue] = useState(false)
 
-    //버섯 객체 저장하기
-    
-    const [growing, setGrowing]         = useState([])
-    const [harvest, setHarvest]         = useState([])
-    const [whiteflower, setWhiteflower] = useState([])
-    
+  const openModal = () => {
+    setModalOpen(true);
+  }
+  const closeModal = () => {
+    setModalOpen(false);
+    setInputValue('')
+    getMuchinePwd(dispatch,'me')
+    getMuchineKey(dispatch,'me')
+    getMuchineMakeDevice(dispatch,'me')
+    getMuchinList()
+  }
 
-    const kinokoState = ['growing', 'harvest', 'whiteflower']
-    const temp = {
-        setGrowing,
-        setHarvest,
-        setWhiteflower,
-        setIsLoding
+  // 선택 삭제
+  const openModalDel = () => {
+    setModalDelOpen(true);
+  }
+
+  const closeModalDel = (argIsOk) => {
+    setModalDelOpen(false);
+    setInputValue('')
+    setDeviceNumber('')
+    getMuchineSetting(dispatch,'me')
+    getMuchineDelete(dispatch,'me')
+    if(argIsOk === 202 ){
+      console.log('삭제, 선택 성공!');
+      setNodivece(false)
+      getMuchinList()
+      
+    }else{
+      console.log('삭제, 선택 실패!');
     }
-    //MyfarmCss
-    const result2 = {
-        userDeviceInfo,day,days,kinokoName,isNameChange,growing,harvest,whiteflower
+  }
+  
+
+  const onClickBtn = (e)=>{
+    const {name} = e.target
+
+    if(name === 'key'){
+      getMuchineKey(dispatch,inputValue.keyOnchange)
+    }else if(name === 'pwd'){
+      getMuchinePwd(dispatch, {pin:inputValue.keyOnchange,pw:inputValue.pwdOnchange})
+    }else if (name === 'makeDevice'){
+      getMuchineMakeDevice(dispatch, {pin:inputValue.keyOnchange,pw:inputValue.pwdOnchange, machineName: inputValue.nickName})
     }
-///////////////////////////////////////////////////////////////////////    실행 함수
+
+  }
+
+  const onChange = (e)=>{
+    const {name,value} = e.target
     
-    // 1번. user에 등록 된 기기 정보 가져오기
-    function machine_list () {
+    setInputValue(
+      { 
+        ...inputValue,
+        [name] : value
+      }
+    )
+      
+  }
 
-        //user에 등록 된 기기 정보 가져오기
-        axios.post(`${AWS_URL}${MACHINE_LIST}`,{
-            // param :  { token : cookies.get('token') }
-            token : cookies.get('token') 
-        }).then(data =>{
-            console.log('Myfarm 등록된 기기 정보 가져오기',data.data)
-            //등록된 버섯 재배기 정보 가져오기 성공
-            if(data.data === '이미 만료된 토큰'){
-                return () => { 
-                    setIsOk({isDevice :1})
-                }
-            }
-            //등뢱된 재배기 정보 저장
-            setUserDeviceInfo({
-                userInfo : data.data
-            })
-            //등록된 기기 정보 가져오기 성공
-            setIsOk({
-                isDevice : true
-            });
+  //정보 가져오기
+  const getMuchinList = ()=>{
+    setNodivece(false)
+    getMuchineList(dispatch)
+    getMuchineDeviceId(dispatch)
+  }
 
-        }).catch(e=>{
-            console.log( e,"등록된 버섯 재배기 정보 가져오기 실패");
-            // setUserDeviceInfo([])            
-        
-            //서버 통신 오류 확인
-            setIsOk({
-                isDevice : 1
-            });
-        })
+  //선택
+  const onSetMuchin = ()=>{
+    console.log('onsetMuchin',deviceNumber);
+    getMuchineSetting(dispatch,deviceNumber)
+  }
+
+  //삭제
+  const onDelMuchin = ()=>{
+    console.log('onDelMuchin',deviceNumber);
+    getMuchineDelete(dispatch,deviceNumber)
+  }
+
+  const onMoveForm = () =>{
+    console.log('상세 페이지로 이동');
+  }
+
+  //============= useEffect =======================
+
+  useEffect(()=>{
+    console.log("Myfarm");
+    console.log('loading',loading);
+    if(error){
+      console.log('error', error.response.data);
+      setNodivece(true)
     }
+    
+    //사용자가 등록된 모든 기기 list 가져오기
+    muchinList && muchinList.map( (obj)=>(
+      (obj.machine_ison !== "false" && isSetDevice('muchine-btn-setCheck'),
+      console.log(obj))
+    ))
+    
+    //선택된 디바이스 있는 지 확인
+    DeviceId && console.log('DeviceId',DeviceId);
+
+  },[loading, error,muchinList,DeviceId,isOkDevice,isOkDeviceId])
+
+  //실시간 소캣 통신 
+  useEffect(() => {
+    if(value){
+     // 소켓 연결 코드
+     const socket = io('http://192.168.0.10:3000') ;
      
-    //2번. 사용자가 선택한 재배기 id,재배기 name
-    function machine_id () {
-         
-        axios.get(`${AWS_URL}${MACHINE_ID}`,{
-            params: { token : (cookies.get('token')) }
-        }).then(data => {
-            //재배기 이름 추후 추가할 예정입니다.
-            HEADER_DEBUG && console.log("Myfarm 사용자가 선택한 재배기 ID 있음",parseInt(data.data.id))
-            
-            //사용자가 작동시킨 재배기 id, 재배기 이름 입력
-            value.setIsOn({
-                id : JSON.stringify(data.data.id),
-                prgName : data.data.name
-            })
-            
-        }).catch(e =>{
-            HEADER_DEBUG && console.log("Myfarm 사용자가 선택한 재배기 ID 실패",e.response.status);
-            setIsLoding(true) //선택한 재배기 없으면 로딩 끝내주기
-            value.setIsOn({
-                id : 0,
-                prgName : ""
-            })
-        })
+     socket.emit('req_video', true) ;
+     socket.on('res_video', (data) => {
+     
+         const byte_chars = atob(data)
 
-
-        HEADER_DEBUG && console.log("==============Myfarm 사용자가 선택한 재배기 확인end==============")
-        
-    }
-    
-    //3번 진행중인 프로그램 이름 -> 진행중인 프로그램이 없으면 모든 값들 초기화 시켜주기
-    function prg_name (){
-        //재배개 작동 상태 가져오기 isValue
-        axios.get(`${AWS_URL}${PRG_NAME}`,{
-            params :  {id : value.isOn.id }
-        }).then(data =>{
-            HEADER_DEBUG && console.log("Myfarm 사용자가 선택한 재배기 프로그램 이름 성공",data.data)
-            value.setPrgInfo({
-                prg_id : data.data[0].id,
-                prg_name : data.data[0].prg_name
-            })
-        }).catch(e =>{
-            HEADER_DEBUG && console.log("Myfarm 사용자가 선택한 재배기 프로그램 이름 실패",e.response.status);
-            //값 초기화 해주기
-            setIsLoding(true)
-            setDays(0)
-            setKinokoName('') //키노코 이름
-            setGrowing([]) //버섯 상태
-            setHarvest([]) // 수확해야하는 버섯
-            setWhiteflower([]) //백화고
-            setIsNameChange(false)
-            value.setPrgInfo({
-                prg_id : 0,
-                prg_name : "진행중인 프로그램이 없습니다"
-            })
-
-        })  
-
-        HEADER_DEBUG && console.log("===========Myfarm end사용자가 선택한 재배기 작동 상태 확인===============")
-    }
-
-    //4번  버섯 재배기 안 모든 버섯 객체 정보 저장
-    function mushroom_all () {
-        HEADER_DEBUG && console.log("==========4. Myfarm 모든 버섯 객체 저장하기==========")
-        let temp = []
-        axios.get(`${AWS_URL}${MUSHROOM_ALL}/${kinokoState[0]}`,{
-            params : {prgId : value.prgInfo.prg_id}
-        }).then(data =>{               
-            console.log(data.data);
-            setGrowing(  
-                data.data
-            )
-        }).catch(e =>{
-            console.log("모든 버섯 정보 가져오기 실패",e);
-        })
-
-        axios.get(`${AWS_URL}${MUSHROOM_ALL}/${kinokoState[1]}`,{
-            params : {prgId : value.prgInfo.prg_id}
-        }).then(data =>{               
-            console.log(data.data);
-            setHarvest(  
-                 data.data
-            )
-        }).catch(e =>{
-            console.log("모든 버섯 정보 가져오기 실패",e);
-        })
-
-        axios.get(`${AWS_URL}${MUSHROOM_ALL}/${kinokoState[2]}`,{
-            params : {prgId : value.prgInfo.prg_id}
-        }).then(data =>{               
-            console.log(data.data);
-            setWhiteflower(  
-                  data.data
-            )
-        }).catch(e =>{
-            console.log("모든 버섯 정보 가져오기 실패",e);
-        }).finally(e=>{
-            value.prgInfo.prg_id !== 0 && 
-            setIsLoding(true)
-        })
-
-        
-    }
+         const byteNumbers = new Array(byte_chars.length) ;
    
-
-    //버섯 배지 이름 가져오기
-    function mushroom_name (){
-        HEADER_DEBUG && console.log("==========6. Myfarm 배지 이름 가져오기==========")
-        axios.get(`${AWS_URL}${MUSHROOM_NAME}`,{
-            params : {id : parseInt(value.prgInfo.prg_id)}
-        }).then(data =>{
-            console.log("이름 가져오기 성공",data.data)
-            setKinokoName(data.data)
-            setIsNameChange(true)
-        }).catch(e =>{
-            console.log(e);
-        })
-        
-    }
-
-    //프로그램 시작 날짜 가져오기
-    function start_date () {
-
-        axios.get(`${AWS_URL}${DATE}`,{
-            params: {id : value.prgInfo.prg_id}
-        }).then(data =>{
-            console.log("프로그램 시작 날짜",data.data)
-            setDay({
-                today : format(new Date, "yyyy-MM-dd"),
-                kinokoDay : format(new Date(data.data), "yyyy-MM-dd")
-            })
-        }).catch(e=>{
-            console.log("프로그램 시작 날짜 가져오기 실패",e.response.status,value.prgInfo);
-        })
-
-    }
-
-    //배지이름 바꾸기 위한 이벤트
-    const onChange = (e) =>{
-        const {value} = e.target
-        setMushroomName(value) //배지 이름 입력한 정보 저장
-    }
-
-    //배지 이름 바꾸기
-    function onClickChangeName (e){
-        const {name} = e.target
-        
-        if(name === "name"){
-            console.log("버튼이 클릭 됨",name);
-            setIsNameChange(false)
-        }else if(name === "changeName"){ // 이름 바꾸기
-            console.log("버튼이 클릭 됨",name);
-                if(value.prgInfo.prg_id !== 0){
-                    axios.put(`${AWS_URL}${MUSHROOM_NAME_CHANGE}`,{
-                    
-                        id : parseInt(value.prgInfo.prg_id),
-                        name : mushroomName
-                    
-                }).then(data=>{
-                    console.log("myfarm 배지 이름 바꾸기 성공",data);
-                    mushroom_name()
-                }).catch(e =>{
-                    console.log("myfarm 배지 이름 바꾸기 실패");
-                }).finally(
-                    setIsNameChange(true) //버튼 값 바꿔주기
-                )
-            }
-        }
-    }
-
-    //마지막. 재배기 작동 상태  isValue -> 제일 마지막에 실행 isLoding -> true 화면 보이기
-     function machine_status () {
-        //재배개 작동 상태 가져오기 isValue
-         axios.get(`${AWS_URL}${MACHINE_STATUS}`,{
-            params :  {id : value.isOn.id }
-        }).then(data =>{
-            HEADER_DEBUG && console.log("Myfarm 사용자가 선택한 재배기 작동 상태 성공",data.data)
-            value.setIsValue(data.data)
-            // setIsLoding(true) //마지막 로딩 끝내주기
-        }).catch(e =>{
-            HEADER_DEBUG && console.log("Myfarm 사용자가 선택한 재배기 작동 상태 실패",e);
-            
-        })  
-
-        HEADER_DEBUG && console.log("===========Myfarm end사용자가 선택한 재배기 작동 상태 확인===============")
-    };    
-    
-//////////////////////////////////////////////////////////////////////////////////////////////////////변수
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////// 
-
-    useEffect(() => {
-       if(cookies.get('token')){
-        // 소켓 연결 코드
-        const socket = io('http://192.168.0.10:3000') ;
-        
-        socket.emit('req_video', true) ;
-        socket.on('res_video', (data) => {
-        
-            const byte_chars = atob(data)
-
-            const byteNumbers = new Array(byte_chars.length) ;
-      
-            for(let i = 0 ; i < byte_chars.length ; i++) {
-              byteNumbers[i] = byte_chars.charCodeAt(i) ;
-            }
-            const byteArray = new Uint8Array(byteNumbers) ;
-      
-            const blob = new Blob([byteArray], { type : 'image/png' }) ;
+         for(let i = 0 ; i < byte_chars.length ; i++) {
+           byteNumbers[i] = byte_chars.charCodeAt(i) ;
+         }
+         const byteArray = new Uint8Array(byteNumbers) ;
+   
+         const blob = new Blob([byteArray], { type : 'image/png' }) ;
+       
+         setImage(URL.createObjectURL(blob)) ;
+   
           
-            setImage(URL.createObjectURL(blob)) ;
-      
-             
-        }) ;
-    
-        // 온, 습도 데이터 요청
-        socket.emit('req_cosdata');
-        // 온, 습도 데이터 받아오는 이벤트
-        socket.on('res_cosdata', (data) => {
-                console.log(data);
-        // 재배기 온도 습도 작동 
-        //  parseInt(data.temperature) && parseInt(data.humidity) && maching_setting(parseInt(data.temperature), parseInt(data.humidity) ) 
-        // maching_setting(parseInt(data.temperature), parseInt(data.humidity) )
-        if(data.temperature != null && data.humidity != null){
-            setTemperature(parseInt(data.temperature))
-            setHumidity(parseInt(data.humidity))
-        }
-        
-        });
-    
-        return () => { // 화면 끝
-          socket.disconnect() ;
-          console.log('myfarm 끝');
-        }
+     }) ;
+ 
+     // 온, 습도 데이터 요청
+     socket.emit('req_cosdata');
+     // 온, 습도 데이터 받아오는 이벤트
+     socket.on('res_cosdata', (data) => {
+             console.log(data);
+     // 재배기 온도 습도 작동 
+     //  parseInt(data.temperature) && parseInt(data.humidity) && maching_setting(parseInt(data.temperature), parseInt(data.humidity) ) 
+     // maching_setting(parseInt(data.temperature), parseInt(data.humidity) )
+     if(data.temperature != null && data.humidity != null){
+         setTemperature(parseInt(data.temperature))
+         setHumidity(parseInt(data.humidity))
+     }
+     
+     });
+ 
+     return () => { // 화면 끝
+       socket.disconnect() ;
+       console.log('myfarm 끝');
+     }
 
-       }    //예외 처리
-      }, []) ;
-    
-    //화면에 보여줄 모든 버섯, 재비기 , 재배기 상태 가져오기
-    useEffect(()=>{
-        setIsLoding(false)
-        console.log("리스트 실행 isCheck",value.isCheck);
-        machine_list()
-        machine_id()
-    },[value.isCheck])
-
-    useEffect(()=>{ //리스트에 값이 있으면 실행하기
-        console.log("리스트 다음 실행 ",value.isOn.id,);
-        console.log("myfarm list prgInfo, isdevice",value.prgInfo,isOk.isDevice);
-        if(isOk.isDevice){
-            prg_name()
-            machine_status()
-        }
-        
-    },[isOk.isDevice,value.isOn.id])
-
-    //한번만 실행하기
-    useEffect(()=>{
-        console.log("====================MyFarm 처음 실행 화면 ===================");
-        // cookie상태값 확인하기
-        DEBUG && console.log("MyFarm prgInfo 확인", value.prgInfo);
-        DEBUG && console.log("MyFarm isCheck 확인", value.isCheck);
-        //등록된 버섯 재배기 온도,습도 값 결정해 주기
-        console.log("===================end===================="); //선택하면 값이 바뀜
-        //진행중인 프로그램 이름이 있으면
-        if(value.prgInfo.prg_id !== 0){ 
-            start_date() //시작 날짜
-            mushroom_name() // 버섯 배지 이름 가져오기    
-            mushroom_all()
-            
-        }
-        else if(value.prgInfo.prg_id === 0){ //진행중인 프로그램 없으면 모든 값 초기화 해주기
-            console.log(value.prgInfo.prg_id,"ddddddd");
-            setDays(0)
-            setKinokoName('')
-            setGrowing([])
-            setHarvest([])
-            setWhiteflower([])
-        }
-        
-    },[value.prgInfo.prg_id,value.isCheck]);
+    }    //예외 처리
+   }, []) ;
 
 
-    
-    useEffect(()=>{ //날짜 계산해서 일차 구하기
-        // console.log("오늘은 며칠?",day.today, day.kinokoDay);
-        if(result2.day.today !== '' ){
-        
-        let test = new Date(day.today)
-        let test2 = new Date(day.kinokoDay)
-        setDays((test.getTime() - test2.getTime()) / (1000*60*60*24) + 1)
-        
-        } 
-        
-    },[day])   
-    //끝 화면에 보여줄 모든 버섯, 재비기 , 재배기 상태 가져오기 
-    useEffect(()=>{
-        if(cookies.get('token') ){
-        (console.log("==================MyFarmCss 처음 실행 화면 =================="));
-        console.log("값이 바뀜",result2.kinokoName);
-    }
-        
-    },[result2.kinokoName])
-    
-    return (
-        <>
-        {
-            cookies.get('token') ? (
-                <MyfarmCss 
-                    value={value} // 사용자 재배기id,name
-                    isLoding={isLoding} //모든 사용 끝나면 보여주기
-                    result2={result2} // 화면 보여줄 값 들
-                    isOk={isOk.isDevice}
-                    onClickChangeName={onClickChangeName} //이름 바꾸기
-                    onChange={onChange}
-                    temp= {temp}
-                    image={image} //이미지 보내기
-                    temperature={temperature}
-                    humidity={humidity}
-                />
-            ) : ( //로그인이 풀렸어요
-                <Redirect to = "Login" />
-            )
-        }
+  
+  if(!window.Kakao.Auth.getAccessToken()) return <Redirect to='/join'/>
+  
+  return(
+      <>
+        <div className='myfarm-wrap'>
+          <div className='inner'>
+            {/* 재배기 등록 모달 */}
+            <Modal open={ modalOpen } close={ closeModal } header="재배기 등록" onClickBtn={onClickBtn} isOkPwd={isOkPwd}>
+            <div>
+                    <input  name='keyOnchange' className='modalbtn' size='30' onChange={onChange} placeholder='재배기 핀 번호를 입력해주세요'/>
+                    <button name='key' type="button" onClick={onClickBtn} className='ok-btn'>확인</button>
+                    {errKey && <div>*실패 했습니다...</div>}
+                    { isOkKey === 202 && <div>*성공 했습니다!</div>}
+                    <input name='pwdOnchange' className='modalbtn' size='30' onChange={onChange} placeholder='재배기 비밀번호를 입력해주세요' />
+                    <button name='pwd' type="button" onClick={onClickBtn} className='ok-btn'>확인</button>
+                    {errPwd && <div>*실패 했습니다...</div>}
+                    {isOkPwd === 202 && <div>*성공 했습니다!</div>}
+                    <input  name='nickName' className='modalbtn' size='30' onChange={onChange} placeholder='기기의 이름을 입력해주세요'  />
+                    {errDevice && <div>*실패 했습니다...{errDevice.response.data}</div>}
+                    {isOkDevice === 202 && <div>*성공 했습니다!</div>}
+                </div>
+            </Modal>
 
-        </>
-        
-    );
-};
+            <ModalDel open={ modalDelOpen } close={ closeModalDel }  header="재배기 삭제"  onSetMuchin={onSetMuchin} onDelMuchin={onDelMuchin}>
+            <div>
+                <div>
+                    <div className="textStyle">"사용" 및 "삭제"를 선택해 주세요.</div>
+                    <br/>
+                    <br/>
+                    <div className="textStyle"><span className="text">*주의사항</span></div>
+                    <div className="textStyle">해당 재배기를 삭제하면 그전에 기록한 정보들은</div>
+                    <div className="textStyle">"전부" 삭제됩니다</div>
+                </div>
+              </div>
+            </ModalDel>
 
-export default withCookies(MyFarm);
+
+            <div className='myfarm-left'>
+              <div className='btn-group'>
+                <div className='muchine-title'><span>재배기 관리</span></div>
+                <button className='muchine-btn' onClick={openModal}> <span>+</span> </button>
+                {
+                  muchinList && muchinList.map( (obj)=>(
+                    <button className={setDevice} onClick={() =>{openModalDel(); (()=>{setDeviceNumber(obj.id)})() }}> <span>{obj.machine_name}</span> </button>
+                  ))
+                }
+                <button className='muchine-btn' onClick={getMuchinList}> <span>새로 불러오기</span> </button>
+                <button className='muchine-btn' onClick={openModalDel}> <span>기기 삭제</span> </button>
+              </div>
+            </div>
+
+            <div className='myfarm-right'>
+              <div className='right-wrap'>
+                {nodivice && <span >등록된 기기가 없습니다. 기기를 등록해 주세요</span>}
+                {!nodivice && !loading && isOkDeviceId !==202 && <span >선택된 기기가 없습니다. 기기를 선택해 주세요</span>}
+                {loading && <span >Loding...</span>}
+                { DeviceId && 
+                  <><div className='grap-wrap'>
+                    <div className = "grap">
+                        <LogoutChart value={deviceNumber&&deviceNumber}/>
+                    </div>
+                  </div>
+
+                  <div className='kinokoInfo-wrap'>
+
+                    <div className='soket'> 
+                      <div className='soket-img'>
+                        <div className='soket-title'><span>실시간 영상</span></div>
+                        {image && <img src={image} alt='실시간 통신'/>}
+                        {/* <img src={logoimg1} alt='logo' className='logo1'/> */}
+                      </div>
+                    </div>
+
+                    <div className='kinokoInfo'> 
+                      <div className='info-top'>
+                        <div className='info-left'>
+
+                        </div>
+                        <div className='info-right'>
+
+                        </div>
+                      </div>
+
+
+                      <div className='info-bottom'>
+
+                        <div className='today-info'>
+                          <h3>오늘 자란 버섯 수</h3>
+                          <span className='today-growth'>4개</span>
+                          {/* <span className='today-growth'>0...</span> */}
+                        </div>
+
+                        <div className='today-grow'>
+                          <h3>수확 가능한 버섯이 있어요!</h3>
+                          <img src={farmer} alt='farmer' className='farmer' />
+                          {/* <h3>아직은 수확 가능한 버섯이 없네요...</h3> */}
+                        </div>
+
+                        <div className='from-move'> 
+                          <Link to="/farm">
+                            <span className='move'>상세 페이지로 이동 </span>
+                          </Link>
+                        </div>
+                        
+                      </div>
+
+                    </div>
+
+
+                  </div>
+                </>
+              }
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </>
+  )
+
+}

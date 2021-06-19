@@ -1,0 +1,65 @@
+.login-wrap{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.login-wrap .inner{
+  height: 600px;
+  width: 900px;
+  border-radius: 65px;
+  background-color: rgb(224 224 218);
+}
+.login-wrap .tit {
+  height: 130px;
+  position: relative;
+}
+.login-wrap .tit img{
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 5px auto;
+}
+/* 로고 이미지 */
+.login-wrap .logo-img{
+  height: 321px;
+  text-align: center;
+  position: relative;
+}
+.login-wrap .logo-img p{
+  margin-top: 10px;
+  font-size: 18px;
+}
+/* swiper */
+.login-wrap .logo-img .swiper-container {
+  width: 200px;
+  height: 220px;
+  position: absolute;  
+  left: 50%;
+  top: 50%;
+  margin-left: -100px;
+  margin-top: -100px;
+  
+}
+.logo-img .swiper-slide{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.logo-img .swiper-slide img {
+  width: 98%;
+  height: 100%;
+}
+.logo-img .swiper-slide .logo1 {
+  width: 96%;
+  height: 100%;
+}
+.login-wrap .inner .kakao-btn{
+  margin-top: 30px;
+  text-align: center;
+}
+.login-wrap .inner .kakao-btn p{
+  font-weight: 700;
+}

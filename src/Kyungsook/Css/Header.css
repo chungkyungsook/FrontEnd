@@ -1,0 +1,25 @@
+
+.myfarm-btn{
+  position: absolute;
+  top: 10px;
+  right: 18px;
+  margin: 5px auto;
+  
+  width: 80px;
+  padding: 5px;
+  border: 2px solid #333;
+  border-radius: 14px;
+  color: #333;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  box-sizing: border-box;
+  display: block;
+  transition: .4s;
+}
+
+.myfarm-btn:hover{
+  background-color: #333;
+  color: #fff;
+}
