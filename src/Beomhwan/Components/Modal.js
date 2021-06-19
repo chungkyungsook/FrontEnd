@@ -13,7 +13,7 @@ const Overlay = styled.div`
     right: 0;
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.4);
-    z-index: 0;
+    z-index: 88;
 `;
 
 const ModalBox = styled.div`
@@ -22,7 +22,7 @@ const ModalBox = styled.div`
     background-color: white;
     width: ${props=>props.width ? props.width+'px' : '80%'};
     height: ${props=>props.height ? props.height+'px' : '80%'};
-    z-index: 10;
+    z-index: 89;
     flex-direction: column;
     border-radius: 12px;
 `;
@@ -32,7 +32,7 @@ const ModalHeader = styled.div`
     display: flex;
     width: 100%;
     height: 40px;
-    z-index: 11;
+    z-index: 90;
     justify-content: flex-end;
     padding-right: 10px;
     border-bottom: 1px solid #dddddd;
