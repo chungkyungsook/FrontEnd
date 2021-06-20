@@ -11,7 +11,7 @@ import {
   useKinokoState 
 } from '../../KinokoContext';
 import { concat } from '@amcharts/amcharts4/.internal/core/utils/Iterator';
-
+import { format } from 'date-fns';
 export default function Farm(){
   //버섯 객체 정보 담기
   const [growing, setGrowing]         = useState([])
@@ -19,8 +19,9 @@ export default function Farm(){
   const [whiteflower, setWhiteflower] = useState([])
   const [complete, setComplete]       = useState([])
   const [kinokoList, setKinokoList]   = useState([])
+  
   //   //버섯 상태별
-  const kinokoState = ['growing', 'harvest', 'whiteflower', 'complete']
+  const kinokoState = ['growing', 'harvest', 'whiteflower', 'complete','mushroomAll','today']
   const [mushroomNum, setMushroomNum] = useState()
 
 
@@ -34,6 +35,10 @@ export default function Farm(){
   const { data:mushroomInfo,  isOk:isOkMushroomInfo } = state.getMushroomInfo; 
   const { data:StartDay, isOk:isOkStartDay } = state.getStartDay; 
 
+  //오늘 날짜 
+  // const today = format(new Date(),'yyyy-MM-dd')
+  let today = new Date(2021,5,19)
+  today = format(today,'yyyy-MM-dd')
   
   useEffect(()=>{
     if(isOkDeviceId === 202){
@@ -53,27 +58,32 @@ export default function Farm(){
   },[isOkProgramInfo])
 
   useEffect(()=>{
-    let num = [0,0,0,0]
+    let num = [0,0,0,0,0,0]
+    // ['growing', 'harvest', 'whiteflower', 'complete','mushroomAll','today']
     if(isOkMushroomInfo === 202){
       console.log('mushroomInfo',isOkMushroomInfo);
       mushroomInfo.map( data =>{
-        // data.mr_status ==='growing' && console.log('data.mr_status',data.mr_status);
-        // data.mr_status ==='whiteflower' && console.log('data.mr_status',data.mr_status);
-        // data.mr_status ==='complete' && console.log('data.mr_status',data.mr_status);
         if(data.mr_status ==='growing' ){
           num[0] = num[0] + 1
-        }else if(data.mr_status ==='whiteflower'){
+        }else if(data.mr_status ==='harvest'){
           num[1] = num[1] + 1
-        }else if(data.mr_status ==='complete' ){
+        }else if(data.mr_status ==='whiteflower' ){
           num[2] = num[2] + 1
+        }else if(data.mr_status ==='complete' ){
+          num[3] = num[3] + 1
         }
-      }) 
       
+      }) 
+
+      mushroomInfo.filter(data =>
+        format(new Date(data.mr_date),'yyyy-MM-dd') === today && (num[5] = num[5] + 1)
+      )
+
+      num[4] = mushroomInfo.length
       console.log(num);
       setMushroomNum(num)
     } 
     
-    console.log(StartDay,'date');
   },[isOkMushroomInfo])
 
 
@@ -95,53 +105,48 @@ export default function Farm(){
 
           <div className='grap-wrap'>
             <div className = "grap">
-              <div>
-                <ProgressChart />
-              </div>
+                {/* <ProgressChart /> */}
             </div>
           </div>
 
           <div className='farm-info-wrap'>
             <div className='info-left'>
-              <div>
-                <div>
-                  사진
-                </div>
+                <h1>버섯 갤러리</h1>
+                
                 <div >
                   <div>성장</div>
                   <div>버섯 길이</div>
                 </div>
-              </div>
             </div>
             <div className='info-right'>
               <div className='info-text-wrap'>
                 <h2>Today 버섯</h2>
-                <span>5개</span>
+                <span>{mushroomNum && mushroomNum[5]}개</span>
               </div>
 
               <div className='info-text-wrap'>
                 <h2>백화고</h2>
-                <span>5개</span>
-              </div>
-
-              <div className='info-text-wrap'>
-                <h2>수확 가능 버섯</h2>
                 <span>{mushroomNum && mushroomNum[2]}개</span>
               </div>
 
               <div className='info-text-wrap'>
+                <h2>수확 가능 버섯</h2>
+                <span>{mushroomNum && mushroomNum[1]}개</span>
+              </div>
+
+              <div className='info-text-wrap'>
                 <h2>성장중인 버섯</h2>
-                <span>5개</span>
+                <span>{mushroomNum && mushroomNum[0]}개</span>
               </div>
 
               <div className='info-text-wrap'>
                 <h2>수확한 버섯</h2>
-                <span>5개</span>
+                <span>{mushroomNum && mushroomNum[3]}개</span>
               </div>
 
               <div className='info-text-wrap'>
                 <h2>모든 버섯</h2>
-                <span>5개</span>
+                <span>{mushroomNum && mushroomNum[4]}개</span>
               </div>
 
             </div>
