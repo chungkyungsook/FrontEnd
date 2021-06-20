@@ -6,12 +6,15 @@ import am4themes_animated from '@amcharts/amcharts4/themes/animated';
 import axios from 'axios';
 import styled from 'styled-components';
 import {URL} from '../Util';
+import { useKinokoState } from '../../KinokoContext';
 
-const ProgressChart = ({prgInfo}) => {
+const ProgressChart = () => {
     console.log(window.location.pathname);
     const [chartData, setChartData] = useState([]);
     const [loading, setLoading] = useState(true);
-    console.log(prgInfo);
+    const state = useKinokoState();
+    const {data: programInfo} = state.programInfo;
+    console.log(programInfo[0].id);
 
     useEffect(() => {
         async function getPrgData(prg_id) {
@@ -37,7 +40,7 @@ const ProgressChart = ({prgInfo}) => {
             });
         }
 
-        getPrgData(prgInfo.prg_id);
+        getPrgData(programInfo[0].id);
     },[]);
 
     useLayoutEffect(() => {
@@ -50,12 +53,12 @@ const ProgressChart = ({prgInfo}) => {
             chart.cursor = new am4charts.XYCursor();
 
             let title = chart.titles.create();
-            title.text = prgInfo.prg_name;
+            title.text = programInfo[0].prg_name;
             title.fontSize = 20;
             title.tooltipText = "당일데이터는 1시간 단위로 측정 중입니다.";
 
             // data 부터 받아오기
-            chart.dataSource.url = `${URL}/api/myfarm/data/hour?prgId=${prgInfo.prg_id}`;
+            chart.dataSource.url = `${URL}/api/myfarm/data/hour?prgId=${programInfo[0].id}`;
             chart.dataSource.parser = new am4core.JSONParser();
             chart.dataSource.parser.options.emptyAs = 0;
 
@@ -97,7 +100,7 @@ const ProgressChart = ({prgInfo}) => {
 
                 ev.target.data = chart;
 
-                if(prgInfo.prg_id === 0 && prgInfo.prg_name === '') {
+                if(programInfo[0].id === 0 && programInfo[0].prg_name === '') {
                     title.text = '현재 환경 프로그램이 실행 되고 있지 않습니다.';
                     chart.tooltipText = '버섯을 재배할 준비를 마친 후 팜 환경설정에서 프로그램을 시작해주세요.'
                 }
@@ -191,7 +194,7 @@ const ProgressChart = ({prgInfo}) => {
         return <>Now Loading...</>
     }
 
-    if(prgInfo.prg_id === 0) {
+    if(programInfo[0].id === 0) {
         return <>현재 프로그램이 실행 되고 있지 않습니다.</>
     }
 
