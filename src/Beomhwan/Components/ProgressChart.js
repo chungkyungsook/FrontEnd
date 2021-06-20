@@ -6,17 +6,22 @@ import am4themes_animated from '@amcharts/amcharts4/themes/animated';
 import axios from 'axios';
 import styled from 'styled-components';
 import {URL} from '../Util';
-import { useKinokoState } from '../../KinokoContext';
+import { getProgramInfo, useKinokoState, useKinokoDispatch } from '../../KinokoContext';
 
 const ProgressChart = () => {
     console.log(window.location.pathname);
     const [chartData, setChartData] = useState([]);
     const [loading, setLoading] = useState(true);
     const state = useKinokoState();
+    const dispatch = useKinokoDispatch();
+    console.log(state);
     const {data: programInfo} = state.programInfo;
-    console.log(programInfo[0].id);
+    console.log(programInfo);
 
     useEffect(() => {
+        getProgramInfo(dispatch, 'me').then(res => {
+            console.log(res);
+        })
         async function getPrgData(prg_id) {
             let chartData = [];
             await axios.get(`${URL}/api/farm/data`, {
@@ -39,12 +44,12 @@ const ProgressChart = () => {
                 setLoading(false);
             });
         }
-
-        getPrgData(programInfo[0].id);
+        if(programInfo !== null) {
+            getPrgData(programInfo[0].id);
+        }
     },[]);
 
     useLayoutEffect(() => {
-        if(!loading) {
             // 진행 차트
             let chart = am4core.create('progressChart', am4charts.XYChart);
 
@@ -185,16 +190,15 @@ const ProgressChart = () => {
             }
 
             return () => {
-                chart.dispose();;
+                chart.dispose();
             }
-        }
     }, [loading]);
 
     if(loading) {
         return <>Now Loading...</>
     }
 
-    if(programInfo[0].id === 0) {
+    if(!programInfo) {
         return <>현재 프로그램이 실행 되고 있지 않습니다.</>
     }
 
