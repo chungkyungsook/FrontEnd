@@ -134,23 +134,6 @@ const PyogoTimeLine = () => {
         imageBullet2.propertyFields.stroke = "color";
         imageBullet2.background.propertyFields.fill = "color";
 
-        // let eventSeries = timeline.series.push(new am4timeline.CurveLineSeries());
-        // eventSeries.dataFields.dateX = "eventDate";
-        // eventSeries.dataFields.categoryY = "category";
-        // eventSeries.data = [
-        //     { category: "", eventDate: "2019-01-10", letter: "A", description: "Something happened here" },
-        //     { category: "", eventDate: "2019-01-12", letter: "B", description: "Something happened here" }];
-        // eventSeries.strokeOpacity = 0;
-
-        // let flagBullet = eventSeries.bullets.push(new am4bullets.FlagBullet())
-        // flagBullet.label.propertyFields.text = "letter";
-        // flagBullet.locationX = 0;
-        // flagBullet.tooltipText = "{description}";
-
-        // timeline.scrollbarX = new am4core.Scrollbar();
-        // timeline.scrollbarX.align = "center"
-        // timeline.scrollbarX.width = am4core.percent(70);
-
         let cursor = new am4timeline.CurveCursor();
         timeline.cursor = cursor;
         cursor.xAxis = dateAxis;

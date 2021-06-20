@@ -3,6 +3,7 @@ import {flexAlign} from '../../Util/css';
 import {NotoSansRegular, NotoSansLight} from '../css/cssModule';
 import {Chart as PyogoChart} from '../Routes/Pyogo';
 import {BaekhwagoChart as BaekhwaChart} from '../Routes/Baekhwago';
+import { useKinokoState } from '../../KinokoContext';
 
 // ---------모달 스타일--------------
 export const ModalTitleBox = styled.div`
@@ -68,9 +69,36 @@ export const Button = styled.button`
     color: rgba(0,0,0,0.7);
 `;
 
+const ProgramRunningContentBox = styled.div`
+    width: 100%;
+    height: 100%;
+    ${flexAlign};
+    ${NotoSansRegular};
+    font-size: 1.4em;
+`;
+
 // =========모달 스타일==============
 
 const ModalContent = ({chartname, text, onClose}) => {
+    const state = useKinokoState();
+    const {data: programInfo} = state.programInfo;
+
+    if(programInfo) {
+        return (
+            <>
+                <ModalTitleBox>
+                    이미 실행중인 프로그램이 있습니다!
+                </ModalTitleBox>
+                <ProgramRunningContentBox>
+                    실행중인 프로그램 : {programInfo[0].prg_name}
+                </ProgramRunningContentBox>
+                <ModalFooter>
+                    <Button onClick={onClose}> 적용 </Button>
+                    <Button onClick={onClose}> 취소 </Button>
+                </ModalFooter>
+            </>
+        )
+    }
 
     return (
         <>
@@ -91,7 +119,7 @@ const ModalContent = ({chartname, text, onClose}) => {
                 <ModalEnvText>
                     {text.waterText}
                 </ModalEnvText>
-                <ModalEnvText>
+                <ModalEnvText>  
                     {text.sunText}
                 </ModalEnvText>
             </ModalEnvInfoBox>

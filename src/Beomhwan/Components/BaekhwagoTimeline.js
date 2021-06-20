@@ -20,7 +20,7 @@ const BaekhwagoTimeline = () => {
         // setting timeline initial's state
         const timeline = am4core.create('pyogoTimeline', am4timeline.SerpentineChart);
         timeline.curveContainer.padding(50, 20, 50, 20);
-        timeline.levelCount = 4;
+        timeline.levelCount = 5;
         timeline.yAxisRadius = am4core.percent(25);
         timeline.yAxisInnerRadius = am4core.percent(-25);
         timeline.maskBullets = false;
@@ -33,45 +33,38 @@ const BaekhwagoTimeline = () => {
 
         timeline.data = [
             {
-                "stage": "1단계",
-                "value": 1
-            }, 
-            {
-                "stage": "2단계",
-                "value": 2
-            },
-            {
-                "stage": "3단계",
-                "value": 3
-            }, 
-            {
-                "stage": "4단계",
-                "value": 4
-            },
-            {
-                "stage": "5단계",
-                "value": 5
-            },
+                "stage": "1단계 : 갓 길이 1cm 이하",
+                "value": "1단계",
+                "state": "갓 길이 1cm 이하"
+            }, {
+                "stage": "2단계 : 갓 길이 2cm ~ 4cm",
+                "value": "1단계",
+                "state": "갓 길이 1cm ~ 2cm"
+            }, {
+                "stage": "3단계 : 갓 길이 2cm ~ 4cm",
+                "value": "1단계",
+                "state": "갓 길이 2cm ~ 4cm"
+            }, {
+                "stage": "4단계 : 갓 길이 4cm ~ 5cm",
+                "value": "1단계",
+                "state": "갓 길이 4cm ~ 5cm"
+            }, {
+                "stage": "5단계 : 갓 길이 5cm 초과",
+                "value": "",
+                "state": "백화고 수확이 가능합니다!"
+            }
         ];
 
-        // let stageAxis = timeline.yAxes.push(new am4charts.CategoryAxis());
-        // stageAxis.dataFields.category = "stage";
-        // stageAxis.renderer.grid.template.disabled = true;
-        // stageAxis.renderer.labels.template.paddingRight = 25;
-        // stageAxis.renderer.minGridDistance = 10;
-        // stageAxis.renderer.innerRadius = -60;
-        // stageAxis.renderer.radius = 60;
-
-        // let valueAxis = timeline.yAxes.push(new am4charts.ValueAxis());
-        // valueAxis.renderer.radius = 100;
-        // valueAxis.renderer.innerRadius = 0;
-        // valueAxis.renderer.grid.template.disabled = true;
-
-        // let series = timeline.series.push(new am4timeline.SerpentineChart());
-        // series.dataFields.valueY = 'value';
-        // series.dataFields.categoryX = 'state';
-        // series.columns.template.fillOpacity = 0.5;
-        // series.columns.template.strokeWidth = 2;
+        let categoryAxis = timeline.xAxes.push(new am4charts.CategoryAxis());
+        categoryAxis.dataFields.category = 'stage';
+        categoryAxis.renderer.grid.template.disabled = true;
+        categoryAxis.renderer.polyspline.tensionX = 0.8;
+        categoryAxis.renderer.minGridDistance = 30;
+        
+        let valueAxis = timeline.yAxes.push(new am4charts.ValueAxis());
+        valueAxis.renderer.radius = 100;
+        valueAxis.renderer.innerRadius = 0;
+        valueAxis.renderer.grid.template.disabled = true;
 
         timeLineRef.current = timeline;
         return () => timeline.dispose();

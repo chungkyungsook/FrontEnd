@@ -136,6 +136,7 @@ const LoadingMessage = styled.p`
 const Custom = () => {
     const state = useKinokoState();
     const { data:DeviceId } = state.muchinDeviceId;
+    const { data:programInfo } = state.programInfo;
     const [loading, setLoading] = useState(true);
     const [customChart, setCustomChart] = useState([]);
     const [modalInfo, setModalInfo] = useState({
@@ -194,28 +195,60 @@ const Custom = () => {
 
     // 커스텀 환경 적용 클릭 시 모달 on 및 텍스트 변경
     const onStart = (prgid) => {
+
         console.log(customChart);
         console.log(prgid);
-        setModalInfo({
-            opacity: 1,
-            customId: prgid,
-            titleText: '주의!',
-            modalTextfirst: '한번 적용하면 도중에 취소가 불가능합니다.',
-            modalTextsecond: '적용하시겠습니까?',
-            confirm: 'start'
-        });
+        // if(programInfo) {
+        //     setModalInfo({
+        //         opacity: 1,
+        //         customId: prgid,
+        //         titleText: '이미 실행중인 프로그램이 있습니다!',
+        //         modalTextfirst: '',
+        //         modalTextsecond: '',
+        //         confirm: ''
+        //     });
+        // } else {
+            setModalInfo({
+                opacity: 1,
+                customId: prgid,
+                titleText: '주의!',
+                modalTextfirst: '한번 적용하면 도중에 취소가 불가능합니다.',
+                modalTextsecond: '적용하시겠습니까?',
+                confirm: 'start'
+            });
+        // }
     };
 
     // 커스텀 환경 삭제 클릭 시 모달 on 및 텍스트 변경
     const onRemove = (prgid) => {
-        setModalInfo({
-            opacity: 1,
-            customId: prgid,
-            titleText: '주의!',
-            modalTextfirst: '정말 삭제하시겠습니까?',
-            modalTextsecond: '',
-            confirm: 'remove'
-        });
+        // if(programInfo) {
+        //     prgid === programInfo[0].id
+        //     ?   setModalInfo({
+        //             opacity: 1,
+        //             customId: prgid,
+        //             titleText: '실행중인 프로그램은 삭제가 불가능합니다!',
+        //             modalTextfirst: '',
+        //             modalTextsecond: '',
+        //             confirm: ''
+        //         })
+        //     :   setModalInfo({
+        //             opacity: 1,
+        //             customId: prgid,
+        //             titleText: '주의!',
+        //             modalTextfirst: '정말 삭제하시겠습니까?',
+        //             modalTextsecond: '',
+        //             confirm: 'remove'
+        //         })
+        // } else {
+            setModalInfo({
+                opacity: 1,
+                customId: prgid,
+                titleText: '주의!',
+                modalTextfirst: '정말 삭제하시겠습니까?',
+                modalTextsecond: '',
+                confirm: 'remove'
+            })
+        // }
     };
 
     // 시작 삭제 클릭 시 모달 설정
