@@ -105,7 +105,7 @@ export default function Farm(){
 
           <div className='grap-wrap'>
             <div className = "grap">
-                {/* <ProgressChart /> */}
+                <ProgressChart />
             </div>
           </div>
 

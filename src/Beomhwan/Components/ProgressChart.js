@@ -50,6 +50,7 @@ const ProgressChart = () => {
     },[]);
 
     useLayoutEffect(() => {
+        if(programInfo) {
             // 진행 차트
             let chart = am4core.create('progressChart', am4charts.XYChart);
 
@@ -192,6 +193,7 @@ const ProgressChart = () => {
             return () => {
                 chart.dispose();
             }
+        }
     }, [loading]);
 
     if(loading) {
