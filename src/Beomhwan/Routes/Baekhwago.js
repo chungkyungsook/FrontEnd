@@ -4,28 +4,30 @@ import {Line} from 'react-chartjs-2';
 import Modal from '../Components/Modal';
 import ModalContent from '../Components/ModalContent';
 import {flexAlign} from '../../Util/css';
+import BaekhwagoTimeline from '../Components/BaekhwagoTimeline';
+import {BoxShadowTrick} from '../css/cssModule';
 
 // 백화고차트 데이터
 const BaekhwagoData = {
     labels: ['1단계','2단계','3단계','4단계','5단계'],
     datasets: [
         {
-            label: 'Temperature-Sunrise',
+            label: '일출 후 온도',
             data: [20, 20, 17, 15, 15],
             fill: false,
-            borderColor: 'rgba(255, 0, 0, 1)'
+            borderColor: '#FB9300'
         },
         {
-            label: 'Temperature-Sunset',
+            label: '일몰 후 온도',
             data: [20, 15, 13, 10, 5],
             fill: false,
-            borderColor: 'rgba(175, 0, 0, 1)'
+            borderColor: '#D83A56'
         },
         {
-            label: 'Humidity',
+            label: '습도',
             data: [90, 70, 60, 50, 40],
             fill: false,
-            borderColor: 'blue'
+            borderColor: '#00BCD4'
         }
     ]
 };
@@ -66,7 +68,7 @@ const FullBox = styled.div`
 `;
 
 const BaekhwagoGraphBox = styled.div`
-    flex: 5;
+    height: 500px;
     padding: 30px;
     border-bottom: 1px solid gray;
 `;
@@ -80,7 +82,7 @@ const FooterBox = styled.div`
 
 const Description = styled.div`
     flex: 9;
-    ${flexAlign};
+    height: 600px;
 `;
 
 const DescriptionTitle = styled.div`
@@ -90,7 +92,6 @@ const DescriptionTitle = styled.div`
 
 const DescriptionContent = styled.div`
     flex: 3;
-    border: 1px solid gray;
     height: 100%;
     ${flexAlign};
 `;
@@ -101,17 +102,19 @@ const GrowStartButtonBox = styled.div`
     display: flex;
 `;
 
+
 const GrowStartButton = styled.button`
-    flex: 1;
-    border: 3px solid rgba(0,0,0,0.4);
-    border-radius: 10px;
-    background: none;
-    outline: none;
-    cursor: pointer;
-    &:hover{
-        background: beige;
-    }
+    width: 100px;
+    height: 40px;
+    border-radius: 5px;
+    border: 3px solid #dddddd;
+    background-color: white;
     transition: 0.3s;
+    cursor: pointer;
+    &:focus {
+        outline: none;
+    }
+    ${BoxShadowTrick};
 `;
 
 const Baekhwago = () => {
@@ -142,8 +145,7 @@ const Baekhwago = () => {
             </BaekhwagoGraphBox>
             <FooterBox>
                 <Description>
-                    <DescriptionTitle></DescriptionTitle>
-                    <DescriptionContent>백화고는 자란 버섯들의 갓 길이의 평균을 기준으로 단계별로 환경을 제공합니다.</DescriptionContent>
+                    <BaekhwagoTimeline />
                 </Description>
                 <GrowStartButtonBox>
                     <GrowStartButton onClick={onModal}>적용</GrowStartButton>

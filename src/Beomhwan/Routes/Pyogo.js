@@ -11,16 +11,16 @@ const data = {
     labels: ['1일차','2일차','3일차','4일차','5일차','6일차','7일차','8일차','9일차','10일차','11일차','12일차','13일차','14일차'],
     datasets: [
         {
-            label: 'Temperature',
+            label: '온도',
             data: [25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25,],
             fill: false,
-            borderColor: 'red',
+            borderColor: '#EC5858',
         },
         {
-            label: 'Humidity',
+            label: '습도',
             data: [80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, ],
             fill: false,
-            borderColor: 'blue',
+            borderColor: '#00BCD4',
         }
     ]
 };
@@ -63,13 +63,12 @@ const PyogoStyled = styled.div`
 
 const PyogoGraphBox = styled.div`
     padding: 30px;
-    flex: 5;
+    height: 500px;
     border-bottom: 1px solid gray;
 `;
 
 const FooterBox = styled.div`
     padding: 30px;
-    flex: 1;
     display: flex;
     flex-direction: row;
 `;
@@ -110,11 +109,14 @@ const ModalOnButton = ({onModal}) => {
 const Pyogo = () => {
     const [opacity, setOpacity] = useState(0);
     const PyogoModalText = {
-        title: '주의',
-        caution1: '설정하시면 도중에 환경 변경이 불가능합니다.',
+        title: '표고버섯 환경 프로그램 적용',
+        caution1: `
+            일정한 환경에서 표고버섯 재배를 실시합니다.
+            물 주는 횟수는 8시간에 1회 입니다.
+        `,
         caution2: '재배를 시작하시겠습니까?',
-        waterText: '물 주기 횟수 : ',
-        sunText: '채광 횟수 : '
+        waterText: '물 주기 횟수 : 3회',
+        sunText: '채광 횟수 : 0회'
     }
 
     const onModal = () => {

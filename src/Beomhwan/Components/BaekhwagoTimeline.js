@@ -11,7 +11,7 @@ const Container = styled.div`
     height: 600px;
 `;
 
-const PyogoTimeLine = () => {
+const BaekhwagoTimeline = () => {
     const timeLineRef = useRef();
 
     useLayoutEffect(() => {
@@ -25,7 +25,7 @@ const PyogoTimeLine = () => {
         timeline.yAxisInnerRadius = am4core.percent(-25);
         timeline.maskBullets = false;
         let title = timeline.titles.create();
-        title.text = '표고버섯 환경 프로그램 로드맵';
+        title.text = '백화고 환경 프로그램 로드맵';
         title.fontSize = 20;
 
         let colorSet = new am4core.ColorSet();
@@ -34,29 +34,36 @@ const PyogoTimeLine = () => {
         timeline.data = [
             {
                 "category": "재배 기간",
-                "start": new Date(),
-                "end": new Date().setDate(new Date().getDate() + 15),
+                "start": 1,
+                "end": 5,
                 "color": colorSet.getIndex(0),
                 "task": "버섯 재배"
             }, 
             {
                 "category": "예상 수확일",
-                "start": new Date().setDate(new Date().getDate() + 5),
-                "end": new Date().setDate(new Date().getDate() + 6),
+                "start": 1,
+                "end": 2,
                 "color": colorSet.getIndex(5),
                 "task": "예상 수확일"
             }, 
             {
                 "category": "예상 수확일",
-                "start": new Date().setDate(new Date().getDate() + 10),
-                "end": new Date().setDate(new Date().getDate() + 11),
+                "start": 2,
+                "end": 3,
                 "color": colorSet.getIndex(10),
                 "task": "예상 수확일"
             }, 
             {
                 "category": "예상 수확일",
-                "start": new Date().setDate(new Date().getDate() + 14),
-                "end": new Date().setDate(new Date().getDate() + 15),
+                "start": 3,
+                "end": 4,
+                "color": colorSet.getIndex(15),
+                "task": "예상 수확일"
+            }, 
+            {
+                "category": "예상 수확일",
+                "start": 4,
+                "end": 5,
                 "color": colorSet.getIndex(15),
                 "task": "예상 수확일"
             }, 
@@ -169,4 +176,4 @@ const PyogoTimeLine = () => {
     return <Container id="pyogoTimeline" ref={timeLineRef}></Container>
 }
 
-export default PyogoTimeLine;
+export default BaekhwagoTimeline;

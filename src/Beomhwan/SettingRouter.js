@@ -34,6 +34,7 @@ const SettingRouter = ({location, value, history}) => {
     const {pathname} = location;
 
     const state = useKinokoState();
+    console.log(state);
     const { data:DeviceId } = state.muchinDeviceId;
 
     if(!window.Kakao.Auth.getAccessToken()) return <Redirect to='/join'/>

@@ -43,11 +43,11 @@ const UpDown = styled.button`
 `;
 
 const NumBox = styled.div`
-    width: 40px;
+    width: 50px;
     height: 40px;
     font-size: 1.2em;
     ${flexAlign};
-    margin: 0 10px 0 10px;
+    margin: 0 5px 0 5px;
 `;
 
 const Select = ({count, sunChange, waterChange}) => {

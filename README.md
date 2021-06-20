@@ -1,70 +1,25 @@
-# Getting Started with Create React App
+# マッシュマッシュ
+**自動的**にしいたけを育てる**栽培サービス**です。
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 開発背景
+- しいたけを育てるための環境を整えるのが難しい
+> 湿度、温度を一定に維持する  
+> 水を一定の時間に一定の量をやる
+- 実際5人で実験したうえで五つの中三つにかびが生えて育てることが難しいと気づく
+![System Architecture](/README/img/pyogo.png)
 
-## Available Scripts
+## Service Architecture
+![System Architecture](/README/img/architecture.png)
 
-In the project directory, you can run:
+## Front-end 担当
+- **ジョン・ギョンスク**：マイファーム、ファーム情報、ヘルプ
+- **ペク・ボムファン**：ファーム環境設定、チャート
 
-### `npm start`
+## 各担当の詳細はREADMEポルダーをご覧ください
+- ジョン・ギョンスク' s [README][ks's README]
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+[ks's README]: https://github.com/Kinoko-Project/FrontEnd/tree/master/README/%E3%82%B8%E3%83%A7%E3%83%B3%E3%83%BB%E3%82%AE%E3%83%A7%E3%83%B3%E3%82%B9%E3%82%AF "ジョン・ギョンスク"
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- ペク・ボムファン's [README][bh's README]
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+[bh's README]: https://github.com/Kinoko-Project/FrontEnd/tree/master/README/%E3%83%9A%E3%82%AF%E3%83%BB%E3%83%9C%E3%83%A0%E3%83%95%E3%82%A1%E3%83%B3/README "ペク・ボムファン"
