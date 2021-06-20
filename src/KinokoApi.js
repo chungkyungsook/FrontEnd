@@ -132,7 +132,7 @@ export async function getMushroomInfo(prgId){
 export async function getStartDay(prgId){
   console.log('prgid',prgId);
   const response = await axios.get(`${AWS_URL}${DATE}`,{
-    params:{prgId:prgId}
+    params:{id:prgId}
   });
   return response.data
 }

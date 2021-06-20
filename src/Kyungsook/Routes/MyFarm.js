@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react' ;
+import React,{useState,useEffect, useRef} from 'react' ;
 import '../Css/Myfarm2.css';
 import {Redirect}   from 'react-router-dom' ;
 import logoimg1 from '../../assets/logo.png' ;
@@ -42,12 +42,16 @@ export default function MyFarm(){
   const state    = useKinokoState();
   const dispatch = useKinokoDispatch();
 
+  // const socket = useRef(io('http://192.168.1.101:3000')) ;
+
   const { data: muchinList, loading, error } = state.muchinList; 
   const { data: muchinKey, error: errKey, isOk: isOkKey } = state.muchinKey; 
   const { error: errPwd, isOk:isOkPwd } = state.muchinPwd; 
   const {  error: errDevice, isOk:isOkDevice } = state.muchinMakeDevice; 
   const { data:DeviceId, error: errDeviceId, isOk:isOkDeviceId } = state.muchinDeviceId; 
   const { data:programInfo, error: errProgramInfo, isOk:isOkProgramInfo } = state.programInfo; 
+  const { data:mushroomInfo, error: errMushroomInfo, isOk:isOkMushroomInfo } = state.getMushroomInfo; 
+  const { data:StartDay, error: errStartDay, isOk:isOkStartDay } = state.getStartDay; 
 
   const [nodivice, setNodivece] = useState(false); // 처음 디바이스 정보 가져올 때
   const [deviceNumber, setDeviceNumber] = useState("")
@@ -56,6 +60,8 @@ export default function MyFarm(){
   const [ modalOpen, setModalOpen ] = useState(false);
   const [ modalDelOpen, setModalDelOpen ] = useState(false);
   const [inputValue, setInputValue] = useState('')
+
+  const [ harvest, setHarvest] = useState(false)
   
   //실시간 소캣 이미지 저장용
   const [image, setImage] = useState(null)
@@ -95,8 +101,11 @@ export default function MyFarm(){
       console.log('삭제, 선택 성공!');
       setNodivece(false)
       getMuchinList()
-    }else{
+    }else if(argIsOk === 444){
       console.log('삭제, 선택 실패!');
+    }else{
+      setNodivece(false)
+      getMuchinList()
     }
   }
   
@@ -165,11 +174,12 @@ export default function MyFarm(){
     if(isOkDeviceId === 202){
       console.log('DeviceId', DeviceId.id);
       getProgramInfo(dispatch,DeviceId.id)
+      setValue(true)
     }
 
   },[loading, error,muchinList,isOkDeviceId,DeviceId,dispatch])
 
-  // 모든 버섯 정보 가졍괴
+  // 모든 버섯 정보 가져오기
   useEffect(()=>{
     if(isOkProgramInfo === 202){
       console.log('isOkProgramInfo',programInfo[0]);
@@ -178,53 +188,76 @@ export default function MyFarm(){
     }
   },[isOkProgramInfo])
 
-  //실시간 소캣 통신 
-  useEffect(() => {
-    if(value){
-     // 소켓 연결 코드
-     const socket = io('http://192.168.0.10:3000') ;
-     
-     socket.emit('req_video', true) ;
-     socket.on('res_video', (data) => {
-     
-         const byte_chars = atob(data)
+  // 모든 버섯 정보 에서 수확활 버섯 있는지 확인하기
+  useEffect(()=>{
+    if(isOkMushroomInfo === 202){
+      console.log('mushroomInfo',isOkMushroomInfo);
+      mushroomInfo.map( data =>{
+        data.mr_status ==='complete' && console.log('data.mr_status',data.mr_status);
+        data.mr_status ==='complete' && setHarvest(true)
+      })  
+    } 
 
-         const byteNumbers = new Array(byte_chars.length) ;
+    console.log(StartDay,'date');
+  },[isOkMushroomInfo])
+
+  useEffect(() =>{
+
+  },[harvest])
+
+  //실시간 소캣 통신 
+  // useEffect(() => {
+  //   // if(value){
+  //    // 소켓 연결 코드
+  //    const socket = io('http://192.168.1.101:3000') ;
+  //    console.log('소캣 연결 확인 중');
+
+
+  //    console.log(socket) ;
+     
+  //    socket.emit('req_video', true) ;
+  //    socket.on('res_video', (data) => {
+
+  //       console.log("소켓 사진 데이터", data) ;
+     
+  //       //  const byte_chars = atob(data)
+
+  //       //  const byteNumbers = new Array(byte_chars.length) ;
    
-         for(let i = 0 ; i < byte_chars.length ; i++) {
-           byteNumbers[i] = byte_chars.charCodeAt(i) ;
-         }
-         const byteArray = new Uint8Array(byteNumbers) ;
+  //       //  for(let i = 0 ; i < byte_chars.length ; i++) {
+  //       //    byteNumbers[i] = byte_chars.charCodeAt(i) ;
+  //       //  }
+  //       //  const byteArray = new Uint8Array(byteNumbers) ;
    
-         const blob = new Blob([byteArray], { type : 'image/png' }) ;
+  //       //  const blob = new Blob([byteArray], { type : 'image/png' }) ;
        
-         setImage(URL.createObjectURL(blob)) ;
+  //       //  setImage(URL.createObjectURL(blob)) ;
    
           
-     }) ;
+  //    }) ;
  
-     // 온, 습도 데이터 요청
-     socket.emit('req_cosdata');
-     // 온, 습도 데이터 받아오는 이벤트
-     socket.on('res_cosdata', (data) => {
-             console.log(data);
-     // 재배기 온도 습도 작동 
-     //  parseInt(data.temperature) && parseInt(data.humidity) && maching_setting(parseInt(data.temperature), parseInt(data.humidity) ) 
-     // maching_setting(parseInt(data.temperature), parseInt(data.humidity) )
-     if(data.temperature != null && data.humidity != null){
-         setTemperature(parseInt(data.temperature))
-         setHumidity(parseInt(data.humidity))
-     }
+  //    // 온, 습도 데이터 요청
+  //   //  socket.emit('req_cosdata');
+  //   //  // 온, 습도 데이터 받아오는 이벤트
+  //   //  socket.on('res_cosdata', (data) => {
+  //   //          console.log("소캣 온 습도 값 가져오기",data);
+  //   //  // 재배기 온도 습도 작동 
+  //   //  //  parseInt(data.temperature) && parseInt(data.humidity) && maching_setting(parseInt(data.temperature), parseInt(data.humidity) ) 
+  //   //  // maching_setting(parseInt(data.temperature), parseInt(data.humidity) )
+  //   // //  if(data.temperature != null && data.humidity != null){
+  //   // //      setTemperature(parseInt(data.temperature))
+  //   // //      setHumidity(parseInt(data.humidity))
+  //   // //  }
      
-     });
+  //   //  });
  
-     return () => { // 화면 끝
-       socket.disconnect() ;
-       console.log('myfarm 끝');
-     }
+  //    return () => { // 화면 끝
+  //     socket.disconnect() ;
+  //     console.log('myfarm 끝');
+  //    }
 
-    }    //예외 처리
-   }, []) ;
+  //   // }    //예외 처리
+  //  },[]) ;
 
 
   
@@ -286,7 +319,8 @@ export default function MyFarm(){
                 {!nodivice && !loading && isOkDeviceId ===202 && !programInfo && <span >선택된 프로그램이 없습니다. 팜 환경 설정에서 프로그램을 선택해 주세요</span>}
                 {loading && <span >Loding...</span>}
                 {/* !nodivice &&  임의로 지정*/}
-                { !nodivice && !loading && programInfo && 
+                
+                {!nodivice && !loading && programInfo && 
                   <><div className='grap-wrap'>
                     <div className = "grap">
                         <LogoutChart />
@@ -321,12 +355,12 @@ export default function MyFarm(){
 
                         <div className='info-right'>
                           <div className='today-box'>
-                            <span>진행 중인 프로그램</span>
-                            <span>{isOkProgramInfo === 202 && programInfo[0].prg_name}</span>
+                            <div className='value1'>진행 중인 프로그램</div>
+                            <div className='value2'>{isOkProgramInfo === 202 && programInfo[0].prg_name}</div>
                           </div>
                           <div className='today-box'>
-                            <span>진행 날짜</span>
-                            <span></span>
+                            <div className='value1'>진행 날짜</div>
+                            <div className='value2'>3일 차</div>
                           </div>
                         </div>
 
@@ -343,9 +377,19 @@ export default function MyFarm(){
                         </div>
 
                         <div className='today-grow'>
-                          <h3>수확 가능한 버섯이 있어요!</h3>
-                          <img src={farmer} alt='farmer' className='farmer' />
-                          {/* <h3>아직은 수확 가능한 버섯이 없네요...</h3> */}
+                          {harvest ? 
+                          (
+                            <>
+                              <h3>수확 가능한 버섯이 있어요!</h3>
+                              <img src={farmer} alt='farmer' className='farmer' />
+                            </>
+                          ):
+                            <>
+                              <h3>아직은 수확 가능한 버섯이 없네요...</h3>
+                            </>
+                          }
+                          
+                          
                         </div>
 
                         <div className='from-move'> 

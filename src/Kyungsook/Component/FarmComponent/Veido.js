@@ -21,14 +21,7 @@ const Veido  = () =>{
 
     useEffect(() =>{
 
-        const api = axios.create({
-            baseURL : `${AWS_URL}`
-          }) ;
-          
           function get3dData() {
-            api.get('/api/url/ply/17').then((img_3d) => {
-        
-              const { data } = img_3d ;
         
               //3D공상 만들기
               var scene = new THREE.Scene();
@@ -42,8 +35,9 @@ const Veido  = () =>{
               
               //렌더러 정의 및 크기 지정, 문서에 추가
               var renderer = new THREE.WebGLRenderer();
-              renderer.setSize( WIDTH, HIGHT );
-
+              // renderer.setSize( WIDTH, HIGHT );
+              // renderer.setSize( window.innerWidth/4, window.innerHeight/4, false);
+              // console.log('window.innerWidth',window.innerWidth,'window.innerHeight',window.innerHeight);
               //빛 생성
               var light = new THREE.SpotLight();
               //적당한 위치에 놓기
@@ -57,7 +51,8 @@ const Veido  = () =>{
         
               const controls = new OrbitControls(camera, renderer.domElement) ;
           
-              loader.load(`${AWS_URL}/api/url/ply?url=${data}`, function(geometry){
+              //load
+              loader.load(`${AWS_URL}/api/ply/1`, function(geometry){
           
               geometry.computeVertexNormals() ;
               
@@ -82,12 +77,15 @@ const Veido  = () =>{
               //생성한 모델 장면에 추가
               scene.add(mesh) ;
           
-              },(xhr) => {
+              }
+              ,(xhr) => {
                 console.log( (xhr.loaded / xhr.total * 100) + '% loaded')
               },
               (error) => {
                   console.log(error);
               }
+              //load end
+
             ) ; 
             const stats = Stats() ;
         
@@ -105,20 +103,18 @@ const Veido  = () =>{
 
           //최초에 한번은 수행
           animate();
-            }) ;
-        
-          }
-        
+            }
+            
          get3dData() ;
     },[])
 
     return(
-      <View ref={element}>
+      <View  ref={element}>
       </View>
     )
 }
 
 const View = styled.div`
-    padding: 54px 0 0 55px;
+  height: 83%;
 `;
 export default Veido;

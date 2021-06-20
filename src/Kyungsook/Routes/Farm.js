@@ -1,11 +1,156 @@
-import React from 'react'
+import React, { useEffect, useState} from 'react'
 import {Redirect}   from 'react-router-dom' ;
+import Veido from '../Component/FarmComponent/Veido';
+import '../Css/farm2.css'
+import ProgressChart from '../../Beomhwan/Components/ProgressChart'
+import { 
+  getProgramInfo,
+  getMushroomInfo,
+  useKinokoDispatch,
+  getStartDay,
+  useKinokoState 
+} from '../../KinokoContext';
+import { concat } from '@amcharts/amcharts4/.internal/core/utils/Iterator';
+
 export default function Farm(){
+  //버섯 객체 정보 담기
+  const [growing, setGrowing]         = useState([])
+  const [harvest, setHarvest]         = useState([])
+  const [whiteflower, setWhiteflower] = useState([])
+  const [complete, setComplete]       = useState([])
+  const [kinokoList, setKinokoList]   = useState([])
+  //   //버섯 상태별
+  const kinokoState = ['growing', 'harvest', 'whiteflower', 'complete']
+  const [mushroomNum, setMushroomNum] = useState()
+
+
+  const state    = useKinokoState();
+  const dispatch = useKinokoDispatch();
+
+  // const socket = useRef(io('http://192.168.1.101:3000')) ;
+
+  const { data:DeviceId, isOk:isOkDeviceId } = state.muchinDeviceId; 
+  const { data:programInfo,  isOk:isOkProgramInfo } = state.programInfo; 
+  const { data:mushroomInfo,  isOk:isOkMushroomInfo } = state.getMushroomInfo; 
+  const { data:StartDay, isOk:isOkStartDay } = state.getStartDay; 
+
+  
+  useEffect(()=>{
+    if(isOkDeviceId === 202){
+      console.log('DeviceId', DeviceId.id);
+      getProgramInfo(dispatch,DeviceId.id)
+    }else {
+      alert('선택한 재배기가 없습니다.')
+    }
+  },[isOkDeviceId,dispatch,DeviceId])
+  useEffect(()=>{
+
+    if(isOkProgramInfo === 202){
+      console.log('isOkProgramInfo',programInfo[0]);
+      getMushroomInfo(dispatch,programInfo[0].id)
+      getStartDay(dispatch,programInfo[0].id)
+    }
+  },[isOkProgramInfo])
+
+  useEffect(()=>{
+    let num = [0,0,0,0]
+    if(isOkMushroomInfo === 202){
+      console.log('mushroomInfo',isOkMushroomInfo);
+      mushroomInfo.map( data =>{
+        // data.mr_status ==='growing' && console.log('data.mr_status',data.mr_status);
+        // data.mr_status ==='whiteflower' && console.log('data.mr_status',data.mr_status);
+        // data.mr_status ==='complete' && console.log('data.mr_status',data.mr_status);
+        if(data.mr_status ==='growing' ){
+          num[0] = num[0] + 1
+        }else if(data.mr_status ==='whiteflower'){
+          num[1] = num[1] + 1
+        }else if(data.mr_status ==='complete' ){
+          num[2] = num[2] + 1
+        }
+      }) 
+      
+      console.log(num);
+      setMushroomNum(num)
+    } 
+    
+    console.log(StartDay,'date');
+  },[isOkMushroomInfo])
+
+
   if(!window.Kakao.Auth.getAccessToken()) return <Redirect to='/join'/>
   return(
-    <div className='inner'>
-      <div>
-        sss
+    <div className='farm-wrap'>
+    {/* {isOkDeviceId !== 202 &&<Redirect to='/'/>} */}
+      <div className='inner'>
+      
+      <div className='farm-left'>
+        <div className='three-wrap'>
+          <div>3D 배지</div>
+          {/* <Veido/> */}
+        </div>
+      </div>
+      
+      <div className='farm-right'>
+        <div className='right-wrap'>
+
+          <div className='grap-wrap'>
+            <div className = "grap">
+              <div>
+                <ProgressChart />
+              </div>
+            </div>
+          </div>
+
+          <div className='farm-info-wrap'>
+            <div className='info-left'>
+              <div>
+                <div>
+                  사진
+                </div>
+                <div >
+                  <div>성장</div>
+                  <div>버섯 길이</div>
+                </div>
+              </div>
+            </div>
+            <div className='info-right'>
+              <div className='info-text-wrap'>
+                <h2>Today 버섯</h2>
+                <span>5개</span>
+              </div>
+
+              <div className='info-text-wrap'>
+                <h2>백화고</h2>
+                <span>5개</span>
+              </div>
+
+              <div className='info-text-wrap'>
+                <h2>수확 가능 버섯</h2>
+                <span>{mushroomNum && mushroomNum[2]}개</span>
+              </div>
+
+              <div className='info-text-wrap'>
+                <h2>성장중인 버섯</h2>
+                <span>5개</span>
+              </div>
+
+              <div className='info-text-wrap'>
+                <h2>수확한 버섯</h2>
+                <span>5개</span>
+              </div>
+
+              <div className='info-text-wrap'>
+                <h2>모든 버섯</h2>
+                <span>5개</span>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
       </div>
     </div>
   )
