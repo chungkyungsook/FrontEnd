@@ -96,7 +96,6 @@ class MyError extends Error {
 
 const Update = ({cookies, history}) => {
     const [loading, setLoading] = useState(true);
-    const [compareChartInfo, setCompareChartInfo] = useState({});
     const [optionCounts, setOptionCounts] = useState({});
     const [compareChartData, setCompareChartData] = useState({});
     const limitDate = useRef(0);
@@ -111,59 +110,45 @@ const Update = ({cookies, history}) => {
     });
 
     const state = useKinokoState();
-    const { data:DeviceId } = state.muchinDeviceId;
+    const { data:programInfo } = state.programInfo;
 
     useEffect(() => {
-        getRunningChartName(DeviceId.id).then(res => {
-            return res[0];
-        }).then(async prgInfo => {
-            if(prgInfo.id === 0) {
-                return false;
-            }
-            console.log('asklflasjfkljasfl: ', prgInfo);
+        getKinoko(programInfo[0].id).then(res => {
+            setKinokoCount(res.length);
+        })
+        getRunningChartInfo(programInfo[0].id, 'custom').then(async res => {
+            console.log(res);
+            extendDate.current = res.humidity.length + 1;
+            limitDate.current = res.humidity.length;
+            await setOptionCounts({
+                water: res.water,
+                sunshine: res.sunshine
+            });
+            setData(chartData => chartData.concat({
+                Date: extendDate.current + '일차',
+                Temperature: 20,
+                Humidity: 80
+            }));
 
-            await setCompareChartInfo({
-                id: prgInfo.id,
-                prg_name: prgInfo.prg_name
-            })
-
-            getKinoko(prgInfo.id).then(res => {
-                setKinokoCount(res.length);
-            })
-            getRunningChartInfo(prgInfo.id, 'custom').then(async res => {
-                console.log(res);
-                extendDate.current = res.humidity.length + 1;
-                limitDate.current = res.humidity.length;
-                await setOptionCounts({
-                    water: res.water,
-                    sunshine: res.sunshine
-                });
-                setData(chartData => chartData.concat({
-                    Date: extendDate.current + '일차',
-                    Temperature: 20,
-                    Humidity: 80
-                }));
-
-                let date = [];
-                let temp = [];
-                let humi = [];
-                let grow = [];
-                await res.humidity.map((ch,i) => {
-                    date.push((i + 1) + '일차');
-                    temp.push(res.temperature[i].setting_value);
-                    humi.push(ch.setting_value);
-                    if(res.growthRate.length !== 0) {
-                        grow.push(res.growthRate[i].gr_value);
-                    }
-                });
-                await setCompareChartData(setChartjsDataset(date, temp, humi, grow));
-                return true;
-            }).then(res => {
-                if(!res)
-                    setLoading(true);
-                else
-                    setLoading(false);
-            })
+            let date = [];
+            let temp = [];
+            let humi = [];
+            let grow = [];
+            await res.humidity.map((ch,i) => {
+                date.push((i + 1) + '일차');
+                temp.push(res.temperature[i].setting_value);
+                humi.push(ch.setting_value);
+                if(res.growthRate.length !== 0) {
+                    grow.push(res.growthRate[i].gr_value);
+                }
+            });
+            await setCompareChartData(setChartjsDataset(date, temp, humi, grow));
+            return true;
+        }).then(res => {
+            if(!res)
+                setLoading(true);
+            else
+                setLoading(false);
         })
     },[]);
 
@@ -234,7 +219,7 @@ const Update = ({cookies, history}) => {
         try{
             let temp = [];
             let humi = [];
-            let token = cookies.get('token');
+            let token = window.Kakao.Auth.getAccessToken();
             let period = data.length;
             data.map(ch => {
                 if(ch.Temperature > 27) {
@@ -247,14 +232,14 @@ const Update = ({cookies, history}) => {
                 humi.push(ch.Humidity);
             });
 
-            console.log(compareChartInfo.id);
+            console.log(programInfo[0].id);
             console.log(temp, humi);
             console.log(period);
             console.log(token);
             console.log(count);
 
             axios.put(`${URL}/api/farm/period/extend`, {
-                id: compareChartInfo.id,
+                id: programInfo[0].id,
                 token: token,
                 period: period,
                 temps: temp,
@@ -265,7 +250,7 @@ const Update = ({cookies, history}) => {
                 console.log(res);
                 setModalInfo({
                     opacity: 1,
-                    customId: compareChartInfo.id,
+                    customId: programInfo[0].id,
                     titleText: '프로그램을 성공적으로 연장했습니다.',
                     modalTextfirst: '',
                 });
@@ -302,7 +287,7 @@ const Update = ({cookies, history}) => {
                     <RanEnvironmentInfo>
                         <Description.DescriptionBox>
                             <Description.TitleBox>
-                                - {compareChartInfo.prg_name} -
+                                - {programInfo[0].prg_name} -
                             </Description.TitleBox>
                             <Description.CardFlex>
                                 <Description.CardBox>

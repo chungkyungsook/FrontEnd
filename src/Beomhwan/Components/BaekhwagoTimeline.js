@@ -33,141 +33,45 @@ const BaekhwagoTimeline = () => {
 
         timeline.data = [
             {
-                "category": "재배 기간",
-                "start": 1,
-                "end": 5,
-                "color": colorSet.getIndex(0),
-                "task": "버섯 재배"
+                "stage": "1단계",
+                "value": 1
             }, 
             {
-                "category": "예상 수확일",
-                "start": 1,
-                "end": 2,
-                "color": colorSet.getIndex(5),
-                "task": "예상 수확일"
+                "stage": "2단계",
+                "value": 2
+            },
+            {
+                "stage": "3단계",
+                "value": 3
             }, 
             {
-                "category": "예상 수확일",
-                "start": 2,
-                "end": 3,
-                "color": colorSet.getIndex(10),
-                "task": "예상 수확일"
-            }, 
+                "stage": "4단계",
+                "value": 4
+            },
             {
-                "category": "예상 수확일",
-                "start": 3,
-                "end": 4,
-                "color": colorSet.getIndex(15),
-                "task": "예상 수확일"
-            }, 
-            {
-                "category": "예상 수확일",
-                "start": 4,
-                "end": 5,
-                "color": colorSet.getIndex(15),
-                "task": "예상 수확일"
-            }, 
+                "stage": "5단계",
+                "value": 5
+            },
         ];
 
-        timeline.dateFormatter.dateFormat = 'yyyy-MM-dd';
-        timeline.dateFormatter.ainputDateFormat = 'yyyy-MM-dd';
-        timeline.fontSize = 11;
+        // let stageAxis = timeline.yAxes.push(new am4charts.CategoryAxis());
+        // stageAxis.dataFields.category = "stage";
+        // stageAxis.renderer.grid.template.disabled = true;
+        // stageAxis.renderer.labels.template.paddingRight = 25;
+        // stageAxis.renderer.minGridDistance = 10;
+        // stageAxis.renderer.innerRadius = -60;
+        // stageAxis.renderer.radius = 60;
 
-        let categoryAxis = timeline.yAxes.push(new am4charts.CategoryAxis());
-        categoryAxis.dataFields.category = "category";
-        categoryAxis.renderer.grid.template.disabled = true;
-        categoryAxis.renderer.labels.template.paddingRight = 25;
-        categoryAxis.renderer.minGridDistance = 10;
-        categoryAxis.renderer.innerRadius = -60;
-        categoryAxis.renderer.radius = 60;
+        // let valueAxis = timeline.yAxes.push(new am4charts.ValueAxis());
+        // valueAxis.renderer.radius = 100;
+        // valueAxis.renderer.innerRadius = 0;
+        // valueAxis.renderer.grid.template.disabled = true;
 
-        let dateAxis = timeline.xAxes.push(new am4charts.DateAxis());
-        dateAxis.renderer.minGridDistance = 70;
-        dateAxis.baseInterval = { count: 1, timeUnit: "day" };
-        dateAxis.renderer.tooltipLocation = 0;
-        dateAxis.startLocation = -0.5;
-        dateAxis.renderer.line.strokeDasharray = "1,4";
-        dateAxis.renderer.line.strokeOpacity = 0.6;
-        dateAxis.tooltip.background.fillOpacity = 0.2;
-        dateAxis.tooltip.background.cornerRadius = 5;
-        dateAxis.tooltip.label.fill = new am4core.InterfaceColorSet().getFor("alternativeBackground");
-        dateAxis.tooltip.label.paddingTop = 7;
-
-        let labelTemplate = dateAxis.renderer.labels.template;
-        labelTemplate.verticalCenter = 'middle';
-        labelTemplate.fillOpacity = 0.7;
-        labelTemplate.background.fill = new am4core.InterfaceColorSet().getFor('background');
-        labelTemplate.background.fillOpacity = 1;
-        labelTemplate.padding(7, 7, 7, 7);
-
-        let series = timeline.series.push(new am4timeline.CurveColumnSeries());
-        series.columns.template.height = am4core.percent(20);
-        series.columns.template.tooltipText = '{task}:[bold]{openDateX}[/] - [bold]{dateX}[/]';
-
-        series.dataFields.openDateX = "start";
-        series.dataFields.dateX = "end";
-        series.dataFields.categoryY = "category";
-        series.columns.template.propertyFields.fill = "color"; // get color from data
-        series.columns.template.propertyFields.stroke = "color";
-        series.columns.template.strokeOpacity = 0;
-
-        let bullet = series.bullets.push(new am4charts.CircleBullet());
-        bullet.circle.radius = 3;
-        bullet.circle.strokeOpacity = 0;
-        bullet.propertyFields.fill = "color";
-        bullet.locationX = 0;
-
-
-        let bullet2 = series.bullets.push(new am4charts.CircleBullet());
-        bullet2.circle.radius = 3;
-        bullet2.circle.strokeOpacity = 0;
-        bullet2.propertyFields.fill = "color";
-        bullet2.locationX = 1;
-
-
-        let imageBullet1 = series.bullets.push(new am4bullets.PinBullet());
-        imageBullet1.disabled = true;
-        imageBullet1.propertyFields.disabled = "disabled1";
-        imageBullet1.locationX = 1;
-        imageBullet1.circle.radius = 10;
-        imageBullet1.propertyFields.stroke = "color";
-        imageBullet1.background.propertyFields.fill = "color";
-
-        let imageBullet2 = series.bullets.push(new am4bullets.PinBullet());
-        imageBullet2.disabled = true;
-        imageBullet2.propertyFields.disabled = "disabled2";
-        imageBullet2.locationX = 0;
-        imageBullet2.circle.radius = 10;
-        imageBullet2.propertyFields.stroke = "color";
-        imageBullet2.background.propertyFields.fill = "color";
-
-        // let eventSeries = timeline.series.push(new am4timeline.CurveLineSeries());
-        // eventSeries.dataFields.dateX = "eventDate";
-        // eventSeries.dataFields.categoryY = "category";
-        // eventSeries.data = [
-        //     { category: "", eventDate: "2019-01-10", letter: "A", description: "Something happened here" },
-        //     { category: "", eventDate: "2019-01-12", letter: "B", description: "Something happened here" }];
-        // eventSeries.strokeOpacity = 0;
-
-        // let flagBullet = eventSeries.bullets.push(new am4bullets.FlagBullet())
-        // flagBullet.label.propertyFields.text = "letter";
-        // flagBullet.locationX = 0;
-        // flagBullet.tooltipText = "{description}";
-
-        // timeline.scrollbarX = new am4core.Scrollbar();
-        // timeline.scrollbarX.align = "center"
-        // timeline.scrollbarX.width = am4core.percent(70);
-
-        let cursor = new am4timeline.CurveCursor();
-        timeline.cursor = cursor;
-        cursor.xAxis = dateAxis;
-        cursor.yAxis = categoryAxis;
-        cursor.lineY.disabled = true;
-        cursor.lineX.strokeDasharray = "1,4";
-        cursor.lineX.strokeOpacity = 1;
-
-        dateAxis.renderer.tooltipLocation2 = 0;
-        categoryAxis.cursorTooltipEnabled = false;
+        // let series = timeline.series.push(new am4timeline.SerpentineChart());
+        // series.dataFields.valueY = 'value';
+        // series.dataFields.categoryX = 'state';
+        // series.columns.template.fillOpacity = 0.5;
+        // series.columns.template.strokeWidth = 2;
 
         timeLineRef.current = timeline;
         return () => timeline.dispose();
