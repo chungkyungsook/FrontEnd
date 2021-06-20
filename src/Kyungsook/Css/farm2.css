@@ -1,0 +1,116 @@
+.farm-wrap{
+  height: 100%;
+}
+.farm-wrap .inner{
+  background-color: rgb(224 224 218);
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.farm-wrap .farm-left{
+  width: 36%;
+  height: 95%;
+  display: flex;
+  justify-content: center;
+}
+.farm-wrap .farm-left .three-wrap{
+  background-color: white;
+  box-sizing: border-box;
+  border: 2px solid rgb(145, 163, 119, 0.8);
+  width: 98%;
+  height: 100%;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.farm-wrap .farm-left .three-wrap div{
+  box-sizing: border-box;
+  font-weight: 700;
+  border-radius: 5px;
+  display: flex;
+  width: 95%;
+  color: #ffffff;
+  background-color: rgb(145, 163, 119, 0.8);
+  margin: 10px;
+  justify-content: center;
+  
+}
+
+.farm-wrap .farm-right {
+  width: 60%;
+  height: 95%;
+  display: flex;
+  justify-content: center;
+}
+
+.farm-wrap .farm-right .right-wrap{
+  width: 95%;
+
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.farm-wrap .farm-right .right-wrap .grap-wrap{
+  height: 37%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  border: 2px solid rgb(145, 163, 119, 0.8);
+  justify-content: center;
+  border-radius: 10px;
+}
+.farm-wrap .farm-right .right-wrap .grap-wrap .grap{
+  
+}
+.farm-wrap .farm-right .right-wrap .farm-info-wrap{
+  height: 61%;
+  width: 100%;
+  display: flex;
+  border-radius: 10px;
+  align-items: center;
+  justify-content: space-around;
+}
+.farm-wrap .farm-right .right-wrap .farm-info-wrap .info-left{
+  width: 63%;
+  height: 95%;
+  border-radius: 5px;
+  background-color: rgb(145, 163, 119, 0.8);
+}
+.farm-wrap .farm-right .right-wrap .farm-info-wrap .info-right{
+  width: 20%;
+  background-color: #6c757d;
+  color: rgb(22, 22, 22);
+  border-radius: 5px;
+  height: 93%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  align-items: center;
+}
+.farm-wrap .farm-right .right-wrap .farm-info-wrap .info-right::-webkit-scrollbar{
+display: none; /* Chrome, Safari, Opera*/
+}
+.farm-wrap .farm-right .right-wrap .farm-info-wrap .info-right .info-text-wrap{
+  font-weight: 700;
+  text-align: center;
+  width: 92%;
+  height: 64px;
+  margin: 5px;
+  background-color: #ffffff;
+  border-radius: 3px;
+}
+.farm-wrap .farm-right .right-wrap .farm-info-wrap .info-right .info-text-wrap h2{
+  margin: 5px;
+}
+.farm-wrap .farm-right .right-wrap .farm-info-wrap .info-right .info-text-wrap span{
+
+}

@@ -16,11 +16,11 @@ import Farm from './Routes/Farm' ;
 import Movie from './Routes/Movie' ;
 
 const Container = styled.div`
-    
+    height: calc(100% - 70px);
 `;
 
 const TemplateContainer = styled.div`
-
+    height: calc(100% - 43px);
 `;
 
 
