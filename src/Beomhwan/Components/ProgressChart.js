@@ -1,4 +1,4 @@
-import React, {useLayoutEffect, useRef, useState, useEffect} from 'react';
+import React, {useLayoutEffect, useState, useEffect} from 'react';
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import * as am4plugins_bullets from '@amcharts/amcharts4/plugins/bullets';
@@ -6,22 +6,17 @@ import am4themes_animated from '@amcharts/amcharts4/themes/animated';
 import axios from 'axios';
 import styled from 'styled-components';
 import {URL} from '../Util';
-import { getProgramInfo, useKinokoState, useKinokoDispatch } from '../../KinokoContext';
+import { useKinokoState } from '../../KinokoContext';
 
 const ProgressChart = () => {
-    console.log(window.location.pathname);
     const [chartData, setChartData] = useState([]);
     const [loading, setLoading] = useState(true);
     const state = useKinokoState();
-    const dispatch = useKinokoDispatch();
     console.log(state);
     const {data: programInfo} = state.programInfo;
     console.log(programInfo);
 
     useEffect(() => {
-        getProgramInfo(dispatch, 'me').then(res => {
-            console.log(res);
-        })
         async function getPrgData(prg_id) {
             let chartData = [];
             await axios.get(`${URL}/api/farm/data`, {
@@ -45,9 +40,9 @@ const ProgressChart = () => {
             });
         }
         if(programInfo !== null) {
-            getPrgData(programInfo[0].id);
+            setTimeout(() => getPrgData(programInfo[0].id), 2000)
         }
-    },[]);
+    },[programInfo]);
 
     useLayoutEffect(() => {
         if(programInfo) {
@@ -197,17 +192,22 @@ const ProgressChart = () => {
     }, [loading]);
 
     if(loading) {
-        return <>Now Loading...</>
+        return <Msg>Now Loading...</Msg>
     }
 
     if(!programInfo) {
-        return <>현재 프로그램이 실행 되고 있지 않습니다.</>
+        return <Msg>현재 프로그램이 실행 되고 있지 않습니다.</Msg>
     }
 
     return (
         <ProgressBox id="progressChart" />
     );
 }
+
+const Msg = styled.p`
+    text-align: center;
+    font-size: 1.4em;
+`;
 
 const ProgressBox = styled.div`
     width: 100%;
