@@ -1,6 +1,6 @@
 import React, { useEffect, useState,useRef} from 'react'
 import {Redirect}   from 'react-router-dom' ;
-import Veido from '../Component/FarmComponent/Veido';
+import VeidoMushroom from '../Component/FarmComponent/VeidoMushroom';
 import '../Css/farm2.css'
 import ProgressChart from '../../Beomhwan/Components/ProgressChart'
 import { 
@@ -23,6 +23,7 @@ import "swiper/components/navigation/navigation.min.css"
 import SwiperCore, {
   Pagination,Navigation
 } from 'swiper/core';
+import { AWS_URL, IMG_COMPOST } from '../../Util/api';
 
 // install Swiper modules
 SwiperCore.use([Pagination,Navigation]);
@@ -40,15 +41,33 @@ export default function Farm(){
   // const socket = useRef(io('http://192.168.1.101:3000')) ;
 
   const { data:DeviceId, isOk:isOkDeviceId } = state.muchinDeviceId; 
-  const { data:programInfo,  isOk:isOkProgramInfo } = state.programInfo; 
-  const { data:mushroomInfo,  isOk:isOkMushroomInfo } = state.getMushroomInfo; 
+  const { data:programInfo,  isOk:isOkProgramInfo ,loading: loadingProgramInfo} = state.programInfo; 
+  const { data:mushroomInfo,  isOk:isOkMushroomInfo ,loading: lodingMushroomInfo} = state.getMushroomInfo; 
   const { data:mushroomImg,  isOk:isOkMushroomImg } = state.getMushroomImg; 
   const { data:StartDay, isOk:isOkStartDay } = state.getStartDay; 
 
+
+  const [mushroomGrowing, setMushroomGrowing] = useState(false)
+  const [image, setImage] = useState(null)
+  const [imgData, setImgData] = useState(null)
   //오늘 날짜 
-  // const today = format(new Date(),'yyyy-MM-dd')
-  let today = new Date(2021,5,19)
-  today = format(today,'yyyy-MM-dd')
+  const today = format(new Date(),'yyyy-MM-dd')
+  // let today = new Date(2021,5,19)
+  // today = format(today,'yyyy-MM-dd')
+
+  // 객체 버섯 정보 가져오기
+  const onGetMushroom = (data)=>{
+    console.log('data',data);
+    setMushroomGrowing({
+      growing: data.mr_growthrate,
+      cm :data.mr_size
+    })
+    let obj = Object.keys(data).map(function (key) { return data[key]; })
+    setImgData(obj)
+    //해당 버섯 객체 사진 가져오기
+  getMushroomImg(dispatch,data.mr_imgid)
+
+  }
   
   useEffect(()=>{
     if(isOkDeviceId === 202){
@@ -98,19 +117,44 @@ export default function Farm(){
     
   },[isOkMushroomInfo])
 
+      
 
   if(!window.Kakao.Auth.getAccessToken()) return <Redirect to='/join'/>
+  if(loadingProgramInfo) return (
+    <div className='farm-wrap'> 
+      <div className='inner'>Loding....</div>
+    </div>
+  )
+  if(lodingMushroomInfo) return (
+    <div className='farm-wrap'> 
+      <div className='inner'>Loding....</div>
+    </div>
+  )
   return(
     <div className='farm-wrap'>
-    {/* {isOkDeviceId !== 202 &&<Redirect to='/'/>} */}
+    {isOkDeviceId !== 202 &&<Redirect to='/'/>}
       <div className='inner'>
-      
       <div className='farm-left'>
         <div className='three-wrap'>
           <div>3D 배지</div>
-          <Veido/>
+          <VeidoMushroom/>
           <div className='farm-btn-wrap'>
-            <button>선택</button>
+            
+            {
+              mushroomInfo !== null && (
+                console.log('isOkMushroomInfo',isOkMushroomInfo),
+                mushroomInfo.map(data =>(
+                  data.mr_status ==='growing'?
+                    <button onClick={() => onGetMushroom(data)}>성장버섯</button>
+                  : data.mr_status ==='harvest' ?
+                    <button onClick={() => onGetMushroom(data)}>수확가능</button>
+                  :data.mr_status ==='whiteflower'?
+                    <button onClick={() => onGetMushroom(data)}>백화고</button>
+                  : null
+              ))
+              ) 
+            }
+          
           </div>
         </div>
       </div>
@@ -130,25 +174,26 @@ export default function Farm(){
                 <Swiper pagination={{
                   "type": "progressbar"
                   }} navigation={true} className="mySwiper">
-
-                  <SwiperSlide>Slide 1</SwiperSlide>
-                  <SwiperSlide>Slide 2</SwiperSlide>
-                  <SwiperSlide>Slide 3</SwiperSlide>
-                  <SwiperSlide>Slide 4</SwiperSlide>
-                  <SwiperSlide>Slide 5</SwiperSlide>
-                  <SwiperSlide>Slide 6</SwiperSlide>
-                  <SwiperSlide>Slide 7</SwiperSlide>
-                  <SwiperSlide>Slide 8</SwiperSlide>
-                  
+                  {!mushroomGrowing ? 
+                  <SwiperSlide>버섯 버튼을 눌러보세요!</SwiperSlide> 
+                  : 
+                  <>
+                  {imgData !== null &&  imgData.map(
+                    data =>(
+                      <SwiperSlide><img src={`${AWS_URL}${IMG_COMPOST}/1`}/></SwiperSlide>
+                  ))
+                  }
+                  </>
+                }
                 </Swiper>
                 <div className='mushroom-info'>
                   <div className='grow-box'>
                     <div className='text2'>성장률</div>
-                    <spna className='text3'>20%</spna>
+                    <spna className='text3'>{mushroomGrowing ? mushroomGrowing.growing : 0}%</spna>
                   </div>
                   <div className='grow-box'>
                     <div className='text2'>버섯 길이</div>
-                    <spna className='text3'>2cm</spna>
+                    <spna className='text3'>{mushroomGrowing ? mushroomGrowing.cm : 0}cm</spna>
                   </div>
                 </div>
             </div>
