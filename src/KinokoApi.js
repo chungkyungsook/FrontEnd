@@ -11,7 +11,8 @@ import {
   MACHINE_ID,
   MUSHROOM_ALL,
   PRG_NAME,
-  DATE
+  DATE,
+  IMG_COMPOST
 } from './Util/api'
 
 export async function getUsers() {
@@ -101,7 +102,6 @@ export async function getMachineSetting(id){
         // token: window.Kakao.Auth.getAccessToken()
       token: window.Kakao.Auth.getAccessToken()
   });
-  console.log('gggg',response);
   return response.data
 }
 
@@ -137,7 +137,13 @@ export async function getStartDay(prgId){
   return response.data
 }
 
-
+// 객체 하나의 버섯 사진 가져오기
+export async function getMushroomImg(id){
+  const response = await axios.put(`${AWS_URL}${IMG_COMPOST}`,{
+      id : id,
+  });
+  return response.data
+}
 
 
 

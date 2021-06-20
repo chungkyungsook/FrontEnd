@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from 'react'
+import React, { useEffect, useState,useRef} from 'react'
 import {Redirect}   from 'react-router-dom' ;
 import Veido from '../Component/FarmComponent/Veido';
 import '../Css/farm2.css'
@@ -8,23 +8,32 @@ import {
   getMushroomInfo,
   useKinokoDispatch,
   getStartDay,
-  useKinokoState 
+  useKinokoState ,
+  getMushroomImg
 } from '../../KinokoContext';
-import { concat } from '@amcharts/amcharts4/.internal/core/utils/Iterator';
 import { format } from 'date-fns';
+
+import { Swiper, SwiperSlide } from "swiper/react";
+// Import Swiper styles
+import "swiper/swiper.min.css";
+import "swiper/components/pagination/pagination.min.css"
+import "swiper/components/navigation/navigation.min.css"
+
+// import Swiper core and required modules
+import SwiperCore, {
+  Pagination,Navigation
+} from 'swiper/core';
+
+// install Swiper modules
+SwiperCore.use([Pagination,Navigation]);
+
 export default function Farm(){
-  //버섯 객체 정보 담기
-  const [growing, setGrowing]         = useState([])
-  const [harvest, setHarvest]         = useState([])
-  const [whiteflower, setWhiteflower] = useState([])
-  const [complete, setComplete]       = useState([])
-  const [kinokoList, setKinokoList]   = useState([])
+
   
-  //   //버섯 상태별
-  const kinokoState = ['growing', 'harvest', 'whiteflower', 'complete','mushroomAll','today']
+  //버섯 성장 상태별로 저장 
   const [mushroomNum, setMushroomNum] = useState()
 
-
+  //context 
   const state    = useKinokoState();
   const dispatch = useKinokoDispatch();
 
@@ -33,6 +42,7 @@ export default function Farm(){
   const { data:DeviceId, isOk:isOkDeviceId } = state.muchinDeviceId; 
   const { data:programInfo,  isOk:isOkProgramInfo } = state.programInfo; 
   const { data:mushroomInfo,  isOk:isOkMushroomInfo } = state.getMushroomInfo; 
+  const { data:mushroomImg,  isOk:isOkMushroomImg } = state.getMushroomImg; 
   const { data:StartDay, isOk:isOkStartDay } = state.getStartDay; 
 
   //오늘 날짜 
@@ -99,6 +109,9 @@ export default function Farm(){
         <div className='three-wrap'>
           <div>3D 배지</div>
           <Veido/>
+          <div className='farm-btn-wrap'>
+            <button>선택</button>
+          </div>
         </div>
       </div>
       
@@ -114,10 +127,29 @@ export default function Farm(){
           <div className='farm-info-wrap'>
             <div className='info-left'>
                 <h1>버섯 갤러리</h1>
-                
-                <div >
-                  <div>성장</div>
-                  <div>버섯 길이</div>
+                <Swiper pagination={{
+                  "type": "progressbar"
+                  }} navigation={true} className="mySwiper">
+
+                  <SwiperSlide>Slide 1</SwiperSlide>
+                  <SwiperSlide>Slide 2</SwiperSlide>
+                  <SwiperSlide>Slide 3</SwiperSlide>
+                  <SwiperSlide>Slide 4</SwiperSlide>
+                  <SwiperSlide>Slide 5</SwiperSlide>
+                  <SwiperSlide>Slide 6</SwiperSlide>
+                  <SwiperSlide>Slide 7</SwiperSlide>
+                  <SwiperSlide>Slide 8</SwiperSlide>
+                  
+                </Swiper>
+                <div className='mushroom-info'>
+                  <div className='grow-box'>
+                    <div className='text2'>성장률</div>
+                    <spna className='text3'>20%</spna>
+                  </div>
+                  <div className='grow-box'>
+                    <div className='text2'>버섯 길이</div>
+                    <spna className='text3'>2cm</spna>
+                  </div>
                 </div>
             </div>
             <div className='info-right'>

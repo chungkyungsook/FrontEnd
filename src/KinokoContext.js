@@ -21,7 +21,8 @@ const initialState = {
   muchinDeviceId:initialAsyncState,
   programInfo: initialAsyncState,
   getMushroomInfo:initialAsyncState,
-  getStartDay: initialAsyncState
+  getStartDay: initialAsyncState,
+  getMushroomImg:initialAsyncState
 };
 
 const usersHandler = createAsyncHandler('GET_USERS', 'users');
@@ -41,7 +42,10 @@ const programInfoHandler = createAsyncHandler('GET_PROGRAM_INFO', 'programInfo')
 
 //getMushroomInfo
 const mushroomInfoHandler = createAsyncHandler('GET_MUSHROOM_INFO', 'getMushroomInfo')
+const mushroomImgHandler = createAsyncHandler('GET_MUSHROOM_IMG', 'getMushroomImg')
 const startDayHandler = createAsyncHandler('GET_START_DATE', 'getStartDay')
+
+
 const logoutHandler = createAsyncHandler('LOGOUT','logout');
 
 
@@ -100,6 +104,10 @@ function usersReducer(state, action) {
     case 'GET_START_DATE_SUCCESS':
     case 'GET_START_DATE_ERROR':
       return startDayHandler(state, action);
+    case 'GET_MUSHROOM_IMG':
+    case 'GET_MUSHROOM_IMG_SUCCESS':
+    case 'GET_MUSHROOM_IMG_ERROR':
+      return mushroomImgHandler(state, action);
     case 'LOGOUT':
     case 'LOGOUT_SUCCESS':
     case 'LOGOUT_ERROR':
@@ -176,3 +184,6 @@ export const getStartDay = createAsyncDispatcher('GET_START_DATE',api.getStartDa
 
 // 모든 버섯 성장 정보 가져오기
 export const getMushroomInfo = createAsyncDispatcher('GET_MUSHROOM_INFO',api.getMushroomInfo)
+
+// 객체 하나의 버섯 사진 가져오기
+export const getMushroomImg = createAsyncDispatcher('GET_MUSHROOM_IMG',api.getMushroomImg)

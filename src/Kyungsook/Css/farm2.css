@@ -82,7 +82,81 @@
   height: 95%;
   border-radius: 5px;
   background-color: rgb(145, 163, 119, 0.8);
+  position: relative;
 }
+.farm-wrap .farm-right .right-wrap .farm-info-wrap .info-left h1{
+  text-align: center;
+  font-weight: 700;
+  background: #666666e8;
+  color: #fff;
+  width: 109px;
+  height: 24px;
+  border-radius: 10px;
+  margin: 5px auto;
+  margin-top: -13px;
+}
+/* swiper */
+.farm-wrap .farm-right .right-wrap .farm-info-wrap .info-left .swiper-container {
+  width: 86%;
+  height: 72%;
+}
+
+.farm-wrap .farm-right .right-wrap .farm-info-wrap .info-left .swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+
+  /* Center slide text vertically */
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+.farm-wrap .farm-right .right-wrap .farm-info-wrap .info-left .swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.farm-wrap .farm-right .right-wrap .farm-info-wrap .info-left .mushroom-info{
+  display: flex;
+  justify-content: space-evenly;
+  height: calc(28% - 24px);
+  flex-direction: row;
+  align-items: flex-end;
+}
+.farm-wrap .farm-right .right-wrap .farm-info-wrap .info-left .mushroom-info .grow-box{
+  display: flex;
+  flex-direction: row;
+  background-color: white;
+  width: 40%;
+  height: 83%;
+  justify-content: space-evenly;
+  align-items: center;
+  border-radius: 13px;
+}
+.farm-wrap .farm-right .right-wrap .farm-info-wrap .info-left .mushroom-info .grow-box .text2{
+  font-weight: 700;
+}
+.farm-wrap .farm-right .right-wrap .farm-info-wrap .info-left .mushroom-info .grow-box .text3{
+  font-weight: 700;
+  font-size: 20px;
+}
+
+
+
+
+
 .farm-wrap .farm-right .right-wrap .farm-info-wrap .info-right{
   width: 20%;
   background-color: #6c757d;
