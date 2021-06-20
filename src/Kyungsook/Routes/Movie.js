@@ -13,7 +13,7 @@ import '../Css/Movie.css';
 // import { number } from '@amcharts/amcharts4/core';
 import{
   AWS_URL,
-  CLUSTER
+  IMG_COMPOST
 }from '../../Util/api'
 import { log } from 'three';
 SwiperCore.use([Navigation, Pagination,Thumbs]);
@@ -41,7 +41,7 @@ const Movie = (props) => {
       
       
     const kinokoImg = async () => { // 모든 이미지 저장 temp
-        await axios.get(`${AWS_URL}${CLUSTER}/1`, {
+        await axios.get(`${AWS_URL}${IMG_COMPOST}/1`, {
           params : {
             token : props.cookies.get('token') 
           }
