@@ -82,7 +82,9 @@ export default function Farm(){
       num[4] = mushroomInfo.length
       console.log(num);
       setMushroomNum(num)
-    } 
+    }else{
+      setMushroomNum(num)
+    }
     
   },[isOkMushroomInfo])
 
@@ -96,7 +98,7 @@ export default function Farm(){
       <div className='farm-left'>
         <div className='three-wrap'>
           <div>3D 배지</div>
-          {/* <Veido/> */}
+          <Veido/>
         </div>
       </div>
       
