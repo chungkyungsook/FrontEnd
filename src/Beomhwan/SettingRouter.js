@@ -30,16 +30,22 @@ const TemplateContainer = styled.div`
     width: 100%;
 `;
 
-const SettingRouter = ({location, value, history}) => {
+const SettingRouter = ({location, history}) => {
     const {pathname} = location;
 
     const state = useKinokoState();
     console.log(state);
     const { data:DeviceId } = state.muchinDeviceId;
 
-    if(!window.Kakao.Auth.getAccessToken()) return <Redirect to='/join'/>
+    if(!window.Kakao.Auth.getAccessToken()) {
+        alert('잘못된 접근입니다!');
+        return <Redirect to='/join'/>;
+    }
 
-    if(!DeviceId) return <Redirect to='/' />
+    if(!DeviceId) {
+        alert('기기를 선택해주세요!');
+        return <Redirect to='/' />;
+    }
 
     return (
         <Container className="inner">
