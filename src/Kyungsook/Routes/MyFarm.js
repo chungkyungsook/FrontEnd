@@ -42,16 +42,21 @@ export default function MyFarm(){
   const state    = useKinokoState();
   const dispatch = useKinokoDispatch();
 
+    //오늘 날짜 
+    const today = format(new Date(),'yyyy-MM-dd')
+    // let today = new Date(2021,5,19)
+    // today = format(today,'yyyy-MM-dd')
+
   // const socket = useRef(io('http://192.168.1.101:3000')) ;
 
   const { data: muchinList, loading, error } = state.muchinList; 
   const { data: muchinKey, error: errKey, isOk: isOkKey } = state.muchinKey; 
   const { error: errPwd, isOk:isOkPwd } = state.muchinPwd; 
   const {  error: errDevice, isOk:isOkDevice } = state.muchinMakeDevice; 
-  const { data:DeviceId, error: errDeviceId, isOk:isOkDeviceId } = state.muchinDeviceId; 
-  const { data:programInfo, error: errProgramInfo, isOk:isOkProgramInfo } = state.programInfo; 
+  const { data:DeviceId, error: errDeviceId, isOk:isOkDeviceId ,loading:loadingDeviceId} = state.muchinDeviceId; 
+  const { data:programInfo, error: errProgramInfo, isOk:isOkProgramInfo ,loading:loadingProgramInfo} = state.programInfo; 
   const { data:mushroomInfo, error: errMushroomInfo, isOk:isOkMushroomInfo } = state.getMushroomInfo; 
-  const { data:StartDay, error: errStartDay, isOk:isOkStartDay } = state.getStartDay; 
+  const { data:StartDay, error: errStartDay, isOk:isOkStartDay , loading: startLoading} = state.getStartDay; 
 
   const [nodivice, setNodivece] = useState(false); // 처음 디바이스 정보 가져올 때
   const [deviceNumber, setDeviceNumber] = useState("")
@@ -62,6 +67,8 @@ export default function MyFarm(){
   const [inputValue, setInputValue] = useState('')
 
   const [ harvest, setHarvest] = useState(false)
+  const [todayMushroom, setTodayMushroom] = useState(false) // 오늘 자라난 버섯
+  const [startMushroom, setStartMushroom] = useState(false)
   
   //실시간 소캣 이미지 저장용
   const [image, setImage] = useState(null)
@@ -101,6 +108,7 @@ export default function MyFarm(){
       console.log('삭제, 선택 성공!');
       setNodivece(false)
       getMuchinList()
+      setValue(false)
     }else if(argIsOk === 444){
       console.log('삭제, 선택 실패!');
     }else{
@@ -174,7 +182,7 @@ export default function MyFarm(){
     if(isOkDeviceId === 202){
       console.log('DeviceId', DeviceId.id);
       getProgramInfo(dispatch,DeviceId.id)
-      setValue(true)
+      
     }
 
   },[loading, error,muchinList,isOkDeviceId,DeviceId,dispatch])
@@ -190,74 +198,101 @@ export default function MyFarm(){
 
   // 모든 버섯 정보 에서 수확활 버섯 있는지 확인하기
   useEffect(()=>{
+    let num = 0
+    let ingDay = 0
+    let start = new Date(StartDay)
+    let day = new Date()
     if(isOkMushroomInfo === 202){
       console.log('mushroomInfo',isOkMushroomInfo);
       mushroomInfo.map( data =>{
         data.mr_status ==='complete' && console.log('data.mr_status',data.mr_status);
-        data.mr_status ==='complete' && setHarvest(true)
-      })  
+        data.mr_status ==='harvest' && setHarvest(true)
+      })
+      
+      //오늘 자란 버섯 수
+      mushroomInfo.filter(data =>
+        format(new Date(data.mr_date),'yyyy-MM-dd') === today && (num = num + 1)
+      )
+
+      // 진행 날짜 구하기
+      if(StartDay) {
+
+        ingDay = (day.getTime() - start.getTime()) / (1000*60*60*24) + 1
+        // console.log( parseInt(ingDay));
+      }
+      setStartMushroom(parseInt(ingDay))
+      // 오늘 자란 버섯 수
+      setTodayMushroom(num)
+      setValue(true)
     } 
 
     console.log(StartDay,'date');
-  },[isOkMushroomInfo])
+  },[isOkMushroomInfo,StartDay])
 
   useEffect(() =>{
 
   },[harvest])
 
   //실시간 소캣 통신 
-  // useEffect(() => {
-  //   // if(value){
-  //    // 소켓 연결 코드
-  //    const socket = io('http://192.168.1.101:3000') ;
-  //    console.log('소캣 연결 확인 중');
+  useEffect(() => {
+    
+    if(value){
+      console.log('value',' 실행됨',value);
+    //  // 소켓 연결 코드
+    //  const socket = io('http://192.168.1.101:3000') ;
+    //  console.log('소캣 연결 확인 중');
 
 
-  //    console.log(socket) ;
+    //  console.log(socket) ;
      
-  //    socket.emit('req_video', true) ;
-  //    socket.on('res_video', (data) => {
+    //  socket.emit('req_video', true) ;
+    //  socket.on('res_video', (data) => {
 
-  //       console.log("소켓 사진 데이터", data) ;
+    //     console.log("소켓 사진 데이터", data) ;
      
-  //       //  const byte_chars = atob(data)
+    //      const byte_chars = atob(data)
 
-  //       //  const byteNumbers = new Array(byte_chars.length) ;
+    //      const byteNumbers = new Array(byte_chars.length) ;
    
-  //       //  for(let i = 0 ; i < byte_chars.length ; i++) {
-  //       //    byteNumbers[i] = byte_chars.charCodeAt(i) ;
-  //       //  }
-  //       //  const byteArray = new Uint8Array(byteNumbers) ;
+    //      for(let i = 0 ; i < byte_chars.length ; i++) {
+    //        byteNumbers[i] = byte_chars.charCodeAt(i) ;
+    //      }
+    //      const byteArray = new Uint8Array(byteNumbers) ;
    
-  //       //  const blob = new Blob([byteArray], { type : 'image/png' }) ;
+    //      const blob = new Blob([byteArray], { type : 'image/png' }) ;
        
-  //       //  setImage(URL.createObjectURL(blob)) ;
+    //      setImage(URL.createObjectURL(blob)) ;
    
           
-  //    }) ;
+    //  }) ;
  
-  //    // 온, 습도 데이터 요청
-  //   //  socket.emit('req_cosdata');
-  //   //  // 온, 습도 데이터 받아오는 이벤트
-  //   //  socket.on('res_cosdata', (data) => {
-  //   //          console.log("소캣 온 습도 값 가져오기",data);
-  //   //  // 재배기 온도 습도 작동 
-  //   //  //  parseInt(data.temperature) && parseInt(data.humidity) && maching_setting(parseInt(data.temperature), parseInt(data.humidity) ) 
-  //   //  // maching_setting(parseInt(data.temperature), parseInt(data.humidity) )
-  //   // //  if(data.temperature != null && data.humidity != null){
-  //   // //      setTemperature(parseInt(data.temperature))
-  //   // //      setHumidity(parseInt(data.humidity))
-  //   // //  }
+    //  // 온, 습도 데이터 요청
+    //  socket.emit('req_cosdata');
+    //  // 온, 습도 데이터 받아오는 이벤트
+    //  socket.on('res_cosdata', (data) => {
+    //          console.log("소캣 온 습도 값 가져오기",data);
+    //  // 재배기 온도 습도 작동 
+    //  //  parseInt(data.temperature) && parseInt(data.humidity) && maching_setting(parseInt(data.temperature), parseInt(data.humidity) ) 
+    //  // maching_setting(parseInt(data.temperature), parseInt(data.humidity) )
+    //  if(data.temperature != null && data.humidity != null){
+    //      setTemperature(parseInt(data.temperature))
+    //      setHumidity(parseInt(data.humidity))
+    //  }
      
-  //   //  });
- 
-  //    return () => { // 화면 끝
-  //     socket.disconnect() ;
-  //     console.log('myfarm 끝');
-  //    }
+    //  });
+    
+    //  return () => { // 화면 끝
+    //   socket.disconnect() ;
+    //   console.log('myfarm 끝');
+    //  }
 
-  //   // }    //예외 처리
-  //  },[]) ;
+    return()=>{
+      setValue(false)
+      console.log('value 끝');
+    }
+    }    //예외 처리 
+
+   },[value]) ;
 
 
   
@@ -316,11 +351,13 @@ export default function MyFarm(){
               <div className='right-wrap'>
                 {nodivice && <span >등록된 기기가 없습니다. 기기를 등록해 주세요</span>}
                 {!nodivice && !loading && isOkDeviceId !==202 && <span >선택된 기기가 없습니다. 기기를 선택해 주세요</span>}
-                {!nodivice && !loading && isOkDeviceId ===202 && !programInfo && <span >선택된 프로그램이 없습니다. 팜 환경 설정에서 프로그램을 선택해 주세요</span>}
+                {!nodivice && !loading && isOkDeviceId ===202 && !programInfo && !loadingProgramInfo && <span>선택된 프로그램이 없습니다. 팜 환경 설정에서 프로그램을 선택해 주세요</span>}
                 {loading && <span >Loding...</span>}
+                {!loading && loadingDeviceId && loadingProgramInfo && <span >Loding...1</span>}
+                {!loading && !nodivice && !loading && programInfo && startLoading && <span>Loding...2</span>}
                 {/* !nodivice &&  임의로 지정*/}
                 
-                {!nodivice && !loading && programInfo && 
+                {!nodivice && !loading && programInfo && !startLoading &&
                   <><div className='grap-wrap'>
                     <div className = "grap">
                         <LogoutChart />
@@ -360,7 +397,7 @@ export default function MyFarm(){
                           </div>
                           <div className='today-box'>
                             <div className='value1'>진행 날짜</div>
-                            <div className='value2'>3일 차</div>
+                            <div className='value2'>{startMushroom}일 차</div>
                           </div>
                         </div>
 
@@ -372,7 +409,7 @@ export default function MyFarm(){
 
                         <div className='today-info'>
                           <h3>  오늘 자란 버섯 수  </h3>
-                          <span className='today-growth'>4개</span>
+                          <span className='today-growth'>{todayMushroom ? todayMushroom : 0} 개</span>
                           {/* <span className='today-growth'>0...</span> */}
                         </div>
 

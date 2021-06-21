@@ -139,9 +139,7 @@ export async function getStartDay(prgId){
 
 // 객체 하나의 버섯 사진 가져오기
 export async function getMushroomImg(id){
-  const response = await axios.put(`${AWS_URL}${IMG_COMPOST}`,{
-      id : id,
-  });
+  const response = await axios.get(`${AWS_URL}${IMG_COMPOST}/1`);
   return response.data
 }
 
