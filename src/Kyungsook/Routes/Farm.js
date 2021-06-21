@@ -52,8 +52,6 @@ export default function Farm(){
   const [imgData, setImgData] = useState(null)
   //오늘 날짜 
   const today = format(new Date(),'yyyy-MM-dd')
-  // let today = new Date(2021,5,19)
-  // today = format(today,'yyyy-MM-dd')
 
   // 객체 버섯 정보 가져오기
   const onGetMushroom = (data)=>{
