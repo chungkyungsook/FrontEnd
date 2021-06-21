@@ -110,13 +110,11 @@ const PyogoTimeLine = () => {
         bullet.propertyFields.fill = "color";
         bullet.locationX = 0;
 
-
         let bullet2 = series.bullets.push(new am4charts.CircleBullet());
         bullet2.circle.radius = 3;
         bullet2.circle.strokeOpacity = 0;
         bullet2.propertyFields.fill = "color";
         bullet2.locationX = 1;
-
 
         let imageBullet1 = series.bullets.push(new am4bullets.PinBullet());
         imageBullet1.disabled = true;

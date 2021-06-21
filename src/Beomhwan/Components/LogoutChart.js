@@ -14,18 +14,18 @@ const LogoutChartComponent = ({loading, prgId, date}) => {
 
         let chart = am4core.create('logoutDiv', am4charts.XYChart);
         am4core.useTheme(am4themes_animated);
-        chart.scrollbarX = new am4core.Scrollbar();
         chart.cursor = new am4charts.XYCursor();
 
         let title = chart.titles.create();
         title.text = 'Now Loading...';
         title.fontSize = 20;
         title.tooltipText = "최근 로그아웃 시간 ~ 로그인 1시간 전까지 표시됩니다.";
+        title.marginBottom = 20;
 
         chart.legend = new am4charts.Legend();
 
         // data 삽입 => prg.prg_id도 추가할 것!
-        chart.dataSource.url = `${URL}/api/farm/logout/list?prgId=${prgId}&date=${date}`;
+        chart.dataSource.url = `${URL}/api/myfarm/data/hour?prgId=55`; // ${prgId}
         chart.dataSource.parser = new am4core.JSONParser();
         chart.dataSource.parser.options.emptyAs = 0;
         chart.dataSource.events.on("parseended", function(ev) {
