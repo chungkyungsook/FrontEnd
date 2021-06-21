@@ -73,8 +73,8 @@ export default function MyFarm(){
   //실시간 소캣 이미지 저장용
   const [image, setImage] = useState(null)
   // 재배기 온도, 습도 값 저장
-  const [temperature, setTemperature] = useState(100)
-  const [humidity, setHumidity] = useState(100)
+  const [temperature, setTemperature] = useState(27)
+  const [humidity, setHumidity] = useState(50)
 
   //가짜 데이터
   const [value, setValue] = useState(false)
@@ -223,7 +223,8 @@ export default function MyFarm(){
       setStartMushroom(parseInt(ingDay))
       // 오늘 자란 버섯 수
       setTodayMushroom(num)
-      setValue(true)
+      //소캣 통신을 위한 변수 / 프로그램 id가 있으면 소캣 통신 합니다. 
+      setValue(false)
     } 
 
     console.log(StartDay,'date');
@@ -238,58 +239,58 @@ export default function MyFarm(){
     
     if(value){
       console.log('value',' 실행됨',value);
-    //  // 소켓 연결 코드
-    //  const socket = io('http://192.168.1.101:3000') ;
-    //  console.log('소캣 연결 확인 중');
+     // 소켓 연결 코드
+     const socket = io('http://192.168.1.101:3000') ;
+     console.log('소캣 연결 확인 중');
 
 
-    //  console.log(socket) ;
+     console.log(socket) ;
      
-    //  socket.emit('req_video', true) ;
-    //  socket.on('res_video', (data) => {
+     socket.emit('req_video', true) ;
+     socket.on('res_video', (data) => {
 
-    //     console.log("소켓 사진 데이터", data) ;
+        console.log("소켓 사진 데이터", data) ;
      
-    //      const byte_chars = atob(data)
+         const byte_chars = atob(data)
 
-    //      const byteNumbers = new Array(byte_chars.length) ;
+         const byteNumbers = new Array(byte_chars.length) ;
    
-    //      for(let i = 0 ; i < byte_chars.length ; i++) {
-    //        byteNumbers[i] = byte_chars.charCodeAt(i) ;
-    //      }
-    //      const byteArray = new Uint8Array(byteNumbers) ;
+         for(let i = 0 ; i < byte_chars.length ; i++) {
+           byteNumbers[i] = byte_chars.charCodeAt(i) ;
+         }
+         const byteArray = new Uint8Array(byteNumbers) ;
    
-    //      const blob = new Blob([byteArray], { type : 'image/png' }) ;
+         const blob = new Blob([byteArray], { type : 'image/png' }) ;
        
-    //      setImage(URL.createObjectURL(blob)) ;
+         setImage(URL.createObjectURL(blob)) ;
    
           
-    //  }) ;
+     }) ;
  
-    //  // 온, 습도 데이터 요청
-    //  socket.emit('req_cosdata');
-    //  // 온, 습도 데이터 받아오는 이벤트
-    //  socket.on('res_cosdata', (data) => {
-    //          console.log("소캣 온 습도 값 가져오기",data);
-    //  // 재배기 온도 습도 작동 
-    //  //  parseInt(data.temperature) && parseInt(data.humidity) && maching_setting(parseInt(data.temperature), parseInt(data.humidity) ) 
-    //  // maching_setting(parseInt(data.temperature), parseInt(data.humidity) )
-    //  if(data.temperature != null && data.humidity != null){
-    //      setTemperature(parseInt(data.temperature))
-    //      setHumidity(parseInt(data.humidity))
-    //  }
+     // 온, 습도 데이터 요청
+     socket.emit('req_cosdata');
+     // 온, 습도 데이터 받아오는 이벤트
+     socket.on('res_cosdata', (data) => {
+             console.log("소캣 온 습도 값 가져오기",data);
+     // 재배기 온도 습도 작동 
+     //  parseInt(data.temperature) && parseInt(data.humidity) && maching_setting(parseInt(data.temperature), parseInt(data.humidity) ) 
+     // maching_setting(parseInt(data.temperature), parseInt(data.humidity) )
+     if(data.temperature != null && data.humidity != null){
+         setTemperature(parseInt(data.temperature))
+         setHumidity(parseInt(data.humidity))
+     }
      
-    //  });
+     });
     
-    //  return () => { // 화면 끝
-    //   socket.disconnect() ;
-    //   console.log('myfarm 끝');
-    //  }
+     return () => { // 화면 끝
+      socket.disconnect() ;
+      console.log('myfarm 끝');
+     }
 
-    return()=>{
-      setValue(false)
-      console.log('value 끝');
-    }
+    // return()=>{
+    //   setValue(false)
+    //   console.log('value 끝');
+    // }
     }    //예외 처리 
 
    },[value]) ;
@@ -353,8 +354,8 @@ export default function MyFarm(){
                 {!nodivice && !loading && isOkDeviceId !==202 && <span >선택된 기기가 없습니다. 기기를 선택해 주세요</span>}
                 {!nodivice && !loading && isOkDeviceId ===202 && !programInfo && !loadingProgramInfo && <span>선택된 프로그램이 없습니다. 팜 환경 설정에서 프로그램을 선택해 주세요</span>}
                 {loading && <span >Loding...</span>}
-                {!loading && loadingDeviceId && loadingProgramInfo && <span >Loding...1</span>}
-                {!loading && !nodivice && !loading && programInfo && startLoading && <span>Loding...2</span>}
+                {!loading && loadingDeviceId && loadingProgramInfo && <span >Loding...</span>}
+                {!loading && !nodivice && !loading && programInfo && startLoading && <span>Loding...</span>}
                 {/* !nodivice &&  임의로 지정*/}
                 
                 {!nodivice && !loading && programInfo && !startLoading &&

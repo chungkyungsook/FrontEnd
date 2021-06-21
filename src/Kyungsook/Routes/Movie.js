@@ -1,22 +1,103 @@
+import { Redirect } from "react-router-dom";
 
-import React, { useEffect, useRef, useState } from 'react' ;
-import axios from 'axios';
-import styled from 'styled-components';
 
-import {Redirect}   from 'react-router-dom' ;
+import React, { useRef, useState } from "react";
+// Import Swiper React components
+import { Swiper, SwiperSlide } from "swiper/react";
+import { AWS_URL } from "../../Util/api";
 
-import 'swiper/swiper-bundle.css';
-import '../Css/Movie.css';
+// Import Swiper styles
+import "swiper/swiper.min.css";
+import "swiper/components/pagination/pagination.min.css"
+import "swiper/components/navigation/navigation.min.css"
 
+import "../Css/movie2.css";
+import videoMushroom from '../../../src/videos/mock.mp4'
+// import '../../../node_modules/vide'
+// import Swiper core and required modules
+import SwiperCore, {
+  Pagination,Navigation
+} from 'swiper/core';
+
+// install Swiper modules
+SwiperCore.use([Pagination,Navigation]);
 
 export default function Movie(){
   if(!window.Kakao.Auth.getAccessToken()) return <Redirect to='/join'/>
-  return(
-    <div>
-      Movie
+
+  return (
+    <div className='movie-wrap'>
+      <div className='inner'>
+
+         <div className='movie-title'> &#60; MOVIE &#62;</div>
+         <div className='video-wrap'>
+         <Swiper pagination={{
+            "type": "progressbar"
+            }} navigation={false} className="mySwiper">
+          <SwiperSlide>
+              <video className='video-mushroom' controls >
+                <source src={`${AWS_URL}/api/mock/1`}/>
+              </video>
+
+            <div className='play-wrap'>
+              <a  className='btn-value' href={videoMushroom} download="Mushroom"> 다운로드 </a>
+            </div>
+          </SwiperSlide>
+          <SwiperSlide>
+              <video className='video-mushroom' controls >
+                <source src={`${AWS_URL}/api/mock/1`}/>
+              </video>
+
+            <div className='play-wrap'>
+              <a  className='btn-value' href={videoMushroom} download="Mushroom"> 다운로드 </a>
+            </div>
+          </SwiperSlide>
+        </Swiper>
+      
+        </div>
+      
+      </div>
     </div>
-  )
-}
+  );
+};
+
+// export default function Movie(){
+//   if(!window.Kakao.Auth.getAccessToken()) return <Redirect to='/join'/>
+//   return(
+//     <div className='movie-wrap'>
+//       <div className='inner'>
+//       <video controls >
+//               <source src={videoMushroom}/>
+//             </video>
+//         <div className='movie-title'> &#60; MOVIE &#62;</div>
+//         <div className='video-wrap'>
+//         <Swiper pagination={{
+//             "type": "progressbar"
+//             }} navigation={true} className="mySwiper">
+//           <SwiperSlide>
+//             <div>
+//             {/* <video controls >
+//               <source src={videoMushroom}/>
+//             </video> */}
+//             <div className='play-wrap'>
+//               <button className='btn value'> 재생 </button>
+//               <a href={videoMushroom} download> 다운로드 </a>
+//             </div>
+//             </div>
+//           </SwiperSlide>
+//           <SwiperSlide><img src="https://swiperjs.com/demos/images/nature-1.jpg" /></SwiperSlide>
+//           <SwiperSlide><img src="https://swiperjs.com/demos/images/nature-1.jpg" /></SwiperSlide>
+//           <SwiperSlide><img src="https://swiperjs.com/demos/images/nature-1.jpg" /></SwiperSlide>
+//           <SwiperSlide><img src="https://swiperjs.com/demos/images/nature-1.jpg" /></SwiperSlide>
+//           <SwiperSlide><img src="https://swiperjs.com/demos/images/nature-1.jpg" /></SwiperSlide>
+//         </Swiper>
+//         </div>
+
+
+//       </div>
+//     </div>
+//   )
+// }
 
 
 
