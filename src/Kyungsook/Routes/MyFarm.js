@@ -55,7 +55,7 @@ export default function MyFarm(){
   const {  error: errDevice, isOk:isOkDevice } = state.muchinMakeDevice; 
   const { data:DeviceId, error: errDeviceId, isOk:isOkDeviceId ,loading:loadingDeviceId} = state.muchinDeviceId; 
   const { data:programInfo, error: errProgramInfo, isOk:isOkProgramInfo ,loading:loadingProgramInfo} = state.programInfo; 
-  const { data:mushroomInfo, error: errMushroomInfo, isOk:isOkMushroomInfo } = state.getMushroomInfo; 
+  const { data:mushroomInfo, error: errMushroomInfo, isOk:isOkMushroomInfo ,loading: loadingMushroom} = state.getMushroomInfo; 
   const { data:StartDay, error: errStartDay, isOk:isOkStartDay , loading: startLoading} = state.getStartDay; 
 
   const [nodivice, setNodivece] = useState(false); // 처음 디바이스 정보 가져올 때
@@ -352,11 +352,14 @@ export default function MyFarm(){
             <div className='myfarm-right'>
               <div className='right-wrap'>
                 {nodivice && <span >등록된 기기가 없습니다. 기기를 등록해 주세요</span>}
-                {!nodivice && !loading && isOkDeviceId !==202 && <span >선택된 기기가 없습니다. 기기를 선택해 주세요</span>}
-                {!nodivice && !loading && isOkDeviceId ===202 && !programInfo && !loadingProgramInfo && <span>선택된 프로그램이 없습니다. 팜 환경 설정에서 프로그램을 선택해 주세요</span>}
                 {loading && <span >Loding...</span>}
-                {!loading && loadingDeviceId && loadingProgramInfo && <span >Loding...</span>}
-                {!loading && !nodivice && !loading && programInfo && startLoading && <span>Loding...</span>}
+                
+                {!nodivice && !loading && isOkDeviceId !==202 && <span >선택된 기기가 없습니다. 기기를 선택해 주세요</span>}
+                {!loading && !nodivice && loadingDeviceId  && <span >Loding...</span>}
+                {!loading && !nodivice && isOkDeviceId ===202 &&!loadingDeviceId  && loadingProgramInfo && <span >Loding...</span>}
+                
+                {!nodivice && !loading && isOkDeviceId === 202 &&  isOkProgramInfo !== 202 && !loadingProgramInfo && <span>선택된 프로그램이 없습니다. 팜 환경 설정에서 프로그램을 선택해 주세요</span>}
+                {!loading && !nodivice && !loadingDeviceId && isOkProgramInfo === 202  && startLoading &&<span>Loding...</span>}
                 {/* !nodivice &&  임의로 지정*/}
                 
                 {!nodivice && !loading && programInfo && !startLoading &&
@@ -372,7 +375,8 @@ export default function MyFarm(){
                       <div className='soket-img'>
                         <div className='soket-title'><span>실시간 영상</span></div>
                         {image && <img src={image} alt='실시간 통신'/>}
-                        {/* <img src={logoimg1} alt='logo' className='logo1'/> */}
+
+                        <img src={logoimg1} alt='logo' className='logo1'/>
                       </div>
                     </div>
 

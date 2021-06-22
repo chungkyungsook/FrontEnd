@@ -80,6 +80,8 @@
   scrollbar-width: none;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  padding: 10px;
 }
 .help-wrap .help-left .kinoko-info-group .info-img-box .info-list .list-wrap::-webkit-scrollbar{
   display: none; /* Chrome, Safari, Opera*/
