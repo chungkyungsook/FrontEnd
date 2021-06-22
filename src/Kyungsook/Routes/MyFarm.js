@@ -344,8 +344,8 @@ export default function MyFarm(){
                     <button className={setDevice} onClick={() =>{openModalDel(); (()=>{setDeviceNumber(obj.id)})() }}> <span>{obj.machine_name}</span> </button>
                   ))
                 }
-                <button className='muchine-btn' onClick={getMuchinList}> <span>새로 불러오기</span> </button>
-                <button className='muchine-btn' onClick={openModalDel}> <span>기기 삭제</span> </button>
+                {/* <button className='muchine-btn' onClick={getMuchinList}> <span>새로 불러오기</span> </button>
+                <button className='muchine-btn' onClick={openModalDel}> <span>기기 삭제</span> </button> */}
               </div>
             </div>
 
