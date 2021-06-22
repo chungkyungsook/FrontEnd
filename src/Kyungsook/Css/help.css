@@ -67,8 +67,22 @@
   padding: 10px;
 }
 .help-wrap .help-left .kinoko-info-group .info-img-box .info-list h1{
-
+  
   font-weight: 700;
+}
+.help-wrap .help-left .kinoko-info-group .info-img-box .info-list .list-wrap{
+  width: 100%;
+  height: 100%;
+  overflow-x: scroll;
+  flex-wrap: nowrap;
+  align-items: center;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  display: flex;
+  flex-direction: column;
+}
+.help-wrap .help-left .kinoko-info-group .info-img-box .info-list .list-wrap::-webkit-scrollbar{
+  display: none; /* Chrome, Safari, Opera*/
 }
 .help-wrap .help-left .kinoko-info-group .info-img-box .logo-img{
   width: 50px;

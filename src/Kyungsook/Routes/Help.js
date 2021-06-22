@@ -65,14 +65,16 @@ const Help = (props) => {
                   </div>
                   <div className='info-title'> &#60;{kinokoInfo.title} &#62;</div>
                   <div className='info-list'>
-                      <h1>개요</h1>
-                      <span className='list-text'>
-                          {kinokoInfo.list}
-                      </span>
-                      <h1>맛</h1>
-                      <span className='list-taste'>
-                          {kinokoInfo.taste}
-                      </span>
+                      <div className='list-wrap'>
+                        <h1>개요</h1>
+                        <span className='list-text'>
+                            {kinokoInfo.list}
+                        </span>
+                        <h1>맛</h1>
+                        <span className='list-taste'>
+                            {kinokoInfo.taste}
+                        </span>
+                      </div>
                   </div>
                   <img src={kinokoImg} draggable="false" alt='logoimg' className='logo-img'/>
 
