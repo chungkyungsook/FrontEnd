@@ -4,35 +4,12 @@ import {Line} from 'react-chartjs-2';
 import Modal from '../Components/Modal';
 import axios from 'axios';
 import {Button, ModalTitleBox, ModalTextBox, ModalFooter} from '../Components/ModalContent';
-import {URL, setChartjsDataset} from '../Util';
+import {URL, setChartjsDataset, options} from '../Util';
 import {flexAlign} from '../../Util/css';
-import {getCustomProgramList} from '../api';
+import {deleteCustomProgram, getCustomProgramList, startCustomProgram} from '../api';
 import {useKinokoState} from '../../KinokoContext';
 
-// chart의 options 설정
-export const options = {
-    maintainAspectRatio: true,
-    tooltips: {
-        mode: 'index',
-        intersect: false,
-        position: 'nearest'
-    },
-    scales: {
-        // y축 세팅
-        yAxes: [
-            {
-                ticks: {
-                    // 0부터 시작
-                    beginAtZero: true,
-                    // ~ 100까지
-                    max: 100,
-                    // 20 단위로 
-                    stepSize: 20
-                }
-            }
-        ]
-    }
-};
+
 
 // 환경 그래프 반환
 const LineChart = ({chartData}) => {
@@ -150,9 +127,7 @@ const Custom = () => {
 
     useEffect(() => {
         // get chart data
-        getCustomProgramList()
-        .then(res => {
-            // api 데이터 가져왔고
+        getCustomProgramList().then(res => {
             let da = res.data;
             return da;
         })
@@ -177,7 +152,7 @@ const Custom = () => {
                 data.growthRate.forEach(growth => {
                     growthArr.push(growth.gr_value);
                 });
-                // chartjs 데이터셋 생성
+                // chartjs 양식으로 데이터 세팅
                 setCustomChart(
                     ch =>
                     ch.concat(
@@ -198,16 +173,16 @@ const Custom = () => {
 
         console.log(customChart);
         console.log(prgid);
-        // if(programInfo) {
-        //     setModalInfo({
-        //         opacity: 1,
-        //         customId: prgid,
-        //         titleText: '이미 실행중인 프로그램이 있습니다!',
-        //         modalTextfirst: '',
-        //         modalTextsecond: '',
-        //         confirm: ''
-        //     });
-        // } else {
+        if(programInfo) {
+            setModalInfo({
+                opacity: 1,
+                customId: prgid,
+                titleText: '이미 실행중인 프로그램이 있습니다!',
+                modalTextfirst: '',
+                modalTextsecond: '',
+                confirm: ''
+            });
+        } else {
             setModalInfo({
                 opacity: 1,
                 customId: prgid,
@@ -216,30 +191,30 @@ const Custom = () => {
                 modalTextsecond: '적용하시겠습니까?',
                 confirm: 'start'
             });
-        // }
+        }
     };
 
     // 커스텀 환경 삭제 클릭 시 모달 on 및 텍스트 변경
     const onRemove = (prgid) => {
-        // if(programInfo) {
-        //     prgid === programInfo[0].id
-        //     ?   setModalInfo({
-        //             opacity: 1,
-        //             customId: prgid,
-        //             titleText: '실행중인 프로그램은 삭제가 불가능합니다!',
-        //             modalTextfirst: '',
-        //             modalTextsecond: '',
-        //             confirm: ''
-        //         })
-        //     :   setModalInfo({
-        //             opacity: 1,
-        //             customId: prgid,
-        //             titleText: '주의!',
-        //             modalTextfirst: '정말 삭제하시겠습니까?',
-        //             modalTextsecond: '',
-        //             confirm: 'remove'
-        //         })
-        // } else {
+        if(programInfo) {
+            prgid === programInfo[0].id
+            ?   setModalInfo({
+                    opacity: 1,
+                    customId: prgid,
+                    titleText: '실행중인 프로그램은 삭제가 불가능합니다!',
+                    modalTextfirst: '',
+                    modalTextsecond: '',
+                    confirm: ''
+                })
+            :   setModalInfo({
+                    opacity: 1,
+                    customId: prgid,
+                    titleText: '주의!',
+                    modalTextfirst: '정말 삭제하시겠습니까?',
+                    modalTextsecond: '',
+                    confirm: 'remove'
+                })
+        } else {
             setModalInfo({
                 opacity: 1,
                 customId: prgid,
@@ -248,7 +223,7 @@ const Custom = () => {
                 modalTextsecond: '',
                 confirm: 'remove'
             })
-        // }
+        }
     };
 
     // 시작 삭제 클릭 시 모달 설정
@@ -258,10 +233,7 @@ const Custom = () => {
             case 'start':
                 // if(prgid === )
                 //커스텀 프로그램 적용 put 코드
-                axios.put(`${URL}/api/myfarm/program`, {
-                    id: macid, //macid
-                    prgId: prgid
-                }).then(response => {
+                startCustomProgram(macid, prgid).then(response => {
                     console.log(response);
                     setModalInfo({
                         opacity: 1,
@@ -276,9 +248,7 @@ const Custom = () => {
                 });
                 break;
             case 'remove':
-                axios.delete(`${URL}/api/farm`, {params: {
-                    id: prgid
-                }}).then(response => {
+                deleteCustomProgram(prgid).then(response => {
                     console.log(response);
                     setCustomChart(cu => cu.filter(id => id.prg_id !== prgid));
                     setModalInfo({

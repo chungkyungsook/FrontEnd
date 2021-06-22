@@ -12,6 +12,7 @@ import axios from 'axios';
 import {URL} from '../Util';
 import Modal from '../Components/Modal';
 import {useKinokoState} from '../../KinokoContext';
+import { addCustomProgram } from '../api';
 
 // 커스텀 차트
 export const CustomChart = ({Data, titleMsg}) => {
@@ -457,17 +458,17 @@ const Add = ({history}) => {
             if(prgInput.prg_name === '')
                 throw new MyError('NameError');
 
-            axios.post(`${URL}/api/farm/custom`, 
-                {
-                    machineId: DeviceId.id, // machineId = 1
-                    water: count.waterCount,
-                    sunshine: count.sunCount,
-                    period: chartData.length,
-                    name: prgInput.prg_name,
-                    temp: temp,
-                    humi: humi
-                }
-            ).then(response => {
+            const addParams = {
+                machineId: DeviceId.id, // machineId = 1
+                water: count.waterCount,
+                sunshine: count.sunCount,
+                period: chartData.length,
+                name: prgInput.prg_name,
+                temp: temp,
+                humi: humi
+            }
+            
+            addCustomProgram(addParams).then(response => {
                 console.log(response);
                 alert('등록 성공했습니다!');
                 history.push('/setting/custom');

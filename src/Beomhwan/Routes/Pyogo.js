@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Line } from 'react-chartjs-2';
 import Modal from '../Components/Modal';
 import {flexAlign} from '../../Util/css';
+import {options} from '../Util';
 import {BoxShadowTrick} from '../css/cssModule';
 import ModalContent from '../Components/ModalContent';
 import PyogoTimeLine from '../Components/PyogoTimeLine';
@@ -23,27 +24,6 @@ const data = {
             borderColor: '#00BCD4',
         }
     ]
-};
-
-const options = {
-    response: true,
-    maintainAspectRatio: false,
-    tooltips: {
-        mode: 'index',
-        intersect: false,
-        position: 'nearest'
-    },
-    scales: {
-        yAxes: [
-            {
-                ticks: {    
-                    beginAtZero: true,
-                    max: 100,
-                    stepSize: 10,
-                }
-            }
-        ]
-    }
 };
 
 export const Chart = () => {

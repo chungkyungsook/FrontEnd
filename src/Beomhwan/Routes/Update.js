@@ -4,47 +4,24 @@ import {Line} from 'react-chartjs-2';
 import {CustomChart as UpdateCustomChart, WarningText, SettingBox, Button, LogBox, CheckBox, CheckMenu, Menu2, SetDate, SetWaterSun, SettingName} from './Add';
 import axios from 'axios';
 import * as Description from '../Components/Compare';
-import { URL, setChartjsDataset } from '../Util';
-import {getRunningChartName ,getRunningChartInfo, getKinoko} from '../api';
+import { URL, setChartjsDataset, options } from '../Util';
+import {getRunningChartName ,getRunningChartInfo, getKinoko, updateCustomProgram} from '../api';
 import Modal from '../Components/Modal';
 import {Button as ModalButton, ModalTitleBox, ModalFooter} from '../Components/ModalContent';
 import { useKinokoState } from '../../KinokoContext';
 import Select from '../Components/Select';
+import {Redirect} from 'react-router-dom';
+
 
 
 // ------------------------지금까지의 환경 그래프------------------------
-
-const RanCustomOptions = {
-    response: true,
-    maintainAspectRatio: false,
-    tooltips: {
-        mode: 'index',
-        intersect: false,
-        position: 'nearest'
-    },
-    scales: {
-        // y축 세팅
-        yAxes: [
-            {
-                ticks: {
-                    // 0부터 시작
-                    beginAtZero: true,
-                    // ~ 100까지
-                    max: 100,
-                    // 20 단위로 
-                    stepSize: 20
-                }
-            }
-        ]
-    },
-};
 
 const RanCustomChart = ({data}) => {
     const LineChart = useRef();
 
     console.dir(LineChart);
 
-    return <Line ref={LineChart} data={data} options={RanCustomOptions} />
+    return <Line ref={LineChart} data={data} options={options} />
 }
 // --------------------------------------------------------------------
 
@@ -113,43 +90,41 @@ const Update = ({cookies, history}) => {
     const { data:programInfo } = state.programInfo;
 
     useEffect(() => {
-        getKinoko(programInfo[0].id).then(res => {
-            setKinokoCount(res.length);
-        })
-        getRunningChartInfo(programInfo[0].id, 'custom').then(async res => {
-            console.log(res);
-            extendDate.current = res.humidity.length + 1;
-            limitDate.current = res.humidity.length;
-            await setOptionCounts({
-                water: res.water,
-                sunshine: res.sunshine
-            });
-            setData(chartData => chartData.concat({
-                Date: extendDate.current + '일차',
-                Temperature: 20,
-                Humidity: 80
-            }));
+        if(programInfo) {
+            getKinoko(programInfo[0].id).then(res => {
+                setKinokoCount(res.length);
+            })
+            getRunningChartInfo(programInfo[0].id, 'custom').then(async res => {
+                console.log(res);
+                extendDate.current = res.humidity.length + 1;
+                limitDate.current = res.humidity.length;
+                await setOptionCounts({
+                    water: res.water,
+                    sunshine: res.sunshine
+                });
+                setData(chartData => chartData.concat({
+                    Date: extendDate.current + '일차',
+                    Temperature: 20,
+                    Humidity: 80
+                }));
 
-            let date = [];
-            let temp = [];
-            let humi = [];
-            let grow = [];
-            await res.humidity.map((ch,i) => {
-                date.push((i + 1) + '일차');
-                temp.push(res.temperature[i].setting_value);
-                humi.push(ch.setting_value);
-                if(res.growthRate.length !== 0) {
-                    grow.push(res.growthRate[i].gr_value);
-                }
-            });
-            await setCompareChartData(setChartjsDataset(date, temp, humi, grow));
-            return true;
-        }).then(res => {
-            if(!res)
-                setLoading(true);
-            else
+                let date = [];
+                let temp = [];
+                let humi = [];
+                let grow = [];
+                await res.humidity.map((ch,i) => {
+                    date.push((i + 1) + '일차');
+                    temp.push(res.temperature[i].setting_value);
+                    humi.push(ch.setting_value);
+                    if(res.growthRate.length !== 0) {
+                        grow.push(res.growthRate[i].gr_value);
+                    }
+                });
+                await setCompareChartData(setChartjsDataset(date, temp, humi, grow));
+            }).then(() => {
                 setLoading(false);
-        })
+            })
+        }
     },[]);
 
     // 1일 추가
@@ -215,7 +190,6 @@ const Update = ({cookies, history}) => {
     };
 
     function onSubmit() {
-        // http://54.210.105.132/api/farm/period/extend
         try{
             let temp = [];
             let humi = [];
@@ -238,15 +212,17 @@ const Update = ({cookies, history}) => {
             console.log(token);
             console.log(count);
 
-            axios.put(`${URL}/api/farm/period/extend`, {
-                id: programInfo[0].id,
+            const updateInfo = {
+                prgId: programInfo[0].id,
                 token: token,
                 period: period,
                 temps: temp,
                 humis: humi,
                 water: count.waterCount,
                 sunshine: count.sunCount
-            }).then(res => {
+            }
+
+            updateCustomProgram(updateInfo).then(res => {
                 console.log(res);
                 setModalInfo({
                     opacity: 1,
@@ -275,7 +251,12 @@ const Update = ({cookies, history}) => {
         history.push('/');
     }
 
-    if(loading) return <>Loading...</>
+    if(loading) return <LoadingContainer>Loading...</LoadingContainer>
+
+    if(!programInfo) {
+        alert('현재 진행중인 프로그램이 없습니다! 환경을 ');
+        return (<Redirect to="/setting/custom" />);
+    }
 
     return (
         <>
@@ -300,8 +281,32 @@ const Update = ({cookies, history}) => {
                                 </Description.CardBox>
                             </Description.CardFlex>
                             <Description.ExtraInfoBox>
-                                햇빛 {optionCounts.sunshine} 회
-                                물 {optionCounts.water} 회
+                                <Description.ButtonContainer>
+                                    <Description.StatusCard>
+                                        <div class="side front">
+                                            <div class="descrition">
+                                                <Description.Water /> 
+                                            </div>
+                                        </div>
+                                        <div class="side back">
+                                            <div class="description">
+                                                {optionCounts.water}회
+                                            </div>
+                                        </div>
+                                    </Description.StatusCard>
+                                    <Description.StatusCard>
+                                        <div class="side front">
+                                            <div class="descrition">
+                                                <Description.Sun /> 
+                                            </div>
+                                        </div>
+                                        <div class="side back">
+                                            <div class="description">
+                                                {optionCounts.sunshine}회
+                                            </div>
+                                        </div>
+                                    </Description.StatusCard>
+                                </Description.ButtonContainer>
                             </Description.ExtraInfoBox>
                         </Description.DescriptionBox> 
                     </RanEnvironmentInfo>
@@ -349,6 +354,11 @@ const Update = ({cookies, history}) => {
         </>
     );
 };
+
+const LoadingContainer = styled.p`
+    font-size: 1.4em;
+    text-align: center;
+`;
 
 export default Update;
 
