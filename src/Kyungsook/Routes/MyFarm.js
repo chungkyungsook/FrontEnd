@@ -73,8 +73,8 @@ export default function MyFarm(){
   //실시간 소캣 이미지 저장용
   const [image, setImage] = useState(null)
   // 재배기 온도, 습도 값 저장
-  const [temperature, setTemperature] = useState(27)
-  const [humidity, setHumidity] = useState(50)
+  const [temperature, setTemperature] = useState(0)
+  const [humidity, setHumidity] = useState(0)
 
   //가짜 데이터
   const [value, setValue] = useState(false)
@@ -284,6 +284,7 @@ export default function MyFarm(){
     
      return () => { // 화면 끝
       socket.disconnect() ;
+      setValue(false)
       console.log('myfarm 끝');
      }
 
@@ -343,8 +344,8 @@ export default function MyFarm(){
                     <button className={setDevice} onClick={() =>{openModalDel(); (()=>{setDeviceNumber(obj.id)})() }}> <span>{obj.machine_name}</span> </button>
                   ))
                 }
-                <button className='muchine-btn' onClick={getMuchinList}> <span>새로 불러오기</span> </button>
-                <button className='muchine-btn' onClick={openModalDel}> <span>기기 삭제</span> </button>
+                {/* <button className='muchine-btn' onClick={getMuchinList}> <span>새로 불러오기</span> </button>
+                <button className='muchine-btn' onClick={openModalDel}> <span>기기 삭제</span> </button> */}
               </div>
             </div>
 

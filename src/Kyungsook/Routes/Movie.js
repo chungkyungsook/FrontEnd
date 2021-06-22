@@ -43,15 +43,16 @@ export default function Movie(){
               <a  className='btn-value' href={videoMushroom} download="Mushroom"> 다운로드 </a>
             </div>
           </SwiperSlide>
-          <SwiperSlide>
+
+          {/* <SwiperSlide>
               <video className='video-mushroom' controls >
                 <source src={`${AWS_URL}/api/mock/1`}/>
               </video>
 
             <div className='play-wrap'>
-              <a  className='btn-value' href={videoMushroom} download="Mushroom"> 다운로드 </a>
+              <a  className='btn-value' href={videoMushroom} download="Mushroom2"> 다운로드 </a>
             </div>
-          </SwiperSlide>
+          </SwiperSlide> */}
         </Swiper>
       
         </div>

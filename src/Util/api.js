@@ -86,7 +86,9 @@ export const LOGOUT = '/api/logout'
 export const PLY = '/api/ply'
 
 //사진 가져오기
-export const IMG_COMPOST = '/api/compost'
+// export const IMG_COMPOST = '/api/compost'
+export const IMG_COMPOST = '/api/img'
+
 
 //모든 배지 사진 가져오기
 export const COMPOST_CLUSTER = '/api/compost/image/cluster'
