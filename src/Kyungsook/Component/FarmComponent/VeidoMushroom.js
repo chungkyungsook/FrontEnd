@@ -244,6 +244,17 @@ function VeidoMushroom() {
               //load end
 
             ) ;
+
+            // const geometry2 = new THREE.BoxGeometry();
+            // const material2 = new THREE.MeshBasicMaterial( { color: 0x00ff55 } );
+
+            // const cube2 = new THREE.Mesh( geometry2, material2 );
+            // cube2.position.y = 0 ;
+            // cube2.position.x = 0.39 ;
+            // cube2.position.z = 0.08 ;
+
+            // cube2.rotation.y = 1.5 ;
+            // scene.add( cube2 );
         
           function animate() {
             //프레임 처리

@@ -73,8 +73,8 @@ export default function MyFarm(){
   //실시간 소캣 이미지 저장용
   const [image, setImage] = useState(null)
   // 재배기 온도, 습도 값 저장
-  const [temperature, setTemperature] = useState(27)
-  const [humidity, setHumidity] = useState(50)
+  const [temperature, setTemperature] = useState(0)
+  const [humidity, setHumidity] = useState(0)
 
   //가짜 데이터
   const [value, setValue] = useState(false)
@@ -284,6 +284,7 @@ export default function MyFarm(){
     
      return () => { // 화면 끝
       socket.disconnect() ;
+      setValue(false)
       console.log('myfarm 끝');
      }
 
