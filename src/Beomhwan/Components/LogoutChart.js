@@ -6,6 +6,7 @@ import * as am4core from '@amcharts/amcharts4/core';
 import am4themes_animated from '@amcharts/amcharts4/themes/animated';
 import {useKinokoState} from '../../KinokoContext';
 import {URL} from '../Util';
+import { getLogoutDate } from '../api';
 
 const LogoutChartComponent = ({loading, prgId, date}) => {
     const chartRef = useRef();
@@ -111,21 +112,16 @@ const LogoutChart = () => {
     const state = useKinokoState();
     const {data: programInfo} = state.programInfo;
     console.log(programInfo[0].id);
+
     const token = window.Kakao.Auth.getAccessToken();
     let userInfoString = window.localStorage.getItem('userInfo');
     const userInfo = JSON.parse(userInfoString);
 
     useEffect(() => {
         const getDate = async () => {
-            await axios.get(`${URL}/api/logout/date`, {
-                params: {
-                    id: userInfo.id,
-                    token: token
-                }
-            }).then(response => {
+            getLogoutDate(userInfo.id, token).then(response => {
                 console.log(response);
                 setDate(response.data);
-                
             }).catch(err => {
                 setDate(null);
                 setLoading(false);
@@ -143,7 +139,7 @@ const LogoutChart = () => {
     }
 
     // date 없을 시 null 반환
-    if(!date) {
+    if(!programInfo) {
         return <>현재 환경 프로그램이 없습니다!</>;
     }
 

@@ -7,31 +7,8 @@ import {getKinoko} from '../api';
 import {GiWaterDrop} from 'react-icons/gi';
 import {RiArrowGoBackLine} from 'react-icons/ri';
 import {BiArrowToLeft, BiArrowToRight} from 'react-icons/bi'; 
-
-const options = {
-    response: true,
-    maintainAspectRatio: false,
-    tooltips: {
-        mode: 'index',
-        intersect: false,
-        position: 'nearest'
-    },
-    scales: {
-        // y축 세팅
-        yAxes: [
-            {
-                ticks: {
-                    // 0부터 시작
-                    beginAtZero: true,
-                    // ~ 100까지
-                    max: 100,
-                    // 20 단위로 
-                    stepSize: 20
-                }
-            }
-        ]
-    },
-};
+import {HiSun} from 'react-icons/hi';
+import {options} from '../Util';
 
 const NextSvg = styled(BiArrowToRight)`
     ${SvgSize};
@@ -65,6 +42,12 @@ const Water = styled(GiWaterDrop)`
     width: 40px;
     height: 40px;
     color: #00BCD4;
+`;
+
+const Sun = styled(HiSun)`
+    width: 40px;
+    height: 40px;
+    color: #F5A962;
 `;
 
 const ContainerBox = styled.div`
@@ -140,13 +123,14 @@ const ExtraInfoBox = styled.div`
     flex: 2;
 `;
 
-const WaterCard = styled.div`
+const StatusCard = styled.div`
     width: 50px;
     position: relative;
     height: 50px;
     perspective: 150em;
     text-align: center;
     user-select: none;
+    margin-right: 15px;
 
     .side {
         position: absolute;
@@ -154,12 +138,12 @@ const WaterCard = styled.div`
         left: 50%;
         width: 100%;
         height: 100%;
-        margin: auto;
         backface-visibility: hidden;
         transition: all .6s ease;
         border: 1px solid #dddddd;
         border-radius: 50px;
         background-color: #FFF; 
+        ${flexAlign};
     }
 
     .front {
@@ -178,6 +162,7 @@ const WaterCard = styled.div`
 
     .description {
         text-transform: uppercase;
+        /* line-height: 50px; */
     }
 `;
 
@@ -301,18 +286,32 @@ const Compare = ({goSlide, chart}) => {
                                     <Button onClick={onPreview}><BackSvg /></Button>
                                     <Button onClick={onNext}><NextSvg /></Button> 
                                 </ButtonContainer>
-                                <WaterCard>
-                                    <div class="side front">
-                                        <div class="descrition">
-                                            <Water /> 
+                                <ButtonContainer>
+                                    <StatusCard>
+                                        <div class="side front">
+                                            <div class="descrition">
+                                                <Water /> 
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="side back">
-                                        <div class="description">
-                                            {ch.prg_water}회
+                                        <div class="side back">
+                                            <div class="description">
+                                                {ch.prg_water}회
+                                            </div>
                                         </div>
-                                    </div>
-                                </WaterCard>
+                                    </StatusCard>
+                                    <StatusCard>
+                                        <div class="side front">
+                                            <div class="descrition">
+                                                <Sun /> 
+                                            </div>
+                                        </div>
+                                        <div class="side back">
+                                            <div class="description">
+                                                {ch.prg_sunshine}회
+                                            </div>
+                                        </div>
+                                    </StatusCard>
+                                </ButtonContainer>
                             </ExtraInfoBox>
                         </DescriptionBox>    
                     </CompareBox>
@@ -348,4 +347,4 @@ const ReturnButton = styled.button`
 `;
 
 export default Compare;
-export {DescriptionBox, ExtraInfoBox, CardFlex, CardBox, CardContent, CardTitle, TitleBox};
+export {DescriptionBox, ExtraInfoBox, CardFlex, CardBox, CardContent, CardTitle, TitleBox, StatusCard, ButtonContainer, Water, Sun};

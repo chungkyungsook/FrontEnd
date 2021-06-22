@@ -104,34 +104,6 @@ const PyogoTimeLine = () => {
         series.columns.template.propertyFields.stroke = "color";
         series.columns.template.strokeOpacity = 0;
 
-        let bullet = series.bullets.push(new am4charts.CircleBullet());
-        bullet.circle.radius = 3;
-        bullet.circle.strokeOpacity = 0;
-        bullet.propertyFields.fill = "color";
-        bullet.locationX = 0;
-
-        let bullet2 = series.bullets.push(new am4charts.CircleBullet());
-        bullet2.circle.radius = 3;
-        bullet2.circle.strokeOpacity = 0;
-        bullet2.propertyFields.fill = "color";
-        bullet2.locationX = 1;
-
-        let imageBullet1 = series.bullets.push(new am4bullets.PinBullet());
-        imageBullet1.disabled = true;
-        imageBullet1.propertyFields.disabled = "disabled1";
-        imageBullet1.locationX = 1;
-        imageBullet1.circle.radius = 10;
-        imageBullet1.propertyFields.stroke = "color";
-        imageBullet1.background.propertyFields.fill = "color";
-
-        let imageBullet2 = series.bullets.push(new am4bullets.PinBullet());
-        imageBullet2.disabled = true;
-        imageBullet2.propertyFields.disabled = "disabled2";
-        imageBullet2.locationX = 0;
-        imageBullet2.circle.radius = 10;
-        imageBullet2.propertyFields.stroke = "color";
-        imageBullet2.background.propertyFields.fill = "color";
-
         let cursor = new am4timeline.CurveCursor();
         timeline.cursor = cursor;
         cursor.xAxis = dateAxis;

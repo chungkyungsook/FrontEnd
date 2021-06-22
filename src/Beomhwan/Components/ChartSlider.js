@@ -4,7 +4,7 @@ import styled, {css} from 'styled-components';
 import { flexAlign } from '../../Util/css';
 import Compare from './Compare';
 import {getCustomProgramList} from '../api';
-import { setChartjsDataset } from '../Util';
+import { setChartjsDataset, options } from '../Util';
 import {FcCheckmark} from 'react-icons/fc';
 import {GrPrevious, GrNext} from 'react-icons/gr';
 import { BoxShadowTrick } from '../css/cssModule';
@@ -150,32 +150,6 @@ const DetailButton = styled.button`
     }
     ${BoxShadowTrick};
 `;
-
-
-const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    tooltips: {
-        mode: 'index',
-        intersect: false,
-        position: 'nearest'
-    },
-    scales: {
-        // y축 세팅
-        yAxes: [
-            {
-                ticks: {
-                    // 0부터 시작
-                    beginAtZero: true,
-                    // ~ 100까지
-                    max: 100,
-                    // 20 단위로 
-                    stepSize: 20
-                }
-            }
-        ]
-    }
-};
 
 const ChartInstance = ({chartData}) => {
 

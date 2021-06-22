@@ -81,6 +81,7 @@ const ProgramRunningContentBox = styled.div`
 
 const ModalContent = ({chartname, text, onClose}) => {
     const state = useKinokoState();
+    console.log(text);
     const {data: programInfo} = state.programInfo;
 
     if(programInfo) {
@@ -117,10 +118,10 @@ const ModalContent = ({chartname, text, onClose}) => {
             </ModalChartBox>
             <ModalEnvInfoBox>
                 <ModalEnvText>
-                    {text.waterText}
+                    {chartname === 'pyogo' ? text.sunText : ''}
                 </ModalEnvText>
                 <ModalEnvText>  
-                    {text.sunText}
+                    {chartname === 'pyogo' ? text.waterText : ''}
                 </ModalEnvText>
             </ModalEnvInfoBox>
         </ModalContentBox>
