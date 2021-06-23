@@ -134,12 +134,12 @@ export default function Farm(){
   if(!window.Kakao.Auth.getAccessToken()) return <Redirect to='/join'/>
   if(loadingProgramInfo) return (
     <div className='farm-wrap'> 
-      <div className='inner'>Loding....</div>
+      <div className='inner'>Loading....</div>
     </div>
   )
   if(lodingMushroomInfo) return (
     <div className='farm-wrap'> 
-      <div className='inner'>Loding....</div>
+      <div className='inner'>Loading....</div>
     </div>
   )
   return(

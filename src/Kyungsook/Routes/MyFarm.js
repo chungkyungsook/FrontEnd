@@ -73,8 +73,8 @@ export default function MyFarm(){
   //실시간 소캣 이미지 저장용
   const [image, setImage] = useState(null)
   // 재배기 온도, 습도 값 저장
-  const [temperature, setTemperature] = useState(0)
-  const [humidity, setHumidity] = useState(0)
+  const [temperature, setTemperature] = useState(24)
+  const [humidity, setHumidity] = useState(72)
 
   //가짜 데이터
   const [value, setValue] = useState(false)
@@ -222,7 +222,7 @@ export default function MyFarm(){
       console.log('startday',StartDay,'day',day,'start',start);
       
       //소캣 통신을 위한 변수 / 프로그램 id가 있으면 소캣 통신 합니다. 
-      setValue(false)
+      setValue(true)
     }
     setStartMushroom(parseInt(ingDay))
     // 오늘 자란 버섯 수
@@ -348,14 +348,14 @@ export default function MyFarm(){
             <div className='myfarm-right'>
               <div className='right-wrap'>
                 {nodivice && <span >등록된 기기가 없습니다. 기기를 등록해 주세요</span>}
-                {loading && <span >Loding...</span>}
+                {loading && <span >Loading...</span>}
                 
                 {!nodivice && !loading && isOkDeviceId !==202 && <span >선택된 기기가 없습니다. 기기를 선택해 주세요</span>}
-                {!loading && !nodivice && loadingDeviceId  && <span >Loding...</span>}
-                {!loading && !nodivice && isOkDeviceId ===202 &&!loadingDeviceId  && loadingProgramInfo && <span >Loding...</span>}
+                {!loading && !nodivice && loadingDeviceId  && <span >Loading...</span>}
+                {!loading && !nodivice && isOkDeviceId ===202 &&!loadingDeviceId  && loadingProgramInfo && <span >Loading...</span>}
                 
                 {!nodivice && !loading && isOkDeviceId === 202 &&  isOkProgramInfo !== 202 && !loadingProgramInfo && <span>선택된 프로그램이 없습니다. 팜 환경 설정에서 프로그램을 선택해 주세요</span>}
-                {!loading && !nodivice && !loadingDeviceId && isOkProgramInfo === 202  && startLoading &&<span>Loding...</span>}
+                {!loading && !nodivice && !loadingDeviceId && isOkProgramInfo === 202  && startLoading &&<span>Loading...</span>}
                 {/* !nodivice &&  임의로 지정*/}
                 
                 {!nodivice && !loading && programInfo && !startLoading &&
