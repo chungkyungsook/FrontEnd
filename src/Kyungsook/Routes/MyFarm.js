@@ -222,7 +222,7 @@ export default function MyFarm(){
       console.log('startday',StartDay,'day',day,'start',start);
       
       //소캣 통신을 위한 변수 / 프로그램 id가 있으면 소캣 통신 합니다. 
-      setValue(true)
+      setValue(false)
     }
     setStartMushroom(parseInt(ingDay))
     // 오늘 자란 버섯 수

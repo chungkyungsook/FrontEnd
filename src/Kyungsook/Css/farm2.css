@@ -52,7 +52,9 @@
   justify-content: center;
   align-items: center;
 }
-
+.farm-wrap .farm-left .three-wrap .noText{
+  height: 63%;
+}
 .farm-wrap .farm-right {
   width: 54%;
   height: 95%;

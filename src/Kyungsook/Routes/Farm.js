@@ -9,7 +9,8 @@ import {
   useKinokoDispatch,
   getStartDay,
   useKinokoState ,
-  getMushroomImg
+  getMushroomImg,
+  getMushroom3D
 } from '../../KinokoContext';
 import { format } from 'date-fns';
 
@@ -46,6 +47,8 @@ export default function Farm(){
   const { data:mushroomImg,  isOk:isOkMushroomImg } = state.getMushroomImg; 
   const { data:StartDay, isOk:isOkStartDay } = state.getStartDay; 
 
+  const { data:mushroom3D, isOk:isOkmushroom3D } = state.getMushroom3D; 
+
 
   const [mushroomGrowing, setMushroomGrowing] = useState(false)
   const [image, setImage] = useState(null)
@@ -67,10 +70,12 @@ export default function Farm(){
 
   }
   
+
   useEffect(()=>{
     if(isOkDeviceId === 202){
       console.log('DeviceId', DeviceId.id);
       getProgramInfo(dispatch,DeviceId.id)
+      
     }else {
       alert('선택한 재배기가 없습니다.')
     }
@@ -81,6 +86,7 @@ export default function Farm(){
       console.log('isOkProgramInfo',programInfo[0]);
       getMushroomInfo(dispatch,programInfo[0].id)
       getStartDay(dispatch,programInfo[0].id)
+      getMushroom3D(dispatch)
     }
   },[isOkProgramInfo])
 
@@ -135,7 +141,7 @@ export default function Farm(){
       <div className='farm-left'>
         <div className='three-wrap'>
           <div>3D 배지</div>
-          <VeidoMushroom/>
+          {isOkmushroom3D !== 202 ? <div className='noText'>가공된 3D 파일 없음</div> : <VeidoMushroom/> }
           <div className='farm-btn-wrap'>
             
             {

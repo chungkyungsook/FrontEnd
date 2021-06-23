@@ -62,7 +62,6 @@ const loader = new PLYLoader() ;
 function VeidoMushroom() {
   const element = useRef() ;
 
-
     useEffect(() =>{
 
           function get3dData() {
