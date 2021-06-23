@@ -244,7 +244,7 @@ export default function MyFarm(){
      // 소켓 연결 코드
      const socket = io('http://192.168.1.101:3000') ;
      console.log('소캣 연결 확인 중');
-
+    
 
      console.log(socket) ;
      
@@ -267,7 +267,7 @@ export default function MyFarm(){
          setImage(URL.createObjectURL(blob)) ;
    
           
-     }) ;
+     })
  
      // 온, 습도 데이터 요청
      socket.emit('req_cosdata');
@@ -370,9 +370,8 @@ export default function MyFarm(){
                     <div className='soket'> 
                       <div className='soket-img'>
                         <div className='soket-title'><span>실시간 영상</span></div>
-                        {image && <img src={image} alt='실시간 통신'/>}
+                        {image ? <img src={image} alt='실시간 통신'/> : <div> 현재 재배기가 카메라를 사용중 입니다. </div>}
 
-                        <img src={logoimg1} alt='logo' className='logo1'/>
                       </div>
                     </div>
 

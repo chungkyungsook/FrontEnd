@@ -25,6 +25,7 @@ import SwiperCore, {
   Pagination,Navigation
 } from 'swiper/core';
 import { AWS_URL, IMG_COMPOST } from '../../Util/api';
+import axios from 'axios';
 
 // install Swiper modules
 SwiperCore.use([Pagination,Navigation]);
@@ -51,7 +52,7 @@ export default function Farm(){
 
 
   const [mushroomGrowing, setMushroomGrowing] = useState(false)
-  const [image, setImage] = useState(null)
+  const [image, setImage] = useState(true)
   const [imgData, setImgData] = useState(null)
   //오늘 날짜 
   const today = format(new Date(),'yyyy-MM-dd')
@@ -70,15 +71,22 @@ export default function Farm(){
 
   }
   
-
   useEffect(()=>{
+    
     if(isOkDeviceId === 202){
       console.log('DeviceId', DeviceId.id);
       getProgramInfo(dispatch,DeviceId.id)
-      
+      axios.get('http://184.73.45.24/api/check/ply').then(data =>{
+        console.log('ok',data);
+        setImage(false)
+      }).catch(e =>{
+        console.log('e',e);
+        setImage(true)
+      })
     }else {
       alert('선택한 재배기가 없습니다.')
     }
+
   },[isOkDeviceId,dispatch,DeviceId])
   useEffect(()=>{
 
@@ -86,9 +94,9 @@ export default function Farm(){
       console.log('isOkProgramInfo',programInfo[0]);
       getMushroomInfo(dispatch,programInfo[0].id)
       getStartDay(dispatch,programInfo[0].id)
-      getMushroom3D(dispatch)
+      
     }
-  },[isOkProgramInfo])
+  },[isOkProgramInfo,isOkmushroom3D])
 
   useEffect(()=>{
     let num = [0,0,0,0,0,0]
@@ -141,7 +149,7 @@ export default function Farm(){
       <div className='farm-left'>
         <div className='three-wrap'>
           <div>3D 배지</div>
-          {isOkmushroom3D !== 202 ? <div className='noText'>가공된 3D 파일 없음</div> : <VeidoMushroom/> }
+          {image ? <div className='noText'>가공된 3D 파일 없음</div> : <VeidoMushroom/> }
           <div className='farm-btn-wrap'>
             
             {
