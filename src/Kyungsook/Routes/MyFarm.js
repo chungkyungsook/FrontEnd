@@ -148,7 +148,7 @@ export default function MyFarm(){
     setNodivece(false)
     getMuchineList(dispatch)
     getMuchineDeviceId(dispatch) //해당 디바이스 끝나면 실행합시다
-    // getProgramInfo(dispatch,DeviceId.id)
+
   }
 
   //선택
@@ -202,6 +202,7 @@ export default function MyFarm(){
     let ingDay = 0
     let start = new Date(StartDay)
     let day = new Date()
+    console.log('mushroomInfo',isOkMushroomInfo);
     if(isOkMushroomInfo === 202){
       console.log('mushroomInfo',isOkMushroomInfo);
       mushroomInfo.map( data =>{
@@ -213,20 +214,21 @@ export default function MyFarm(){
       mushroomInfo.filter(data =>
         format(new Date(data.mr_date),'yyyy-MM-dd') === today && (num = num + 1)
       )
-
-      // 진행 날짜 구하기
-      if(StartDay) {
-
-        ingDay = (day.getTime() - start.getTime()) / (1000*60*60*24) + 1
-        // console.log( parseInt(ingDay));
-      }
-      setStartMushroom(parseInt(ingDay))
-      // 오늘 자란 버섯 수
-      setTodayMushroom(num)
-      //소캣 통신을 위한 변수 / 프로그램 id가 있으면 소캣 통신 합니다. 
-      setValue(false)
+      
     } 
+    // 진행 날짜 구하기
+    if(StartDay) {
+      ingDay = (day.getTime() - start.getTime()) / (1000*60*60*24) + 1
+      console.log('startday',StartDay,'day',day,'start',start);
+      
+      //소캣 통신을 위한 변수 / 프로그램 id가 있으면 소캣 통신 합니다. 
+      setValue(true)
+    }
+    setStartMushroom(parseInt(ingDay))
+    // 오늘 자란 버섯 수
+    setTodayMushroom(num)
 
+    
     console.log(StartDay,'date');
   },[isOkMushroomInfo,StartDay])
 
@@ -283,15 +285,11 @@ export default function MyFarm(){
      });
     
      return () => { // 화면 끝
-      socket.disconnect() ;
+      // socket.disconnect() ;
       setValue(false)
       console.log('myfarm 끝');
      }
 
-    // return()=>{
-    //   setValue(false)
-    //   console.log('value 끝');
-    // }
     }    //예외 처리 
 
    },[value]) ;
@@ -344,8 +342,6 @@ export default function MyFarm(){
                     <button className={setDevice} onClick={() =>{openModalDel(); (()=>{setDeviceNumber(obj.id)})() }}> <span>{obj.machine_name}</span> </button>
                   ))
                 }
-                {/* <button className='muchine-btn' onClick={getMuchinList}> <span>새로 불러오기</span> </button>
-                <button className='muchine-btn' onClick={openModalDel}> <span>기기 삭제</span> </button> */}
               </div>
             </div>
 
@@ -403,7 +399,7 @@ export default function MyFarm(){
                           </div>
                           <div className='today-box'>
                             <div className='value1'>진행 날짜</div>
-                            <div className='value2'>{startMushroom}일 차</div>
+                            <div className='value2'>{startMushroom ? startMushroom : 0}일 차</div>
                           </div>
                         </div>
 
