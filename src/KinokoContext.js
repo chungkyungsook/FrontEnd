@@ -194,4 +194,4 @@ export const getMushroomInfo = createAsyncDispatcher('GET_MUSHROOM_INFO',api.get
 // 객체 하나의 버섯 사진 가져오기
 export const getMushroomImg = createAsyncDispatcher('GET_MUSHROOM_IMG',api.getMushroomImg)
 // 객체 하나의 버섯 사진 가져오기
-export const getMushroom3D = createAsyncDispatcher('GET_MUSHROOM_IMG',api.getMushroom3D)
+export const getMushroom3D = createAsyncDispatcher('GET_MUSHROOM_3D',api.getMushroom3D)

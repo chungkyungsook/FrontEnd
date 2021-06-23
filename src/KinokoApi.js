@@ -146,7 +146,6 @@ export async function getMushroomImg(id){
 export async function getMushroom3D(){
   console.log('실행됨');
   const response = await axios.get('http://184.73.45.24/api/check/ply');
-  console.log('dd',response.data);
   return response.data
 }
 
