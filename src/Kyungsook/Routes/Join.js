@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react' ;
+import React from 'react' ;
 import '../Css/Join.css'
 // 그림 리소스
 import logoimg1 from '../../assets/logo.png' ;

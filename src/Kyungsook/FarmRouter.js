@@ -31,14 +31,10 @@ const FarmRouter = ({ location,value }) => {
         <Container>
             <FarmMenu pathname = {pathname}/>
             <TemplateContainer>
-                
-                <Route exact path={FARM} 
-                       render= {(props) => <Farm {...props} value={value}/>} />
 
-                <Route path={`${FARM}${MOVIE}`} 
-                       render={ (props) => <Movie {...props} value={value} />} />
-                {/* <Route exact path={FARM} component={Farm} />
-                <Route path={`${FARM}${MOVIE}`} component={Movie} /> */}
+                <Route exact path={FARM} component={Farm} />
+                <Route path={`${FARM}${MOVIE}`} component={Movie} />
+                
             </TemplateContainer>
         </Container>
     );

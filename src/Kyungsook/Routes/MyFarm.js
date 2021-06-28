@@ -1,24 +1,17 @@
-import React,{useState,useEffect, useRef} from 'react' ;
+import React,{useState,useEffect} from 'react' ;
 import '../Css/Myfarm2.css';
 import {Redirect}   from 'react-router-dom' ;
-import logoimg1 from '../../assets/logo.png' ;
 import farmer from '../../assets/farmer.png';
 import {Link} from 'react-router-dom';
  // 해당 페이지 보여주기
 
 import {format} from 'date-fns';
-import { da } from 'date-fns/locale';
-import { concat } from '@amcharts/amcharts4/.internal/core/utils/Iterator';
 import io from 'socket.io-client'
-import MyFarmComponent from '../Component/MyFarmComponent';
-import swal from 'sweetalert';
 
 //그래프
 import LogoutChart from '../../Beomhwan/Components/LogoutChart';
 import Progress from '../Component/Progress'
-import {
-  AWS_URL,
-}from '../../Util/api'
+
 import { 
   getProgramInfo,
   getMuchineKey,
@@ -42,21 +35,17 @@ export default function MyFarm(){
   const state    = useKinokoState();
   const dispatch = useKinokoDispatch();
 
-    //오늘 날짜 
-    const today = format(new Date(),'yyyy-MM-dd')
-    // let today = new Date(2021,5,19)
-    // today = format(today,'yyyy-MM-dd')
-
-  // const socket = useRef(io('http://192.168.1.101:3000')) ;
+  //오늘 날짜 
+  const today = format(new Date(),'yyyy-MM-dd')
 
   const { data: muchinList, loading, error } = state.muchinList; 
-  const { data: muchinKey, error: errKey, isOk: isOkKey } = state.muchinKey; 
+  const { error: errKey, isOk: isOkKey } = state.muchinKey; 
   const { error: errPwd, isOk:isOkPwd } = state.muchinPwd; 
   const {  error: errDevice, isOk:isOkDevice } = state.muchinMakeDevice; 
-  const { data:DeviceId, error: errDeviceId, isOk:isOkDeviceId ,loading:loadingDeviceId} = state.muchinDeviceId; 
-  const { data:programInfo, error: errProgramInfo, isOk:isOkProgramInfo ,loading:loadingProgramInfo} = state.programInfo; 
-  const { data:mushroomInfo, error: errMushroomInfo, isOk:isOkMushroomInfo ,loading: loadingMushroom} = state.getMushroomInfo; 
-  const { data:StartDay, error: errStartDay, isOk:isOkStartDay , loading: startLoading} = state.getStartDay; 
+  const { data:DeviceId, isOk:isOkDeviceId ,loading:loadingDeviceId} = state.muchinDeviceId; 
+  const { data:programInfo,  isOk:isOkProgramInfo ,loading:loadingProgramInfo} = state.programInfo; 
+  const { data:mushroomInfo,  isOk:isOkMushroomInfo } = state.getMushroomInfo; 
+  const { data:StartDay, loading: startLoading} = state.getStartDay; 
 
   const [nodivice, setNodivece] = useState(false); // 처음 디바이스 정보 가져올 때
   const [deviceNumber, setDeviceNumber] = useState("")
@@ -222,7 +211,7 @@ export default function MyFarm(){
       console.log('startday',StartDay,'day',day,'start',start);
       
       //소캣 통신을 위한 변수 / 프로그램 id가 있으면 소캣 통신 합니다. 
-      setValue(true)
+      setValue(false)
     }
     setStartMushroom(parseInt(ingDay))
     // 오늘 자란 버섯 수
@@ -269,14 +258,12 @@ export default function MyFarm(){
           
      })
  
-     // 온, 습도 데이터 요청
      socket.emit('req_cosdata');
+     // 온, 습도 데이터 요청
      // 온, 습도 데이터 받아오는 이벤트
      socket.on('res_cosdata', (data) => {
              console.log("소캣 온 습도 값 가져오기",data);
      // 재배기 온도 습도 작동 
-     //  parseInt(data.temperature) && parseInt(data.humidity) && maching_setting(parseInt(data.temperature), parseInt(data.humidity) ) 
-     // maching_setting(parseInt(data.temperature), parseInt(data.humidity) )
      if(data.temperature != null && data.humidity != null){
          setTemperature(parseInt(data.temperature))
          setHumidity(parseInt(data.humidity))

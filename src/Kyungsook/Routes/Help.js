@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react' ;
 
 import {Redirect}   from 'react-router-dom' ;
-import { withCookies} from 'react-cookie';
 
 import '../Css/help.css'
 import kinokoImg      from '../../assets/logoHeight.png' ;
@@ -36,11 +35,6 @@ const Help = (props) => {
         })
 
     },[])
-
-    // useEffect(()=>{
-    //     console.log('help main',mushroomList);
-    //     mushroomList.map(data => ( data.id === 1 && setKinokoInfo(data)))
-    // },[mushroomList])
 
     if(!window.Kakao.Auth.getAccessToken()) return <Redirect to='/join'/>
     if(!mushroomList) {
@@ -125,4 +119,4 @@ const Help = (props) => {
     );
 };
 
-export default withCookies(Help) ;
+export default Help;

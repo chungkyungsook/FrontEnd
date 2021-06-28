@@ -21,9 +21,8 @@ import HeaderMenu from './HeaderMenu' ;
 // 그림 리소스
 import logoHeight from './assets/logoHeight.png' ;
 import title from './assets/header_title.png' ;
-import { withCookies } from 'react-cookie';
 
-import { useKinokoDispatch, useKinokoState, getlogout, useLoginContext, getMuchineList ,getMuchineDeviceId} from './KinokoContext';
+import { useKinokoDispatch, getlogout, useLoginContext, getMuchineList ,getMuchineDeviceId} from './KinokoContext';
 // setIsOn -> 선택한 기기 정보 넣기 
 const Header = ({ location}) => {
 
@@ -55,11 +54,9 @@ const Header = ({ location}) => {
           FARM 
           : pathname.includes(SETTING) ? SETTING : pathname ;  
 
-  const state    = useKinokoState();
   const dispatch = useKinokoDispatch();
   const {isLogin, setIsLogin} = useLoginContext()
 
-  const { data: muchinList, loading, error } = state.muchinList; // state.data 를 users 키워드로 조회
 
   //로그아웃 
   const logoutBtn = ()=>{
@@ -183,8 +180,5 @@ const LogoutBtn = styled.button`
 }
 
 `;
-const loding_wrap = styled.div`
 
-
-`;
-export default withRouter(withCookies(Header)) ;
+export default withRouter(Header) ;

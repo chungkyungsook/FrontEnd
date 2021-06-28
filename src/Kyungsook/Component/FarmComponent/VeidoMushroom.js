@@ -20,13 +20,6 @@ const Wrapper = styled.div`
 
 `;
 
-// const Container = styled.div`
-//   display : flex ;
-
-//   align-items : center ;
-//   justify-content : center ;
-// `;
-
 const Container = styled.div`
   height: 67%;
 `;
@@ -244,17 +237,6 @@ function VeidoMushroom() {
 
             ) ;
 
-            // const geometry2 = new THREE.BoxGeometry();
-            // const material2 = new THREE.MeshBasicMaterial( { color: 0x00ff55 } );
-
-            // const cube2 = new THREE.Mesh( geometry2, material2 );
-            // cube2.position.y = 0 ;
-            // cube2.position.x = 0.39 ;
-            // cube2.position.z = 0.08 ;
-
-            // cube2.rotation.y = 1.5 ;
-            // scene.add( cube2 );
-        
           function animate() {
             //프레임 처리
             controls.update() ;
@@ -273,38 +255,6 @@ function VeidoMushroom() {
          get3dData() ;
     },[])
 
-
-    // mesh2.position.y = 0 ;
-    // mesh2.position.x = 0 ;
-    // mesh2.position.z = -0.2 ;
-
-    // //생성한 모델 장면에 추가
-    // scene.add(mesh2) ;
-
-    // mesh3.position.y = 0 ;
-    // mesh3.position.x = 0 ;
-    // mesh3.position.z = -0.3 ;
-
-    // mesh3.rotation.y = 1.4 ;
-
-    // //생성한 모델 장면에 추가
-    // scene.add(mesh3) ;
-
-    // mesh4.position.y = 0 ;
-    // mesh4.position.x = 0 ;
-    // mesh4.position.z = -0.3 ;
-
-    // mesh4.rotation.y = -1.6 ;
-
-    // //생성한 모델 장면에 추가
-    // scene.add(mesh4) ;
-
-
-    // const mesh2 = new THREE.Mesh(geometry, material) ; 
-    //           const mesh3 = new THREE.Mesh(geometry, material) ; 
-    //           const mesh4 = new THREE.Mesh(geometry, material) ; 
-    // <Wrapper>
-    // </Wrapper>
   return (
     
         <Container ref={element}>
@@ -314,14 +264,3 @@ function VeidoMushroom() {
 }
 
 export default VeidoMushroom;
-
-// three js 좌표계
-// const axesHelper = new THREE.AxesHelper(5)
-// scene.add(axesHelper)
-
-// 큐브
-// use ref as a mount point of the Three.js scene instead of the document.body
-// var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-// var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-// var cube = new THREE.Mesh( geometry, material );
-// scene.add( cube );

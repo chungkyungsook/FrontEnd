@@ -149,23 +149,6 @@ export async function getMushroom3D(){
   return response.data
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // 오늘 성장한 버섯 정보 가져오기
 export async function getMushroomGrowInfo(prgId){
   const response = await axios.get(`${AWS_URL}${MUCHIN_DELETE}/growing`,{
