@@ -251,7 +251,6 @@ function VeidoMushroom() {
           //최초에 한번은 수행
           animate();
             }
-            
          get3dData() ;
     },[])
 
