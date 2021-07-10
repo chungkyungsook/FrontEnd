@@ -39,7 +39,7 @@ export default function Movie(){
               </video>
 
             <div className='play-wrap'>
-              <a  className='btn-value' href={videoMushroom} download="Mushroom"> 다운로드 </a>
+              <a  className='btn-value' href={videoMushroom} download="Mushroom"> ダウンロード </a>
             </div>
           </SwiperSlide>
 

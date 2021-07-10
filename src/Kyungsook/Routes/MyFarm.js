@@ -357,7 +357,7 @@ export default function MyFarm(){
                     <div className='soket'> 
                       <div className='soket-img'>
                         <div className='soket-title'><span>リアルタイム映像</span></div>
-                        {image ? <img src={image} alt='リアルタイム通信'/> : <div> 現在、栽培機がカメラを使用しています。少し待ってください。</div>}
+                        {image ? <img src={image} alt='リアルタイム通信'/> : <div> 現在、栽培機がカメラを使用しています。<br/>少し待ってください。</div>}
 
                       </div>
                     </div>
@@ -418,7 +418,7 @@ export default function MyFarm(){
 
                         <div className='from-move'> 
                           <Link to="/farm">
-                            <span className='move'>Farmページに移動します。 </span>
+                            <span className='move'>Farmページに移動</span>
                           </Link>
                         </div>
                         

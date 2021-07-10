@@ -177,7 +177,7 @@ export default function Farm(){
 
           <div className='farm-info-wrap'>
             <div className='info-left'>
-                <h1>シイタケギャラリー</h1>
+                <h1>ギャラリー</h1>
                 <Swiper pagination={{
                   "type": "progressbar"
                   }} navigation={true} className="mySwiper">
@@ -206,7 +206,7 @@ export default function Farm(){
             </div>
             <div className='info-right'>
               <div className='info-text-wrap'>
-                <h2>Today シイタケ</h2>
+                <h2>Todayキノコ</h2>
                 <span>{mushroomNum && mushroomNum[5]}つ</span>
               </div>
 
@@ -216,22 +216,22 @@ export default function Farm(){
               </div>
 
               <div className='info-text-wrap'>
-                <h2>収穫できるシイタケ</h2>
+                <h2>収穫できキノコ</h2>
                 <span>{mushroomNum && mushroomNum[1]}つ</span>
               </div>
 
               <div className='info-text-wrap'>
-                <h2>成長中のシイタケ</h2>
+                <h2>成長中キノコ</h2>
                 <span>{mushroomNum && mushroomNum[0]}つ</span>
               </div>
 
               <div className='info-text-wrap'>
-                <h2>収穫したシイタケ</h2>
+                <h2>収穫しキノコ</h2>
                 <span>{mushroomNum && mushroomNum[3]}つ</span>
               </div>
 
               <div className='info-text-wrap'>
-                <h2>すべてのシイタケ</h2>
+                <h2>すべてキノコ</h2>
                 <span>{mushroomNum && mushroomNum[4]}つ</span>
               </div>
 
