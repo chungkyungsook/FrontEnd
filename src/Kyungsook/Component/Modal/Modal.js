@@ -25,7 +25,7 @@ const Modal = ( props ) => {
                       {props.children}
                   </main>
                   <footer>
-                    {isOkPwd === 202 && <button name='makeDevice' className="close" type="button" onClick={onClickBtn}>등록</button>}
+                    {isOkPwd === 202 && <button name='makeDevice' className="close" type="button" onClick={onClickBtn}>登録</button>}
                     <button className="close" onClick={close}> close </button>
                   </footer>
               </section>

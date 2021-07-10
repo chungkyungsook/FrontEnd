@@ -12,16 +12,16 @@ const ModalDel = ( props ) => {
 
   useEffect(()=>{
     if(errSetting ) {
-        swal('선택에 실패 했습니다....')
+        swal('選択に失敗しました。。。')
         close('3')
     }else if(isOkSetting === 202) {
-        swal('선택되었습니다! :)')
+        swal('選択できました。:)')
         close(isOkSetting)
     }else if(errDelete) {
-        swal('삭제 실패 했습니다....')
+        swal('削除にしっぱいしました。。。')
         close('3')
     }else if(isOkDelete === 202) {
-        swal('삭제되었습니다! :)')
+        swal('削除しました。 :)')
         close(isOkDelete)
     }
 
@@ -39,8 +39,8 @@ const ModalDel = ( props ) => {
                       {props.children}
                   </main>
                   <footer>
-                    <button className="close" onClick={onSetMuchin}> 사용 </button>
-                    <button className="close" onClick={onDelMuchin}> 삭제 </button>
+                    <button className="close" onClick={onSetMuchin}> 私用 </button>
+                    <button className="close" onClick={onDelMuchin}> 削除 </button>
                   </footer>
               </section>
           ) : null }

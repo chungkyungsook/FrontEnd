@@ -32,12 +32,12 @@ const FarmMenu = ({pathname}) => {
             <Ul>
                 <Link to="/farm">
                     <Li>
-                        팜 정보
+                        Farm情報
                     </Li>
                 </Link>
                 <Link to="/farm/movie">
                     <Li>
-                        영상
+                        映像
                     </Li>
                 </Link>
             </Ul>

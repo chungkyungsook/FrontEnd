@@ -79,7 +79,7 @@ export default function Farm(){
         setImage(true)
       })
     }else {
-      alert('선택한 재배기가 없습니다.')
+      alert('選択した栽培機がありません。')
     }
 
   },[isOkDeviceId,dispatch,DeviceId])
@@ -143,8 +143,8 @@ export default function Farm(){
       <div className='inner'>
       <div className='farm-left'>
         <div className='three-wrap'>
-          <div>3D 배지</div>
-          {image ? <div className='noText'>가공된 3D 파일 없음</div> : <VeidoMushroom/> }
+          <div>3Dシイタケ</div>
+          {image ? <div className='noText'>加工された3Dファイルなし</div> : <VeidoMushroom/> }
           <div className='farm-btn-wrap'>
             
             {
@@ -152,11 +152,11 @@ export default function Farm(){
                 console.log('isOkMushroomInfo',isOkMushroomInfo),
                 mushroomInfo.map(data =>(
                   data.mr_status ==='growing'?
-                    <button onClick={() => onGetMushroom(data)}>성장버섯</button>
+                    <button onClick={() => onGetMushroom(data)}>成長したシイタケ</button>
                   : data.mr_status ==='harvest' ?
-                    <button onClick={() => onGetMushroom(data)}>수확가능</button>
+                    <button onClick={() => onGetMushroom(data)}>収穫可能</button>
                   :data.mr_status ==='whiteflower'?
-                    <button onClick={() => onGetMushroom(data)}>백화고</button>
+                    <button onClick={() => onGetMushroom(data)}>花どんこ</button>
                   : null
               ))
               ) 
@@ -177,12 +177,12 @@ export default function Farm(){
 
           <div className='farm-info-wrap'>
             <div className='info-left'>
-                <h1>버섯 갤러리</h1>
+                <h1>シイタケギャラリー</h1>
                 <Swiper pagination={{
                   "type": "progressbar"
                   }} navigation={true} className="mySwiper">
                   {!mushroomGrowing ? 
-                  <SwiperSlide>버섯 버튼을 눌러보세요!</SwiperSlide> 
+                  <SwiperSlide>ボタンを押してみてください！</SwiperSlide> 
                   : 
                   <>
                   {imgData !== null &&  imgData.map(
@@ -195,44 +195,44 @@ export default function Farm(){
                 </Swiper>
                 <div className='mushroom-info'>
                   <div className='grow-box'>
-                    <div className='text2'>성장률</div>
+                    <div className='text2'>成長率</div>
                     <spna className='text3'>{mushroomGrowing ? mushroomGrowing.growing : 0}%</spna>
                   </div>
                   <div className='grow-box'>
-                    <div className='text2'>버섯 길이</div>
+                    <div className='text2'>シイタケの長さ</div>
                     <spna className='text3'>{mushroomGrowing ? mushroomGrowing.cm : 0}cm</spna>
                   </div>
                 </div>
             </div>
             <div className='info-right'>
               <div className='info-text-wrap'>
-                <h2>Today 버섯</h2>
-                <span>{mushroomNum && mushroomNum[5]}개</span>
+                <h2>Today シイタケ</h2>
+                <span>{mushroomNum && mushroomNum[5]}つ</span>
               </div>
 
               <div className='info-text-wrap'>
-                <h2>백화고</h2>
-                <span>{mushroomNum && mushroomNum[2]}개</span>
+                <h2>花ドン</h2>
+                <span>{mushroomNum && mushroomNum[2]}つ</span>
               </div>
 
               <div className='info-text-wrap'>
-                <h2>수확 가능 버섯</h2>
-                <span>{mushroomNum && mushroomNum[1]}개</span>
+                <h2>収穫できるシイタケ</h2>
+                <span>{mushroomNum && mushroomNum[1]}つ</span>
               </div>
 
               <div className='info-text-wrap'>
-                <h2>성장중인 버섯</h2>
-                <span>{mushroomNum && mushroomNum[0]}개</span>
+                <h2>成長中のシイタケ</h2>
+                <span>{mushroomNum && mushroomNum[0]}つ</span>
               </div>
 
               <div className='info-text-wrap'>
-                <h2>수확한 버섯</h2>
-                <span>{mushroomNum && mushroomNum[3]}개</span>
+                <h2>収穫したシイタケ</h2>
+                <span>{mushroomNum && mushroomNum[3]}つ</span>
               </div>
 
               <div className='info-text-wrap'>
-                <h2>모든 버섯</h2>
-                <span>{mushroomNum && mushroomNum[4]}개</span>
+                <h2>すべてのシイタケ</h2>
+                <span>{mushroomNum && mushroomNum[4]}つ</span>
               </div>
 
             </div>

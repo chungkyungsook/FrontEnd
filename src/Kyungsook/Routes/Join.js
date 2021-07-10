@@ -40,7 +40,7 @@ export default function Join(){
     localStorage.setItem('userInfo',JSON.stringify(res.profile))
     console.log("kakao",res);
     getJoinAccount(res.profile)
-    swal(`반갑습니다. ${res.profile.properties.nickname}님!:)`); //window 창
+    swal(`いらっしゃいませ ${res.profile.properties.nickname}さま!:)`); //window 창
   }
 
   //회원가입 api
@@ -51,7 +51,7 @@ export default function Join(){
       email: data.kakao_account.email
     }).then(response =>{
       console.log("회원가입 성공",response);
-      swal(`회원 가입에 성공하였습니다. 어서오세요 ${data.profile.properties.nickname}님!:)`); //window 창
+      swal(`会員登録に成功しました。 いらっしゃいませ ${data.profile.properties.nickname}さま!:)`); //window 창
       getLoginAccount(data)
     }).catch(e=>{
       let message = e.response.data
@@ -92,7 +92,7 @@ export default function Join(){
           </div>
 
           <div className='logo-img'>
-              <p> 맛슈맛슈 프로젝트에 어서오세요!</p>
+              <p> マッシュマッシュプロジェクトへようこそ!　</p>
               <Swiper 
                 effect={'cube'} 
                 grabCursor={true} 
@@ -115,7 +115,7 @@ export default function Join(){
                 jsKey={'f8f1fac656c36d6630bc59140a724fb5'}
                 onSuccess={(res) => {login(res)}}
             >
-              <p className='kakao-font'>KAKAO 로그인</p>
+              <p className='kakao-font'>KAKAOでログイン</p>
             </KakaoLogin>
           </div>
         </div>
