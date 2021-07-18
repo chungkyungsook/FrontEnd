@@ -27,34 +27,73 @@
   align-items: center;
   flex-direction: column;
 }
-.farm-wrap .farm-left .three-wrap div:first-child{
-  height: 25px;
-  width: 102px;
-}
-.farm-wrap .farm-left .three-wrap div:last-child{
-  height: 27px;
-}
-.farm-wrap .farm-left .three-wrap canvas{
-  width: 95% !important;
-  height: 95% !important;
-  border-radius: 10px;
-
-}
-.farm-wrap .farm-left .three-wrap div{
-  box-sizing: border-box;
-  font-weight: 700;
+.farm-wrap .farm-left .three-wrap .text{
+  background-color: rgb(145 163 119 / 80%);
+  margin: 5px;
   border-radius: 5px;
+  height: 30px;
+  color: #fff;
+  padding: 5px;
+  font-weight: 700;
+}
+.farm-wrap .farm-left .three-wrap .img2D{
+  width: 100%;
+  height: 68%;
+  position: relative;
+}
+/* swiper */
+.farm-wrap .farm-left .three-wrap .img2D .swiper-container {
+  width: 300px;
+  height: 300px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -150px;
+  margin-top: -150px;
+}
+.farm-wrap .farm-left .three-wrap .img2D .swiper-slide {
+  background-position: center;
+  background-size: cover;
+}
+.farm-wrap .farm-left .three-wrap .img2D .swiper-slide img {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.farm-wrap .farm-left .three-wrap .farm-btn-wrap{
+  height: 25%;
   display: flex;
-  width: 95%;
-  color: #ffffff;
-  background-color: rgb(145, 163, 119, 0.8);
-  margin: 10px;
-  justify-content: center;
+  flex-direction: row;
   align-items: center;
 }
-.farm-wrap .farm-left .three-wrap .noText{
-  height: 63%;
+
+.farm-wrap .farm-left .three-wrap .farm-btn-wrap button{
+  margin: 5px;
+  padding: 8px;
+  outline: 0;
+  border-radius: 5px;
+  border: 0;
+  font-weight: 700;
+  color: #fff;
+  background-color: rgb(0 0 0 / 50%);
+  font-size: 16px;
 }
+.farm-wrap .farm-left .three-wrap .farm-btn-wrap button:hover{
+  cursor: pointer;
+  margin: 5px;
+  padding: 8px;
+  outline: 0;
+  border-radius: 5px;
+  border: 0;
+  font-weight: 700;
+  color: rgb(0 0 0 / 50%);
+  background-color: #fff;
+  border: 2px solid rgb(145, 163, 119, 0.8);
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
 .farm-wrap .farm-right {
   width: 54%;
   height: 95%;
@@ -167,10 +206,6 @@
   font-weight: 700;
   font-size: 20px;
 }
-
-
-
-
 
 .farm-wrap .farm-right .right-wrap .farm-info-wrap .info-right{
   width: 22%;

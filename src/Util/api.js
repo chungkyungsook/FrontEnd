@@ -93,3 +93,26 @@ export const IMG_COMPOST = '/api/img'
 //모든 배지 사진 가져오기
 export const COMPOST_CLUSTER = '/api/compost/image/cluster'
 
+// farm 페이지에 필요한 api 
+
+// 선택된 버섯의 현재까지의 이미지를 가져온다. 
+// get -> id : 버섯 번호 
+export const MUSHROOM_IMG_HISTROY = '/api/img/history'
+
+// 실시간 배지 이미지를 각도별로 4개 획득
+// 파라미터 : 대상 기기 아이디 int -> id 
+// id : 이미지 번호
+// machineid : 대상 기기 id
+// rotation 촬영한 각도
+// data : 저장한 시간 
+export const  MUSHROOM_CLUSTER =  '/api/cluster/compost'
+
+// 지정한 각도에 해당하는 버섯들을 가져온다.
+export const MUSHROOM_ROTATION = '/api/rotation/mushroom'
+
+// 실시간 배지 이미지 파일을 가져온다. 
+export const MUSHROOM_REALTIME = '/api/realtime/compost'
+
+
+
+

@@ -12,7 +12,10 @@ import {
   MUSHROOM_ALL,
   PRG_NAME,
   DATE,
-  IMG_COMPOST
+  IMG_COMPOST,
+  MUSHROOM_CLUSTER,
+  MUSHROOM_IMG_HISTROY,
+  MUSHROOM_ROTATION
 } from './Util/api'
 
 export async function getUsers() {
@@ -161,5 +164,27 @@ export async function getMushroomHarvestInfo(prgId){
   const response = await axios.get(`${AWS_URL}${MUCHIN_DELETE}/harvest`,{
     params:{prgId:prgId}
   });
+  return response.data
+}
+
+// 실시간 배지 이미지 각도별로 획득
+export async function getMushroomCluster(prgId){
+  const response = await axios.get(`${AWS_URL}${MUSHROOM_CLUSTER}/${prgId}`);
+  return response.data
+}
+// 각도별 표고버섯 이미지 사진 가져오기 
+export async function getMushroomRotation({prgId,rotation}){
+  const response = await axios.get(`${AWS_URL}${MUSHROOM_ROTATION}`,{
+    params:{
+      prgId:prgId,
+      rotation:rotation
+    }
+  });
+  return response.data
+}
+
+// 각도별 표고버섯 이미지 사진 가져오기 
+export async function getMushroomHistory(prgId){
+  const response = await axios.get(`${AWS_URL}${MUSHROOM_IMG_HISTROY}/${prgId}`);
   return response.data
 }

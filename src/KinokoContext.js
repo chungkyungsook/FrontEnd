@@ -23,7 +23,10 @@ const initialState = {
   getMushroomInfo:initialAsyncState,
   getStartDay: initialAsyncState,
   getMushroomImg:initialAsyncState,
-  getMushroom3D:initialAsyncState
+  getMushroom3D:initialAsyncState,
+  getMushroomCluster:initialAsyncState,
+  getMushroomHistory:initialAsyncState,
+  getMushroomRotation:initialAsyncState
 };
 
 const usersHandler = createAsyncHandler('GET_USERS', 'users');
@@ -47,6 +50,12 @@ const mushroomImgHandler = createAsyncHandler('GET_MUSHROOM_IMG', 'getMushroomIm
 const mushroom3DHandler = createAsyncHandler('GET_MUSHROOM_IMG', 'getMushroom3D')
 const startDayHandler = createAsyncHandler('GET_START_DATE', 'getStartDay')
 
+// 실시간 표고버섯 배지 이미지 정보 가져오기
+const mushroomClusterHandler = createAsyncHandler("GET_MUSHROOM_CLUSTER",'getMushroomCluster')
+// 지정한 각도에 해당하는 버섯들을 가져오기
+const mushroomRotationHandler = createAsyncHandler("GET_MUSHROOM_ROTATION",'getMushroomRotation')
+// 실시간 표고버섯 배지 이미지 가져오기 
+const mushroomHistoryHandler = createAsyncHandler("GET_MUSHROOM_HISTORY",'getMushroomHistory')
 
 const logoutHandler = createAsyncHandler('LOGOUT','logout');
 
@@ -114,6 +123,18 @@ function usersReducer(state, action) {
     case 'GET_MUSHROOM_3D_SUCCESS':
     case 'GET_MUSHROOM_3D_ERROR':
       return mushroom3DHandler(state, action);
+    case 'GET_MUSHROOM_CLUSTER':
+    case 'GET_MUSHROOM_CLUSTER_SUCCESS':
+    case 'GET_MUSHROOM_CLUSTER_ERROR':
+      return mushroomClusterHandler(state, action);  
+    case 'GET_MUSHROOM_ROTATION':
+    case 'GET_MUSHROOM_ROTATION_SUCCESS':
+    case 'GET_MUSHROOM_ROTATION_ERROR':
+      return mushroomRotationHandler(state, action);  
+    case 'GET_MUSHROOM_HISTORY':
+    case 'GET_MUSHROOM_HISTORY_SUCCESS':
+    case 'GET_MUSHROOM_HISTORY_ERROR':
+      return mushroomHistoryHandler(state, action);  
     case 'LOGOUT':
     case 'LOGOUT_SUCCESS':
     case 'LOGOUT_ERROR':
@@ -195,3 +216,14 @@ export const getMushroomInfo = createAsyncDispatcher('GET_MUSHROOM_INFO',api.get
 export const getMushroomImg = createAsyncDispatcher('GET_MUSHROOM_IMG',api.getMushroomImg)
 // 객체 하나의 버섯 사진 가져오기
 export const getMushroom3D = createAsyncDispatcher('GET_MUSHROOM_3D',api.getMushroom3D)
+
+
+// 실시간 표고버섯 이미지 정보 가져오기
+export const getMushroomCluster = createAsyncDispatcher('GET_MUSHROOM_CLUSTER',api.getMushroomCluster)
+
+// 지정한 각도에 해당하는 버섯들을 가져오기
+export const getMushroomRotation = createAsyncDispatcher('GET_MUSHROOM_ROTATION',api.getMushroomRotation)
+
+
+// 실시간 표고버섯 배지 이미지 가져오기 
+export const getMushroomHistory = createAsyncDispatcher('GET_MUSHROOM_HISTORY',api.getMushroomHistory)

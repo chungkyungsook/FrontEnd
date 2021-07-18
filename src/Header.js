@@ -161,7 +161,7 @@ const LogoutBtn = styled.button`
   right: 18px;
   margin: 5px auto;
   
-  width: 80px;
+  width: 120px;
   padding: 5px;
   border: 2px solid #333;
   border-radius: 14px;
